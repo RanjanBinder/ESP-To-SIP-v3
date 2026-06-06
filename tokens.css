@@ -1,32 +1,32 @@
 /* ESP-SIP Design System — tokens */
 :root {
   /* Brand */
-  --ink-900: #0A2540;
-  --ink-800: #1B3A57;
-  --ink-700: #2E4F6C;
-  --ink-600: #425466;
-  --ink-500: #697386;
-  --ink-400: #8792A2;
-  --ink-300: #C6D1DE;
-  --ink-200: #E3E8EE;
-  --ink-100: #EEF3F8;
-  --ink-50:  #F6F9FC;
+  --ink-900: #0E1B2C;
+  --ink-800: #182838;
+  --ink-700: #2A3B4E;
+  --ink-600: #475569;
+  --ink-500: #64748B;
+  --ink-400: #94A3B8;
+  --ink-300: #CBD3DC;
+  --ink-200: #E4E8EE;
+  --ink-100: #EFF2F6;
+  --ink-50:  #F6F8FA;
 
-  --canvas: #F6F9FC;
+  --canvas: #FAFAF7;
   --paper:  #FFFFFF;
 
-  --accent:        #635BFF;
-  --accent-hover:  #4F46E5;
-  --accent-active: #3730A3;
-  --accent-soft:   #F3F0FF;
-  --accent-text:   #3F36B5;
+  --accent:        #3737c8;
+  --accent-hover:  #2b2bad;
+  --accent-active: #232391;
+  --accent-soft:   #ebebf9;
+  --accent-text:   #2929a0;
 
   --stripe-blue-950: #06182C;
   --stripe-blue-900: #0A2540;
   --stripe-blue-800: #12395B;
   --stripe-blue-700: #174A73;
   --stripe-cyan: #00D4FF;
-  --stripe-violet: #635BFF;
+  --stripe-violet: #3737c8;
   --sidebar-bg: linear-gradient(180deg, #0A2540 0%, #0D335F 52%, #174A73 100%);
   --sidebar-glow: radial-gradient(circle at 18% 0%, rgba(99,91,255,0.38), transparent 34%), radial-gradient(circle at 100% 24%, rgba(0,212,255,0.20), transparent 30%);
   --sidebar-border: rgba(255,255,255,0.12);
@@ -37,21 +37,21 @@
   --sidebar-item-active: #FFFFFF;
   --sidebar-item-active-text: #0A2540;
 
-  --success:      #00A88F;
-  --success-soft: #E6FAF6;
-  --success-text: #007A6A;
+  --success:      oklch(0.62 0.13 155);
+  --success-soft: oklch(0.96 0.04 155);
+  --success-text: oklch(0.42 0.12 155);
 
-  --warning:      #F5A524;
-  --warning-soft: #FFF7E6;
-  --warning-text: #9A5B00;
+  --warning:      oklch(0.78 0.13 78);
+  --warning-soft: oklch(0.97 0.05 85);
+  --warning-text: oklch(0.45 0.10 70);
 
-  --danger:       #DF1B41;
-  --danger-soft:  #FFF1F3;
-  --danger-text:  #A21535;
+  --danger:       oklch(0.60 0.18 25);
+  --danger-soft:  oklch(0.96 0.04 25);
+  --danger-text:  oklch(0.45 0.16 25);
 
-  --info:         #0570DE;
-  --info-soft:    #EAF4FF;
-  --info-text:    #075CB7;
+  --info:         oklch(0.62 0.13 240);
+  --info-soft:    oklch(0.96 0.04 240);
+  --info-text:    oklch(0.42 0.13 240);
 
   --neutral-soft: var(--ink-100);
   --neutral-text: var(--ink-600);
@@ -65,11 +65,11 @@
   --r-full: 999px;
 
   /* Shadow */
-  --shadow-xs: 0 1px 0 rgba(10,37,64,0.04);
-  --shadow-sm: 0 1px 2px rgba(10,37,64,0.08), 0 1px 0 rgba(10,37,64,0.03);
-  --shadow-md: 0 8px 20px -12px rgba(10,37,64,0.28), 0 2px 6px -2px rgba(10,37,64,0.10);
-  --shadow-lg: 0 24px 60px -24px rgba(10,37,64,0.36), 0 8px 18px -8px rgba(10,37,64,0.14);
-  --shadow-focus: 0 0 0 3px rgba(99,91,255,0.22);
+  --shadow-xs: 0 1px 0 rgba(14,27,44,0.04);
+  --shadow-sm: 0 1px 2px rgba(14,27,44,0.06), 0 1px 0 rgba(14,27,44,0.03);
+  --shadow-md: 0 4px 12px -2px rgba(14,27,44,0.08), 0 2px 4px -1px rgba(14,27,44,0.04);
+  --shadow-lg: 0 16px 32px -8px rgba(14,27,44,0.14), 0 4px 8px -2px rgba(14,27,44,0.06);
+  --shadow-focus: 0 0 0 3px rgba(55,55,200,0.22);
 
   /* Spacing */
   --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px;

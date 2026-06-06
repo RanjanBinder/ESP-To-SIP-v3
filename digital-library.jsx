@@ -370,10 +370,14 @@ const libCSS = `
   border-bottom: 1px solid rgba(10,37,64,.08);
 }
 .dl-layout .ds-sidebar-mark {
-  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-  color: var(--paper);
-  box-shadow: 0 10px 20px -14px rgba(99,91,255,.9), inset 0 0 0 1px rgba(255,255,255,.28);
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(255,255,255,0.18);
+  padding: 0;
+  overflow: hidden;
 }
+.dl-layout .ds-sidebar-mark::after { display: none; }
+.dl-layout .ds-sidebar-mark img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
 .dl-layout .ds-sidebar-brand .ds-sidebar-title,
 .dl-layout .ds-sidebar-username {
   color: var(--ink-900);
@@ -839,7 +843,7 @@ const libCSS = `
 .dl-bulk-page-title {
   color: var(--ink-900);
   font-size: 22px;
-  font-weight: 900;
+  font-weight: 800;
   line-height: 1.15;
 }
 .dl-bulk-page-subtitle {
@@ -898,7 +902,7 @@ const libCSS = `
 .dl-bulk-upload-title {
   color: var(--ink-900);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 800;
 }
 .dl-bulk-upload-sub {
   margin-top: 4px;
@@ -920,6 +924,7 @@ const libCSS = `
   font-size: 12px;
   color: var(--ink-500);
   font-weight: 700;
+  font-family: var(--font-mono);
 }
 .dl-bulk-file-input {
   position: fixed;
@@ -996,7 +1001,7 @@ const libCSS = `
 .dl-bulk-extraction-title {
   color: var(--ink-900);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 800;
 }
 .dl-bulk-extraction-sub {
   margin-top: 3px;
@@ -1030,7 +1035,7 @@ const libCSS = `
   margin-top: 5px;
   color: var(--ink-500);
   font-size: 11px;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .04em;
 }
@@ -1064,7 +1069,7 @@ const libCSS = `
   margin-top: 4px;
   color: var(--ink-500);
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .04em;
 }
@@ -1136,7 +1141,7 @@ const libCSS = `
   background: var(--ink-50);
   color: var(--ink-500);
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: .05em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1155,6 +1160,7 @@ const libCSS = `
   padding: 0 7px;
   outline: none;
 }
+.dl-bulk-review tbody tr:hover td { background: var(--ink-50); transition: background 100ms; }
 .dl-bulk-review td[data-invalid="true"] input,
 .dl-bulk-review td[data-invalid="true"] select {
   border-color: var(--danger);
@@ -1167,7 +1173,7 @@ const libCSS = `
   padding: 0 7px;
   border-radius: var(--r-full);
   font-size: 10.5px;
-  font-weight: 900;
+  font-weight: 600;
   white-space: nowrap;
 }
 .dl-bulk-row-status[data-status="valid"] { background: var(--success-soft); color: var(--success-text); }
@@ -1182,7 +1188,7 @@ const libCSS = `
   line-height: 1.35;
 }
 .dl-bulk-error-msg[data-muted="true"] { color: var(--ink-500); }
-.dl-bulk-error-msg[data-ready="true"] { color: var(--success-text); font-weight: 800; }
+.dl-bulk-error-msg[data-ready="true"] { color: var(--success-text); font-weight: 700; }
 .dl-bulk-row-actions {
   display: flex;
   align-items: center;
@@ -1198,7 +1204,7 @@ const libCSS = `
   color: var(--danger-text);
   font-family: var(--font-sans);
   font-size: 11.5px;
-  font-weight: 800;
+  font-weight: 500;
   cursor: pointer;
 }
 .dl-bulk-empty {
@@ -1216,7 +1222,7 @@ const libCSS = `
   background: var(--accent-soft);
   color: var(--accent-text);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
 }
 .dl-bulk-loading {
   display: flex;
@@ -1322,7 +1328,7 @@ const libCSS = `
   text-transform: uppercase;
   letter-spacing: .055em;
   font-size: 10.5px;
-  font-weight: 900;
+  font-weight: 700;
   color: var(--ink-600);
   border-bottom: 1px solid var(--ink-300);
 }
@@ -1427,7 +1433,7 @@ const libCSS = `
   border-radius: var(--r-xs);
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--paper);
   letter-spacing: 0.03em;
   margin-top: 2px;
@@ -1459,7 +1465,7 @@ const libCSS = `
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--danger-text);
-  font-weight: 900;
+  font-weight: 600;
 }
 
 /* ── Versions ── */
@@ -1491,10 +1497,10 @@ const libCSS = `
   color: var(--accent-text);
   font-family: var(--font-sans);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  box-shadow: var(--shadow-xs);
+  transition: background 120ms, border-color 120ms;
 }
 .dl-row-view-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
 .dl-row-more-wrap { position: relative; }
@@ -1509,7 +1515,6 @@ const libCSS = `
   color: var(--ink-600);
   cursor: pointer;
   transition: background 120ms, border-color 120ms, color 120ms;
-  box-shadow: var(--shadow-xs);
 }
 .dl-action-icon:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-text); }
 .dl-row-menu {
@@ -1537,7 +1542,7 @@ const libCSS = `
   color: var(--ink-700);
   font-family: var(--font-sans);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
   text-align: left;
   cursor: pointer;
 }
@@ -1796,39 +1801,67 @@ const libCSS = `
 .dl-doc-tip:hover::after,
 .dl-doc-tip:hover::before { opacity: 1; }
 
-/* ── Compact document summary column ── */
+/* ── Option B — dot row document column ── */
 .dl-doc-summary { position: relative; display: inline-flex; align-items: center; min-width: 0; }
-.dl-doc-summary-top {
+.dl-dot-row {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-width: 0;
-  padding: 3px 4px 3px 8px;
-  border: 1px solid color-mix(in srgb, var(--ink-200) 70%, var(--info));
+  padding: 5px 8px;
+  border: 1px solid var(--ink-200);
   border-radius: var(--r-full);
-  background: linear-gradient(135deg, var(--paper), var(--info-soft));
-  box-shadow: var(--shadow-xs);
-}
-.dl-doc-count { min-width: 14px; color: var(--info-text); font-size: 13px; font-weight: 900; line-height: 1; white-space: nowrap; text-align: center; font-variant-numeric: tabular-nums; }
-.dl-doc-info-btn {
-  width: 20px;
-  height: 20px;
-  display: inline-grid;
-  place-items: center;
-  border: 1px solid transparent;
-  border-radius: var(--r-full);
-  background: transparent;
-  color: var(--ink-600);
+  background: var(--paper);
   cursor: pointer;
-  transition: background 120ms, border-color 120ms, color 120ms, box-shadow 120ms;
+  transition: border-color 120ms, box-shadow 120ms;
 }
-.dl-doc-info-btn:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
-.dl-doc-info-btn:hover,
-.dl-doc-info-btn[aria-expanded="true"] {
-  color: var(--info-text);
-  border-color: var(--info);
-  background: var(--info-soft);
+.dl-dot-row:hover { border-color: var(--ink-300); box-shadow: var(--shadow-xs); }
+.dl-dot-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+.dl-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: transform 150ms;
+}
+.dl-dot-wrap:hover .dl-dot { transform: scale(1.5); }
+.dl-dot-tip {
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: var(--ink-900);
+  color: var(--paper);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: var(--r-xs);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms;
+  z-index: 100;
+}
+.dl-dot-tip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--ink-900);
+}
+.dl-dot-wrap:hover .dl-dot-tip { opacity: 1; }
+.dl-dot[data-tone="success"] { background: var(--success); }
+.dl-dot[data-tone="info"]    { background: var(--info); }
+.dl-dot[data-tone="warning"] { background: var(--warning); }
+.dl-dot[data-tone="danger"]  { background: var(--danger); }
+.dl-dot[data-tone="neutral"] { background: var(--ink-300); }
 .dl-doc-hover-card {
   position: absolute;
   z-index: 90;
@@ -1879,7 +1912,7 @@ const libCSS = `
   padding: 12px 14px;
   border-bottom: var(--hairline);
 }
-.dl-doc-popover-title { color: var(--ink-900); font-size: 14px; font-weight: 900; line-height: 1.2; }
+.dl-doc-popover-title { color: var(--ink-900); font-size: 14px; font-weight: 800; line-height: 1.2; }
 .dl-doc-popover-sub { margin-top: 3px; color: var(--ink-500); font-size: 11.5px; line-height: 1.35; }
 .dl-doc-popover-close {
   width: 26px;
@@ -1900,7 +1933,7 @@ const libCSS = `
   background: var(--ink-50);
   color: var(--ink-500);
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: .06em;
   text-transform: uppercase;
   text-align: left;
@@ -1927,12 +1960,13 @@ const libCSS = `
   padding: 0 10px;
   border: var(--hairline);
   border-radius: var(--r-sm);
-  background: var(--paper);
+  background: transparent;
   color: var(--accent-text);
   font-family: var(--font-sans);
   font-size: 11.5px;
-  font-weight: 800;
+  font-weight: 500;
   cursor: pointer;
+  transition: background 120ms, border-color 120ms;
 }
 .dl-doc-detail-action:hover { border-color: var(--accent); background: var(--accent-soft); }
 .dl-doc-detail-action:disabled {
@@ -1940,7 +1974,7 @@ const libCSS = `
   background: var(--ink-50);
   cursor: not-allowed;
 }
-.dl-overall-status { display: inline-flex; align-items: center; min-height: 24px; padding: 0 9px; border-radius: var(--r-full); font-size: 11px; font-weight: 900; white-space: nowrap; }
+.dl-overall-status { display: inline-flex; align-items: center; min-height: 24px; padding: 0 9px; border-radius: var(--r-full); font-size: 11px; font-weight: 600; white-space: nowrap; }
 .dl-overall-status[data-tone="success"] { background: var(--success-soft); color: var(--success-text); }
 .dl-overall-status[data-tone="info"] { background: var(--info-soft); color: var(--info-text); }
 .dl-overall-status[data-tone="warning"] { background: var(--warning-soft); color: var(--warning-text); }
@@ -2404,18 +2438,15 @@ const DocumentDetailsPopover = ({ station, documents, onView }) => {
   };
 
   return (
-    <div className="dl-doc-summary" onClick={(event) => event.stopPropagation()} onMouseEnter={() => setHoverOpen(true)} onMouseLeave={() => setHoverOpen(false)}>
-      <div className="dl-doc-summary-top">
-        <span className="dl-doc-count" aria-label={`${availableCount} documents`}>{availableCount}</span>
-        <button className="dl-doc-info-btn" type="button" title="Open document details" aria-label={`Open document details for ${station.name}`} aria-expanded={hoverOpen || modalOpen ? "true" : "false"} onClick={openModal}>
-          <Icon name="info" size={15} />
-        </button>
+    <div className="dl-doc-summary" onClick={(event) => event.stopPropagation()}>
+      <div className="dl-dot-row" role="button" aria-label={`${availableCount} documents — click for details`} onClick={openModal}>
+        {documents.filter((d) => d.key !== "survey").map((doc) => (
+          <div className="dl-dot-wrap" key={doc.key}>
+            <div className="dl-dot" data-tone={doc.tone} />
+            <span className="dl-dot-tip">{doc.label} · {doc.status}</span>
+          </div>
+        ))}
       </div>
-      {hoverOpen && !modalOpen && (
-        <div className="dl-doc-hover-card" role="dialog" aria-label={`Document preview for ${station.name}`} onClick={(event) => event.stopPropagation()}>
-          <DocumentDetailsTable documents={documents} onView={viewDocument} />
-        </div>
-      )}
       {modalOpen && (
         <div className="dl-doc-modal-layer" role="presentation" onClick={() => setModalOpen(false)}>
           <div className="dl-doc-popover" role="dialog" aria-modal="true" aria-label={`Document details for ${station.name}`} onClick={(event) => event.stopPropagation()}>
@@ -3519,7 +3550,7 @@ const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate })
   return (
     <aside className="ds-sidebar" data-collapsed={collapsed ? "true" : "false"}>
       <div className="ds-sidebar-brand">
-        <div className="ds-sidebar-mark"><span>IR</span></div>
+        <div className="ds-sidebar-mark"><img src="ir-logo.png" alt="Indian Railways" /></div>
         <div>
           <div className="ds-sidebar-title">Indian Railways</div>
           <div className="ds-sidebar-sub"></div>
@@ -3556,13 +3587,16 @@ const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate })
       </nav>
 
       <div className="ds-sidebar-foot">
-        <div className="ds-sidebar-user" title={collapsed ? "Ashwini Vaishnav" : undefined}>AV</div>
+        <div className="ds-sidebar-user" title={collapsed ? "Sarath" : undefined}>S</div>
         <div className="ds-sidebar-userinfo">
-          <div className="ds-sidebar-username">Ashwini Vaishnav</div>
-          <div className="ds-sidebar-userrole">Railway Minister</div>
+          <div className="ds-sidebar-username">Sarath</div>
+          <div className="ds-sidebar-userrole">Admin SCR</div>
         </div>
-        <button className="ds-sidebar-foot-btn" title="Settings">
-          <Icon name="settings" size={15} />
+        <button className="ds-sidebar-foot-btn" title="Sign out" onClick={() => {
+          try { sessionStorage.removeItem('ir-login-session'); sessionStorage.removeItem('lr-authed'); } catch(e) {}
+          window.location.reload();
+        }}>
+          <Icon name="log_out" size={15} />
         </button>
       </div>
     </aside>);
@@ -3619,7 +3653,7 @@ const LoginPage = ({ onLogin }) => {
     <main className="ir-login-shell">
       <section className="ir-login-visual" aria-label="Indian Railways access context">
         <div className="ir-login-brand">
-          <div className="ir-login-mark">IR</div>
+          <div className="ir-login-mark" style={{background:'none',padding:0,overflow:'hidden',borderRadius:'50%'}}><img src="ir-logo.png" alt="Indian Railways" style={{width:'100%',height:'100%',objectFit:'cover'}} /></div>
           <div>
             <div className="ir-login-brand-title">Indian Railways</div>
             <div className="ir-login-brand-sub">ESP, SIP and LOP control desk</div>

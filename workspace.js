@@ -315,7 +315,7 @@
   padding: 0 9px;
   border-radius: var(--r-sm);
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.06em;
   border: 1px solid transparent;
   font-family: var(--font-sans);

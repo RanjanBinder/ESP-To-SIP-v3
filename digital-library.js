@@ -365,10 +365,14 @@ const libCSS = `
   border-bottom: 1px solid rgba(10,37,64,.08);
 }
 .dl-layout .ds-sidebar-mark {
-  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-  color: var(--paper);
-  box-shadow: 0 10px 20px -14px rgba(99,91,255,.9), inset 0 0 0 1px rgba(255,255,255,.28);
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(255,255,255,0.18);
+  padding: 0;
+  overflow: hidden;
 }
+.dl-layout .ds-sidebar-mark::after { display: none; }
+.dl-layout .ds-sidebar-mark img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
 .dl-layout .ds-sidebar-brand .ds-sidebar-title,
 .dl-layout .ds-sidebar-username {
   color: var(--ink-900);
@@ -834,7 +838,7 @@ const libCSS = `
 .dl-bulk-page-title {
   color: var(--ink-900);
   font-size: 22px;
-  font-weight: 900;
+  font-weight: 800;
   line-height: 1.15;
 }
 .dl-bulk-page-subtitle {
@@ -893,7 +897,7 @@ const libCSS = `
 .dl-bulk-upload-title {
   color: var(--ink-900);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 800;
 }
 .dl-bulk-upload-sub {
   margin-top: 4px;
@@ -915,6 +919,7 @@ const libCSS = `
   font-size: 12px;
   color: var(--ink-500);
   font-weight: 700;
+  font-family: var(--font-mono);
 }
 .dl-bulk-file-input {
   position: fixed;
@@ -991,7 +996,7 @@ const libCSS = `
 .dl-bulk-extraction-title {
   color: var(--ink-900);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 800;
 }
 .dl-bulk-extraction-sub {
   margin-top: 3px;
@@ -1025,7 +1030,7 @@ const libCSS = `
   margin-top: 5px;
   color: var(--ink-500);
   font-size: 11px;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .04em;
 }
@@ -1059,7 +1064,7 @@ const libCSS = `
   margin-top: 4px;
   color: var(--ink-500);
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .04em;
 }
@@ -1131,7 +1136,7 @@ const libCSS = `
   background: var(--ink-50);
   color: var(--ink-500);
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: .05em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1150,6 +1155,7 @@ const libCSS = `
   padding: 0 7px;
   outline: none;
 }
+.dl-bulk-review tbody tr:hover td { background: var(--ink-50); transition: background 100ms; }
 .dl-bulk-review td[data-invalid="true"] input,
 .dl-bulk-review td[data-invalid="true"] select {
   border-color: var(--danger);
@@ -1162,7 +1168,7 @@ const libCSS = `
   padding: 0 7px;
   border-radius: var(--r-full);
   font-size: 10.5px;
-  font-weight: 900;
+  font-weight: 600;
   white-space: nowrap;
 }
 .dl-bulk-row-status[data-status="valid"] { background: var(--success-soft); color: var(--success-text); }
@@ -1177,7 +1183,7 @@ const libCSS = `
   line-height: 1.35;
 }
 .dl-bulk-error-msg[data-muted="true"] { color: var(--ink-500); }
-.dl-bulk-error-msg[data-ready="true"] { color: var(--success-text); font-weight: 800; }
+.dl-bulk-error-msg[data-ready="true"] { color: var(--success-text); font-weight: 700; }
 .dl-bulk-row-actions {
   display: flex;
   align-items: center;
@@ -1193,7 +1199,7 @@ const libCSS = `
   color: var(--danger-text);
   font-family: var(--font-sans);
   font-size: 11.5px;
-  font-weight: 800;
+  font-weight: 500;
   cursor: pointer;
 }
 .dl-bulk-empty {
@@ -1211,7 +1217,7 @@ const libCSS = `
   background: var(--accent-soft);
   color: var(--accent-text);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
 }
 .dl-bulk-loading {
   display: flex;
@@ -1317,7 +1323,7 @@ const libCSS = `
   text-transform: uppercase;
   letter-spacing: .055em;
   font-size: 10.5px;
-  font-weight: 900;
+  font-weight: 700;
   color: var(--ink-600);
   border-bottom: 1px solid var(--ink-300);
 }
@@ -1422,7 +1428,7 @@ const libCSS = `
   border-radius: var(--r-xs);
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--paper);
   letter-spacing: 0.03em;
   margin-top: 2px;
@@ -1454,7 +1460,7 @@ const libCSS = `
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--danger-text);
-  font-weight: 900;
+  font-weight: 600;
 }
 
 /* \u2500\u2500 Versions \u2500\u2500 */
@@ -1486,10 +1492,10 @@ const libCSS = `
   color: var(--accent-text);
   font-family: var(--font-sans);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  box-shadow: var(--shadow-xs);
+  transition: background 120ms, border-color 120ms;
 }
 .dl-row-view-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
 .dl-row-more-wrap { position: relative; }
@@ -1504,7 +1510,6 @@ const libCSS = `
   color: var(--ink-600);
   cursor: pointer;
   transition: background 120ms, border-color 120ms, color 120ms;
-  box-shadow: var(--shadow-xs);
 }
 .dl-action-icon:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-text); }
 .dl-row-menu {
@@ -1532,7 +1537,7 @@ const libCSS = `
   color: var(--ink-700);
   font-family: var(--font-sans);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
   text-align: left;
   cursor: pointer;
 }
@@ -1793,37 +1798,65 @@ const libCSS = `
 
 /* \u2500\u2500 Compact document summary column \u2500\u2500 */
 .dl-doc-summary { position: relative; display: inline-flex; align-items: center; min-width: 0; }
-.dl-doc-summary-top {
+.dl-dot-row {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-width: 0;
-  padding: 3px 4px 3px 8px;
-  border: 1px solid color-mix(in srgb, var(--ink-200) 70%, var(--info));
+  padding: 5px 8px;
+  border: 1px solid var(--ink-200);
   border-radius: var(--r-full);
-  background: linear-gradient(135deg, var(--paper), var(--info-soft));
-  box-shadow: var(--shadow-xs);
-}
-.dl-doc-count { min-width: 14px; color: var(--info-text); font-size: 13px; font-weight: 900; line-height: 1; white-space: nowrap; text-align: center; font-variant-numeric: tabular-nums; }
-.dl-doc-info-btn {
-  width: 20px;
-  height: 20px;
-  display: inline-grid;
-  place-items: center;
-  border: 1px solid transparent;
-  border-radius: var(--r-full);
-  background: transparent;
-  color: var(--ink-600);
+  background: var(--paper);
   cursor: pointer;
-  transition: background 120ms, border-color 120ms, color 120ms, box-shadow 120ms;
+  transition: border-color 120ms, box-shadow 120ms;
 }
-.dl-doc-info-btn:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
-.dl-doc-info-btn:hover,
-.dl-doc-info-btn[aria-expanded="true"] {
-  color: var(--info-text);
-  border-color: var(--info);
-  background: var(--info-soft);
+.dl-dot-row:hover { border-color: var(--ink-300); box-shadow: var(--shadow-xs); }
+.dl-dot-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+.dl-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: transform 150ms;
+}
+.dl-dot-wrap:hover .dl-dot { transform: scale(1.5); }
+.dl-dot-tip {
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: var(--ink-900);
+  color: var(--paper);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: var(--r-xs);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms;
+  z-index: 100;
+}
+.dl-dot-tip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--ink-900);
+}
+.dl-dot-wrap:hover .dl-dot-tip { opacity: 1; }
+.dl-dot[data-tone="success"] { background: var(--success); }
+.dl-dot[data-tone="info"]    { background: var(--info); }
+.dl-dot[data-tone="warning"] { background: var(--warning); }
+.dl-dot[data-tone="danger"]  { background: var(--danger); }
+.dl-dot[data-tone="neutral"] { background: var(--ink-300); }
 .dl-doc-hover-card {
   position: absolute;
   z-index: 90;
@@ -1874,7 +1907,7 @@ const libCSS = `
   padding: 12px 14px;
   border-bottom: var(--hairline);
 }
-.dl-doc-popover-title { color: var(--ink-900); font-size: 14px; font-weight: 900; line-height: 1.2; }
+.dl-doc-popover-title { color: var(--ink-900); font-size: 14px; font-weight: 800; line-height: 1.2; }
 .dl-doc-popover-sub { margin-top: 3px; color: var(--ink-500); font-size: 11.5px; line-height: 1.35; }
 .dl-doc-popover-close {
   width: 26px;
@@ -1895,7 +1928,7 @@ const libCSS = `
   background: var(--ink-50);
   color: var(--ink-500);
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: .06em;
   text-transform: uppercase;
   text-align: left;
@@ -1922,12 +1955,13 @@ const libCSS = `
   padding: 0 10px;
   border: var(--hairline);
   border-radius: var(--r-sm);
-  background: var(--paper);
+  background: transparent;
   color: var(--accent-text);
   font-family: var(--font-sans);
   font-size: 11.5px;
-  font-weight: 800;
+  font-weight: 500;
   cursor: pointer;
+  transition: background 120ms, border-color 120ms;
 }
 .dl-doc-detail-action:hover { border-color: var(--accent); background: var(--accent-soft); }
 .dl-doc-detail-action:disabled {
@@ -1935,7 +1969,7 @@ const libCSS = `
   background: var(--ink-50);
   cursor: not-allowed;
 }
-.dl-overall-status { display: inline-flex; align-items: center; min-height: 24px; padding: 0 9px; border-radius: var(--r-full); font-size: 11px; font-weight: 900; white-space: nowrap; }
+.dl-overall-status { display: inline-flex; align-items: center; min-height: 24px; padding: 0 9px; border-radius: var(--r-full); font-size: 11px; font-weight: 600; white-space: nowrap; }
 .dl-overall-status[data-tone="success"] { background: var(--success-soft); color: var(--success-text); }
 .dl-overall-status[data-tone="info"] { background: var(--info-soft); color: var(--info-text); }
 .dl-overall-status[data-tone="warning"] { background: var(--warning-soft); color: var(--warning-text); }
@@ -2409,7 +2443,7 @@ const DocumentDetailsPopover = ({ station, documents, onView }) => {
     setModalOpen(false);
     onView?.(doc, station);
   };
-  return /* @__PURE__ */ React.createElement("div", { className: "dl-doc-summary", onClick: (event) => event.stopPropagation(), onMouseEnter: () => setHoverOpen(true), onMouseLeave: () => setHoverOpen(false) }, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-summary-top" }, /* @__PURE__ */ React.createElement("span", { className: "dl-doc-count", "aria-label": `${availableCount} documents` }, availableCount), /* @__PURE__ */ React.createElement("button", { className: "dl-doc-info-btn", type: "button", title: "Open document details", "aria-label": `Open document details for ${station.name}`, "aria-expanded": hoverOpen || modalOpen ? "true" : "false", onClick: openModal }, /* @__PURE__ */ React.createElement(Icon, { name: "info", size: 15 }))), hoverOpen && !modalOpen && /* @__PURE__ */ React.createElement("div", { className: "dl-doc-hover-card", role: "dialog", "aria-label": `Document preview for ${station.name}`, onClick: (event) => event.stopPropagation() }, /* @__PURE__ */ React.createElement(DocumentDetailsTable, { documents, onView: viewDocument })), modalOpen && /* @__PURE__ */ React.createElement("div", { className: "dl-doc-modal-layer", role: "presentation", onClick: () => setModalOpen(false) }, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover", role: "dialog", "aria-modal": "true", "aria-label": `Document details for ${station.name}`, onClick: (event) => event.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-title" }, "Document Details"), /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-sub" }, station.name, " \xB7 ", station.code)), /* @__PURE__ */ React.createElement("button", { className: "dl-doc-popover-close", type: "button", "aria-label": "Close document details", onClick: () => setModalOpen(false) }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 13 }))), /* @__PURE__ */ React.createElement(DocumentDetailsTable, { documents, onView: viewDocument }))));
+  return /* @__PURE__ */ React.createElement("div", { className: "dl-doc-summary", onClick: (event) => event.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "dl-dot-row", role: "button", "aria-label": `${availableCount} documents — click for details`, onClick: openModal }, documents.filter((d) => d.key !== "survey").map((doc) => /* @__PURE__ */ React.createElement("div", { className: "dl-dot-wrap", key: doc.key }, /* @__PURE__ */ React.createElement("div", { className: "dl-dot", "data-tone": doc.tone }), /* @__PURE__ */ React.createElement("span", { className: "dl-dot-tip" }, doc.label, " \xB7 ", doc.status)))), modalOpen && /* @__PURE__ */ React.createElement("div", { className: "dl-doc-modal-layer", role: "presentation", onClick: () => setModalOpen(false) }, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover", role: "dialog", "aria-modal": "true", "aria-label": `Document details for ${station.name}`, onClick: (event) => event.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-title" }, "Document Details"), /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-sub" }, station.name, " \xB7 ", station.code)), /* @__PURE__ */ React.createElement("button", { className: "dl-doc-popover-close", type: "button", "aria-label": "Close document details", onClick: () => setModalOpen(false) }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 13 }))), /* @__PURE__ */ React.createElement(DocumentDetailsTable, { documents, onView: viewDocument }))));
 };
 const StationRowActions = ({ station, onView, onAction }) => {
   const [open, setOpen] = useStateLib(false);
@@ -3201,7 +3235,7 @@ const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate })
       ]
     }
   ];
-  return /* @__PURE__ */ React.createElement("aside", { className: "ds-sidebar", "data-collapsed": collapsed ? "true" : "false" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-brand" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-mark" }, /* @__PURE__ */ React.createElement("span", null, "IR")), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-title" }, "Indian Railways"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-sub" })), /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ React.createElement("aside", { className: "ds-sidebar", "data-collapsed": collapsed ? "true" : "false" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-brand" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-mark" }, /* @__PURE__ */ React.createElement("img", { src: "ir-logo.png", alt: "Indian Railways" })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-title" }, "Indian Railways"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-sub" })), /* @__PURE__ */ React.createElement(
     "button",
     {
       className: "dl-sidebar-toggle-btn",
@@ -3235,7 +3269,7 @@ const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate })
         it.badge && /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-badge" }, it.badge)
       )
     ))
-  )), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-foot" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-user", title: collapsed ? "Ashwini Vaishnav" : void 0 }, "AV"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userinfo" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-username" }, "Ashwini Vaishnav"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userrole" }, "Railway Minister")), /* @__PURE__ */ React.createElement("button", { className: "ds-sidebar-foot-btn", title: "Settings" }, /* @__PURE__ */ React.createElement(Icon, { name: "settings", size: 15 }))));
+  )), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-foot" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-user", title: collapsed ? "Sarath" : void 0 }, "S"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userinfo" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-username" }, "Sarath"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userrole" }, "Admin SCR")), /* @__PURE__ */ React.createElement("button", { className: "ds-sidebar-foot-btn", title: "Sign out", onClick: () => { try { sessionStorage.removeItem("ir-login-session"); sessionStorage.removeItem("lr-authed"); } catch(e) {} window.location.reload(); } }, /* @__PURE__ */ React.createElement(Icon, { name: "log_out", size: 15 }))));
 };
 const readLoginSession = () => {
   try {
@@ -3274,7 +3308,7 @@ const LoginPage = ({ onLogin }) => {
     }
     onLogin(session);
   };
-  return /* @__PURE__ */ React.createElement("main", { className: "ir-login-shell" }, /* @__PURE__ */ React.createElement("section", { className: "ir-login-visual", "aria-label": "Indian Railways access context" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-mark" }, "IR"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand-title" }, "Indian Railways"), /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand-sub" }, "ESP, SIP and LOP control desk"))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-scene", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("div", { className: "ir-station-board" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-board-small" }, "\u092D\u093E\u0930\u0924\u0940\u092F \u0930\u0947\u0932"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-name" }, "Aurangabad"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-hindi" }, "\u0914\u0930\u0902\u0917\u093E\u092C\u093E\u0926"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-code" }, /* @__PURE__ */ React.createElement(Icon, { name: "train", size: 14 }), " AWB \xB7 SCR"))), /* @__PURE__ */ React.createElement("div", { className: "ir-vb-train", "aria-label": "Vande Bharat Express illustration" }, /* @__PURE__ */ React.createElement("div", { className: "ir-vb-train-label" }, /* @__PURE__ */ React.createElement("span", { className: "ir-vb-train-name" }, "\u0935\u0928\u094D\u0926\u0947 \u092D\u093E\u0930\u0924 \u090F\u0915\u094D\u0938\u092A\u094D\u0930\u0947\u0938"), /* @__PURE__ */ React.createElement("span", { className: "ir-vb-train-badge" }, "Train 18 \xB7 SCR")), /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 560 95", fill: "none", xmlns: "http://www.w3.org/2000/svg", className: "ir-vb-train-svg", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("ellipse", { cx: "280", cy: "90", rx: "272", ry: "5", fill: "rgba(14,27,44,0.07)" }), /* @__PURE__ */ React.createElement("rect", { x: "28", y: "16", width: "504", height: "62", fill: "white" }), /* @__PURE__ */ React.createElement("path", { d: "M28 16 C28 16 8 28 6 53 L6 78 L28 78 Z", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("path", { d: "M532 16 C532 16 552 28 554 53 L554 78 L532 78 Z", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "16", width: "548", height: "15", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "63", width: "548", height: "15", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "31", width: "548", height: "4", fill: "#FF7722" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "59", width: "548", height: "4", fill: "#FF7722" }), /* @__PURE__ */ React.createElement("path", { d: "M16 34 L28 34 L28 63 L16 63 C10 57 8 51 10 45 Z", fill: "#C8E6FA", opacity: "0.9" }), /* @__PURE__ */ React.createElement("path", { d: "M544 34 L532 34 L532 63 L544 63 C550 57 552 51 550 45 Z", fill: "#C8E6FA", opacity: "0.9" }), /* @__PURE__ */ React.createElement("rect", { x: "36", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "58", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "80", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "102", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "124", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "146", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "168", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "190", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "212", y: "16", width: "3", height: "62", fill: "#1B4FA8", opacity: "0.3" }), /* @__PURE__ */ React.createElement("rect", { x: "222", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "244", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "266", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "288", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "310", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "332", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "354", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "376", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "398", y: "16", width: "3", height: "62", fill: "#1B4FA8", opacity: "0.3" }), /* @__PURE__ */ React.createElement("rect", { x: "408", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "430", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "452", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "474", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "496", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "518", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("text", { x: "280", y: "53", fontFamily: "Arial,sans-serif", fontSize: "9.5", fontWeight: "900", fill: "#1B4FA8", textAnchor: "middle", letterSpacing: "2.5" }, "VANDE BHARAT EXPRESS"), /* @__PURE__ */ React.createElement("rect", { x: "30", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "52", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "108", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "230", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "252", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "308", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "430", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "452", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "508", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "0", y: "86", width: "560", height: "3", rx: "1.5", fill: "#888" }), /* @__PURE__ */ React.createElement("rect", { x: "0", y: "91", width: "560", height: "3", rx: "1.5", fill: "#888" }))), /* @__PURE__ */ React.createElement("div", { className: "ir-route-panel" }, /* @__PURE__ */ React.createElement("div", { className: "ir-route-head" }, /* @__PURE__ */ React.createElement("span", null, "Nanded Division"), /* @__PURE__ */ React.createElement("span", { className: "mono" }, "431.240 KM")), /* @__PURE__ */ React.createElement("div", { className: "ir-route-track" }, /* @__PURE__ */ React.createElement("div", { className: "ir-track-sleeper" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node a" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node b" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node c" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label a" }, "Daulatabad"), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label b" }, "AWB"), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label c" }, "Chikalthan")))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-ops" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Zone"), /* @__PURE__ */ React.createElement("strong", null, "South Central")), /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Workspace"), /* @__PURE__ */ React.createElement("strong", null, "Digital Library")), /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Status"), /* @__PURE__ */ React.createElement("strong", null, "SSO Active")))), /* @__PURE__ */ React.createElement("section", { className: "ir-login-panel" }, /* @__PURE__ */ React.createElement("form", { className: "ir-login-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-card-head" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-kicker" }, /* @__PURE__ */ React.createElement(Icon, { name: "shield", size: 13 }), " Secure access"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "ir-login-title" }, "Sign in to RailWorks"), /* @__PURE__ */ React.createElement("p", { className: "ir-login-sub" }, "Use your railway ID to access station documents, approvals and validation workspaces."))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-form" }, /* @__PURE__ */ React.createElement(Field, { label: "Rail ID", required: true }, /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ React.createElement("main", { className: "ir-login-shell" }, /* @__PURE__ */ React.createElement("section", { className: "ir-login-visual", "aria-label": "Indian Railways access context" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-mark", style: { background: "none", padding: 0, overflow: "hidden", borderRadius: "50%" } }, /* @__PURE__ */ React.createElement("img", { src: "ir-logo.png", alt: "Indian Railways", style: { width: "100%", height: "100%", objectFit: "cover" } })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand-title" }, "Indian Railways"), /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand-sub" }, "ESP, SIP and LOP control desk"))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-scene", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("div", { className: "ir-station-board" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-board-small" }, "\u092D\u093E\u0930\u0924\u0940\u092F \u0930\u0947\u0932"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-name" }, "Aurangabad"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-hindi" }, "\u0914\u0930\u0902\u0917\u093E\u092C\u093E\u0926"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-code" }, /* @__PURE__ */ React.createElement(Icon, { name: "train", size: 14 }), " AWB \xB7 SCR"))), /* @__PURE__ */ React.createElement("div", { className: "ir-vb-train", "aria-label": "Vande Bharat Express illustration" }, /* @__PURE__ */ React.createElement("div", { className: "ir-vb-train-label" }, /* @__PURE__ */ React.createElement("span", { className: "ir-vb-train-name" }, "\u0935\u0928\u094D\u0926\u0947 \u092D\u093E\u0930\u0924 \u090F\u0915\u094D\u0938\u092A\u094D\u0930\u0947\u0938"), /* @__PURE__ */ React.createElement("span", { className: "ir-vb-train-badge" }, "Train 18 \xB7 SCR")), /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 560 95", fill: "none", xmlns: "http://www.w3.org/2000/svg", className: "ir-vb-train-svg", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("ellipse", { cx: "280", cy: "90", rx: "272", ry: "5", fill: "rgba(14,27,44,0.07)" }), /* @__PURE__ */ React.createElement("rect", { x: "28", y: "16", width: "504", height: "62", fill: "white" }), /* @__PURE__ */ React.createElement("path", { d: "M28 16 C28 16 8 28 6 53 L6 78 L28 78 Z", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("path", { d: "M532 16 C532 16 552 28 554 53 L554 78 L532 78 Z", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "16", width: "548", height: "15", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "63", width: "548", height: "15", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "31", width: "548", height: "4", fill: "#FF7722" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "59", width: "548", height: "4", fill: "#FF7722" }), /* @__PURE__ */ React.createElement("path", { d: "M16 34 L28 34 L28 63 L16 63 C10 57 8 51 10 45 Z", fill: "#C8E6FA", opacity: "0.9" }), /* @__PURE__ */ React.createElement("path", { d: "M544 34 L532 34 L532 63 L544 63 C550 57 552 51 550 45 Z", fill: "#C8E6FA", opacity: "0.9" }), /* @__PURE__ */ React.createElement("rect", { x: "36", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "58", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "80", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "102", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "124", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "146", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "168", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "190", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "212", y: "16", width: "3", height: "62", fill: "#1B4FA8", opacity: "0.3" }), /* @__PURE__ */ React.createElement("rect", { x: "222", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "244", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "266", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "288", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "310", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "332", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "354", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "376", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "398", y: "16", width: "3", height: "62", fill: "#1B4FA8", opacity: "0.3" }), /* @__PURE__ */ React.createElement("rect", { x: "408", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "430", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "452", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "474", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "496", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "518", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("text", { x: "280", y: "53", fontFamily: "Arial,sans-serif", fontSize: "9.5", fontWeight: "900", fill: "#1B4FA8", textAnchor: "middle", letterSpacing: "2.5" }, "VANDE BHARAT EXPRESS"), /* @__PURE__ */ React.createElement("rect", { x: "30", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "52", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "108", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "230", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "252", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "308", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "430", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "452", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "508", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "0", y: "86", width: "560", height: "3", rx: "1.5", fill: "#888" }), /* @__PURE__ */ React.createElement("rect", { x: "0", y: "91", width: "560", height: "3", rx: "1.5", fill: "#888" }))), /* @__PURE__ */ React.createElement("div", { className: "ir-route-panel" }, /* @__PURE__ */ React.createElement("div", { className: "ir-route-head" }, /* @__PURE__ */ React.createElement("span", null, "Nanded Division"), /* @__PURE__ */ React.createElement("span", { className: "mono" }, "431.240 KM")), /* @__PURE__ */ React.createElement("div", { className: "ir-route-track" }, /* @__PURE__ */ React.createElement("div", { className: "ir-track-sleeper" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node a" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node b" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node c" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label a" }, "Daulatabad"), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label b" }, "AWB"), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label c" }, "Chikalthan")))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-ops" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Zone"), /* @__PURE__ */ React.createElement("strong", null, "South Central")), /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Workspace"), /* @__PURE__ */ React.createElement("strong", null, "Digital Library")), /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Status"), /* @__PURE__ */ React.createElement("strong", null, "SSO Active")))), /* @__PURE__ */ React.createElement("section", { className: "ir-login-panel" }, /* @__PURE__ */ React.createElement("form", { className: "ir-login-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-card-head" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-kicker" }, /* @__PURE__ */ React.createElement(Icon, { name: "shield", size: 13 }), " Secure access"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "ir-login-title" }, "Sign in to RailWorks"), /* @__PURE__ */ React.createElement("p", { className: "ir-login-sub" }, "Use your railway ID to access station documents, approvals and validation workspaces."))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-form" }, /* @__PURE__ */ React.createElement(Field, { label: "Rail ID", required: true }, /* @__PURE__ */ React.createElement(
     TextInput,
     {
       leadingIcon: "users",
