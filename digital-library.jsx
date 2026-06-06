@@ -1,18 +1,13 @@
-// Digital Library — Station Registry
-// Indian Railways ESP · SIP · LOP Platform
 const { useState: useStateLib, useMemo: useMemoLib } = React;
-
-const DL_TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "sidebarCollapsed": false,
-  "tableDensity": "regular"
-}/*EDITMODE-END*/;
-
-/* ─────────────────────────────────────────────────────────────────────
-   NEW CSS — only structures not covered by existing component classes.
-   Follows exact token and naming conventions of the design system.
-───────────────────────────────────────────────────────────────────── */
+const DL_TWEAK_DEFAULTS = (
+  /*EDITMODE-BEGIN*/
+  {
+    "sidebarCollapsed": false,
+    "tableDensity": "regular"
+  }
+);
 const libCSS = `
-/* ── Login ── */
+/* \u2500\u2500 Login \u2500\u2500 */
 .ir-login-shell {
   min-height: 100vh;
   display: grid;
@@ -345,7 +340,7 @@ const libCSS = `
   font-weight: 800;
 }
 
-/* ── Outer layout ── */
+/* \u2500\u2500 Outer layout \u2500\u2500 */
 .dl-layout {
   display: flex;
   height: 100vh;
@@ -458,7 +453,7 @@ const libCSS = `
   background-size: auto, 40px 40px;
 }
 
-/* ── Page header ── */
+/* \u2500\u2500 Page header \u2500\u2500 */
 .dl-page-header {
   position: relative;
   display: flex;
@@ -508,7 +503,7 @@ const libCSS = `
 }
 
 
-/* ── Scope bar ── */
+/* \u2500\u2500 Scope bar \u2500\u2500 */
 .dl-scope-bar {
   display: flex;
   align-items: center;
@@ -581,7 +576,7 @@ const libCSS = `
   box-shadow: var(--shadow-xs);
 }
 
-/* ── Search + filter bar ── */
+/* \u2500\u2500 Search + filter bar \u2500\u2500 */
 .dl-filter-bar {
   display: flex;
   flex-direction: column;
@@ -703,7 +698,7 @@ const libCSS = `
   font-weight: 800;
 }
 
-/* ── Add station modal ── */
+/* \u2500\u2500 Add station modal \u2500\u2500 */
 .dl-add-overlay {
   position: fixed;
   inset: 0;
@@ -1303,7 +1298,7 @@ const libCSS = `
   .dl-add-field[data-span="full"] { grid-column: auto; }
 }
 
-/* ── Table scroll area ── */
+/* \u2500\u2500 Table scroll area \u2500\u2500 */
 .dl-table-area {
   flex: 1;
   overflow: auto;
@@ -1423,7 +1418,7 @@ const libCSS = `
   color: var(--ink-400);
 }
 
-/* ── Station code pill ── */
+/* \u2500\u2500 Station code pill \u2500\u2500 */
 .dl-code-pill {
   display: inline-flex;
   align-items: center;
@@ -1440,10 +1435,10 @@ const libCSS = `
   box-shadow: 0 1px 0 rgba(14,27,44,.1);
 }
 
-/* ── Document status (absent) ── */
+/* \u2500\u2500 Document status (absent) \u2500\u2500 */
 .dl-doc-absent { font-size: 16px; color: var(--ink-300); font-weight: 400; line-height: 1; }
 
-/* ── Survey tags ── */
+/* \u2500\u2500 Survey tags \u2500\u2500 */
 .dl-survey-tags { display: flex; gap: 3px; align-items: center; }
 .dl-survey-tag {
   font-family: var(--font-mono);
@@ -1468,21 +1463,21 @@ const libCSS = `
   font-weight: 600;
 }
 
-/* ── Versions ── */
+/* \u2500\u2500 Versions \u2500\u2500 */
 .dl-versions { font-family: var(--font-mono); font-size: 11px; color: var(--ink-500); white-space: nowrap; }
 .dl-versions-empty { font-size: 13px; color: var(--ink-300); }
 
-/* ── Last activity ── */
+/* \u2500\u2500 Last activity \u2500\u2500 */
 .dl-activity-time { font-size: 12px; color: var(--ink-600); line-height: 1.3; }
 .dl-activity-by   { font-size: 10.5px; color: var(--ink-400); margin-top: 1px; }
 
-/* ── Completeness bar ── */
+/* \u2500\u2500 Completeness bar \u2500\u2500 */
 .dl-complete { display: flex; align-items: center; gap: 7px; }
 .dl-complete-bar { display: flex; gap: 2px; flex: 1; min-width: 70px; }
 .dl-complete-seg { flex: 1; height: 5px; border-radius: 2px; transition: background 200ms; }
 .dl-complete-count { font-family: var(--font-mono); font-size: 11px; color: var(--ink-500); white-space: nowrap; }
 
-/* ── Row actions ── */
+/* \u2500\u2500 Row actions \u2500\u2500 */
 .dl-row-actions { display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
 .dl-row-view-btn {
   height: 28px;
@@ -1548,7 +1543,7 @@ const libCSS = `
 }
 .dl-row-menu button:hover { background: var(--ink-50); color: var(--ink-900); }
 
-/* ── Sidebar toggle button in brand header ── */
+/* \u2500\u2500 Sidebar toggle button in brand header \u2500\u2500 */
 .dl-sidebar-toggle-btn {
   margin-left: auto;
   flex-shrink: 0;
@@ -1569,11 +1564,11 @@ const libCSS = `
 }
 .ds-sidebar[data-collapsed="true"] .dl-sidebar-toggle-btn { margin-left: 0; }
 
-/* ── Table density ── */
+/* \u2500\u2500 Table density \u2500\u2500 */
 .dl-table-area[data-density="compact"] .ds-table tbody td { padding: 3px 14px; }
 .dl-table-area[data-density="compact"] .ds-table thead th { padding: 3px 14px; }
 
-/* ── Sidebar collapse/expand ── */
+/* \u2500\u2500 Sidebar collapse/expand \u2500\u2500 */
 .ds-sidebar {
   flex-shrink: 0;
   overflow: hidden;
@@ -1625,7 +1620,7 @@ const libCSS = `
   gap: 0;
 }
 
-/* ── Bulk action bar ── */
+/* \u2500\u2500 Bulk action bar \u2500\u2500 */
 .dl-bulk-bar {
   display: flex;
   align-items: center;
@@ -1653,11 +1648,11 @@ const libCSS = `
   cursor: pointer; font-family: var(--font-sans); padding: 0 4px; transition: 120ms;
 }
 .dl-bulk-clear:hover { color: rgba(255,255,255,0.8); text-decoration: underline; }
-/* ── Validated (ESP-only) chip ── */
+/* \u2500\u2500 Validated (ESP-only) chip \u2500\u2500 */
 .ds-chip[data-tone="validated"] { background: oklch(0.94 0.06 295); color: oklch(0.38 0.18 295); border-color: oklch(0.85 0.1 295); }
 .ds-chip[data-variant="solid"][data-tone="validated"] { background: oklch(0.42 0.18 295); color: #fff; border-color: oklch(0.42 0.18 295); }
 
-/* ── Status guide button ── */
+/* \u2500\u2500 Status guide button \u2500\u2500 */
 .dl-status-guide-btn {
   display: inline-flex; align-items: center; gap: 4px;
   font-size: 11px; font-weight: 500; color: var(--ink-400);
@@ -1668,7 +1663,7 @@ const libCSS = `
 }
 .dl-status-guide-btn:hover { color: var(--accent-text); border-color: var(--accent); background: var(--accent-soft); }
 
-/* ── Status guide modal ── */
+/* \u2500\u2500 Status guide modal \u2500\u2500 */
 .dl-sg-overlay {
   position: fixed;
   inset: 0;
@@ -1764,7 +1759,7 @@ const libCSS = `
   .dl-sg-desc { grid-column: 2; }
 }
 
-/* ── Doc chip tooltip ── */
+/* \u2500\u2500 Doc chip tooltip \u2500\u2500 */
 .dl-doc-tip { position: relative; display: inline-flex; }
 .dl-doc-tip::after {
   content: attr(data-tooltip);
@@ -1801,7 +1796,7 @@ const libCSS = `
 .dl-doc-tip:hover::after,
 .dl-doc-tip:hover::before { opacity: 1; }
 
-/* ── Option B — dot row document column ── */
+/* \u2500\u2500 Compact document summary column \u2500\u2500 */
 .dl-doc-summary { position: relative; display: inline-flex; align-items: center; min-width: 0; }
 .dl-dot-row {
   display: inline-flex;
@@ -1995,108 +1990,184 @@ const libCSS = `
 .ir-login-mark,
 .ir-board-code { background: linear-gradient(180deg,var(--stripe-blue-800),var(--stripe-blue-900)); color: var(--paper); }
 `;
-
-/* ─────────────────────────────────────────────────────────────────────
-   STATION DATA — 12 sample rows covering all document + survey states
-───────────────────────────────────────────────────────────────────── */
 const ALL_STATIONS = [
-{
-  id: 1, name: "Vijayawada Junction", code: "BZA", section: "Vijayawada–Gudivada",
-  zone: "SCR", division: "Vijayawada",
-  esp: "approved", sip: "approved", lop: "approved", toc: true,
-  survey: { lidar: true, ortho: true, ts: true },
-  versions: "ESP v4 · SIP v2 · LOP v1",
-  lastTime: "1 day ago", lastBy: "K. Naidu"
-},
-{
-  id: 2, name: "Guntur Junction", code: "GNT", section: "Guntur–Tenali",
-  zone: "SCR", division: "Vijayawada",
-  esp: "approved", sip: "under_review", lop: null, toc: false,
-  survey: { lidar: true, ortho: true, ts: false },
-  versions: "ESP v3 · SIP v1",
-  lastTime: "3 hours ago", lastBy: "R. Prasad"
-},
-{
-  id: 3, name: "Tenali Junction", code: "TEL", section: "Guntur–Tenali",
-  zone: "SCR", division: "Vijayawada",
-  esp: "digitised", sip: "uploaded", lop: null, toc: false,
-  survey: { lidar: true, ortho: false, ts: true },
-  versions: "ESP v2 · SIP v1",
-  lastTime: "5 hours ago", lastBy: "V. Rao"
-},
-{
-  id: 4, name: "Ongole", code: "OGL", section: "Ongole–Nellore",
-  zone: "SCR", division: "Vijayawada",
-  esp: "pending_review", sip: null, lop: null, toc: false,
-  survey: { lidar: false, ortho: true, ts: false },
-  versions: null,
-  lastTime: "12 hours ago", lastBy: "S. Kumar"
-},
-{
-  id: 5, name: "Eluru", code: "EE", section: "Vijayawada–Eluru",
-  zone: "SCR", division: "Vijayawada",
-  esp: null, sip: null, lop: null, toc: false,
-  survey: { lidar: true, ortho: true, ts: true },
-  versions: null,
-  lastTime: "2 days ago", lastBy: "P. Murthy"
-},
-{
-  id: 6, name: "Rajahmundry", code: "RJY", section: "Eluru–Samalkot",
-  zone: "SCR", division: "Vijayawada",
-  esp: "approved", sip: "approved", lop: "digitised", toc: true,
-  survey: { lidar: true, ortho: true, ts: false },
-  versions: "ESP v3 · SIP v2 · LOP v1",
-  lastTime: "6 hours ago", lastBy: "A. Reddy"
-},
-{
-  id: 7, name: "Bhimavaram Town", code: "BVRT", section: "Nidadavolu–Bhimavaram",
-  zone: "SCR", division: "Vijayawada",
-  esp: "approved", sip: null, lop: null, toc: false,
-  survey: { lidar: false, ortho: false, ts: false },
-  versions: "ESP v2",
-  lastTime: "4 days ago", lastBy: "M. Kishore"
-},
-{
-  id: 8, name: "Nidadavolu", code: "NDD", section: "Nidadavolu–Bhimavaram",
-  zone: "SCR", division: "Vijayawada",
-  esp: "validated", sip: "digitised", lop: null, toc: false,
-  survey: { lidar: false, ortho: false, ts: false },
-  versions: "ESP v2 · SIP v1",
-  lastTime: "1 day ago", lastBy: "G. Sharma"
-},
-{
-  id: 9, name: "Kakinada Port", code: "COA", section: "Samalkot–Kakinada",
-  zone: "SCR", division: "Vijayawada",
-  esp: "under_review", sip: null, lop: null, toc: false,
-  survey: { lidar: true, ortho: false, ts: false },
-  versions: null,
-  lastTime: "now", lastBy: "upload system"
-},
-{
-  id: 10, name: "Nuzvid", code: "NZD", section: "Vijayawada–Eluru",
-  zone: "SCR", division: "Vijayawada",
-  esp: null, sip: null, lop: null, toc: false,
-  survey: { lidar: false, ortho: false, ts: false },
-  versions: null,
-  lastTime: "Just added", lastBy: "Admin"
-},
-{
-  id: 11, name: "Chirala", code: "CLX", section: "Ongole–Nellore",
-  zone: "SCR", division: "Vijayawada",
-  esp: "approved", sip: null, lop: null, toc: false,
-  survey: { lidar: true, ortho: true, ts: false },
-  versions: "ESP v2",
-  lastTime: "3 days ago", lastBy: "T. Babu"
-},
-{
-  id: 12, name: "Bisalwas Kalan", code: "BIWK", section: "Nagda–Ratlam",
-  zone: "WR", division: "Ratlam",
-  esp: "approved", sip: "under_review", lop: null, toc: false,
-  survey: { lidar: false, ortho: true, ts: true },
-  versions: "ESP v2 · SIP v1",
-  lastTime: "2 days ago", lastBy: "K. Naidu"
-}];
-
+  {
+    id: 1,
+    name: "Vijayawada Junction",
+    code: "BZA",
+    section: "Vijayawada\u2013Gudivada",
+    zone: "SCoR",
+    division: "Vijayawada",
+    esp: "approved",
+    sip: "approved",
+    lop: "approved",
+    toc: true,
+    survey: { lidar: true, ortho: true, ts: true },
+    versions: "ESP v4 \xB7 SIP v2 \xB7 LOP v1",
+    lastTime: "1 day ago",
+    lastBy: "Sarath"
+  },
+  {
+    id: 2,
+    name: "Guntur Junction",
+    code: "GNT",
+    section: "Guntur\u2013Tenali",
+    zone: "SCoR",
+    division: "Vijayawada",
+    esp: "approved",
+    sip: "under_review",
+    lop: null,
+    toc: false,
+    survey: { lidar: true, ortho: true, ts: false },
+    versions: "ESP v3 \xB7 SIP v1",
+    lastTime: "3 hours ago",
+    lastBy: "R. Prasad"
+  },
+  {
+    id: 3,
+    name: "Tenali Junction",
+    code: "TEL",
+    section: "Guntur\u2013Tenali",
+    zone: "SCoR",
+    division: "Vijayawada",
+    esp: "digitised",
+    sip: "uploaded",
+    lop: null,
+    toc: false,
+    survey: { lidar: true, ortho: false, ts: true },
+    versions: "ESP v2 \xB7 SIP v1",
+    lastTime: "5 hours ago",
+    lastBy: "V. Rao"
+  },
+  {
+    id: 4,
+    name: "Ongole",
+    code: "OGL",
+    section: "Ongole\u2013Nellore",
+    zone: "SCoR",
+    division: "Vijayawada",
+    esp: "pending_review",
+    sip: null,
+    lop: null,
+    toc: false,
+    survey: { lidar: false, ortho: true, ts: false },
+    versions: null,
+    lastTime: "12 hours ago",
+    lastBy: "S. Kumar"
+  },
+  {
+    id: 5,
+    name: "Eluru",
+    code: "EE",
+    section: "Vijayawada\u2013Eluru",
+    zone: "SCoR",
+    division: "Vijayawada",
+    esp: null,
+    sip: null,
+    lop: null,
+    toc: false,
+    survey: { lidar: true, ortho: true, ts: true },
+    versions: null,
+    lastTime: "2 days ago",
+    lastBy: "P. Murthy"
+  },
+  {
+    id: 6,
+    name: "Rajahmundry",
+    code: "RJY",
+    section: "Eluru\u2013Samalkot",
+    zone: "SCoR",
+    division: "Vijayawada",
+    esp: "approved",
+    sip: "approved",
+    lop: "digitised",
+    toc: true,
+    survey: { lidar: true, ortho: true, ts: false },
+    versions: "ESP v3 \xB7 SIP v2 \xB7 LOP v1",
+    lastTime: "6 hours ago",
+    lastBy: "A. Reddy"
+  },
+  {
+    id: 7,
+    name: "Bhimavaram Town",
+    code: "BVRT",
+    section: "Nidadavolu\u2013Bhimavaram",
+    zone: "SCoR",
+    division: "Vijayawada",
+    esp: "approved",
+    sip: null,
+    lop: null,
+    toc: false,
+    survey: { lidar: false, ortho: false, ts: false },
+    versions: "ESP v2",
+    lastTime: "4 days ago",
+    lastBy: "M. Kishore"
+  },
+  {
+    id: 8,
+    name: "Nidadavolu",
+    code: "NDD",
+    section: "Nidadavolu\u2013Bhimavaram",
+    zone: "SCoR",
+    division: "Vijayawada",
+    esp: "validated",
+    sip: "digitised",
+    lop: null,
+    toc: false,
+    survey: { lidar: false, ortho: false, ts: false },
+    versions: "ESP v2 \xB7 SIP v1",
+    lastTime: "1 day ago",
+    lastBy: "G. Sharma"
+  },
+  {
+    id: 9,
+    name: "Kakinada Port",
+    code: "COA",
+    section: "Samalkot\u2013Kakinada",
+    zone: "SCoR",
+    division: "Vijayawada",
+    esp: "under_review",
+    sip: null,
+    lop: null,
+    toc: false,
+    survey: { lidar: true, ortho: false, ts: false },
+    versions: null,
+    lastTime: "now",
+    lastBy: "upload system"
+  },
+  {
+    id: 10,
+    name: "Nuzvid",
+    code: "NZD",
+    section: "Vijayawada\u2013Eluru",
+    zone: "SCoR",
+    division: "Vijayawada",
+    esp: null,
+    sip: null,
+    lop: null,
+    toc: false,
+    survey: { lidar: false, ortho: false, ts: false },
+    versions: null,
+    lastTime: "Just added",
+    lastBy: "Admin"
+  },
+  {
+    id: 11,
+    name: "Chirala",
+    code: "CLX",
+    section: "Ongole\u2013Nellore",
+    zone: "SCoR",
+    division: "Vijayawada",
+    esp: "approved",
+    sip: null,
+    lop: null,
+    toc: false,
+    survey: { lidar: true, ortho: true, ts: false },
+    versions: "ESP v2",
+    lastTime: "3 days ago",
+    lastBy: "T. Babu"
+  }
+];
 const DOCUMENT_FILTERS = [
   { value: "all", label: "All document types" },
   { value: "esp", label: "ESP available" },
@@ -2105,7 +2176,6 @@ const DOCUMENT_FILTERS = [
   { value: "missing_any", label: "Missing any ESP/SIP/LOP" },
   { value: "toc", label: "TOC available" }
 ];
-
 const STATUS_FILTERS = [
   { value: "all", label: "Any document status" },
   { value: "uploaded", label: "Uploaded" },
@@ -2117,7 +2187,6 @@ const STATUS_FILTERS = [
   { value: "returned_correction", label: "Returned for Correction" },
   { value: "missing", label: "Missing document" }
 ];
-
 const SURVEY_FILTERS = [
   { value: "all", label: "Any survey data" },
   { value: "lidar", label: "LiDAR available" },
@@ -2126,154 +2195,108 @@ const SURVEY_FILTERS = [
   { value: "all_survey", label: "All survey data available" },
   { value: "missing_survey", label: "Missing survey data" }
 ];
-
 const COMPLETENESS_FILTERS = [
   { value: "all", label: "Any completeness" },
   { value: "complete", label: "Complete: 5/5" },
   { value: "incomplete", label: "Incomplete: 1-4/5" },
   { value: "not_started", label: "Not started: 0/5" }
 ];
-
 const DEFAULT_FILTERS = {
   document: "all",
   status: "all",
   survey: "all",
   completeness: "all"
 };
-
 const FILTER_LABELS = {
   document: Object.fromEntries(DOCUMENT_FILTERS.map((o) => [o.value, o.label])),
   status: Object.fromEntries(STATUS_FILTERS.map((o) => [o.value, o.label])),
   survey: Object.fromEntries(SURVEY_FILTERS.map((o) => [o.value, o.label])),
   completeness: Object.fromEntries(COMPLETENESS_FILTERS.map((o) => [o.value, o.label]))
 };
-
 const SECTION_SCOPE_LABELS = {
   all: "All Sections",
-  "VJA-GDV": "Vijayawada–Gudivada",
-  "GNT-TEL": "Guntur–Tenali",
-  "EE-SLO": "Eluru–Samalkot"
+  "VJA-GDV": "Vijayawada\u2013Gudivada",
+  "GNT-TEL": "Guntur\u2013Tenali",
+  "EE-SLO": "Eluru\u2013Samalkot"
 };
-
 const ZONE_OPTIONS = [
-  { value: "SCR", label: "SCR — South Central Railway" },
-  { value: "WR", label: "WR — Western Railway" },
-  { value: "CR", label: "CR — Central Railway" },
-  { value: "NR", label: "NR — Northern Railway" },
-  { value: "ER", label: "ER — Eastern Railway" }
+  { value: "SCoR", label: "SCoR \u2014 South Coast Railway" }
 ];
-
 const DIVISION_OPTIONS = {
-  SCR: ["Vijayawada", "Guntur", "Hyderabad", "Guntakal", "Nanded"],
-  WR: ["Ratlam", "Vadodara", "Mumbai Central", "Ahmedabad"],
+  SCoR: ["Visakhapatnam", "Vijayawada", "Guntur", "Guntakal"],
   CR: ["Mumbai", "Pune", "Nagpur", "Solapur"],
   NR: ["Delhi", "Ambala", "Lucknow", "Firozpur"],
   ER: ["Howrah", "Sealdah", "Asansol", "Malda"]
 };
-
 const SECTION_OPTIONS = {
-  Vijayawada: ["Vijayawada–Gudivada", "Vijayawada–Eluru", "Eluru–Samalkot", "Samalkot–Kakinada"],
-  Guntur: ["Guntur–Tenali", "Guntur–Nandyal"],
-  Hyderabad: ["Secunderabad–Kazipet", "Hyderabad–Vikarabad"],
-  Guntakal: ["Guntakal–Renigunta", "Guntakal–Wadi"],
-  Nanded: ["Aurangabad–Ankai", "Nanded–Mudkhed", "Parbhani–Purna"],
-  Ratlam: ["Nagda–Ratlam", "Ratlam–Godhra", "Ratlam–Chittaurgarh"],
-  Vadodara: ["Vadodara–Godhra", "Vadodara–Ahmedabad"],
-  "Mumbai Central": ["Mumbai Central–Surat", "Surat–Vadodara"],
-  Ahmedabad: ["Ahmedabad–Viramgam", "Ahmedabad–Vadodara"],
-  Mumbai: ["CSMT–Kalyan", "Kalyan–Kasara"],
-  Pune: ["Pune–Lonavala", "Pune–Daund"],
-  Nagpur: ["Nagpur–Wardha", "Nagpur–Itarsi"],
-  Solapur: ["Solapur–Daund", "Solapur–Wadi"],
-  Delhi: ["Delhi–Ambala", "Delhi–Ghaziabad"],
-  Ambala: ["Ambala–Ludhiana", "Ambala–Kalka"],
-  Lucknow: ["Lucknow–Kanpur", "Lucknow–Varanasi"],
-  Firozpur: ["Firozpur–Ludhiana", "Firozpur–Bathinda"],
-  Howrah: ["Howrah–Barddhaman", "Howrah–Kharagpur"],
-  Sealdah: ["Sealdah–Krishnanagar", "Sealdah–Bongaon"],
-  Asansol: ["Asansol–Dhanbad", "Asansol–Barddhaman"],
-  Malda: ["Malda–New Farakka", "Malda–Azimganj"]
+  Visakhapatnam: ["Visakhapatnam\u2013Vizianagaram", "Visakhapatnam\u2013Bimlipatnam", "Visakhapatnam\u2013Duvvada"],
+  Vijayawada: ["Vijayawada\u2013Gudivada", "Vijayawada\u2013Eluru", "Eluru\u2013Samalkot", "Samalkot\u2013Kakinada"],
+  Guntur: ["Guntur\u2013Tenali", "Guntur\u2013Nandyal", "Guntur\u2013Macherla"],
+  Guntakal: ["Guntakal\u2013Renigunta", "Guntakal\u2013Wadi", "Guntakal\u2013Dhone"]
 };
-
 const TRAIN_DIRECTIONS = [
   "Up",
   "Down",
-  "Up ↔ Down",
+  "Up \u2194 Down",
   "Bidirectional"
 ];
-
 const AURANGABAD_STATION_DRAFT = {
-  zone: "SCR",
-  division: "Nanded",
-  section: "Aurangabad–Ankai",
-  stationName: "Aurangabad",
-  stationCode: "AWB",
-  stationTitle: "Aurangabad",
-  stationId: "AWB-431240",
+  zone: "SCoR",
+  division: "Vijayawada",
+  section: "Vijayawada\u2013Gudivada",
+  stationName: "Machilipatnam",
+  stationCode: "MTM",
+  stationTitle: "Machilipatnam",
+  stationId: "MTM-120050",
   cll: "431.240",
-  trainDirection: "Up ↔ Down"
+  trainDirection: "Up \u2194 Down"
 };
-
-
-/* ─────────────────────────────────────────────────────────────────────
-   HELPER: Completeness calculation — Survey / ESP / SIP / LOP / TOC
-───────────────────────────────────────────────────────────────────── */
 const getCompleteness = (s) => {
   const segs = [
-  s.survey.lidar || s.survey.ortho || s.survey.ts,
-  s.esp === "approved",
-  s.sip === "approved",
-  s.lop === "approved",
-  s.toc === true];
-
+    s.survey.lidar || s.survey.ortho || s.survey.ts,
+    s.esp === "approved",
+    s.sip === "approved",
+    s.lop === "approved",
+    s.toc === true
+  ];
   return { segs, count: segs.filter(Boolean).length };
 };
-
-/* ─────────────────────────────────────────────────────────────────────
-   SMALL COMPONENTS
-───────────────────────────────────────────────────────────────────── */
-
-/* Document-state chip or absence marker */
-
 const DOC_TOOLTIPS = {
-  uploaded:            "Document received and stored — awaiting review",
-  pending_review:      "Queued for reviewer assignment",
-  under_review:        "Actively being reviewed by the team",
-  digitised:           "Content extracted and digitised",
-  returned_correction: "Returned for correction — will loop back to Under Review",
-  validated:           "Validated — ESP document reviewed and signed off (ESP only)",
-  approved:            "Verified and approved",
+  uploaded: "Document received and stored \u2014 awaiting review",
+  pending_review: "Queued for reviewer assignment",
+  under_review: "Actively being reviewed by the team",
+  digitised: "Content extracted and digitised",
+  returned_correction: "Returned for correction \u2014 will loop back to Under Review",
+  validated: "Validated \u2014 ESP document reviewed and signed off (ESP only)",
+  approved: "Verified and approved"
 };
-
 const DOC_STATE = {
-  uploaded:            () => <Chip tone="neutral"  variant="solid">Uploaded</Chip>,
-  pending_review:      () => <Chip tone="warning"  variant="solid">Pending Review</Chip>,
-  under_review:        () => <Chip tone="info"     variant="solid" pulse>Under Review</Chip>,
-  digitised:           () => <Chip tone="accent"   variant="solid">Digitised</Chip>,
-  returned_correction: () => <Chip tone="danger"    variant="solid">Returned for Correction</Chip>,
-  validated:           () => <Chip tone="validated" variant="solid">Validated</Chip>,
-  approved:            () => <Chip tone="success"   variant="solid" leadingIcon="check">Approved</Chip>,
+  uploaded: () => /* @__PURE__ */ React.createElement(Chip, { tone: "neutral", variant: "solid" }, "Uploaded"),
+  pending_review: () => /* @__PURE__ */ React.createElement(Chip, { tone: "warning", variant: "solid" }, "Pending Review"),
+  under_review: () => /* @__PURE__ */ React.createElement(Chip, { tone: "info", variant: "solid", pulse: true }, "Under Review"),
+  digitised: () => /* @__PURE__ */ React.createElement(Chip, { tone: "accent", variant: "solid" }, "Digitised"),
+  returned_correction: () => /* @__PURE__ */ React.createElement(Chip, { tone: "danger", variant: "solid" }, "Returned for Correction"),
+  validated: () => /* @__PURE__ */ React.createElement(Chip, { tone: "validated", variant: "solid" }, "Validated"),
+  approved: () => /* @__PURE__ */ React.createElement(Chip, { tone: "success", variant: "solid", leadingIcon: "check" }, "Approved")
 };
 const getLatestDocVersion = (station, docKey) => {
   const label = docKey.toUpperCase();
   if (docKey === "toc") return station.toc ? "TOC available" : "Not available";
-  const version = (station.versions || "").split(" · ").find((item) => item.toLowerCase().startsWith(docKey));
+  const version = (station.versions || "").split(" \xB7 ").find((item) => item.toLowerCase().startsWith(docKey));
   return version || "Not available";
 };
 const DocChip = ({ state, latestVersion, docLabel }) => {
   const tip = `${docLabel} latest version: ${latestVersion || "Not available"}`;
-  if (!state) return <span className="dl-doc-tip" data-tooltip={tip}><span className="dl-doc-absent">—</span></span>;
+  if (!state) return /* @__PURE__ */ React.createElement("span", { className: "dl-doc-tip", "data-tooltip": tip }, /* @__PURE__ */ React.createElement("span", { className: "dl-doc-absent" }, "\u2014"));
   const fn = DOC_STATE[state];
-  return <span className="dl-doc-tip" data-tooltip={tip}>{fn ? fn() : <span className="dl-doc-absent">—</span>}</span>;
+  return /* @__PURE__ */ React.createElement("span", { className: "dl-doc-tip", "data-tooltip": tip }, fn ? fn() : /* @__PURE__ */ React.createElement("span", { className: "dl-doc-absent" }, "\u2014"));
 };
-
 const VISIBLE_DOCUMENT_TYPES = [
   { key: "esp", label: "ESP", missingAction: "Upload" },
   { key: "sip", label: "SIP", missingAction: "Generate" },
   { key: "toc", label: "TOC", missingAction: "Generate" },
   { key: "lop", label: "LOP", missingAction: "Generate" }
 ];
-
 const normalizeDocumentStatus = (state) => {
   if (!state) return "Not Available";
   return {
@@ -2287,7 +2310,6 @@ const normalizeDocumentStatus = (state) => {
     failed: "Failed"
   }[state] || "Not Available";
 };
-
 const getDocumentTone = (status) => {
   if (status === "Approved" || status === "Digitised" || status === "Available") return "success";
   if (status === "Under Review" || status === "Uploaded") return "info";
@@ -2295,29 +2317,25 @@ const getDocumentTone = (status) => {
   if (status === "Failed") return "danger";
   return "neutral";
 };
-
 const formatLatestVersion = (station, docKey) => {
-  if (docKey === "toc") return station.toc ? "V1 R0 A0" : "Empty";
-  const version = (station.versions || "").split(" · ").find((item) => item.toLowerCase().startsWith(docKey));
+  if (docKey === "toc") return station.toc ? "V1-R0-A0" : "Empty";
+  const version = (station.versions || "").split(" \xB7 ").find((item) => item.toLowerCase().startsWith(docKey));
   if (!version) return "Empty";
-  return version.replace(/^[A-Z]+\s*/i, "").toUpperCase().replace(/^V(\d+)$/, "V$1 R0 A0");
+  return version.replace(/^[A-Z]+\s*/i, "").toUpperCase().replace(/^V(\d+)$/, "V$1-R0-A0");
 };
-
 const getDocumentState = (station, docKey) => docKey === "toc" ? station.toc ? "approved" : null : station[docKey];
 const getLatestApprovedVersion = (station, docKey, status) => {
   if (status !== "Approved") return "Empty";
   return formatLatestVersion(station, docKey);
 };
-
 const getSurveySummary = (survey = {}) => {
   const labels = [
     survey.lidar ? "LiDAR" : null,
     survey.ortho ? "Ortho" : null,
     survey.ts ? "Total Station" : null
   ].filter(Boolean);
-  return labels.length ? labels.join(" · ") : "Empty";
+  return labels.length ? labels.join(" \xB7 ") : "Empty";
 };
-
 const getStationDocuments = (station) => {
   const documentRows = VISIBLE_DOCUMENT_TYPES.map((doc) => {
     const state = getDocumentState(station, doc.key);
@@ -2330,7 +2348,7 @@ const getStationDocuments = (station) => {
       latestVersion,
       status,
       tone: getDocumentTone(status),
-      lastUpdated: available ? station.lastTime : "—",
+      lastUpdated: available ? station.lastTime : "\u2014",
       action: "View"
     };
   });
@@ -2344,12 +2362,11 @@ const getStationDocuments = (station) => {
       latestVersion: getSurveySummary(station.survey),
       status: hasSurvey ? "Available" : "Not Available",
       tone: hasSurvey ? "success" : "neutral",
-      lastUpdated: hasSurvey ? station.lastTime : "—",
+      lastUpdated: hasSurvey ? station.lastTime : "\u2014",
       action: "View"
     }
   ];
 };
-
 const getOverallStatus = (documents) => {
   const statuses = documents.map((doc) => doc.status);
   if (statuses.includes("Failed")) return { label: "Action Required", tone: "danger" };
@@ -2360,60 +2377,13 @@ const getOverallStatus = (documents) => {
   if (statuses.includes("Not Available")) return { label: "Incomplete", tone: "neutral" };
   return { label: "In Progress", tone: "info" };
 };
-
-const DocumentStatusBadge = ({ status }) => (
-  <span className="dl-overall-status" data-tone={getDocumentTone(status)}>{status}</span>
-);
-
-const OverallStatusBadge = ({ status }) => (
-  <span className="dl-overall-status" data-tone={status.tone}>{status.label}</span>
-);
-
-const DocumentDetailsTable = ({ documents, onView }) => (
-  <table className="dl-doc-detail-table">
-    <thead>
-      <tr>
-        <th>Document</th>
-        <th>Latest Approved Version</th>
-        <th>Last Updated</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {documents.map((doc) => (
-        <tr key={doc.key} data-available={doc.available ? "true" : "false"}>
-          <td>
-            <span className="dl-doc-detail-label">
-              <span className="dl-doc-detail-dot" data-tone={doc.tone} aria-hidden="true" />
-              {doc.label}
-            </span>
-          </td>
-          <td>
-            {doc.available
-              ? <span className="dl-doc-detail-version">{doc.latestVersion}</span>
-              : <span className="dl-doc-detail-empty">Not uploaded</span>}
-          </td>
-          <td>
-            {doc.available
-              ? <span className="dl-doc-detail-time">{doc.lastUpdated}</span>
-              : <span className="dl-doc-detail-empty">—</span>}
-          </td>
-          <td>
-            {doc.available
-              ? <button className="dl-doc-detail-action" type="button" onClick={() => onView(doc)}>View</button>
-              : <span className="dl-doc-detail-empty">—</span>}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-);
-
+const DocumentStatusBadge = ({ status }) => /* @__PURE__ */ React.createElement("span", { className: "dl-overall-status", "data-tone": getDocumentTone(status) }, status);
+const OverallStatusBadge = ({ status }) => /* @__PURE__ */ React.createElement("span", { className: "dl-overall-status", "data-tone": status.tone }, status.label);
+const DocumentDetailsTable = ({ documents, onView }) => /* @__PURE__ */ React.createElement("table", { className: "dl-doc-detail-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Document"), /* @__PURE__ */ React.createElement("th", null, "Latest Approved Version"), /* @__PURE__ */ React.createElement("th", null, "Last Updated"), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, documents.map((doc) => /* @__PURE__ */ React.createElement("tr", { key: doc.key, "data-available": doc.available ? "true" : "false" }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "dl-doc-detail-label" }, /* @__PURE__ */ React.createElement("span", { className: "dl-doc-detail-dot", "data-tone": doc.tone, "aria-hidden": "true" }), doc.label)), /* @__PURE__ */ React.createElement("td", null, doc.available ? /* @__PURE__ */ React.createElement("span", { className: "dl-doc-detail-version" }, doc.latestVersion) : /* @__PURE__ */ React.createElement("span", { className: "dl-doc-detail-empty" }, "Not uploaded")), /* @__PURE__ */ React.createElement("td", null, doc.available ? /* @__PURE__ */ React.createElement("span", { className: "dl-doc-detail-time" }, doc.lastUpdated) : /* @__PURE__ */ React.createElement("span", { className: "dl-doc-detail-empty" }, "\u2014")), /* @__PURE__ */ React.createElement("td", null, doc.available ? /* @__PURE__ */ React.createElement("button", { className: "dl-doc-detail-action", type: "button", onClick: () => onView(doc) }, "View") : /* @__PURE__ */ React.createElement("span", { className: "dl-doc-detail-empty" }, "\u2014"))))));
 const DocumentDetailsPopover = ({ station, documents, onView }) => {
   const [hoverOpen, setHoverOpen] = useStateLib(false);
   const [modalOpen, setModalOpen] = useStateLib(false);
   const availableCount = documents.filter((doc) => doc.key !== "survey" && doc.available).length;
-
   React.useEffect(() => {
     if (!modalOpen) return;
     const onKey = (event) => {
@@ -2424,7 +2394,6 @@ const DocumentDetailsPopover = ({ station, documents, onView }) => {
       document.removeEventListener("keydown", onKey);
     };
   }, [modalOpen]);
-
   const openModal = (event) => {
     event.stopPropagation();
     setHoverOpen(false);
@@ -2436,40 +2405,10 @@ const DocumentDetailsPopover = ({ station, documents, onView }) => {
     setModalOpen(false);
     onView?.(doc, station);
   };
-
-  return (
-    <div className="dl-doc-summary" onClick={(event) => event.stopPropagation()}>
-      <div className="dl-dot-row" role="button" aria-label={`${availableCount} documents — click for details`} onClick={openModal}>
-        {documents.filter((d) => d.key !== "survey").map((doc) => (
-          <div className="dl-dot-wrap" key={doc.key}>
-            <div className="dl-dot" data-tone={doc.tone} />
-            <span className="dl-dot-tip">{doc.label} · {doc.status}</span>
-          </div>
-        ))}
-      </div>
-      {modalOpen && (
-        <div className="dl-doc-modal-layer" role="presentation" onClick={() => setModalOpen(false)}>
-          <div className="dl-doc-popover" role="dialog" aria-modal="true" aria-label={`Document details for ${station.name}`} onClick={(event) => event.stopPropagation()}>
-            <div className="dl-doc-popover-head">
-              <div>
-                <div className="dl-doc-popover-title">Document Details</div>
-                <div className="dl-doc-popover-sub">{station.name} · {station.code}</div>
-              </div>
-              <button className="dl-doc-popover-close" type="button" aria-label="Close document details" onClick={() => setModalOpen(false)}>
-                <Icon name="x" size={13} />
-              </button>
-            </div>
-            <DocumentDetailsTable documents={documents} onView={viewDocument} />
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  return /* @__PURE__ */ React.createElement("div", { className: "dl-doc-summary", onClick: (event) => event.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "dl-dot-row", role: "button", "aria-label": `${availableCount} documents — click for details`, onClick: openModal }, documents.filter((d) => d.key !== "survey").map((doc) => /* @__PURE__ */ React.createElement("div", { className: "dl-dot-wrap", key: doc.key }, /* @__PURE__ */ React.createElement("div", { className: "dl-dot", "data-tone": doc.tone }), /* @__PURE__ */ React.createElement("span", { className: "dl-dot-tip" }, doc.label, " \xB7 ", doc.status)))), modalOpen && /* @__PURE__ */ React.createElement("div", { className: "dl-doc-modal-layer", role: "presentation", onClick: () => setModalOpen(false) }, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover", role: "dialog", "aria-modal": "true", "aria-label": `Document details for ${station.name}`, onClick: (event) => event.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-title" }, "Document Details"), /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-sub" }, station.name, " \xB7 ", station.code)), /* @__PURE__ */ React.createElement("button", { className: "dl-doc-popover-close", type: "button", "aria-label": "Close document details", onClick: () => setModalOpen(false) }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 13 }))), /* @__PURE__ */ React.createElement(DocumentDetailsTable, { documents, onView: viewDocument }))));
 };
-
 const StationRowActions = ({ station, onView, onAction }) => {
   const [open, setOpen] = useStateLib(false);
-
   React.useEffect(() => {
     if (!open) return;
     const close = () => setOpen(false);
@@ -2483,63 +2422,31 @@ const StationRowActions = ({ station, onView, onAction }) => {
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
-
   const menuAction = (label, event) => {
     event.stopPropagation();
     setOpen(false);
     onAction?.(`${label} for ${station.code}`);
   };
-
-  return (
-    <div className="dl-row-actions">
-      <button className="dl-row-view-btn" type="button" onClick={onView}>
-        <Icon name="eye" size={14} /> View
-      </button>
-      <div className="dl-row-more-wrap">
-        <button className="dl-action-icon" type="button" title="More actions" aria-label={`More actions for ${station.name}`} aria-expanded={open ? "true" : "false"} onClick={(event) => {
-          event.stopPropagation();
-          setOpen((current) => !current);
-        }}>
-          <Icon name="more" size={15} />
-        </button>
-        {open && (
-          <div className="dl-row-menu" role="menu" onClick={(event) => event.stopPropagation()}>
-            <button type="button" role="menuitem" onClick={(event) => menuAction("Download documents", event)}>
-              <Icon name="download" size={13} /> Download documents
-            </button>
-            <button type="button" role="menuitem" onClick={(event) => menuAction("View audit trail", event)}>
-              <Icon name="clock" size={13} /> View audit trail
-            </button>
-            <button type="button" role="menuitem" onClick={(event) => menuAction("Edit metadata", event)}>
-              <Icon name="edit" size={13} /> Edit metadata
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  return /* @__PURE__ */ React.createElement("div", { className: "dl-row-actions" }, /* @__PURE__ */ React.createElement("button", { className: "dl-row-view-btn", type: "button", onClick: onView }, /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 14 }), " View"), /* @__PURE__ */ React.createElement("div", { className: "dl-row-more-wrap" }, /* @__PURE__ */ React.createElement("button", { className: "dl-action-icon", type: "button", title: "More actions", "aria-label": `More actions for ${station.name}`, "aria-expanded": open ? "true" : "false", onClick: (event) => {
+    event.stopPropagation();
+    setOpen((current) => !current);
+  } }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 15 })), open && /* @__PURE__ */ React.createElement("div", { className: "dl-row-menu", role: "menu", onClick: (event) => event.stopPropagation() }, /* @__PURE__ */ React.createElement("button", { type: "button", role: "menuitem", onClick: (event) => menuAction("Download documents", event) }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 13 }), " Download documents"), /* @__PURE__ */ React.createElement("button", { type: "button", role: "menuitem", onClick: (event) => menuAction("View audit trail", event) }, /* @__PURE__ */ React.createElement(Icon, { name: "clock", size: 13 }), " View audit trail"), /* @__PURE__ */ React.createElement("button", { type: "button", role: "menuitem", onClick: (event) => menuAction("Edit metadata", event) }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 13 }), " Edit metadata"))));
 };
-
-
-/* Status guide button + modal */
 const STATUS_GUIDE_ROWS = [
-  { n:1, key:"uploaded",            label:"Uploaded",                tone:"neutral",   desc:"Document received and stored" },
-  { n:2, key:"pending_review",      label:"Pending Review",          tone:"warning",   desc:"Queued for reviewer assignment" },
-  { n:3, key:"under_review",        label:"Under Review",            tone:"info",      desc:"Actively being reviewed", pulse:true },
-  { n:4, key:"digitised",           label:"Digitised",               tone:"accent",    desc:"Content extracted and digitised" },
-  { n:5, key:"validated",           label:"Validated",               tone:"validated", desc:"Reviewed and signed off", espOnly:true },
-  { n:6, key:"returned_correction", label:"Returned for Correction", tone:"danger",    desc:"Sent back — loops to Under Review" },
-  { n:7, key:"approved",            label:"Approved",                tone:"success",   desc:"Verified and approved", check:true },
+  { n: 1, key: "uploaded", label: "Uploaded", tone: "neutral", desc: "Document received and stored" },
+  { n: 2, key: "pending_review", label: "Pending Review", tone: "warning", desc: "Queued for reviewer assignment" },
+  { n: 3, key: "under_review", label: "Under Review", tone: "info", desc: "Actively being reviewed", pulse: true },
+  { n: 4, key: "digitised", label: "Digitised", tone: "accent", desc: "Content extracted and digitised" },
+  { n: 5, key: "validated", label: "Validated", tone: "validated", desc: "Reviewed and signed off", espOnly: true },
+  { n: 6, key: "returned_correction", label: "Returned for Correction", tone: "danger", desc: "Sent back \u2014 loops to Under Review" },
+  { n: 7, key: "approved", label: "Approved", tone: "success", desc: "Verified and approved", check: true }
 ];
-
 const StatusGuide = () => {
   const [open, setOpen] = useStateLib(false);
-
   const toggle = (e) => {
     e.stopPropagation();
-    setOpen(o => !o);
+    setOpen((o) => !o);
   };
-
   React.useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
@@ -2550,69 +2457,23 @@ const StatusGuide = () => {
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
-
-  return (
-    <>
-      <button className="dl-status-guide-btn" onClick={toggle}>
-        <Icon name="info" size={11} /> Status guide
-      </button>
-      {open && ReactDOM.createPortal((
-        <div className="dl-sg-overlay" onClick={() => setOpen(false)}>
-          <div className="dl-sg-modal" role="dialog" aria-modal="true" aria-labelledby="status-guide-title" onClick={e => e.stopPropagation()}>
-          <div className="dl-sg-head">
-            <div>
-              <div id="status-guide-title" className="dl-sg-title">Document Status Guide</div>
-              <div className="dl-sg-subtitle">Statuses apply independently to ESP, SIP and LOP.</div>
-            </div>
-            <button className="dl-sg-close" onClick={() => setOpen(false)}><Icon name="x" size={13} /></button>
-          </div>
-          <div className="dl-sg-rows">
-            {STATUS_GUIDE_ROWS.map((s, i) => (
-              <React.Fragment key={s.key}>
-                {s.key === "returned_correction" && <div className="dl-sg-divider" />}
-                <div className="dl-sg-row">
-                  <span className="dl-sg-num">{s.n}</span>
-                  <span className="dl-sg-status-line">
-                    <span className="dl-sg-status" data-tone={s.tone}>
-                      {s.pulse && <span className="dl-sg-pulse" />}
-                      {s.check && <Icon name="check" size={10} />}
-                      {s.label}
-                    </span>
-                    {s.espOnly && <span className="dl-sg-esp">ESP</span>}
-                  </span>
-                  <span className="dl-sg-desc">{s.desc}</span>
-                </div>
-              </React.Fragment>
-            ))}
-          </div>
-          <div className="dl-sg-footer"><strong>Validated</strong> is ESP-only. <strong>Returned for Correction</strong> loops back to Under Review after amendments.</div>
-          </div>
-        </div>
-      ), document.body)}
-    </>
-  );
+  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { className: "dl-status-guide-btn", onClick: toggle }, /* @__PURE__ */ React.createElement(Icon, { name: "info", size: 11 }), " Status guide"), open && ReactDOM.createPortal(/* @__PURE__ */ React.createElement("div", { className: "dl-sg-overlay", onClick: () => setOpen(false) }, /* @__PURE__ */ React.createElement("div", { className: "dl-sg-modal", role: "dialog", "aria-modal": "true", "aria-labelledby": "status-guide-title", onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "dl-sg-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { id: "status-guide-title", className: "dl-sg-title" }, "Document Status Guide"), /* @__PURE__ */ React.createElement("div", { className: "dl-sg-subtitle" }, "Statuses apply independently to ESP, SIP and LOP.")), /* @__PURE__ */ React.createElement("button", { className: "dl-sg-close", onClick: () => setOpen(false) }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 13 }))), /* @__PURE__ */ React.createElement("div", { className: "dl-sg-rows" }, STATUS_GUIDE_ROWS.map((s, i) => /* @__PURE__ */ React.createElement(React.Fragment, { key: s.key }, s.key === "returned_correction" && /* @__PURE__ */ React.createElement("div", { className: "dl-sg-divider" }), /* @__PURE__ */ React.createElement("div", { className: "dl-sg-row" }, /* @__PURE__ */ React.createElement("span", { className: "dl-sg-num" }, s.n), /* @__PURE__ */ React.createElement("span", { className: "dl-sg-status-line" }, /* @__PURE__ */ React.createElement("span", { className: "dl-sg-status", "data-tone": s.tone }, s.pulse && /* @__PURE__ */ React.createElement("span", { className: "dl-sg-pulse" }), s.check && /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 10 }), s.label), s.espOnly && /* @__PURE__ */ React.createElement("span", { className: "dl-sg-esp" }, "ESP")), /* @__PURE__ */ React.createElement("span", { className: "dl-sg-desc" }, s.desc))))), /* @__PURE__ */ React.createElement("div", { className: "dl-sg-footer" }, /* @__PURE__ */ React.createElement("strong", null, "Validated"), " is ESP-only. ", /* @__PURE__ */ React.createElement("strong", null, "Returned for Correction"), " loops back to Under Review after amendments."))), document.body));
 };
-
 const AddStationModal = ({ initialZone, initialDivision, initialSectionScope, existingCodes, onAdd, onClose }) => {
-  const resolveDivision = (zone, division) =>
-  (DIVISION_OPTIONS[zone] || []).includes(division) ? division : (DIVISION_OPTIONS[zone] || [])[0] || "";
-
+  const resolveDivision = (zone, division) => (DIVISION_OPTIONS[zone] || []).includes(division) ? division : (DIVISION_OPTIONS[zone] || [])[0] || "";
   const resolveSection = (division, sectionScope) => {
     const sections = SECTION_OPTIONS[division] || [];
     const scoped = sectionScope !== "all" ? SECTION_SCOPE_LABELS[sectionScope] || sectionScope : "";
     return sections.includes(scoped) ? scoped : sections[0] || "";
   };
-
   const startDivision = resolveDivision(initialZone, initialDivision);
   const [form, setForm] = useStateLib({
     ...AURANGABAD_STATION_DRAFT
   });
-
   const code = form.stationCode.trim().toUpperCase();
   const name = form.stationName.trim();
   const duplicateCode = code && existingCodes.has(code);
   const canSubmit = name && code && form.section && !duplicateCode;
-
   React.useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
@@ -2620,14 +2481,11 @@ const AddStationModal = ({ initialZone, initialDivision, initialSectionScope, ex
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, []);
-
-  const updateName = (value) =>
-  setForm((prev) => ({
+  const updateName = (value) => setForm((prev) => ({
     ...prev,
     stationName: value,
     stationTitle: !prev.stationTitle || prev.stationTitle === prev.stationName ? value : prev.stationTitle
   }));
-
   const updateZone = (value) => {
     const division = resolveDivision(value, "");
     setForm((prev) => ({
@@ -2637,14 +2495,11 @@ const AddStationModal = ({ initialZone, initialDivision, initialSectionScope, ex
       section: resolveSection(division, "all")
     }));
   };
-
-  const updateDivision = (value) =>
-  setForm((prev) => ({
+  const updateDivision = (value) => setForm((prev) => ({
     ...prev,
     division: value,
     section: resolveSection(value, "all")
   }));
-
   const submit = (e) => {
     e.preventDefault();
     if (!canSubmit) return;
@@ -2660,98 +2515,79 @@ const AddStationModal = ({ initialZone, initialDivision, initialSectionScope, ex
       trainDirection: form.trainDirection
     });
   };
-
-  return ReactDOM.createPortal((
-    <div className="dl-add-overlay" onClick={onClose}>
-      <form className="dl-add-modal" role="dialog" aria-modal="true" aria-labelledby="add-station-title"
-      onClick={(e) => e.stopPropagation()} onSubmit={submit}>
-        <div className="dl-add-head">
-          <div>
-            <div className="dl-add-title" id="add-station-title">Add New Station</div>
-            <div className="dl-add-subtitle">Create a station record and add basic railway details.</div>
-          </div>
-          <button type="button" className="dl-add-close" onClick={onClose}><Icon name="x" size={15} /></button>
-        </div>
-
-        <div className="dl-add-body">
-          <div className="dl-add-field">
-            <label>Station</label>
-            <input value={form.stationName} placeholder="e.g. Bisalwas Kalan"
-            onChange={(e) => updateName(e.target.value)} />
-          </div>
-          <div className="dl-add-field">
-            <label>Code</label>
-            <input value={form.stationCode} placeholder="e.g. BIWK" maxLength={8}
-            onChange={(e) => setForm((prev) => ({ ...prev, stationCode: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "") }))} />
-          </div>
-          <div className="dl-add-field">
-            <label>Station Title</label>
-            <input value={form.stationTitle} placeholder="Display title"
-            onChange={(e) => setForm((prev) => ({ ...prev, stationTitle: e.target.value }))} />
-          </div>
-
-          <div className="dl-add-field">
-            <label>Station ID</label>
-            <input value={form.stationId} placeholder="e.g. 24055"
-            onChange={(e) => setForm((prev) => ({ ...prev, stationId: e.target.value }))} />
-          </div>
-          <div className="dl-add-field">
-            <label>Central Line Location</label>
-            <input value={form.cll} placeholder="e.g. 433.560"
-            onChange={(e) => setForm((prev) => ({ ...prev, cll: e.target.value }))} />
-          </div>
-          <div className="dl-add-field">
-            <label>Train Direction</label>
-            <select value={form.trainDirection}
-            onChange={(e) => setForm((prev) => ({ ...prev, trainDirection: e.target.value }))}>
-              {TRAIN_DIRECTIONS.map((direction) =>
-              <option key={direction} value={direction}>{direction}</option>
-              )}
-            </select>
-          </div>
-
-          <div className="dl-add-field">
-            <label>Zone</label>
-            <select value={form.zone} onChange={(e) => updateZone(e.target.value)}>
-              {ZONE_OPTIONS.map((option) =>
-              <option key={option.value} value={option.value}>{option.label}</option>
-              )}
-            </select>
-          </div>
-          <div className="dl-add-field">
-            <label>Division</label>
-            <select value={form.division} onChange={(e) => updateDivision(e.target.value)}>
-              {(DIVISION_OPTIONS[form.zone] || []).map((division) =>
-              <option key={division} value={division}>{division}</option>
-              )}
-            </select>
-          </div>
-          <div className="dl-add-field">
-            <label>Section</label>
-            <select value={form.section}
-            onChange={(e) => setForm((prev) => ({ ...prev, section: e.target.value }))}>
-              {(SECTION_OPTIONS[form.division] || []).map((section) =>
-              <option key={section} value={section}>{section}</option>
-              )}
-            </select>
-          </div>
-
-          <div className="dl-add-note">
-            This creates the station registry shell. ESP, SIP, LOP and survey data start empty so the next step can be document upload or survey linking.
-          </div>
-          {duplicateCode &&
-          <div className="dl-add-error">Station code {code} already exists in the Digital Library.</div>}
-        </div>
-
-        <div className="dl-add-actions">
-          <Btn type="button" variant="secondary" onClick={onClose}>Cancel</Btn>
-          <Btn type="submit" variant="accent" leadingIcon="plus" disabled={!canSubmit}>Add Station</Btn>
-        </div>
-      </form>
-    </div>
-  ), document.body);
+  return ReactDOM.createPortal(/* @__PURE__ */ React.createElement("div", { className: "dl-add-overlay", onClick: onClose }, /* @__PURE__ */ React.createElement(
+    "form",
+    {
+      className: "dl-add-modal",
+      role: "dialog",
+      "aria-modal": "true",
+      "aria-labelledby": "add-station-title",
+      onClick: (e) => e.stopPropagation(),
+      onSubmit: submit
+    },
+    /* @__PURE__ */ React.createElement("div", { className: "dl-add-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-add-title", id: "add-station-title" }, "Add New Station"), /* @__PURE__ */ React.createElement("div", { className: "dl-add-subtitle" }, "Create a station record and add basic railway details.")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "dl-add-close", onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 15 }))),
+    /* @__PURE__ */ React.createElement("div", { className: "dl-add-body" }, /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Station"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        value: form.stationName,
+        placeholder: "e.g. Tirupati",
+        onChange: (e) => updateName(e.target.value)
+      }
+    )), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Code"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        value: form.stationCode,
+        placeholder: "e.g. BIWK",
+        maxLength: 8,
+        onChange: (e) => setForm((prev) => ({ ...prev, stationCode: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "") }))
+      }
+    )), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Station Title"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        value: form.stationTitle,
+        placeholder: "Display title",
+        onChange: (e) => setForm((prev) => ({ ...prev, stationTitle: e.target.value }))
+      }
+    )), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Station ID"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        value: form.stationId,
+        placeholder: "e.g. 24055",
+        onChange: (e) => setForm((prev) => ({ ...prev, stationId: e.target.value }))
+      }
+    )), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Central Line Location"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        value: form.cll,
+        placeholder: "e.g. 433.560",
+        onChange: (e) => setForm((prev) => ({ ...prev, cll: e.target.value }))
+      }
+    )), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Train Direction"), /* @__PURE__ */ React.createElement(
+      "select",
+      {
+        value: form.trainDirection,
+        onChange: (e) => setForm((prev) => ({ ...prev, trainDirection: e.target.value }))
+      },
+      TRAIN_DIRECTIONS.map(
+        (direction) => /* @__PURE__ */ React.createElement("option", { key: direction, value: direction }, direction)
+      )
+    )), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Zone"), /* @__PURE__ */ React.createElement("select", { value: form.zone, onChange: (e) => updateZone(e.target.value) }, ZONE_OPTIONS.map(
+      (option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label)
+    ))), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Division"), /* @__PURE__ */ React.createElement("select", { value: form.division, onChange: (e) => updateDivision(e.target.value) }, (DIVISION_OPTIONS[form.zone] || []).map(
+      (division) => /* @__PURE__ */ React.createElement("option", { key: division, value: division }, division)
+    ))), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Section"), /* @__PURE__ */ React.createElement(
+      "select",
+      {
+        value: form.section,
+        onChange: (e) => setForm((prev) => ({ ...prev, section: e.target.value }))
+      },
+      (SECTION_OPTIONS[form.division] || []).map(
+        (section) => /* @__PURE__ */ React.createElement("option", { key: section, value: section }, section)
+      )
+    )), /* @__PURE__ */ React.createElement("div", { className: "dl-add-note" }, "This creates the station registry shell. ESP, SIP, LOP and survey data start empty so the next step can be document upload or survey linking."), duplicateCode && /* @__PURE__ */ React.createElement("div", { className: "dl-add-error" }, "Station code ", code, " already exists in the Digital Library.")),
+    /* @__PURE__ */ React.createElement("div", { className: "dl-add-actions" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", onClick: onClose }, "Cancel"), /* @__PURE__ */ React.createElement(Btn, { type: "submit", variant: "accent", leadingIcon: "plus", disabled: !canSubmit }, "Add Station"))
+  )), document.body);
 };
-
 const BULK_REQUIRED_COLUMNS = [
   "Zone",
   "Division",
@@ -2766,15 +2602,15 @@ const BULK_REQUIRED_COLUMNS = [
 const BULK_OPTIONAL_COLUMNS = ["State", "Route", "Latitude", "Longitude", "Remarks"];
 const BULK_TEMPLATE_COLUMNS = [...BULK_REQUIRED_COLUMNS, ...BULK_OPTIONAL_COLUMNS];
 const BULK_SAMPLE_ROW = {
-  Zone: "SCR — South Central Railway",
-  Division: "Nanded",
-  Section: "Aurangabad–Ankai",
-  "Station Name": "Aurangabad",
-  "Station Code": "AWB",
-  "Station Title": "Aurangabad",
-  "Station ID": "AWB-431240",
+  Zone: "SCoR \u2014 South Coast Railway",
+  Division: "Vijayawada",
+  Section: "Vijayawada\u2013Gudivada",
+  "Station Name": "Vijayawada Junction",
+  "Station Code": "BZA",
+  "Station Title": "Vijayawada Junction",
+  "Station ID": "BZA-120001",
   "Central Line Location": "431.240",
-  "Train Direction": "Up ↔ Down",
+  "Train Direction": "Up \u2194 Down",
   State: "",
   Route: "",
   Latitude: "",
@@ -2804,7 +2640,6 @@ const BULK_REVIEW_COLUMNS = [
   "Error Message",
   "Action"
 ];
-
 const normalizeBulkZone = (value) => {
   const raw = String(value || "").trim();
   if (!raw) return "";
@@ -2815,7 +2650,6 @@ const normalizeBulkZone = (value) => {
   const prefix = raw.split(/[—-]/)[0].trim();
   return prefix.toUpperCase();
 };
-
 const stationIdForExisting = (station) => (station.stationId || station.idCode || station.stationID || "").trim().toUpperCase();
 const stationIdentity = (name, division, section) => [name, division, section].map((value) => String(value || "").trim().toLowerCase()).join("|");
 const isBlankBulkRow = (row) => Object.values(row || {}).every((value) => !String(value || "").trim());
@@ -2840,12 +2674,10 @@ const newBulkRow = (rowNumber, source = {}) => ({
   statusLabel: "Pending validation",
   skipReason: "pending"
 });
-
 const csvEscape = (value) => {
   const text = String(value ?? "");
   return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 };
-
 const parseCsvRows = (text) => {
   const rows = [];
   let row = [], cell = "", quoted = false;
@@ -2878,7 +2710,6 @@ const parseCsvRows = (text) => {
   rows.push(row);
   return rows.filter((cells) => cells.some((value) => String(value || "").trim()));
 };
-
 const rowsFromCsv = (text) => {
   const rows = parseCsvRows(text);
   const headers = (rows[0] || []).map((header) => String(header || "").trim());
@@ -2888,19 +2719,16 @@ const rowsFromCsv = (text) => {
     return { source, rowNumber: index + 2 };
   }).filter(({ source }) => !isBlankBulkRow(source));
 };
-
 const missingBulkColumns = (headers = []) => {
   const headerSet = new Set(headers.map((header) => String(header || "").trim().toLowerCase()));
   return BULK_REQUIRED_COLUMNS.filter((column) => !headerSet.has(column.toLowerCase()));
 };
-
 const formatBulkFileSize = (bytes = 0) => {
   if (!bytes) return "0 KB";
   const units = ["B", "KB", "MB", "GB"];
   const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
   return `${(bytes / Math.pow(1024, index)).toFixed(index ? 1 : 0)} ${units[index]}`;
 };
-
 const bulkRowMessage = (row) => {
   if (row.status === "valid") return "Ready to import";
   if (row.status === "duplicate") return "Duplicate station in uploaded file";
@@ -2909,7 +2737,6 @@ const bulkRowMessage = (row) => {
   if (row.status === "skipped") return "Skipped and will not be imported";
   return Object.values(row.errors || {}).join(" ") || "Fix validation errors";
 };
-
 const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
   const [rows, setRows] = useStateLib([]);
   const [uploadedFile, setUploadedFile] = useStateLib(null);
@@ -2922,11 +2749,9 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
   const [templateMissing, setTemplateMissing] = useStateLib(false);
   const [rowFilter, setRowFilter] = useStateLib("all");
   const fileInputRef = React.useRef(null);
-
   const existingCodeSet = useMemoLib(() => new Set(existingStations.map((station) => station.code.toUpperCase())), [existingStations]);
   const existingIdSet = useMemoLib(() => new Set(existingStations.map(stationIdForExisting).filter(Boolean)), [existingStations]);
   const existingNameSet = useMemoLib(() => new Set(existingStations.map((station) => stationIdentity(station.name, station.division, station.section))), [existingStations]);
-
   const buildExtractionReport = (nextRows, errors = [], fileName = uploadedFile?.name || "") => {
     const successRows = nextRows.filter((row) => row.status === "valid").length;
     const errorRows = nextRows.filter((row) => row.status !== "valid" && row.status !== "skipped").length + errors.length;
@@ -2938,7 +2763,6 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
       errors
     };
   };
-
   const setValidatedRows = (nextRows, nextMessage, errors = [], fileName = uploadedFile?.name || "") => {
     setRows(nextRows);
     setExtractionReport(buildExtractionReport(nextRows, errors, fileName));
@@ -2946,7 +2770,6 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
     if (nextMessage) setMessage(nextMessage);
     return nextRows;
   };
-
   const buildValidatedRows = (draftRows = rows) => {
     const codeCounts = {};
     const idCounts = {};
@@ -2956,7 +2779,6 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
       if (code) codeCounts[code] = (codeCounts[code] || 0) + 1;
       if (id) idCounts[id] = (idCounts[id] || 0) + 1;
     });
-
     const nextRows = draftRows.map((row) => {
       const errors = {};
       const required = {
@@ -2973,12 +2795,10 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
       Object.entries(required).forEach(([key, label]) => {
         if (!String(row[key] || "").trim()) errors[key] = `${label} is required.`;
       });
-
       const zone = normalizeBulkZone(row.zone);
       if (row.zone && !ZONE_OPTIONS.some((option) => option.value === zone)) errors.zone = "Zone must match allowed master values.";
       if (row.division && !(DIVISION_OPTIONS[zone] || []).includes(row.division)) errors.division = "Division must belong to selected Zone.";
       if (row.section && !(SECTION_OPTIONS[row.division] || []).includes(row.section)) errors.section = "Section must belong to selected Division.";
-
       const code = row.stationCode.trim().toUpperCase();
       const id = row.stationId.trim().toUpperCase();
       if (code && codeCounts[code] > 1) errors.stationCode = "Station Code is duplicated in uploaded file.";
@@ -2992,12 +2812,8 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
       if (row.trainDirection && !TRAIN_DIRECTIONS.includes(row.trainDirection)) errors.trainDirection = "Train Direction must match allowed values.";
       if (row.latitude && Number.isNaN(Number(row.latitude))) errors.latitude = "Latitude must be numeric.";
       if (row.longitude && Number.isNaN(Number(row.longitude))) errors.longitude = "Longitude must be numeric.";
-
       const values = Object.values(errors);
-      const status = values.some((error) => error.includes("uploaded file")) ? "duplicate" :
-        values.some((error) => error.includes("already exists")) ? "existing" :
-        values.length ? "error" : "valid";
-
+      const status = values.some((error) => error.includes("uploaded file")) ? "duplicate" : values.some((error) => error.includes("already exists")) ? "existing" : values.length ? "error" : "valid";
       return {
         ...row,
         zone,
@@ -3010,30 +2826,22 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
     });
     return nextRows;
   };
-
   const applyValidationResult = (nextRows) => {
     const validRows = nextRows.filter((row) => row.status === "valid").length;
     const errorRows = nextRows.filter((row) => ["error", "duplicate", "existing", "pending"].includes(row.status)).length;
-    const nextMessage = validRows && errorRows ?
-      "Validation complete. Fix highlighted rows, then validate rows again." :
-      validRows ?
-        "Validation complete. All rows are ready to import." :
-        "No valid station records found. Fix highlighted rows, then validate rows again.";
+    const nextMessage = validRows && errorRows ? "Validation complete. Fix highlighted rows, then validate rows again." : validRows ? "Validation complete. All rows are ready to import." : "No valid station records found. Fix highlighted rows, then validate rows again.";
     return setValidatedRows(nextRows, nextMessage);
   };
-
   const validateRows = (draftRows = rows) => applyValidationResult(buildValidatedRows(draftRows));
-
   const runValidation = () => {
     if (!uploadedFile || templateMissing || readingUpload) return;
     setValidating(true);
-    setMessage("Validating station records…");
+    setMessage("Validating station records\u2026");
     window.setTimeout(() => {
       applyValidationResult(buildValidatedRows(rows));
       setValidating(false);
     }, 450);
   };
-
   const stats = useMemoLib(() => {
     const validRows = rows.filter((row) => row.status === "valid").length;
     const pendingRows = rows.filter((row) => row.status === "pending").length;
@@ -3044,13 +2852,11 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
     const skippedRows = errorRows + duplicateRows + existingRows + pendingRows + skippedManualRows;
     return { totalRows: rows.length, validRows, errorRows, duplicateRows, existingRows, pendingRows, skippedManualRows, skippedRows };
   }, [rows]);
-
   const reviewRows = useMemoLib(() => rows.map((row, index) => ({ row, index })).filter(({ row }) => {
     if (rowFilter === "valid") return row.status === "valid";
     if (rowFilter === "skipped") return row.status && row.status !== "valid";
     return true;
   }), [rows, rowFilter]);
-
   const downloadTemplate = () => {
     const sample = BULK_TEMPLATE_COLUMNS.map((header) => BULK_SAMPLE_ROW[header] || "");
     if (window.XLSX) {
@@ -3084,7 +2890,6 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
       URL.revokeObjectURL(link.href);
     }
   };
-
   const readUpload = async (file) => {
     if (!file) return;
     setReadingUpload(true);
@@ -3094,7 +2899,7 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
     setValidated(false);
     setTemplateMissing(false);
     setRowFilter("all");
-    setMessage(`Reading ${file.name}…`);
+    setMessage(`Reading ${file.name}\u2026`);
     try {
       let imported = [];
       let headers = [];
@@ -3178,26 +2983,22 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
       setReadingUpload(false);
     }
   };
-
   const openFilePicker = () => fileInputRef.current?.click();
-
   const handleFileChange = (event) => {
     const file = event.target.files?.[0];
     readUpload(file);
     event.target.value = "";
   };
-
   const handleDrop = (event) => {
     event.preventDefault();
     setDragActive(false);
     readUpload(event.dataTransfer.files?.[0]);
   };
-
   const updateCell = (index, key, value) => {
     setRows((current) => {
       const nextRows = current.map((row, i) => {
         if (i !== index) return row;
-        const nextErrors = { ...(row.errors || {}) };
+        const nextErrors = { ...row.errors || {} };
         delete nextErrors[key];
         return {
           ...row,
@@ -3212,7 +3013,6 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
       return nextRows;
     });
   };
-
   const removeRow = (index) => {
     setRows((current) => {
       const nextRows = current.filter((_, i) => i !== index);
@@ -3220,7 +3020,6 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
       return nextRows;
     });
   };
-
   const resetUpload = () => {
     setRows([]);
     setUploadedFile(null);
@@ -3232,7 +3031,6 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
     setRowFilter("all");
     setMessage("Upload a completed station template to begin.");
   };
-
   const skipErrorRows = () => {
     setRows((current) => {
       const nextRows = current.map((row) => ["error", "duplicate", "existing", "pending"].includes(row.status) ? {
@@ -3246,7 +3044,6 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
     });
     setMessage("Skipped rows will not be added as stations. Only valid rows will be imported.");
   };
-
   const importValid = () => {
     const validRows = rows.filter((row) => row.status === "valid");
     const skipped = rows.length - validRows.length;
@@ -3269,342 +3066,173 @@ const BulkUploadStationsPage = ({ existingStations = [], onAdd, onClose }) => {
       remarks: row.remarks || ""
     })), skipped);
   };
-
   const revalidateRow = () => validateRows(rows);
-
   const fieldControl = (row, rowIndex, header) => {
     const key = BULK_FIELD_KEYS[header];
     const invalid = !!row.errors?.[key];
     const common = {
       value: row[key] || "",
       onChange: (event) => updateCell(rowIndex, key, event.target.value),
-      title: row.errors?.[key] || undefined
+      title: row.errors?.[key] || void 0
     };
     if (header === "Zone") {
-      return <td key={header} data-invalid={invalid || undefined}><select {...common}>{["", ...ZONE_OPTIONS.map((option) => option.value)].map((value) => <option key={value} value={value}>{value || "Select"}</option>)}</select></td>;
+      return /* @__PURE__ */ React.createElement("td", { key: header, "data-invalid": invalid || void 0 }, /* @__PURE__ */ React.createElement("select", { ...common }, ["", ...ZONE_OPTIONS.map((option) => option.value)].map((value) => /* @__PURE__ */ React.createElement("option", { key: value, value }, value || "Select"))));
     }
     if (header === "Division") {
-      return <td key={header} data-invalid={invalid || undefined}><select {...common}>{["", ...Object.values(DIVISION_OPTIONS).flat()].map((value) => <option key={value} value={value}>{value || "Select"}</option>)}</select></td>;
+      return /* @__PURE__ */ React.createElement("td", { key: header, "data-invalid": invalid || void 0 }, /* @__PURE__ */ React.createElement("select", { ...common }, ["", ...Object.values(DIVISION_OPTIONS).flat()].map((value) => /* @__PURE__ */ React.createElement("option", { key: value, value }, value || "Select"))));
     }
     if (header === "Section") {
-      return <td key={header} data-invalid={invalid || undefined}><select {...common}>{["", ...Object.values(SECTION_OPTIONS).flat()].map((value) => <option key={value} value={value}>{value || "Select"}</option>)}</select></td>;
+      return /* @__PURE__ */ React.createElement("td", { key: header, "data-invalid": invalid || void 0 }, /* @__PURE__ */ React.createElement("select", { ...common }, ["", ...Object.values(SECTION_OPTIONS).flat()].map((value) => /* @__PURE__ */ React.createElement("option", { key: value, value }, value || "Select"))));
     }
     if (header === "Train Direction") {
-      return <td key={header} data-invalid={invalid || undefined}><select {...common}>{["", ...TRAIN_DIRECTIONS].map((value) => <option key={value} value={value}>{value || "Select"}</option>)}</select></td>;
+      return /* @__PURE__ */ React.createElement("td", { key: header, "data-invalid": invalid || void 0 }, /* @__PURE__ */ React.createElement("select", { ...common }, ["", ...TRAIN_DIRECTIONS].map((value) => /* @__PURE__ */ React.createElement("option", { key: value, value }, value || "Select"))));
     }
-    return <td key={header} data-invalid={invalid || undefined}><input {...common} /></td>;
+    return /* @__PURE__ */ React.createElement("td", { key: header, "data-invalid": invalid || void 0 }, /* @__PURE__ */ React.createElement("input", { ...common }));
   };
-
-  return (
-    <div className="dl-bulk-page">
-      <div className="dl-bulk-page-head">
-        <div>
-          <div className="dl-bulk-page-title">Bulk Upload Stations</div>
-          <div className="dl-bulk-page-subtitle">
-            Upload a station template, validate rows, fix errors, and import valid stations.
-          </div>
-        </div>
-      </div>
-
-      <div className="dl-bulk-panel">
-        <div className="dl-bulk-workflow">
-          <div className="dl-bulk-toolbar">
-            <Btn type="button" variant="secondary" leadingIcon="download" onClick={downloadTemplate}>Download Template</Btn>
-            <input
-              ref={fileInputRef}
-              className="dl-bulk-file-input"
-              type="file"
-              accept=".xlsx,.csv,text/csv"
-              onChange={handleFileChange}
-            />
-          </div>
-
-          {!uploadedFile && !readingUpload && (
-            <div
-              className="dl-bulk-upload-zone"
-              data-drag={dragActive ? "true" : undefined}
-              onDragEnter={(event) => { event.preventDefault(); setDragActive(true); }}
-              onDragOver={(event) => { event.preventDefault(); setDragActive(true); }}
-              onDragLeave={() => setDragActive(false)}
-              onDrop={handleDrop}
-            >
-              <div className="dl-bulk-upload-icon"><Icon name="upload" size={19} /></div>
-              <div>
-                <div className="dl-bulk-upload-title">Drop the completed station template here</div>
-                <div className="dl-bulk-upload-sub">Use the downloaded `.xlsx` or `.csv` template with one station per row.</div>
-              </div>
-              <Btn type="button" variant="secondary" leadingIcon="upload" onClick={openFilePicker}>Upload File</Btn>
-            </div>
-          )}
-
-          {uploadedFile && (
-              <div className="dl-bulk-file-card">
-                <div className="dl-bulk-file-meta">
-                  <strong>{uploadedFile.name}</strong>
-                  <span>{formatBulkFileSize(uploadedFile.size)}</span>
-                </div>
-                <button type="button" className="dl-bulk-link-btn" onClick={resetUpload}>Remove</button>
-              </div>
-          )}
-
-          {message && <div className="dl-add-note">{message}</div>}
-
-          {extractionReport && (
-            <div className="dl-bulk-extraction">
-              <div className="dl-bulk-extraction-head">
-                <div>
-                  <div className="dl-bulk-extraction-title">Extraction Report</div>
-                  <div className="dl-bulk-extraction-sub">{extractionReport.fileName}</div>
-                </div>
-                {readingUpload && <Chip tone="info" pulse>Reading</Chip>}
-              </div>
-              <div className="dl-bulk-extraction-grid">
-                <div className="dl-bulk-extraction-card">
-                  <strong>{extractionReport.totalRows}</strong>
-                  <span>Rows Count</span>
-                </div>
-                <div className="dl-bulk-extraction-card" data-tone="success">
-                  <strong>{extractionReport.successRows}</strong>
-                  <span>Success</span>
-                </div>
-                <div className="dl-bulk-extraction-card" data-tone="error">
-                  <strong>{extractionReport.errorRows}</strong>
-                  <span>Error</span>
-                </div>
-              </div>
-              {!!extractionReport.errors?.length && (
-                <div className="dl-bulk-extraction-errors">
-                  {extractionReport.errors.map((error, index) => <div key={`${error}-${index}`}>{error}</div>)}
-                </div>
-              )}
-            </div>
-          )}
-
-          {!validated && rows.length > 0 && !validating && !readingUpload && (
-            <div className="dl-bulk-preview">
-              <span>{rows.length} row{rows.length === 1 ? "" : "s"} ready for validation.</span>
-              <Btn type="button" variant="primary" size="sm" leadingIcon="check" onClick={runValidation}>Validate File</Btn>
-            </div>
-          )}
-
-          {validating && (
-            <div className="dl-bulk-loading">
-              <span className="dl-bulk-spinner" aria-hidden="true" />
-              <span>Validating station records…</span>
-            </div>
-          )}
-
-          {validated && (
-            <>
-              <div className="dl-bulk-summary-grid">
-                <div className="dl-bulk-card"><strong>{stats.totalRows}</strong><span>Total Rows</span></div>
-                <div className="dl-bulk-card"><strong>{stats.validRows}</strong><span>Valid Rows</span></div>
-                <div className="dl-bulk-card"><strong>{stats.errorRows}</strong><span>Error Rows</span></div>
-                <div className="dl-bulk-card"><strong>{stats.duplicateRows}</strong><span>Duplicate Rows</span></div>
-                <div className="dl-bulk-card"><strong>{stats.existingRows}</strong><span>Existing Stations</span></div>
-                <div className="dl-bulk-card"><strong>{stats.skippedRows}</strong><span>Rows to Fix/Skip</span></div>
-              </div>
-
-              <div className="dl-bulk-info">
-                <Icon name="info" size={14} />
-                <span>Skipped rows will not be added as stations. Only valid rows will be imported.</span>
-              </div>
-
-              <div className="dl-bulk-row-tabs" aria-label="Review row filter">
-                {[
-                  { id: "all", label: "All Rows", count: stats.totalRows },
-                  { id: "valid", label: "Valid Rows", count: stats.validRows },
-                  { id: "skipped", label: "Rows to Fix", count: stats.skippedRows }
-                ].map((tab) =>
-                <button
-                  type="button"
-                  className="dl-bulk-row-tab"
-                  data-active={rowFilter === tab.id ? "true" : undefined}
-                  key={tab.id}
-                  onClick={() => setRowFilter(tab.id)}>
-                    {tab.label} <span>{tab.count}</span>
-                  </button>
-                )}
-              </div>
-              <div className="dl-bulk-review-wrap">
-                <table className="dl-bulk-review">
-                  <colgroup>
-                    {BULK_REVIEW_COLUMNS.map((header) => <col key={header} />)}
-                  </colgroup>
-                  <thead>
-                    <tr>{BULK_REVIEW_COLUMNS.map((header) => <th key={header}>{header}</th>)}</tr>
-                  </thead>
-                  <tbody>
-                    {reviewRows.length ? reviewRows.map(({ row, index: rowIndex }) => {
-                      return (
-                        <tr key={`${row.rowNumber}-${rowIndex}`}>
-                          <td>{row.rowNumber}</td>
-                          {BULK_REQUIRED_COLUMNS.map((header) => fieldControl(row, rowIndex, header))}
-                          <td><span className="dl-bulk-row-status" data-status={row.status}>{row.statusLabel}</span></td>
-                          <td><div className="dl-bulk-error-msg" data-ready={row.status === "valid" ? "true" : undefined} data-muted={row.status === "skipped" ? "true" : undefined}>{bulkRowMessage(row)}</div></td>
-                          <td>
-                            <div className="dl-bulk-row-actions">
-                              <button className="dl-bulk-remove" type="button" onClick={revalidateRow}>Validate</button>
-                              <button className="dl-bulk-remove" type="button" onClick={() => removeRow(rowIndex)}>Remove</button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    }) : (
-                      <tr>
-                        <td colSpan={BULK_REVIEW_COLUMNS.length}>
-                          <div className="dl-bulk-empty">No rows in this view.</div>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
-        </div>
-
-        <div className="dl-bulk-footer">
-          <div className="dl-bulk-footer-note">Only valid rows will be imported. Skipped rows will not be added as stations.</div>
-          <div className="dl-bulk-footer-actions">
-            <Btn type="button" variant="secondary" onClick={onClose || resetUpload}>Cancel</Btn>
-            <Btn type="button" variant="secondary" leadingIcon="refresh" disabled={!validated || validating || !rows.length} onClick={() => validateRows(rows)}>Validate Rows</Btn>
-            <Btn type="button" variant="secondary" leadingIcon="x" disabled={!validated || validating || !(stats.errorRows || stats.duplicateRows || stats.existingRows || stats.pendingRows)} onClick={skipErrorRows}>Skip Error Rows</Btn>
-            <Btn type="button" variant="accent" leadingIcon="plus" disabled={!validated || validating || !stats.validRows} onClick={importValid}>Import Valid Stations</Btn>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-page" }, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-page-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-page-title" }, "Bulk Upload Stations"), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-page-subtitle" }, "Upload a station template, validate rows, fix errors, and import valid stations."))), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-panel" }, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-workflow" }, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-toolbar" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "download", onClick: downloadTemplate }, "Download Template"), /* @__PURE__ */ React.createElement(
+    "input",
+    {
+      ref: fileInputRef,
+      className: "dl-bulk-file-input",
+      type: "file",
+      accept: ".xlsx,.csv,text/csv",
+      onChange: handleFileChange
+    }
+  )), !uploadedFile && !readingUpload && /* @__PURE__ */ React.createElement(
+    "div",
+    {
+      className: "dl-bulk-upload-zone",
+      "data-drag": dragActive ? "true" : void 0,
+      onDragEnter: (event) => {
+        event.preventDefault();
+        setDragActive(true);
+      },
+      onDragOver: (event) => {
+        event.preventDefault();
+        setDragActive(true);
+      },
+      onDragLeave: () => setDragActive(false),
+      onDrop: handleDrop
+    },
+    /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-upload-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "upload", size: 19 })),
+    /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-upload-title" }, "Drop the completed station template here"), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-upload-sub" }, "Use the downloaded `.xlsx` or `.csv` template with one station per row.")),
+    /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "upload", onClick: openFilePicker }, "Upload File")
+  ), uploadedFile && /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-file-card" }, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-file-meta" }, /* @__PURE__ */ React.createElement("strong", null, uploadedFile.name), /* @__PURE__ */ React.createElement("span", null, formatBulkFileSize(uploadedFile.size))), /* @__PURE__ */ React.createElement("button", { type: "button", className: "dl-bulk-link-btn", onClick: resetUpload }, "Remove")), message && /* @__PURE__ */ React.createElement("div", { className: "dl-add-note" }, message), extractionReport && /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-extraction" }, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-extraction-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-extraction-title" }, "Extraction Report"), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-extraction-sub" }, extractionReport.fileName)), readingUpload && /* @__PURE__ */ React.createElement(Chip, { tone: "info", pulse: true }, "Reading")), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-extraction-grid" }, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-extraction-card" }, /* @__PURE__ */ React.createElement("strong", null, extractionReport.totalRows), /* @__PURE__ */ React.createElement("span", null, "Rows Count")), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-extraction-card", "data-tone": "success" }, /* @__PURE__ */ React.createElement("strong", null, extractionReport.successRows), /* @__PURE__ */ React.createElement("span", null, "Success")), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-extraction-card", "data-tone": "error" }, /* @__PURE__ */ React.createElement("strong", null, extractionReport.errorRows), /* @__PURE__ */ React.createElement("span", null, "Error"))), !!extractionReport.errors?.length && /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-extraction-errors" }, extractionReport.errors.map((error, index) => /* @__PURE__ */ React.createElement("div", { key: `${error}-${index}` }, error)))), !validated && rows.length > 0 && !validating && !readingUpload && /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-preview" }, /* @__PURE__ */ React.createElement("span", null, rows.length, " row", rows.length === 1 ? "" : "s", " ready for validation."), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "primary", size: "sm", leadingIcon: "check", onClick: runValidation }, "Validate File")), validating && /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-loading" }, /* @__PURE__ */ React.createElement("span", { className: "dl-bulk-spinner", "aria-hidden": "true" }), /* @__PURE__ */ React.createElement("span", null, "Validating station records\u2026")), validated && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-summary-grid" }, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-card" }, /* @__PURE__ */ React.createElement("strong", null, stats.totalRows), /* @__PURE__ */ React.createElement("span", null, "Total Rows")), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-card" }, /* @__PURE__ */ React.createElement("strong", null, stats.validRows), /* @__PURE__ */ React.createElement("span", null, "Valid Rows")), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-card" }, /* @__PURE__ */ React.createElement("strong", null, stats.errorRows), /* @__PURE__ */ React.createElement("span", null, "Error Rows")), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-card" }, /* @__PURE__ */ React.createElement("strong", null, stats.duplicateRows), /* @__PURE__ */ React.createElement("span", null, "Duplicate Rows")), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-card" }, /* @__PURE__ */ React.createElement("strong", null, stats.existingRows), /* @__PURE__ */ React.createElement("span", null, "Existing Stations")), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-card" }, /* @__PURE__ */ React.createElement("strong", null, stats.skippedRows), /* @__PURE__ */ React.createElement("span", null, "Rows to Fix/Skip"))), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-info" }, /* @__PURE__ */ React.createElement(Icon, { name: "info", size: 14 }), /* @__PURE__ */ React.createElement("span", null, "Skipped rows will not be added as stations. Only valid rows will be imported.")), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-row-tabs", "aria-label": "Review row filter" }, [
+    { id: "all", label: "All Rows", count: stats.totalRows },
+    { id: "valid", label: "Valid Rows", count: stats.validRows },
+    { id: "skipped", label: "Rows to Fix", count: stats.skippedRows }
+  ].map(
+    (tab) => /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        type: "button",
+        className: "dl-bulk-row-tab",
+        "data-active": rowFilter === tab.id ? "true" : void 0,
+        key: tab.id,
+        onClick: () => setRowFilter(tab.id)
+      },
+      tab.label,
+      " ",
+      /* @__PURE__ */ React.createElement("span", null, tab.count)
+    )
+  )), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-review-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "dl-bulk-review" }, /* @__PURE__ */ React.createElement("colgroup", null, BULK_REVIEW_COLUMNS.map((header) => /* @__PURE__ */ React.createElement("col", { key: header }))), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, BULK_REVIEW_COLUMNS.map((header) => /* @__PURE__ */ React.createElement("th", { key: header }, header)))), /* @__PURE__ */ React.createElement("tbody", null, reviewRows.length ? reviewRows.map(({ row, index: rowIndex }) => {
+    return /* @__PURE__ */ React.createElement("tr", { key: `${row.rowNumber}-${rowIndex}` }, /* @__PURE__ */ React.createElement("td", null, row.rowNumber), BULK_REQUIRED_COLUMNS.map((header) => fieldControl(row, rowIndex, header)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "dl-bulk-row-status", "data-status": row.status }, row.statusLabel)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-error-msg", "data-ready": row.status === "valid" ? "true" : void 0, "data-muted": row.status === "skipped" ? "true" : void 0 }, bulkRowMessage(row))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-row-actions" }, /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-remove", type: "button", onClick: revalidateRow }, "Validate"), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-remove", type: "button", onClick: () => removeRow(rowIndex) }, "Remove"))));
+  }) : /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { colSpan: BULK_REVIEW_COLUMNS.length }, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-empty" }, "No rows in this view.")))))))), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-footer" }, /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-footer-note" }, "Only valid rows will be imported. Skipped rows will not be added as stations."), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-footer-actions" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", onClick: onClose || resetUpload }, "Cancel"), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "refresh", disabled: !validated || validating || !rows.length, onClick: () => validateRows(rows) }, "Validate Rows"), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "x", disabled: !validated || validating || !(stats.errorRows || stats.duplicateRows || stats.existingRows || stats.pendingRows), onClick: skipErrorRows }, "Skip Error Rows"), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "accent", leadingIcon: "plus", disabled: !validated || validating || !stats.validRows, onClick: importValid }, "Import Valid Stations")))));
 };
-
-/* Survey-data tag cluster */
 const SurveyCell = ({ survey }) => {
   const available = [["LiDAR", survey.lidar], ["Ortho", survey.ortho], ["TS", survey.ts]].filter(([, present]) => present);
-  if (!available.length) return <span className="dl-survey-none">—</span>;
-  return (
-    <div className="dl-survey-tags">
-      {available.map(([lbl]) =>
-      <span key={lbl} className="dl-survey-tag" data-present="true">{lbl}</span>
-      )}
-    </div>);
+  if (!available.length) return /* @__PURE__ */ React.createElement("span", { className: "dl-survey-none" }, "\u2014");
+  return /* @__PURE__ */ React.createElement("div", { className: "dl-survey-tags" }, available.map(
+    ([lbl]) => /* @__PURE__ */ React.createElement("span", { key: lbl, className: "dl-survey-tag", "data-present": "true" }, lbl)
+  ));
 };
-
-/* Completeness segmented bar */
 const CompletenessCell = ({ station }) => {
   const { segs, count } = getCompleteness(station);
   const LABELS = ["Survey", "ESP", "SIP", "LOP", "TOC"];
-  return (
-    <div className="dl-complete">
-      <div className="dl-complete-bar">
-        {segs.map((done, i) =>
-        <div key={i} className="dl-complete-seg"
-        title={`${LABELS[i]}: ${done ? "Complete" : "Incomplete"}`}
-        style={{ background: done ? "var(--success)" : "var(--ink-200)" }} />
-        )}
-      </div>
-      <span className="dl-complete-count">{count}/5</span>
-    </div>);
-
+  return /* @__PURE__ */ React.createElement("div", { className: "dl-complete" }, /* @__PURE__ */ React.createElement("div", { className: "dl-complete-bar" }, segs.map(
+    (done, i) => /* @__PURE__ */ React.createElement(
+      "div",
+      {
+        key: i,
+        className: "dl-complete-seg",
+        title: `${LABELS[i]}: ${done ? "Complete" : "Incomplete"}`,
+        style: { background: done ? "var(--success)" : "var(--ink-200)" }
+      }
+    )
+  )), /* @__PURE__ */ React.createElement("span", { className: "dl-complete-count" }, count, "/5"));
 };
-
-/* Sortable column header */
 const SortTh = ({ children, sortKey, sort, onSort, style }) => {
   const active = sort.key === sortKey;
-  return (
-    <th style={style} data-sortable="true" data-active={active || undefined}
-    onClick={() => onSort(sortKey)}>
-      <span className="ds-th-inner">
-        {children}
-        {active ?
-        <Icon name={sort.dir === "asc" ? "arrow_up" : "arrow_down"} size={11} /> :
-        <Icon name="sort" size={11} style={{ opacity: 0.35 }} />}
-      </span>
-    </th>);
-
+  return /* @__PURE__ */ React.createElement(
+    "th",
+    {
+      style,
+      "data-sortable": "true",
+      "data-active": active || void 0,
+      onClick: () => onSort(sortKey)
+    },
+    /* @__PURE__ */ React.createElement("span", { className: "ds-th-inner" }, children, active ? /* @__PURE__ */ React.createElement(Icon, { name: sort.dir === "asc" ? "arrow_up" : "arrow_down", size: 11 }) : /* @__PURE__ */ React.createElement(Icon, { name: "sort", size: 11, style: { opacity: 0.35 } }))
+  );
 };
-
-/* ─────────────────────────────────────────────────────────────────────
-   IR SIDEBAR — reuses all .ds-sidebar CSS; updated brand + nav
-───────────────────────────────────────────────────────────────────── */
 const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate }) => {
   const groups = [
-  {
-    label: "MANAGE",
-    items: [
-    { id: "library", icon: "book", label: "Digital Library" },
-    { id: "workspace", icon: "layers", label: "Workspace" }]
-  },
-  {
-    label: "REVIEW",
-    items: [
-    { id: "approvals", icon: "check_circle", label: "Approvals", badge: "7" }]
-  },
-  {
-    label: "SYSTEM",
-    items: [
-    { id: "help", icon: "info", label: "Help" },
-    { id: "settings", icon: "settings", label: "Settings" }]
-  }];
-
-  return (
-    <aside className="ds-sidebar" data-collapsed={collapsed ? "true" : "false"}>
-      <div className="ds-sidebar-brand">
-        <div className="ds-sidebar-mark"><img src="ir-logo.png" alt="Indian Railways" /></div>
-        <div>
-          <div className="ds-sidebar-title">Indian Railways</div>
-          <div className="ds-sidebar-sub"></div>
-        </div>
-        <button className="dl-sidebar-toggle-btn" onClick={onToggle}
-          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}>
-          <Icon name={collapsed ? "panel_left_open" : "panel_left_close"} size={16} />
-        </button>
-      </div>
-
-      <nav className="ds-sidebar-nav">
-        {/* Home — standalone, above groups */}
-        <div className="ds-sidebar-item" data-active={active === "home" ? "true" : "false"}
-          title={collapsed ? "Home" : undefined}
-          onClick={() => onNavigate && onNavigate("home")}>
-          <Icon name="home" /><span>Home</span>
-        </div>
-
-        {groups.map((g) =>
-          <div key={g.label}>
-            <div className="ds-sidebar-section">{g.label}</div>
-            {g.items.map((it) =>
-              <div key={it.id} className="ds-sidebar-item"
-                data-active={active === it.id ? "true" : "false"}
-                title={collapsed ? it.label : undefined}
-                onClick={() => onNavigate && onNavigate(it.id)}>
-                <Icon name={it.icon} />
-                <span>{it.label}</span>
-                {it.badge && <span className="ds-sidebar-badge">{it.badge}</span>}
-              </div>
-            )}
-          </div>
-        )}
-      </nav>
-
-      <div className="ds-sidebar-foot">
-        <div className="ds-sidebar-user" title={collapsed ? "Sarath" : undefined}>S</div>
-        <div className="ds-sidebar-userinfo">
-          <div className="ds-sidebar-username">Sarath</div>
-          <div className="ds-sidebar-userrole">Admin SCR</div>
-        </div>
-        <button className="ds-sidebar-foot-btn" title="Sign out" onClick={() => {
-          try { sessionStorage.removeItem('ir-login-session'); sessionStorage.removeItem('lr-authed'); } catch(e) {}
-          window.location.reload();
-        }}>
-          <Icon name="log_out" size={15} />
-        </button>
-      </div>
-    </aside>);
+    {
+      label: "MANAGE",
+      items: [
+        { id: "library", icon: "book", label: "Digital Library" },
+        { id: "workspace", icon: "layers", label: "Workspace" }
+      ]
+    },
+    {
+      label: "REVIEW",
+      items: [
+        { id: "approvals", icon: "check_circle", label: "Approvals", badge: "7" }
+      ]
+    },
+    {
+      label: "SYSTEM",
+      items: [
+        { id: "help", icon: "info", label: "Help" },
+        { id: "settings", icon: "settings", label: "Settings" }
+      ]
+    }
+  ];
+  return /* @__PURE__ */ React.createElement("aside", { className: "ds-sidebar", "data-collapsed": collapsed ? "true" : "false" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-brand" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-mark" }, /* @__PURE__ */ React.createElement("img", { src: "ir-logo.png", alt: "Indian Railways" })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-title" }, "Indian Railways"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-sub" })), /* @__PURE__ */ React.createElement(
+    "button",
+    {
+      className: "dl-sidebar-toggle-btn",
+      onClick: onToggle,
+      title: collapsed ? "Expand sidebar" : "Collapse sidebar"
+    },
+    /* @__PURE__ */ React.createElement(Icon, { name: collapsed ? "panel_left_open" : "panel_left_close", size: 16 })
+  )), /* @__PURE__ */ React.createElement("nav", { className: "ds-sidebar-nav" }, /* @__PURE__ */ React.createElement(
+    "div",
+    {
+      className: "ds-sidebar-item",
+      "data-active": active === "home" ? "true" : "false",
+      title: collapsed ? "Home" : void 0,
+      onClick: () => onNavigate && onNavigate("home")
+    },
+    /* @__PURE__ */ React.createElement(Icon, { name: "home" }),
+    /* @__PURE__ */ React.createElement("span", null, "Home")
+  ), groups.map(
+    (g) => /* @__PURE__ */ React.createElement("div", { key: g.label }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-section" }, g.label), g.items.map(
+      (it) => /* @__PURE__ */ React.createElement(
+        "div",
+        {
+          key: it.id,
+          className: "ds-sidebar-item",
+          "data-active": active === it.id ? "true" : "false",
+          title: collapsed ? it.label : void 0,
+          onClick: () => onNavigate && onNavigate(it.id)
+        },
+        /* @__PURE__ */ React.createElement(Icon, { name: it.icon }),
+        /* @__PURE__ */ React.createElement("span", null, it.label),
+        it.badge && /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-badge" }, it.badge)
+      )
+    ))
+  )), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-foot" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-user", title: collapsed ? "Sarath" : void 0 }, "S"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userinfo" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-username" }, "Sarath"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userrole" }, "Admin SCoR")), /* @__PURE__ */ React.createElement("button", { className: "ds-sidebar-foot-btn", title: "Sign out", onClick: () => { try { sessionStorage.removeItem("ir-login-session"); sessionStorage.removeItem("lr-authed"); } catch(e) {} window.location.reload(); } }, /* @__PURE__ */ React.createElement(Icon, { name: "log_out", size: 15 }))));
 };
-
-/* ─────────────────────────────────────────────────────────────────────
-   LOGIN — first-run gate
-───────────────────────────────────────────────────────────────────── */
 const readLoginSession = () => {
   try {
     const stored = window.sessionStorage.getItem("ir-login-session");
@@ -3613,29 +3241,25 @@ const readLoginSession = () => {
     return null;
   }
 };
-
 const LoginPage = ({ onLogin }) => {
-  const [railId, setRailId] = useStateLib("IR-SCR-1024");
+  const [railId, setRailId] = useStateLib("IR-SCoR-1024");
   const [password, setPassword] = useStateLib("railway");
-  const [division, setDivision] = useStateLib("Nanded");
+  const [division, setDivision] = useStateLib("Vijayawada");
   const [accessDesk, setAccessDesk] = useStateLib("approver");
   const [remember, setRemember] = useStateLib(false);
   const [error, setError] = useStateLib("");
-
   const submit = (event) => {
     event.preventDefault();
     if (!railId.trim() || !password.trim()) {
       setError("Rail ID and password are required.");
       return;
     }
-
     const session = {
       railId: railId.trim(),
-      operator: "Ashwini Vaishnav",
+      operator: "Sarath",
       division,
       accessDesk
     };
-
     try {
       if (remember) {
         window.sessionStorage.setItem("ir-login-session", JSON.stringify(session));
@@ -3643,201 +3267,43 @@ const LoginPage = ({ onLogin }) => {
         window.sessionStorage.removeItem("ir-login-session");
       }
     } catch {
-      // Access can continue even if browser storage is unavailable.
     }
-
     onLogin(session);
   };
-
-  return (
-    <main className="ir-login-shell">
-      <section className="ir-login-visual" aria-label="Indian Railways access context">
-        <div className="ir-login-brand">
-          <div className="ir-login-mark" style={{background:'none',padding:0,overflow:'hidden',borderRadius:'50%'}}><img src="ir-logo.png" alt="Indian Railways" style={{width:'100%',height:'100%',objectFit:'cover'}} /></div>
-          <div>
-            <div className="ir-login-brand-title">Indian Railways</div>
-            <div className="ir-login-brand-sub">ESP, SIP and LOP control desk</div>
-          </div>
-        </div>
-
-        <div className="ir-login-scene" aria-hidden="true">
-          <div className="ir-station-board">
-            <div>
-              <div className="ir-board-small">भारतीय रेल</div>
-              <div className="ir-board-name">Aurangabad</div>
-              <div className="ir-board-hindi">औरंगाबाद</div>
-              <div className="ir-board-code"><Icon name="train" size={14} /> AWB · SCR</div>
-            </div>
-          </div>
-
-          <div className="ir-vb-train" aria-label="Vande Bharat Express illustration">
-            <div className="ir-vb-train-label">
-              <span className="ir-vb-train-name">वन्दे भारत एक्सप्रेस</span>
-              <span className="ir-vb-train-badge">Train 18 · SCR</span>
-            </div>
-            <svg viewBox="0 0 560 95" fill="none" xmlns="http://www.w3.org/2000/svg" className="ir-vb-train-svg" aria-hidden="true">
-              <ellipse cx="280" cy="90" rx="272" ry="5" fill="rgba(14,27,44,0.07)"/>
-              <rect x="28" y="16" width="504" height="62" fill="white"/>
-              <path d="M28 16 C28 16 8 28 6 53 L6 78 L28 78 Z" fill="#1B4FA8"/>
-              <path d="M532 16 C532 16 552 28 554 53 L554 78 L532 78 Z" fill="#1B4FA8"/>
-              <rect x="6" y="16" width="548" height="15" fill="#1B4FA8"/>
-              <rect x="6" y="63" width="548" height="15" fill="#1B4FA8"/>
-              <rect x="6" y="31" width="548" height="4" fill="#FF7722"/>
-              <rect x="6" y="59" width="548" height="4" fill="#FF7722"/>
-              <path d="M16 34 L28 34 L28 63 L16 63 C10 57 8 51 10 45 Z" fill="#C8E6FA" opacity="0.9"/>
-              <path d="M544 34 L532 34 L532 63 L544 63 C550 57 552 51 550 45 Z" fill="#C8E6FA" opacity="0.9"/>
-              <rect x="36" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="58" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="80" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="102" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="124" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="146" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="168" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="190" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="212" y="16" width="3" height="62" fill="#1B4FA8" opacity="0.3"/>
-              <rect x="222" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="244" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="266" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="288" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="310" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="332" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="354" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="376" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="398" y="16" width="3" height="62" fill="#1B4FA8" opacity="0.3"/>
-              <rect x="408" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="430" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="452" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="474" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="496" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <rect x="518" y="38" width="16" height="13" rx="1.5" fill="#C8E6FA" opacity="0.85"/>
-              <text x="280" y="53" fontFamily="Arial,sans-serif" fontSize="9.5" fontWeight="900" fill="#1B4FA8" textAnchor="middle" letterSpacing="2.5">VANDE BHARAT EXPRESS</text>
-              <rect x="30" y="77" width="100" height="5" rx="1.5" fill="#3a3a3a"/>
-              <circle cx="52" cy="82" r="6" fill="#1a1a1a" stroke="#666" strokeWidth="1.5"/>
-              <circle cx="108" cy="82" r="6" fill="#1a1a1a" stroke="#666" strokeWidth="1.5"/>
-              <rect x="230" y="77" width="100" height="5" rx="1.5" fill="#3a3a3a"/>
-              <circle cx="252" cy="82" r="6" fill="#1a1a1a" stroke="#666" strokeWidth="1.5"/>
-              <circle cx="308" cy="82" r="6" fill="#1a1a1a" stroke="#666" strokeWidth="1.5"/>
-              <rect x="430" y="77" width="100" height="5" rx="1.5" fill="#3a3a3a"/>
-              <circle cx="452" cy="82" r="6" fill="#1a1a1a" stroke="#666" strokeWidth="1.5"/>
-              <circle cx="508" cy="82" r="6" fill="#1a1a1a" stroke="#666" strokeWidth="1.5"/>
-              <rect x="0" y="86" width="560" height="3" rx="1.5" fill="#888"/>
-              <rect x="0" y="91" width="560" height="3" rx="1.5" fill="#888"/>
-            </svg>
-          </div>
-
-          <div className="ir-route-panel">
-            <div className="ir-route-head">
-              <span>Nanded Division</span>
-              <span className="mono">431.240 KM</span>
-            </div>
-            <div className="ir-route-track">
-              <div className="ir-track-sleeper" />
-              <div className="ir-route-node a" />
-              <div className="ir-route-node b" />
-              <div className="ir-route-node c" />
-              <div className="ir-route-label a">Daulatabad</div>
-              <div className="ir-route-label b">AWB</div>
-              <div className="ir-route-label c">Chikalthan</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="ir-login-ops">
-          <div className="ir-login-op"><span>Zone</span><strong>South Central</strong></div>
-          <div className="ir-login-op"><span>Workspace</span><strong>Digital Library</strong></div>
-          <div className="ir-login-op"><span>Status</span><strong>SSO Active</strong></div>
-        </div>
-      </section>
-
-      <section className="ir-login-panel">
-        <form className="ir-login-card" onSubmit={submit}>
-          <div className="ir-login-card-head">
-            <div className="ir-login-kicker"><Icon name="shield" size={13} /> Secure access</div>
-            <div>
-              <h1 className="ir-login-title">Sign in to RailWorks</h1>
-              <p className="ir-login-sub">Use your railway ID to access station documents, approvals and validation workspaces.</p>
-            </div>
-          </div>
-
-          <div className="ir-login-form">
-            <Field label="Rail ID" required>
-              <TextInput
-                leadingIcon="users"
-                value={railId}
-                autoComplete="username"
-                onChange={(event) => { setRailId(event.target.value); setError(""); }}
-              />
-            </Field>
-
-            <Field label="Password" required>
-              <TextInput
-                leadingIcon="lock"
-                type="password"
-                value={password}
-                autoComplete="current-password"
-                onChange={(event) => { setPassword(event.target.value); setError(""); }}
-              />
-            </Field>
-
-            <div className="ir-login-form-grid">
-              <Field label="Division">
-                <Select value={division} onChange={(event) => setDivision(event.target.value)}>
-                  <option value="Nanded">Nanded</option>
-                  <option value="Vijayawada">Vijayawada</option>
-                  <option value="Guntur">Guntur</option>
-                  <option value="Guntakal">Guntakal</option>
-                </Select>
-              </Field>
-              <Field label="Access desk">
-                <Select value={accessDesk} onChange={(event) => setAccessDesk(event.target.value)}>
-                  <option value="approver">Approver</option>
-                  <option value="engineering">Engineering</option>
-                  <option value="survey">Survey</option>
-                  <option value="ohe">OHE</option>
-                </Select>
-              </Field>
-            </div>
-
-            <label className="ir-login-remember">
-              <Checkbox checked={remember} onChange={setRemember} ariaLabel="Keep me signed in" />
-              <span>Keep me signed in on this device</span>
-            </label>
-
-            {error && <div className="ir-login-error"><Icon name="alert" size={13} />{error}</div>}
-
-            <div className="ir-login-submit">
-              <Btn type="submit" variant="accent" size="lg" leadingIcon="lock">Sign in</Btn>
-            </div>
-          </div>
-
-          <div className="ir-login-foot">
-            <span className="ir-login-secure"><Icon name="shield" size={13} /> SSO gateway</span>
-            <span>Help desk 139</span>
-          </div>
-        </form>
-      </section>
-    </main>
-  );
+  return /* @__PURE__ */ React.createElement("main", { className: "ir-login-shell" }, /* @__PURE__ */ React.createElement("section", { className: "ir-login-visual", "aria-label": "Indian Railways access context" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-mark", style: { background: "none", padding: 0, overflow: "hidden", borderRadius: "50%" } }, /* @__PURE__ */ React.createElement("img", { src: "ir-logo.png", alt: "Indian Railways", style: { width: "100%", height: "100%", objectFit: "cover" } })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand-title" }, "Indian Railways"), /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand-sub" }, "ESP, SIP and LOP control desk"))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-scene", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("div", { className: "ir-station-board" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-board-small" }, "\u092D\u093E\u0930\u0924\u0940\u092F \u0930\u0947\u0932"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-name" }, "Vijayawada Jn"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-hindi" }, "\u0935\u093F\u091C\u092F\u0935\u093E\u0921\u093C\u093E"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-code" }, /* @__PURE__ */ React.createElement(Icon, { name: "train", size: 14 }), " BZA \xB7 SCoR"))), /* @__PURE__ */ React.createElement("div", { className: "ir-vb-train", "aria-label": "Vande Bharat Express illustration" }, /* @__PURE__ */ React.createElement("div", { className: "ir-vb-train-label" }, /* @__PURE__ */ React.createElement("span", { className: "ir-vb-train-name" }, "\u0935\u0928\u094D\u0926\u0947 \u092D\u093E\u0930\u0924 \u090F\u0915\u094D\u0938\u092A\u094D\u0930\u0947\u0938"), /* @__PURE__ */ React.createElement("span", { className: "ir-vb-train-badge" }, "Train 18 \xB7 SCoR")), /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 560 95", fill: "none", xmlns: "http://www.w3.org/2000/svg", className: "ir-vb-train-svg", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("ellipse", { cx: "280", cy: "90", rx: "272", ry: "5", fill: "rgba(14,27,44,0.07)" }), /* @__PURE__ */ React.createElement("rect", { x: "28", y: "16", width: "504", height: "62", fill: "white" }), /* @__PURE__ */ React.createElement("path", { d: "M28 16 C28 16 8 28 6 53 L6 78 L28 78 Z", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("path", { d: "M532 16 C532 16 552 28 554 53 L554 78 L532 78 Z", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "16", width: "548", height: "15", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "63", width: "548", height: "15", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "31", width: "548", height: "4", fill: "#FF7722" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "59", width: "548", height: "4", fill: "#FF7722" }), /* @__PURE__ */ React.createElement("path", { d: "M16 34 L28 34 L28 63 L16 63 C10 57 8 51 10 45 Z", fill: "#C8E6FA", opacity: "0.9" }), /* @__PURE__ */ React.createElement("path", { d: "M544 34 L532 34 L532 63 L544 63 C550 57 552 51 550 45 Z", fill: "#C8E6FA", opacity: "0.9" }), /* @__PURE__ */ React.createElement("rect", { x: "36", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "58", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "80", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "102", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "124", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "146", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "168", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "190", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "212", y: "16", width: "3", height: "62", fill: "#1B4FA8", opacity: "0.3" }), /* @__PURE__ */ React.createElement("rect", { x: "222", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "244", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "266", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "288", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "310", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "332", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "354", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "376", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "398", y: "16", width: "3", height: "62", fill: "#1B4FA8", opacity: "0.3" }), /* @__PURE__ */ React.createElement("rect", { x: "408", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "430", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "452", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "474", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "496", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "518", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("text", { x: "280", y: "53", fontFamily: "Arial,sans-serif", fontSize: "9.5", fontWeight: "900", fill: "#1B4FA8", textAnchor: "middle", letterSpacing: "2.5" }, "VANDE BHARAT EXPRESS"), /* @__PURE__ */ React.createElement("rect", { x: "30", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "52", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "108", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "230", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "252", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "308", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "430", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "452", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "508", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "0", y: "86", width: "560", height: "3", rx: "1.5", fill: "#888" }), /* @__PURE__ */ React.createElement("rect", { x: "0", y: "91", width: "560", height: "3", rx: "1.5", fill: "#888" }))), /* @__PURE__ */ React.createElement("div", { className: "ir-route-panel" }, /* @__PURE__ */ React.createElement("div", { className: "ir-route-head" }, /* @__PURE__ */ React.createElement("span", null, "Vijayawada Division"), /* @__PURE__ */ React.createElement("span", { className: "mono" }, "120.001 KM")), /* @__PURE__ */ React.createElement("div", { className: "ir-route-track" }, /* @__PURE__ */ React.createElement("div", { className: "ir-track-sleeper" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node a" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node b" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node c" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label a" }, "Kondapalli"), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label b" }, "BZA"), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label c" }, "Gudivada")))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-ops" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Zone"), /* @__PURE__ */ React.createElement("strong", null, "South Coast")), /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Workspace"), /* @__PURE__ */ React.createElement("strong", null, "Digital Library")), /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Status"), /* @__PURE__ */ React.createElement("strong", null, "SSO Active")))), /* @__PURE__ */ React.createElement("section", { className: "ir-login-panel" }, /* @__PURE__ */ React.createElement("form", { className: "ir-login-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-card-head" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-kicker" }, /* @__PURE__ */ React.createElement(Icon, { name: "shield", size: 13 }), " Secure access"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "ir-login-title" }, "Sign in to RailWorks"), /* @__PURE__ */ React.createElement("p", { className: "ir-login-sub" }, "Use your railway ID to access station documents, approvals and validation workspaces."))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-form" }, /* @__PURE__ */ React.createElement(Field, { label: "Rail ID", required: true }, /* @__PURE__ */ React.createElement(
+    TextInput,
+    {
+      leadingIcon: "users",
+      value: railId,
+      autoComplete: "username",
+      onChange: (event) => {
+        setRailId(event.target.value);
+        setError("");
+      }
+    }
+  )), /* @__PURE__ */ React.createElement(Field, { label: "Password", required: true }, /* @__PURE__ */ React.createElement(
+    TextInput,
+    {
+      leadingIcon: "lock",
+      type: "password",
+      value: password,
+      autoComplete: "current-password",
+      onChange: (event) => {
+        setPassword(event.target.value);
+        setError("");
+      }
+    }
+  )), /* @__PURE__ */ React.createElement("div", { className: "ir-login-form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Division" }, /* @__PURE__ */ React.createElement(Select, { value: division, onChange: (event) => setDivision(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "Vijayawada" }, "Vijayawada"), /* @__PURE__ */ React.createElement("option", { value: "Vijayawada" }, "Vijayawada"), /* @__PURE__ */ React.createElement("option", { value: "Guntur" }, "Guntur"), /* @__PURE__ */ React.createElement("option", { value: "Guntakal" }, "Guntakal"))), /* @__PURE__ */ React.createElement(Field, { label: "Access desk" }, /* @__PURE__ */ React.createElement(Select, { value: accessDesk, onChange: (event) => setAccessDesk(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "approver" }, "Approver"), /* @__PURE__ */ React.createElement("option", { value: "engineering" }, "Engineering"), /* @__PURE__ */ React.createElement("option", { value: "survey" }, "Survey"), /* @__PURE__ */ React.createElement("option", { value: "ohe" }, "OHE")))), /* @__PURE__ */ React.createElement("label", { className: "ir-login-remember" }, /* @__PURE__ */ React.createElement(Checkbox, { checked: remember, onChange: setRemember, ariaLabel: "Keep me signed in" }), /* @__PURE__ */ React.createElement("span", null, "Keep me signed in on this device")), error && /* @__PURE__ */ React.createElement("div", { className: "ir-login-error" }, /* @__PURE__ */ React.createElement(Icon, { name: "alert", size: 13 }), error), /* @__PURE__ */ React.createElement("div", { className: "ir-login-submit" }, /* @__PURE__ */ React.createElement(Btn, { type: "submit", variant: "accent", size: "lg", leadingIcon: "lock" }, "Sign in"))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-foot" }, /* @__PURE__ */ React.createElement("span", { className: "ir-login-secure" }, /* @__PURE__ */ React.createElement(Icon, { name: "shield", size: 13 }), " SSO gateway"), /* @__PURE__ */ React.createElement("span", null, "Help desk 139")))));
 };
-
 const DigitalLibraryApp = () => {
   const [session, setSession] = useStateLib(readLoginSession);
-
   if (!session) {
-    return <LoginPage onLogin={setSession} />;
+    return /* @__PURE__ */ React.createElement(LoginPage, { onLogin: setSession });
   }
-
-  return <DigitalLibraryPage user={session} />;
+  return /* @__PURE__ */ React.createElement(DigitalLibraryPage, { user: session });
 };
-
-/* ─────────────────────────────────────────────────────────────────────
-   MAIN PAGE — DigitalLibraryPage
-───────────────────────────────────────────────────────────────────── */
 const DigitalLibraryPage = () => {
-  /* Tweaks */
   const [t, setTweak] = useTweaks(DL_TWEAK_DEFAULTS);
-
-  /* Station registry */
   const [stations, setStations] = useStateLib(ALL_STATIONS);
   const [addStationOpen, setAddStationOpen] = useStateLib(false);
   const [hubStation, setHubStation] = useStateLib(null);
@@ -3845,59 +3311,40 @@ const DigitalLibraryPage = () => {
   const [activeNav, setActiveNav] = useStateLib("library");
   const [recentlyAdded, setRecentlyAdded] = useStateLib(null);
   const [toast, setToast] = useStateLib("");
-
-  /* Scope state */
-  const [zone, setZone] = useStateLib("SCR");
+  const [zone, setZone] = useStateLib("SCoR");
   const [division, setDivision] = useStateLib("Vijayawada");
   const [sectionScope, setSectionScope] = useStateLib("all");
-
-  /* Search + filter chips */
   const [search, setSearch] = useStateLib("");
   const [filtersOpen, setFiltersOpen] = useStateLib(false);
   const [filters, setFilters] = useStateLib(DEFAULT_FILTERS);
-
-  /* View toggle */
   const [view, setView] = useStateLib("table");
-
-  /* Row selection */
   const [selected, setSelected] = useStateLib({});
-
-  /* Sort */
   const [sort, setSort] = useStateLib({ key: "name", dir: "asc" });
-
-  /* Pagination */
   const [pageSize, setPageSize] = useStateLib(10);
   const [currentPage, setCurrentPage] = useStateLib(1);
-
-  /* Derived filtered + sorted rows */
   const rows = useMemoLib(() => {
     let list = stations;
     const sectionMap = {
-      "VJA-GDV": "Vijayawada–Gudivada",
-      "GNT-TEL": "Guntur–Tenali",
-      "EE-SLO": "Eluru–Samalkot"
+      "VJA-GDV": "Vijayawada\u2013Gudivada",
+      "GNT-TEL": "Guntur\u2013Tenali",
+      "EE-SLO": "Eluru\u2013Samalkot"
     };
-
     if (sectionScope !== "all") {
       list = list.filter((s) => s.section === (sectionMap[sectionScope] || SECTION_SCOPE_LABELS[sectionScope] || sectionScope));
     }
-
     if (search.trim()) {
       const q = search.toLowerCase();
-      list = list.filter((s) =>
-      s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q)
+      list = list.filter(
+        (s) => s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q)
       );
     }
-
     list = list.filter((s) => {
       const docs = { esp: s.esp, sip: s.sip, toc: s.toc ? "approved" : null, lop: s.lop };
       const docStates = Object.values(docs);
       const hasSurvey = s.survey.lidar || s.survey.ortho || s.survey.ts;
       const { count } = getCompleteness(s);
-
       if (filters.document === "missing_any" && docStates.every(Boolean)) return false;
       if (["esp", "sip", "toc", "lop"].includes(filters.document) && !docs[filters.document]) return false;
-
       if (filters.status === "missing") {
         if (["esp", "sip", "toc", "lop"].includes(filters.document)) {
           if (docs[filters.document]) return false;
@@ -3911,51 +3358,38 @@ const DigitalLibraryPage = () => {
           return false;
         }
       }
-
       if (filters.survey === "lidar" && !s.survey.lidar) return false;
       if (filters.survey === "ortho" && !s.survey.ortho) return false;
       if (filters.survey === "ts" && !s.survey.ts) return false;
       if (filters.survey === "all_survey" && !(s.survey.lidar && s.survey.ortho && s.survey.ts)) return false;
       if (filters.survey === "missing_survey" && hasSurvey) return false;
-
       if (filters.completeness === "complete" && count !== 5) return false;
       if (filters.completeness === "incomplete" && (count === 0 || count === 5)) return false;
       if (filters.completeness === "not_started" && count !== 0) return false;
-
       return true;
     });
-
     return [...list].sort((a, b) => {
-      const av = a[sort.key] ?? "",bv = b[sort.key] ?? "";
+      const av = a[sort.key] ?? "", bv = b[sort.key] ?? "";
       const cmp = String(av).localeCompare(String(bv));
       return sort.dir === "asc" ? cmp : -cmp;
     });
   }, [stations, search, sort, sectionScope, filters]);
-
-  const existingCodes = useMemoLib(() =>
-  new Set(stations.map((s) => s.code.toUpperCase())),
-  [stations]);
-
+  const existingCodes = useMemoLib(
+    () => new Set(stations.map((s) => s.code.toUpperCase())),
+    [stations]
+  );
   React.useEffect(() => {
     setCurrentPage(1);
   }, [search, filters, sectionScope, sort, pageSize]);
-
   const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
   const safeCurrentPage = Math.min(currentPage, totalPages);
   const pageStart = rows.length ? (safeCurrentPage - 1) * pageSize : 0;
   const pageEnd = Math.min(pageStart + pageSize, rows.length);
   const pagedRows = rows.slice(pageStart, pageEnd);
-  const pageNumbers = totalPages <= 5 ?
-  Array.from({ length: totalPages }, (_, i) => i + 1) :
-  Array.from(new Set([1, safeCurrentPage - 1, safeCurrentPage, safeCurrentPage + 1, totalPages])).
-  filter((p) => p >= 1 && p <= totalPages).
-  sort((a, b) => a - b);
-
-  /* Selection helpers */
+  const pageNumbers = totalPages <= 5 ? Array.from({ length: totalPages }, (_, i) => i + 1) : Array.from(/* @__PURE__ */ new Set([1, safeCurrentPage - 1, safeCurrentPage, safeCurrentPage + 1, totalPages])).filter((p) => p >= 1 && p <= totalPages).sort((a, b) => a - b);
   const selectedCount = Object.values(selected).filter(Boolean).length;
   const allChecked = pagedRows.length > 0 && pagedRows.every((s) => selected[s.id]);
   const someChecked = pagedRows.some((s) => selected[s.id]) && !allChecked;
-
   const toggleAll = () => {
     const v = !allChecked;
     const next = {};
@@ -3967,24 +3401,25 @@ const DigitalLibraryPage = () => {
     setSelected((prev) => ({ ...prev, [id]: !prev[id] }));
   };
   const clearSelection = () => setSelected({});
-
   const addStation = (station) => {
     const nextId = Math.max(0, ...stations.map((s) => s.id)) + 1;
-    setStations((current) => [
-    {
-      id: nextId,
-      ...station,
-      addedOrder: Date.now(),
-      esp: null,
-      sip: null,
-      lop: null,
-      toc: false,
-      survey: { lidar: false, ortho: false, ts: false },
-      versions: null,
-      lastTime: "Just added",
-      lastBy: "Admin"
-    },
-    ...current]
+    setStations(
+      (current) => [
+        {
+          id: nextId,
+          ...station,
+          addedOrder: Date.now(),
+          esp: null,
+          sip: null,
+          lop: null,
+          toc: false,
+          survey: { lidar: false, ortho: false, ts: false },
+          versions: null,
+          lastTime: "Just added",
+          lastBy: "Admin"
+        },
+        ...current
+      ]
     );
     setZone(station.zone);
     setDivision(station.division);
@@ -3995,11 +3430,10 @@ const DigitalLibraryPage = () => {
     setActiveNav("library");
     setRecentlyAdded({ id: nextId, name: station.name, code: station.code });
     setToast(`${station.name} (${station.code}) added to Digital Library`);
-    window.setTimeout(() => setToast(""), 3000);
+    window.setTimeout(() => setToast(""), 3e3);
     setAddStationOpen(false);
     setCurrentPage(1);
   };
-
   const addStationsBulk = (newStations, skippedRows = 0) => {
     const addedAt = Date.now();
     let nextId = Math.max(0, ...stations.map((s) => s.id)) + 1;
@@ -4035,26 +3469,16 @@ const DigitalLibraryPage = () => {
     setToast(`${newStations.length} stations added successfully. ${skippedRows} rows skipped.`);
     window.setTimeout(() => setToast(""), 3200);
   };
-
-  /* Sort handler */
-  const onSort = (key) =>
-  setSort((s) => ({ key, dir: s.key === key && s.dir === "asc" ? "desc" : "asc" }));
-
-  const setFilterValue = (key, value) =>
-  setFilters((current) => ({ ...current, [key]: value }));
-
+  const onSort = (key) => setSort((s) => ({ key, dir: s.key === key && s.dir === "asc" ? "desc" : "asc" }));
+  const setFilterValue = (key, value) => setFilters((current) => ({ ...current, [key]: value }));
   const clearFilters = () => {
     setSearch("");
     setFilters(DEFAULT_FILTERS);
   };
-
   const activeFilterChips = [
-  search.trim() ? { key: "search", label: `Search: ${search.trim()}` } : null,
-  ...Object.entries(filters).
-  filter(([, value]) => value !== "all").
-  map(([key, value]) => ({ key, label: FILTER_LABELS[key][value] }))
+    search.trim() ? { key: "search", label: `Search: ${search.trim()}` } : null,
+    ...Object.entries(filters).filter(([, value]) => value !== "all").map(([key, value]) => ({ key, label: FILTER_LABELS[key][value] }))
   ].filter(Boolean);
-
   const removeFilterChip = (key) => {
     if (key === "search") {
       setSearch("");
@@ -4062,16 +3486,12 @@ const DigitalLibraryPage = () => {
     }
     setFilterValue(key, "all");
   };
-
-  /* Scope breadcrumb label */
   const secLabel = SECTION_SCOPE_LABELS;
-
   const navLabels = {
     approvals: "Approvals",
     help: "Help",
     settings: "Settings"
   };
-
   const navigateSidebar = (page) => {
     setActiveNav(page);
     setHubStation(null);
@@ -4086,532 +3506,375 @@ const DigitalLibraryPage = () => {
     }
   };
   const handleEditorModeChange = (active) => {
-    if (active && !t.sidebarCollapsed) setTweak('sidebarCollapsed', true);
+    if (active && !t.sidebarCollapsed) setTweak("sidebarCollapsed", true);
   };
   const showRowActionToast = (message) => {
     setToast(message);
     window.setTimeout(() => setToast(""), 2600);
   };
-
   if (activePage === "home" && window.DashboardPage) {
     const Dashboard = window.DashboardPage;
-    return (
-      <div className="dl-layout">
-        <LibrarySidebar
-          collapsed={t.sidebarCollapsed}
-          onToggle={() => setTweak('sidebarCollapsed', !t.sidebarCollapsed)}
-          active="home"
-          onNavigate={navigateSidebar}
-        />
-        <Dashboard embedded />
-      </div>
-    );
+    return /* @__PURE__ */ React.createElement("div", { className: "dl-layout" }, /* @__PURE__ */ React.createElement(
+      LibrarySidebar,
+      {
+        collapsed: t.sidebarCollapsed,
+        onToggle: () => setTweak("sidebarCollapsed", !t.sidebarCollapsed),
+        active: "home",
+        onNavigate: navigateSidebar
+      }
+    ), /* @__PURE__ */ React.createElement(Dashboard, { embedded: true }));
   }
-
   if (activePage === "workspace" && window.WorkspacePage) {
     const Workspace = window.WorkspacePage;
-    return (
-      <div className="dl-layout">
-        <LibrarySidebar
-          collapsed={t.sidebarCollapsed}
-          onToggle={() => setTweak('sidebarCollapsed', !t.sidebarCollapsed)}
-          active="workspace"
-          onNavigate={navigateSidebar}
-        />
-        <Workspace onNavigate={navigateSidebar} />
-      </div>
-    );
+    return /* @__PURE__ */ React.createElement("div", { className: "dl-layout" }, /* @__PURE__ */ React.createElement(
+      LibrarySidebar,
+      {
+        collapsed: t.sidebarCollapsed,
+        onToggle: () => setTweak("sidebarCollapsed", !t.sidebarCollapsed),
+        active: "workspace",
+        onNavigate: navigateSidebar
+      }
+    ), /* @__PURE__ */ React.createElement(Workspace, { onNavigate: navigateSidebar }));
   }
-
   if (activePage === "bulkUpload") {
-    return (
-      <div className="dl-layout">
-        <LibrarySidebar
-          collapsed={t.sidebarCollapsed}
-          onToggle={() => setTweak('sidebarCollapsed', !t.sidebarCollapsed)}
-          active="library"
-          onNavigate={navigateSidebar}
-        />
-
-        <div className="dl-content">
-          <AppTopBar
-            crumbs={[
-              { label: "Home", onClick: () => navigateSidebar("home") },
-              { label: "Digital Library", onClick: () => navigateSidebar("library") },
-              "Bulk Upload Stations"
-            ]}
-            searchPlaceholder="Search stations, documents, approvals..."
-          />
-          <BulkUploadStationsPage
-            existingStations={stations}
-            onAdd={addStationsBulk}
-            onClose={() => navigateSidebar("library")}
-          />
-          {toast && <div className="dl-toast" role="status" aria-live="polite"><Icon name="check_circle" size={16} />{toast}</div>}
-        </div>
-      </div>
-    );
+    return /* @__PURE__ */ React.createElement("div", { className: "dl-layout" }, /* @__PURE__ */ React.createElement(
+      LibrarySidebar,
+      {
+        collapsed: t.sidebarCollapsed,
+        onToggle: () => setTweak("sidebarCollapsed", !t.sidebarCollapsed),
+        active: "library",
+        onNavigate: navigateSidebar
+      }
+    ), /* @__PURE__ */ React.createElement("div", { className: "dl-content" }, /* @__PURE__ */ React.createElement(
+      AppTopBar,
+      {
+        crumbs: [
+          { label: "Home", onClick: () => navigateSidebar("home") },
+          { label: "Digital Library", onClick: () => navigateSidebar("library") },
+          "Bulk Upload Stations"
+        ],
+        searchPlaceholder: "Search stations, documents, approvals..."
+      }
+    ), /* @__PURE__ */ React.createElement(
+      BulkUploadStationsPage,
+      {
+        existingStations: stations,
+        onAdd: addStationsBulk,
+        onClose: () => navigateSidebar("library")
+      }
+    ), toast && /* @__PURE__ */ React.createElement("div", { className: "dl-toast", role: "status", "aria-live": "polite" }, /* @__PURE__ */ React.createElement(Icon, { name: "check_circle", size: 16 }), toast)));
   }
-
   if (hubStation && window.StationHubPage) {
     const Hub = window.StationHubPage;
-    return (
-      <div className="dl-layout">
-        <LibrarySidebar
-          collapsed={t.sidebarCollapsed}
-          onToggle={() => setTweak('sidebarCollapsed', !t.sidebarCollapsed)}
-          active="library"
-          onNavigate={navigateSidebar}
-        />
-        <Hub
-          station={hubStation}
-          source="Digital Library"
-          onBack={() => {
-            setActiveNav("library");
-            setHubStation(null);
-          }}
-          onEditorModeChange={handleEditorModeChange}
-        />
-      </div>
-    );
+    return /* @__PURE__ */ React.createElement("div", { className: "dl-layout" }, /* @__PURE__ */ React.createElement(
+      LibrarySidebar,
+      {
+        collapsed: t.sidebarCollapsed,
+        onToggle: () => setTweak("sidebarCollapsed", !t.sidebarCollapsed),
+        active: "library",
+        onNavigate: navigateSidebar
+      }
+    ), /* @__PURE__ */ React.createElement(
+      Hub,
+      {
+        station: hubStation,
+        source: "Digital Library",
+        onBack: () => {
+          setActiveNav("library");
+          setHubStation(null);
+        },
+        onEditorModeChange: handleEditorModeChange
+      }
+    ));
   }
-
-  return (
-    <div className="dl-layout">
-      <LibrarySidebar
-        collapsed={t.sidebarCollapsed}
-        onToggle={() => setTweak('sidebarCollapsed', !t.sidebarCollapsed)}
-        active={activeNav}
-        onNavigate={navigateSidebar}
-      />
-
-      <div className="dl-content">
-        <AppTopBar
-          crumbs={[{ label: "Home", onClick: () => navigateSidebar("home") }, "Digital Library"]}
-          searchPlaceholder="Search stations, documents, approvals..."
-        />
-
-        {/* ── Region 1: Page Header ── */}
-        <div className="dl-page-header">
-          <div className="dl-page-heading">
-            <div className="dl-page-title">Digital Library</div>
-            <div className="dl-page-sub">
-              Central repository of all station records, drawings and survey data
-            </div>
-          </div>
-          <div className="dl-page-actions">
-            <button className="ds-icon-btn" title="Export Register">
-              <Icon name="download" size={16} />
-            </button>
-            <Btn variant="secondary" leadingIcon="plus" onClick={() => {
-              setHubStation(null);
-              setActiveNav("library");
-              setActivePage("bulkUpload");
-            }}>Add Stations in Bulk</Btn>
-            <Btn variant="accent" leadingIcon="plus" onClick={() => setAddStationOpen(true)}>Add Station</Btn>
-          </div>
-        </div>
-
-        {/* ── Region 2: Scope Bar ── */}
-        <div className="dl-scope-bar">
-          <span className="dl-scope-label">Scope:</span>
-
-          <div className="dl-scope-controls">
-            <select className="dl-scope-select" value={zone}
-            onChange={(e) => {
-              const nextZone = e.target.value;
-              const nextDivision = (DIVISION_OPTIONS[nextZone] || [])[0] || "";
-              setZone(nextZone);
-              setDivision(nextDivision);
-              setSectionScope("all");
-            }}>
-              {ZONE_OPTIONS.map((option) =>
-              <option key={option.value} value={option.value}>{option.label}</option>
-              )}
-            </select>
-
-            <select className="dl-scope-select" value={division}
-            onChange={(e) => {
-              setDivision(e.target.value);
-              setSectionScope("all");
-            }}>
-              {(DIVISION_OPTIONS[zone] || []).map((divisionName) =>
-              <option key={divisionName} value={divisionName}>{divisionName} Division</option>
-              )}
-            </select>
-
-            <select className="dl-scope-select" value={sectionScope}
-            onChange={(e) => setSectionScope(e.target.value)}>
-              <option value="all">All Sections</option>
-              {(SECTION_OPTIONS[division] || []).map((sectionName) =>
-              <option key={sectionName} value={sectionName}>{sectionName}</option>
-              )}
-            </select>
-          </div>
-
-          <div className="dl-vdivider" />
-          <span className="dl-scope-count">{rows.length} stations in scope</span>
-
-          {/* Breadcrumb path indicator */}
-          <nav className="ds-breadcrumb dl-scope-path" style={{ fontSize: "12px" }}>
-            <a style={{ fontSize: "12px" }}>{zone}</a>
-            <Icon name="chevron_right" size={11} className="ds-breadcrumb-sep" />
-            <a style={{ fontSize: "12px" }}>{division}</a>
-            <Icon name="chevron_right" size={11} className="ds-breadcrumb-sep" />
-            <span className="ds-breadcrumb-current" style={{ fontSize: "12px" }}>
-              {secLabel[sectionScope] || sectionScope}
-            </span>
-          </nav>
-        </div>
-
-        {/* ── Region 3: Search + Filter Bar ── */}
-        <div className="dl-filter-bar">
-          <div className="dl-filter-row">
-            <div className="dl-search-wrap">
-              <Icon name="search" size={14} className="dl-search-icon" />
-              <input
-                placeholder="Search by station name or code…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)} />
-              
-            </div>
-            <div className="dl-filter-shell">
-              <Btn
-                variant="secondary"
-                size="sm"
-                leadingIcon="filter"
-                trailingIcon={filtersOpen ? "chevron_up" : "chevron_down"}
-                onClick={() => setFiltersOpen((open) => !open)}>
-                Filters{activeFilterChips.length ? ` (${activeFilterChips.length})` : ""}
-              </Btn>
-              {filtersOpen && (
-                <div className="dl-filter-panel">
-                  <div className="dl-filter-field">
-                    <label>Document Type</label>
-                    <select value={filters.document}
-                    onChange={(e) => setFilterValue("document", e.target.value)}>
-                      {DOCUMENT_FILTERS.map((option) =>
-                      <option key={option.value} value={option.value}>{option.label}</option>
-                      )}
-                    </select>
-                  </div>
-                  <div className="dl-filter-field">
-                    <label>Document Status</label>
-                    <select value={filters.status}
-                    onChange={(e) => setFilterValue("status", e.target.value)}>
-                      {STATUS_FILTERS.map((option) =>
-                      <option key={option.value} value={option.value}>{option.label}</option>
-                      )}
-                    </select>
-                  </div>
-                  <div className="dl-filter-field">
-                    <label>Survey Data</label>
-                    <select value={filters.survey}
-                    onChange={(e) => setFilterValue("survey", e.target.value)}>
-                      {SURVEY_FILTERS.map((option) =>
-                      <option key={option.value} value={option.value}>{option.label}</option>
-                      )}
-                    </select>
-                  </div>
-                  <div className="dl-filter-field">
-                    <label>Completeness</label>
-                    <select value={filters.completeness}
-                    onChange={(e) => setFilterValue("completeness", e.target.value)}>
-                      {COMPLETENESS_FILTERS.map((option) =>
-                      <option key={option.value} value={option.value}>{option.label}</option>
-                      )}
-                    </select>
-                  </div>
-                  <div className="dl-filter-actions">
-                    <Btn variant="ghost" size="sm" onClick={clearFilters}>Clear all</Btn>
-                    <Btn variant="primary" size="sm" onClick={() => setFiltersOpen(false)}>Apply</Btn>
-                  </div>
-                </div>
-              )}
-            </div>
-            <Btn variant="secondary" size="sm" leadingIcon="sort">Sort</Btn>
-            <div className="dl-vdivider" />
-            <PillTabs
-              items={[{ id: "table", label: "Table" }, { id: "cards", label: "Cards" }]}
-              active={view}
-              onChange={setView} />
-            
-          </div>
-
-          <div className="dl-chips">
-            {activeFilterChips.length ? activeFilterChips.map((chip) => {
-              return (
-                <button key={chip.key} className="ds-fchip" data-active="true"
-                onClick={() => removeFilterChip(chip.key)}>
-                  <span>{chip.label}</span>
-                  <span className="ds-fchip-x"><Icon name="x" size={10} /></span>
-                </button>);
-
-            }) : (
-              <span style={{ fontSize: 12, color: "var(--ink-500)" }}>
-                Filters available: document type, document status, survey data, completeness
-              </span>
-            )}
-            <button className="ds-fchip"
-            style={{ borderStyle: "dashed", color: "var(--ink-500)" }}
-            onClick={() => setFiltersOpen(true)}>
-              <Icon name="plus" size={12} />&thinsp;Add filter
-            </button>
-          </div>
-        </div>
-
-        {/* ── Region 4: Station Registry Table ── */}
-        <div className="dl-table-area" data-density={t.tableDensity}>
-
-          {view === "cards" ?
-          <div style={{ display: "flex", justifyContent: "center", paddingTop: 64 }}>
-              <EmptyState
-              kind="track"
-              title="Cards view coming soon"
-              description="Switch back to Table view to browse the full station registry."
-              secondary="Switch to Table" />
-            
-            </div> :
-
-
-          <div className="dl-table-container">
-              <table className="ds-table" style={{ width: "100%" }}>
-                <colgroup>
-                  <col style={{ width: 42 }} />
-                  <col style={{ width: 150 }} />
-                  <col style={{ width: 76 }} />
-                  <col style={{ width: 154 }} />
-                  <col style={{ width: 116 }} />
-                  <col style={{ width: 72 }} />
-                  <col style={{ width: 104 }} />
-                  <col style={{ width: 142 }} />
-                  <col style={{ width: 126 }} />
-                </colgroup>
-
-                <thead>
-                  <tr>
-                    <th className="col-checkbox">
-                      <Checkbox checked={allChecked} indeterminate={someChecked}
-                    onChange={toggleAll} />
-                    </th>
-                    <SortTh sortKey="name" sort={sort} onSort={onSort}>Station</SortTh>
-                    <SortTh sortKey="code" sort={sort} onSort={onSort}>Code</SortTh>
-                    <th>Section</th>
-                    <SortTh sortKey="division" sort={sort} onSort={onSort}>Division</SortTh>
-                    <SortTh sortKey="zone" sort={sort} onSort={onSort}>Zone</SortTh>
-                    <th>Documents</th>
-                    <SortTh sortKey="lastTime" sort={sort} onSort={onSort}>Last Activity</SortTh>
-                    <th style={{ textAlign: "right" }}>Action</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {rows.length === 0 ?
-                <tr>
-                      <td colSpan={9} style={{ padding: 0, border: "none" }}>
-                        <div style={{ padding: "40px 28px" }}>
-                          <EmptyState
-                        kind="search"
-                        title="No stations match this scope"
-                        description="Adjust your search or filter criteria to find stations."
-                        secondary="Clear filters" />
-                      
-                        </div>
-                      </td>
-                    </tr> :
-                pagedRows.map((s) => {
-                  const isSelected = !!selected[s.id];
-                  const stationDocuments = getStationDocuments(s);
-                  return (
-                    <tr key={s.id} data-selected={isSelected} data-new={recentlyAdded?.id === s.id ? "true" : undefined}
-                    onClick={() => {
-                      setActiveNav("library");
-                      setHubStation(s);
-                    }}>
-
-                        {/* Checkbox */}
-                        <td className="col-checkbox"
-                      onClick={(e) => toggleRow(s.id, e)}>
-                          <Checkbox checked={isSelected}
-                        onChange={() => toggleRow(s.id)} />
-                        </td>
-
-                        {/* Station name */}
-                        <td>
-                          <div className="dl-station-cell" title={s.name}>
-                            {s.name}
-                          </div>
-                        </td>
-
-                        {/* Code */}
-                        <td>
-                          <span className="dl-code-pill">{s.code}</span>
-                        </td>
-
-                        {/* Section */}
-                        <td>
-                          <div className="dl-section-cell" title={s.section}>
-                          {s.section}
-                          </div>
-                        </td>
-
-                        {/* Division */}
-                        <td>
-                          <div className="dl-division-cell" title={s.division}>
-                          {s.division}
-                          </div>
-                        </td>
-
-                        {/* Zone */}
-                        <td style={{ fontSize: 12, color: "var(--ink-700)", fontWeight: 700 }}>
-                          {s.zone}
-                        </td>
-
-                        {/* Documents */}
-                        <td className="dl-doc-table-cell">
-                          <DocumentDetailsPopover
-                            station={s}
-                            documents={stationDocuments}
-                            onView={() => {
-                              setActiveNav("library");
-                              setHubStation(s);
-                            }}
-                          />
-                        </td>
-
-                        {/* Last activity */}
-                        <td>
-                          <div className="dl-activity-time">{s.lastTime}</div>
-                          <div className="dl-activity-by">by {s.lastBy}</div>
-                        </td>
-
-                        {/* Row actions */}
-                        <td className="dl-action-table-cell" onClick={(e) => e.stopPropagation()}>
-                          <StationRowActions
-                            station={s}
-                            onView={() => {
-                              setActiveNav("library");
-                              setHubStation(s);
-                            }}
-                            onAction={showRowActionToast}
-                          />
-                        </td>
-                      </tr>);
-
-                })}
-                </tbody>
-              </table>
-
-              {/* Table footer */}
-              <div className="ds-table-foot">
-                <div className="dl-table-foot-left">
-                  <span>
-                    Showing {rows.length ? pageStart + 1 : 0}-{pageEnd} of {rows.length} visible stations
-                    {activeFilterChips.length > 0 &&
-                    <span style={{ color: "var(--ink-500)" }}> — {activeFilterChips.length} filter{activeFilterChips.length !== 1 ? "s" : ""} active</span>}
-                  </span>
-                  <label className="dl-page-size">
-                    <span>Rows per page</span>
-                    <select value={pageSize}
-                    onChange={(e) => setPageSize(Number(e.target.value))}>
-                      {[5, 10, 25, 50].map((size) =>
-                      <option key={size} value={size}>{size}</option>
-                      )}
-                    </select>
-                  </label>
-                </div>
-                <div className="ds-table-pager">
-                  <button className="ds-page-btn" disabled={safeCurrentPage === 1}
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}>
-                    <Icon name="chevron_left" size={14} />
-                  </button>
-                  {pageNumbers.map((page, i) => (
-                    <React.Fragment key={page}>
-                      {i > 0 && page - pageNumbers[i - 1] > 1 &&
-                      <span className="dl-page-ellipsis">…</span>}
-                      <button className="ds-page-btn"
-                      data-current={page === safeCurrentPage ? "true" : undefined}
-                      onClick={() => setCurrentPage(page)}>
-                        {page}
-                      </button>
-                    </React.Fragment>
-                  ))}
-                  <button className="ds-page-btn" disabled={safeCurrentPage === totalPages}
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}>
-                    <Icon name="chevron_right" size={14} />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-          }
-        </div>
-
-        {/* ── Region 6: Bulk Action Bar (visible when ≥1 row selected) ── */}
-        {selectedCount > 0 &&
-        <div className="dl-bulk-bar">
-            <Icon name="check_circle" size={15}
-          style={{ color: "rgba(255,255,255,0.45)", flexShrink: 0 }} />
-            <span className="dl-bulk-label">
-              {selectedCount} station{selectedCount !== 1 ? "s" : ""} selected
-            </span>
-            <div className="dl-bulk-sep" />
-            <button className="dl-bulk-action">
-              <Icon name="download" size={13} />Export selected
-            </button>
-            <button className="dl-bulk-action">
-              <Icon name="file" size={13} />Download documents
-            </button>
-            <button className="dl-bulk-action">
-              <Icon name="pin" size={13} />Add to…
-            </button>
-            <div style={{ flex: 1 }} />
-            <button className="dl-bulk-clear" onClick={clearSelection}>
-              Clear selection
-            </button>
-          </div>
+  return /* @__PURE__ */ React.createElement("div", { className: "dl-layout" }, /* @__PURE__ */ React.createElement(
+    LibrarySidebar,
+    {
+      collapsed: t.sidebarCollapsed,
+      onToggle: () => setTweak("sidebarCollapsed", !t.sidebarCollapsed),
+      active: activeNav,
+      onNavigate: navigateSidebar
+    }
+  ), /* @__PURE__ */ React.createElement("div", { className: "dl-content" }, /* @__PURE__ */ React.createElement(
+    AppTopBar,
+    {
+      crumbs: [{ label: "Home", onClick: () => navigateSidebar("home") }, "Digital Library"],
+      searchPlaceholder: "Search stations, documents, approvals..."
+    }
+  ), /* @__PURE__ */ React.createElement("div", { className: "dl-page-header" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-heading" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-title" }, "Digital Library"), /* @__PURE__ */ React.createElement("div", { className: "dl-page-sub" }, "Central repository of all station records, drawings and survey data")), /* @__PURE__ */ React.createElement("div", { className: "dl-page-actions" }, /* @__PURE__ */ React.createElement("button", { className: "ds-icon-btn", title: "Export Register" }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 16 })), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "plus", onClick: () => {
+    setHubStation(null);
+    setActiveNav("library");
+    setActivePage("bulkUpload");
+  } }, "Add Stations in Bulk"), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "plus", onClick: () => setAddStationOpen(true) }, "Add Station"))), /* @__PURE__ */ React.createElement("div", { className: "dl-scope-bar" }, /* @__PURE__ */ React.createElement("span", { className: "dl-scope-label" }, "Scope:"), /* @__PURE__ */ React.createElement("div", { className: "dl-scope-controls" }, /* @__PURE__ */ React.createElement(
+    "select",
+    {
+      className: "dl-scope-select",
+      value: zone,
+      onChange: (e) => {
+        const nextZone = e.target.value;
+        const nextDivision = (DIVISION_OPTIONS[nextZone] || [])[0] || "";
+        setZone(nextZone);
+        setDivision(nextDivision);
+        setSectionScope("all");
+      }
+    },
+    ZONE_OPTIONS.map(
+      (option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label)
+    )
+  ), /* @__PURE__ */ React.createElement(
+    "select",
+    {
+      className: "dl-scope-select",
+      value: division,
+      onChange: (e) => {
+        setDivision(e.target.value);
+        setSectionScope("all");
+      }
+    },
+    (DIVISION_OPTIONS[zone] || []).map(
+      (divisionName) => /* @__PURE__ */ React.createElement("option", { key: divisionName, value: divisionName }, divisionName, " Division")
+    )
+  ), /* @__PURE__ */ React.createElement(
+    "select",
+    {
+      className: "dl-scope-select",
+      value: sectionScope,
+      onChange: (e) => setSectionScope(e.target.value)
+    },
+    /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Sections"),
+    (SECTION_OPTIONS[division] || []).map(
+      (sectionName) => /* @__PURE__ */ React.createElement("option", { key: sectionName, value: sectionName }, sectionName)
+    )
+  )), /* @__PURE__ */ React.createElement("div", { className: "dl-vdivider" }), /* @__PURE__ */ React.createElement("span", { className: "dl-scope-count" }, rows.length, " stations in scope"), /* @__PURE__ */ React.createElement("nav", { className: "ds-breadcrumb dl-scope-path", style: { fontSize: "12px" } }, /* @__PURE__ */ React.createElement("a", { style: { fontSize: "12px" } }, zone), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11, className: "ds-breadcrumb-sep" }), /* @__PURE__ */ React.createElement("a", { style: { fontSize: "12px" } }, division), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11, className: "ds-breadcrumb-sep" }), /* @__PURE__ */ React.createElement("span", { className: "ds-breadcrumb-current", style: { fontSize: "12px" } }, secLabel[sectionScope] || sectionScope))), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-bar" }, /* @__PURE__ */ React.createElement("div", { className: "dl-filter-row" }, /* @__PURE__ */ React.createElement("div", { className: "dl-search-wrap" }, /* @__PURE__ */ React.createElement(Icon, { name: "search", size: 14, className: "dl-search-icon" }), /* @__PURE__ */ React.createElement(
+    "input",
+    {
+      placeholder: "Search by station name or code\u2026",
+      value: search,
+      onChange: (e) => setSearch(e.target.value)
+    }
+  )), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-shell" }, /* @__PURE__ */ React.createElement(
+    Btn,
+    {
+      variant: "secondary",
+      size: "sm",
+      leadingIcon: "filter",
+      trailingIcon: filtersOpen ? "chevron_up" : "chevron_down",
+      onClick: () => setFiltersOpen((open) => !open)
+    },
+    "Filters",
+    activeFilterChips.length ? ` (${activeFilterChips.length})` : ""
+  ), filtersOpen && /* @__PURE__ */ React.createElement("div", { className: "dl-filter-panel" }, /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Document Type"), /* @__PURE__ */ React.createElement(
+    "select",
+    {
+      value: filters.document,
+      onChange: (e) => setFilterValue("document", e.target.value)
+    },
+    DOCUMENT_FILTERS.map(
+      (option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label)
+    )
+  )), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Document Status"), /* @__PURE__ */ React.createElement(
+    "select",
+    {
+      value: filters.status,
+      onChange: (e) => setFilterValue("status", e.target.value)
+    },
+    STATUS_FILTERS.map(
+      (option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label)
+    )
+  )), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Survey Data"), /* @__PURE__ */ React.createElement(
+    "select",
+    {
+      value: filters.survey,
+      onChange: (e) => setFilterValue("survey", e.target.value)
+    },
+    SURVEY_FILTERS.map(
+      (option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label)
+    )
+  )), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Completeness"), /* @__PURE__ */ React.createElement(
+    "select",
+    {
+      value: filters.completeness,
+      onChange: (e) => setFilterValue("completeness", e.target.value)
+    },
+    COMPLETENESS_FILTERS.map(
+      (option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label)
+    )
+  )), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", size: "sm", onClick: clearFilters }, "Clear all"), /* @__PURE__ */ React.createElement(Btn, { variant: "primary", size: "sm", onClick: () => setFiltersOpen(false) }, "Apply")))), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", size: "sm", leadingIcon: "sort" }, "Sort"), /* @__PURE__ */ React.createElement("div", { className: "dl-vdivider" }), /* @__PURE__ */ React.createElement(
+    PillTabs,
+    {
+      items: [{ id: "table", label: "Table" }, { id: "cards", label: "Cards" }],
+      active: view,
+      onChange: setView
+    }
+  )), /* @__PURE__ */ React.createElement("div", { className: "dl-chips" }, activeFilterChips.length ? activeFilterChips.map((chip) => {
+    return /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        key: chip.key,
+        className: "ds-fchip",
+        "data-active": "true",
+        onClick: () => removeFilterChip(chip.key)
+      },
+      /* @__PURE__ */ React.createElement("span", null, chip.label),
+      /* @__PURE__ */ React.createElement("span", { className: "ds-fchip-x" }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 10 }))
+    );
+  }) : /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, color: "var(--ink-500)" } }, "Filters available: document type, document status, survey data, completeness"), /* @__PURE__ */ React.createElement(
+    "button",
+    {
+      className: "ds-fchip",
+      style: { borderStyle: "dashed", color: "var(--ink-500)" },
+      onClick: () => setFiltersOpen(true)
+    },
+    /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 12 }),
+    "\u2009Add filter"
+  ))), /* @__PURE__ */ React.createElement("div", { className: "dl-table-area", "data-density": t.tableDensity }, view === "cards" ? /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "center", paddingTop: 64 } }, /* @__PURE__ */ React.createElement(
+    EmptyState,
+    {
+      kind: "track",
+      title: "Cards view coming soon",
+      description: "Switch back to Table view to browse the full station registry.",
+      secondary: "Switch to Table"
+    }
+  )) : /* @__PURE__ */ React.createElement("div", { className: "dl-table-container" }, /* @__PURE__ */ React.createElement("table", { className: "ds-table", style: { width: "100%" } }, /* @__PURE__ */ React.createElement("colgroup", null, /* @__PURE__ */ React.createElement("col", { style: { width: 42 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 150 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 76 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 154 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 116 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 72 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 104 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 142 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 126 } })), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { className: "col-checkbox" }, /* @__PURE__ */ React.createElement(
+    Checkbox,
+    {
+      checked: allChecked,
+      indeterminate: someChecked,
+      onChange: toggleAll
+    }
+  )), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "name", sort, onSort }, "Station"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "code", sort, onSort }, "Code"), /* @__PURE__ */ React.createElement("th", null, "Section"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "division", sort, onSort }, "Division"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "zone", sort, onSort }, "Zone"), /* @__PURE__ */ React.createElement("th", null, "Documents"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "lastTime", sort, onSort }, "Last Activity"), /* @__PURE__ */ React.createElement("th", { style: { textAlign: "right" } }, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, rows.length === 0 ? /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { colSpan: 9, style: { padding: 0, border: "none" } }, /* @__PURE__ */ React.createElement("div", { style: { padding: "40px 28px" } }, /* @__PURE__ */ React.createElement(
+    EmptyState,
+    {
+      kind: "search",
+      title: "No stations match this scope",
+      description: "Adjust your search or filter criteria to find stations.",
+      secondary: "Clear filters"
+    }
+  )))) : pagedRows.map((s) => {
+    const isSelected = !!selected[s.id];
+    const stationDocuments = getStationDocuments(s);
+    return /* @__PURE__ */ React.createElement(
+      "tr",
+      {
+        key: s.id,
+        "data-selected": isSelected,
+        "data-new": recentlyAdded?.id === s.id ? "true" : void 0,
+        onClick: () => {
+          setActiveNav("library");
+          setHubStation(s);
         }
-
-      </div>
-
-      {addStationOpen &&
-      <AddStationModal
-        initialZone={zone}
-        initialDivision={division}
-        initialSectionScope={sectionScope}
-        existingCodes={existingCodes}
-        onAdd={addStation}
-        onClose={() => setAddStationOpen(false)}
-      />}
-
-      {toast && <div className="dl-toast" role="status" aria-live="polite"><Icon name="check_circle" size={16} />{toast}</div>}
-
-      {/* ── Tweaks panel ── */}
-      <TweaksPanel>
-        <TweakSection label="Sidebar" />
-        <TweakToggle
-          label="Collapse sidebar"
-          value={t.sidebarCollapsed}
-          onChange={(v) => setTweak('sidebarCollapsed', v)}
-        />
-        <TweakSection label="Table" />
-        <TweakRadio
-          label="Density"
-          value={t.tableDensity}
-          options={['compact', 'regular']}
-          onChange={(v) => setTweak('tableDensity', v)}
-        />
-      </TweaksPanel>
-
-    </div>);
-
+      },
+      /* @__PURE__ */ React.createElement(
+        "td",
+        {
+          className: "col-checkbox",
+          onClick: (e) => toggleRow(s.id, e)
+        },
+        /* @__PURE__ */ React.createElement(
+          Checkbox,
+          {
+            checked: isSelected,
+            onChange: () => toggleRow(s.id)
+          }
+        )
+      ),
+      /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "dl-station-cell", title: s.name }, s.name)),
+      /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, s.code)),
+      /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "dl-section-cell", title: s.section }, s.section)),
+      /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "dl-division-cell", title: s.division }, s.division)),
+      /* @__PURE__ */ React.createElement("td", { style: { fontSize: 12, color: "var(--ink-700)", fontWeight: 700 } }, s.zone),
+      /* @__PURE__ */ React.createElement("td", { className: "dl-doc-table-cell" }, /* @__PURE__ */ React.createElement(
+        DocumentDetailsPopover,
+        {
+          station: s,
+          documents: stationDocuments,
+          onView: () => {
+            setActiveNav("library");
+            setHubStation(s);
+          }
+        }
+      )),
+      /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "dl-activity-time" }, s.lastTime), /* @__PURE__ */ React.createElement("div", { className: "dl-activity-by" }, "by ", s.lastBy)),
+      /* @__PURE__ */ React.createElement("td", { className: "dl-action-table-cell", onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement(
+        StationRowActions,
+        {
+          station: s,
+          onView: () => {
+            setActiveNav("library");
+            setHubStation(s);
+          },
+          onAction: showRowActionToast
+        }
+      ))
+    );
+  }))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-foot" }, /* @__PURE__ */ React.createElement("div", { className: "dl-table-foot-left" }, /* @__PURE__ */ React.createElement("span", null, "Showing ", rows.length ? pageStart + 1 : 0, "-", pageEnd, " of ", rows.length, " visible stations", activeFilterChips.length > 0 && /* @__PURE__ */ React.createElement("span", { style: { color: "var(--ink-500)" } }, " \u2014 ", activeFilterChips.length, " filter", activeFilterChips.length !== 1 ? "s" : "", " active")), /* @__PURE__ */ React.createElement("label", { className: "dl-page-size" }, /* @__PURE__ */ React.createElement("span", null, "Rows per page"), /* @__PURE__ */ React.createElement(
+    "select",
+    {
+      value: pageSize,
+      onChange: (e) => setPageSize(Number(e.target.value))
+    },
+    [5, 10, 25, 50].map(
+      (size) => /* @__PURE__ */ React.createElement("option", { key: size, value: size }, size)
+    )
+  ))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-pager" }, /* @__PURE__ */ React.createElement(
+    "button",
+    {
+      className: "ds-page-btn",
+      disabled: safeCurrentPage === 1,
+      onClick: () => setCurrentPage((p) => Math.max(1, p - 1))
+    },
+    /* @__PURE__ */ React.createElement(Icon, { name: "chevron_left", size: 14 })
+  ), pageNumbers.map((page, i) => /* @__PURE__ */ React.createElement(React.Fragment, { key: page }, i > 0 && page - pageNumbers[i - 1] > 1 && /* @__PURE__ */ React.createElement("span", { className: "dl-page-ellipsis" }, "\u2026"), /* @__PURE__ */ React.createElement(
+    "button",
+    {
+      className: "ds-page-btn",
+      "data-current": page === safeCurrentPage ? "true" : void 0,
+      onClick: () => setCurrentPage(page)
+    },
+    page
+  ))), /* @__PURE__ */ React.createElement(
+    "button",
+    {
+      className: "ds-page-btn",
+      disabled: safeCurrentPage === totalPages,
+      onClick: () => setCurrentPage((p) => Math.min(totalPages, p + 1))
+    },
+    /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 14 })
+  ))))), selectedCount > 0 && /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-bar" }, /* @__PURE__ */ React.createElement(
+    Icon,
+    {
+      name: "check_circle",
+      size: 15,
+      style: { color: "rgba(255,255,255,0.45)", flexShrink: 0 }
+    }
+  ), /* @__PURE__ */ React.createElement("span", { className: "dl-bulk-label" }, selectedCount, " station", selectedCount !== 1 ? "s" : "", " selected"), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-sep" }), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 13 }), "Export selected"), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 13 }), "Download documents"), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "pin", size: 13 }), "Add to\u2026"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-clear", onClick: clearSelection }, "Clear selection"))), addStationOpen && /* @__PURE__ */ React.createElement(
+    AddStationModal,
+    {
+      initialZone: zone,
+      initialDivision: division,
+      initialSectionScope: sectionScope,
+      existingCodes,
+      onAdd: addStation,
+      onClose: () => setAddStationOpen(false)
+    }
+  ), toast && /* @__PURE__ */ React.createElement("div", { className: "dl-toast", role: "status", "aria-live": "polite" }, /* @__PURE__ */ React.createElement(Icon, { name: "check_circle", size: 16 }), toast), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Sidebar" }), /* @__PURE__ */ React.createElement(
+    TweakToggle,
+    {
+      label: "Collapse sidebar",
+      value: t.sidebarCollapsed,
+      onChange: (v) => setTweak("sidebarCollapsed", v)
+    }
+  ), /* @__PURE__ */ React.createElement(TweakSection, { label: "Table" }), /* @__PURE__ */ React.createElement(
+    TweakRadio,
+    {
+      label: "Density",
+      value: t.tableDensity,
+      options: ["compact", "regular"],
+      onChange: (v) => setTweak("tableDensity", v)
+    }
+  )));
 };
-
-/* ─────────────────────────────────────────────────────────────────────
-   INJECT CSS + MOUNT
-───────────────────────────────────────────────────────────────────── */
 const dlStyleEl = document.createElement("style");
 dlStyleEl.textContent = window.NAV_CSS + window.DATA_CSS + window.FORM_CSS + libCSS;
 document.head.appendChild(dlStyleEl);
-
-ReactDOM.createRoot(document.getElementById("root")).render(<DigitalLibraryApp />);
+ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(DigitalLibraryApp, null));

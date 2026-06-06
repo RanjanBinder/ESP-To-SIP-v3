@@ -1,8 +1,8 @@
 (() => {
   const { useState: useStateHub } = React;
   const CURRENT_USER = {
-    name: "Ashwini Vaishnav",
-    role: "Railway Minister",
+    name: "Sarath",
+    role: "Admin SCoR",
     zone: "SCR",
     division: "Nanded"
   };
@@ -18,7 +18,7 @@
     section: "Aurangabad\u2013Ankai",
     stationClass: "A",
     kilometerRef: "KM 431.240",
-    owner: "Ashwini Vaishnav",
+    owner: "Sarath",
     lastUpdated: "Today, 10:42",
     currentBaseline: "ESP-AWB-V7",
     stationType: "Existing Yard",
@@ -99,8 +99,8 @@
     }
   ];
   const UPLOADED_DOCUMENT_ROWS = [
-    { id: "new-esp-v8", docId: "esp", docType: "ESP", fileType: "DWG", file: "AWB_ESP_V8-PIM.dwg", version: "V8", name: "Engineering Scale Plan", addedBy: "R. Patil" },
-    { id: "previous-esp-v7", docId: "esp", docType: "ESP", fileType: "DWG", file: "AWB_ESP_V7-R0-A0.dwg", version: "V7-R0-A0", name: "Engineering Scale Plan", addedBy: "K. Naidu" }
+    { id: "new-esp-v8", docId: "esp", docType: "ESP", fileType: "DWG", file: "AWB_ESP_V8-PIM.dwg", version: "V8", name: "Engineering Scale Plan", addedBy: "Sarath" },
+    { id: "previous-esp-v7", docId: "esp", docType: "ESP", fileType: "DWG", file: "AWB_ESP_V7-R0-A0.dwg", version: "V7-R0-A0", name: "Engineering Scale Plan", addedBy: "Sarath" }
   ];
   const UPLOAD_DOC_ID = {
     ESP: "esp",
@@ -124,7 +124,7 @@
   };
   const ARCHIVES = {
     ESP: [
-      { version: "V7", status: "Approved / Frozen", created: "May 10, 2026", approved: "May 14, 2026", by: "K. Naidu", validation: "Validated", latest: true, actions: ["View", "Compare"] },
+      { version: "V7", status: "Approved / Frozen", created: "May 10, 2026", approved: "May 14, 2026", by: "Sarath", validation: "Validated", latest: true, actions: ["View", "Compare"] },
       { version: "V6", status: "Archived", created: "Apr 18, 2026", approved: "Apr 22, 2026", by: "S&T Team", validation: "Validated", latest: false, actions: ["View", "Compare"] }
     ],
     SIP: [
@@ -151,7 +151,7 @@
     lidarFile: "AWB_LiDAR_2026-05-12.las",
     surveyFile: "AWB_TotalStation_2026-05-11.csv",
     lastEdited: "17 May 2026, 14:20",
-    lastEditedBy: "R. Patil",
+    lastEditedBy: "Sarath",
     stationContext: "Aurangabad (AWB), Nanded Division, South Central Railway"
   };
   const ESP_ASSETS = [
@@ -193,15 +193,23 @@
   const assetConfigFor = (asset, instanceNumber = 1) => {
     const unitLabel = assetUnitLabel(asset.type);
     const assetId = `${assetCodeFor(asset.type)}-${String(instanceNumber).padStart(2, "0")}`;
+    const trackNames = ["Main Line", "Loop Line No.1", "Loop Line No.2", "Loop Line No.3", "Through Siding", "Shunting Neck"];
+    const trackDisplayNames = ["MAIN LINE CSR 848.00m (STR-STR)", "LOOP LINE NO.1 CSR 848.00m (STR-STR)", "LOOP LINE NO.2 CSR 765.10m (STR-STR)", "LOOP LINE NO.3 CSR 765.10m (STR-STR)", "THROUGH SIDING CSR 681.548m (FM-FM)", "SHUNTING NECK 410.0M (BS-TS)"];
+    const trackTypes = ["Main Line", "Loop Line", "Loop Line", "Loop Line", "Through Siding", "Shunting Neck"];
+    const trackCsrs = ["848.00m", "848.00m", "765.10m", "765.10m", "681.548m", "410.0m"];
+    const trackRoadNums = ["TRK-01", "TRK-02", "TRK-03", "TRK-04", "TRK-05", "TRK-06"];
+    const tIdx = instanceNumber - 1;
     const trackFields = [
-      ["Asset group", asset.type],
-      ["Track ID", assetId],
-      ["Gauge", "1676 mm Broad Gauge"],
-      ["Chainage start", `${(431.24 + (instanceNumber - 1) * 0.18).toFixed(3)} km`],
-      ["Chainage end", `${(433.86 + (instanceNumber - 1) * 0.18).toFixed(3)} km`],
-      ["Line speed", "90 km/h"],
-      ["Track center spacing", "5.30 m"],
-      ["Platform clearance", "1675 mm"]
+      ["Track Name",            trackNames[tIdx] || ("Track " + instanceNumber)],
+      ["Display Name",          trackDisplayNames[tIdx] || "—"],
+      ["Road Number",           trackRoadNums[tIdx] || assetId],
+      ["Track Type",            trackTypes[tIdx] || "Loop Line"],
+      ["Csr",                   trackCsrs[tIdx] || "—"],
+      ["Direction",             instanceNumber === 1 ? "DN / UP (Bidirectional)" : instanceNumber % 2 === 0 ? "DN (Down)" : "UP (Up)"],
+      ["Start Location Km",     `${(431.240 + tIdx * 0.062).toFixed(3)} km`],
+      ["Start Location Chainage", `${431}+${String(Math.round(240 + tIdx * 62)).padStart(3,"0")} m`],
+      ["End Location Km",       `${(432.088 - tIdx * 0.083).toFixed(3)} km`],
+      ["End Location Chainage", `${432}+${String(Math.round(88 + tIdx * 0)).padStart(3,"0")} m`]
     ];
     const defaultFields = [
       ["Asset group", asset.type],
@@ -213,6 +221,76 @@
       ["Owner", ESP_DETAIL.lastEditedBy],
       ["Revision note", "Aligned with ESP V7-R0-A0"]
     ];
+    const adjacentStationFields = [
+      ["Station Name",                   instanceNumber === 1 ? "Mudkhed Junction" : instanceNumber === 2 ? "Parbhani Junction" : "Purna Junction"],
+      ["Station Code",                   instanceNumber === 1 ? "MUE" : instanceNumber === 2 ? "PBN" : "PA"],
+      ["Junction Name",                  instanceNumber === 1 ? "Mudkhed Jn" : instanceNumber === 2 ? "Parbhani Jn" : "Purna Jn"],
+      ["Distance Km",                    instanceNumber === 1 ? "10.03 km" : instanceNumber === 2 ? "38.20 km" : "52.14 km"],
+      ["Center Line Location Km",        instanceNumber === 1 ? "123.18 km" : instanceNumber === 2 ? "290.44 km" : "314.60 km"],
+      ["Center Line Location Chainage",  instanceNumber === 1 ? "123+180 m" : instanceNumber === 2 ? "290+440 m" : "314+600 m"],
+      ["Connected Track Ids",            instanceNumber === 1 ? "TRK-01, TRK-02" : instanceNumber === 2 ? "TRK-01, TRK-03" : "TRK-02, TRK-04"]
+    ];
+    if (asset.type === "Adjacent Stations") return adjacentStationFields;
+    const platformFields = [
+      ["Platform Name",          instanceNumber === 1 ? "Pro Goods RL Platform" : instanceNumber === 2 ? "High Level Passenger Platform" : instanceNumber === 3 ? "Loop Line Goods Platform" : "Bay Platform"],
+      ["Track Ids",              instanceNumber === 1 ? "TRK-01 (Goods Line)" : instanceNumber === 2 ? "TRK-02 (Main Line)" : instanceNumber === 3 ? "TRK-03 (Loop Line No.1)" : "TRK-04 (Loop Line No.2)"],
+      ["Start Location Km",      instanceNumber === 1 ? "120.250 km" : instanceNumber === 2 ? "120.312 km" : instanceNumber === 3 ? "120.374 km" : "120.436 km"],
+      ["Start Location Chainage",instanceNumber === 1 ? "120+250 m" : instanceNumber === 2 ? "120+312 m" : instanceNumber === 3 ? "120+374 m" : "120+436 m"],
+      ["End Location Km",        instanceNumber === 1 ? "120.859 km" : instanceNumber === 2 ? "120.762 km" : instanceNumber === 3 ? "120.724 km" : "120.636 km"],
+      ["End Location Chainage",  instanceNumber === 1 ? "120+859 m" : instanceNumber === 2 ? "120+762 m" : instanceNumber === 3 ? "120+724 m" : "120+636 m"]
+    ];
+    if (asset.type === "Platforms") return platformFields;
+    const turnoutTypes = ["1 in 8.5", "1 in 12", "1 in 8.5ss", "1 in 8.5ss"];
+    const turnoutFields = [
+      ["Turnout Type",      turnoutTypes[instanceNumber - 1] || "1 in 8.5"],
+      ["Turnout Angle",     instanceNumber <= 2 ? "6° 42\u2032 34\u2033" : "6° 42\u2032 34\u2033 (Special)"],
+      ["Labels Label",      `P${instanceNumber + 24}` ],
+      ["Labels Track Id",   instanceNumber % 2 === 1 ? "TRK-0" + instanceNumber + " / TRK-0" + (instanceNumber + 1) : "TRK-0" + instanceNumber],
+      ["Location Km",       `${(431.240 + (instanceNumber - 1) * 0.045).toFixed(3)} km`],
+      ["Location Chainage", `${431}+${String(Math.round(240 + (instanceNumber - 1) * 45)).padStart(3,"0")} m`],
+      ["Geometry Pattern",  instanceNumber % 2 === 1 ? "Left Hand (LH)" : "Right Hand (RH)"]
+    ];
+    if (asset.type === "Points and Turnouts") return turnoutFields;
+    const deadEndTypes = ["Buffer Stop (BS)", "Over Shoot Line", "Catch Siding End", "Sand Hump"];
+    const deadEndDisplayNames = ["OVER SHOOT LINE (275 M.)", "BUFFER STOP (BS-42 TS)", "CATCH SIDING END", "SAND HUMP BS"];
+    const deadEndTrackIds = ["TRK-01", "TRK-02", "TRK-03", "TRK-04"];
+    const deIdx = instanceNumber - 1;
+    const deadEndFields = [
+      ["Display Name",      deadEndDisplayNames[deIdx] || ("Dead End " + instanceNumber)],
+      ["Type",              deadEndTypes[deIdx] || "Buffer Stop (BS)"],
+      ["Track Id",          deadEndTrackIds[deIdx] || "TRK-0" + instanceNumber],
+      ["Location Km",       `${(431.892 + deIdx * 0.068).toFixed(3)} km`],
+      ["Location Chainage", `${431}+${String(Math.round(892 + deIdx * 68)).padStart(3,"0")} m`]
+    ];
+    if (asset.type === "Dead Ends") return deadEndFields;
+    const trapTypes = ["Catch Points (Fixed)", "Trap Points (Moveable)", "Catch Points (Fixed)"];
+    const trapLabels = ["TP-01 (Catch)", "TP-02 (Trap)", "TP-03 (Catch)"];
+    const trapTrackIds = ["TRK-02", "TRK-03", "TRK-04"];
+    const tpIdx = instanceNumber - 1;
+    const trapPointFields = [
+      ["Label",            trapLabels[tpIdx] || ("TP-0" + instanceNumber)],
+      ["Trap Point Type",  trapTypes[tpIdx] || "Catch Points (Fixed)"],
+      ["Is Manual",        instanceNumber === 2 ? "Yes" : "No"],
+      ["Track Id",         trapTrackIds[tpIdx] || "TRK-0" + instanceNumber],
+      ["Location Km",      `${(431.560 + tpIdx * 0.055).toFixed(3)} km`],
+      ["Location Chainage",`${431}+${String(Math.round(560 + tpIdx * 55)).padStart(3,"0")} m`]
+    ];
+    if (asset.type === "Trap Points") return trapPointFields;
+    const gateIds   = ["LC-301", "LC-302", "LC-303"];
+    const gateAlpha = ["GTA", "GTB", "GTC"];
+    const gIdx = instanceNumber - 1;
+    const gateFields = [
+      ["Asset Id",                 `GATE-0${instanceNumber}`],
+      ["Lc/Gate Id",               gateIds[gIdx] || `LC-30${instanceNumber}`],
+      ["Lc Class",                 instanceNumber === 1 ? "Class C" : instanceNumber === 2 ? "Class B" : "Class C"],
+      ["Lc Manning Type",          instanceNumber === 2 ? "Manned (Gateman)" : "Unmanned (Traffic)"],
+      ["Lc Gate Alpha Id",         gateAlpha[gIdx] || ("GT" + String.fromCharCode(64 + instanceNumber))],
+      ["Sliding Boom - Up",        instanceNumber <= 2 ? "Yes" : "No"],
+      ["Sliding Boom - Down",      "No"],
+      ["Sliding Boom Up Direction","Road (East-West)"],
+      ["Sliding Boom Down Direction","N/A"]
+    ];
+    if (asset.type === "Gates") return gateFields;
     return asset.type === "Tracks" ? trackFields : defaultFields;
   };
   const SIP_DETAIL = {
@@ -663,6 +741,7 @@
 .sh-hub-search { min-width:260px; height:34px; border:var(--hairline); border-radius:var(--r-md); background:var(--ink-50); padding:0 10px; color:var(--ink-900); font-family:var(--font-sans); font-size:12px; outline:none; }
 .sh-hub-select { height:34px; border:var(--hairline); border-radius:var(--r-md); background:var(--paper); padding:0 10px; color:var(--ink-900); font-family:var(--font-sans); font-size:12px; outline:none; }
 .sh-hub-table-wrap { overflow-x:auto; }
+.sh-hub-chips-wrap { padding:14px; }
 .sh-hub-table { min-width:920px; width:100%; border-collapse:collapse; }
 .sh-hub-table th { padding:8px 10px; border-bottom:var(--hairline); background:var(--ink-50); color:var(--ink-500); font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; text-align:left; white-space:nowrap; }
 .sh-hub-table td { padding:10px; border-bottom:var(--hairline); color:var(--ink-700); font-size:12px; vertical-align:middle; }
@@ -988,6 +1067,9 @@
 .sh-asset-preview-panel { border-right:var(--hairline); }
 .sh-asset-panel-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:14px 16px 12px; border-bottom:var(--hairline); }
 .sh-asset-preview { position:relative; flex:1; min-height:430px; background:linear-gradient(180deg,var(--ink-50),var(--paper)); overflow:hidden; }
+.sh-asset-preview[data-type="adjacent"] { background:var(--paper); padding:0; }
+.sh-asset-esp-img { width:100%; height:100%; object-fit:contain; object-position:center; display:block; }
+.sh-asset-preview[data-type="adjacent"] .sh-asset-preview-label { position:absolute; top:8px; left:12px; z-index:2; background:rgba(255,255,255,0.88); padding:2px 8px; border-radius:4px; font-size:10px; font-weight:600; letter-spacing:.04em; border:1px solid var(--ink-200); }
 .sh-asset-preview::before { content:""; position:absolute; inset:0; background-image:linear-gradient(var(--ink-100) 1px,transparent 1px),linear-gradient(90deg,var(--ink-100) 1px,transparent 1px); background-size:38px 38px; opacity:.75; }
 .sh-asset-preview-track { position:absolute; left:7%; right:7%; height:5px; border-radius:var(--r-full); background:var(--ink-800); box-shadow:0 15px 0 -13px var(--ink-500),0 -15px 0 -13px var(--ink-500); }
 .sh-asset-preview-track::after { content:""; position:absolute; left:0; right:0; top:-9px; height:23px; background:repeating-linear-gradient(90deg,transparent 0 20px,var(--ink-300) 20px 22px,transparent 22px 42px); opacity:.8; }
@@ -1014,6 +1096,8 @@
 .sh-asset-live-head { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 10px; border-bottom:var(--hairline); }
 .sh-asset-live-title { display:flex; align-items:center; gap:7px; color:var(--ink-900); font-size:12.5px; font-weight:700; }
 .sh-asset-live-canvas { position:relative; min-height:118px; background:linear-gradient(180deg,var(--paper),var(--ink-50)); overflow:hidden; }
+.sh-asset-live-canvas[data-type="adjacent"] { background:var(--paper); min-height:140px; }
+.sh-asset-live-esp-img { width:100%; height:100%; min-height:140px; object-fit:contain; object-position:center; display:block; }
 .sh-asset-live-canvas::before { content:""; position:absolute; inset:0; background-image:linear-gradient(var(--ink-100) 1px,transparent 1px),linear-gradient(90deg,var(--ink-100) 1px,transparent 1px); background-size:22px 22px; opacity:.8; }
 .sh-asset-live-line { position:absolute; left:10%; right:10%; top:52%; height:4px; border-radius:var(--r-full); background:var(--ink-700); box-shadow:0 -10px 0 -8px var(--ink-400),0 10px 0 -8px var(--ink-400); }
 .sh-asset-live-badge { position:absolute; left:50%; top:42%; transform:translate(-50%,-50%); z-index:2; max-width:78%; padding:6px 9px; border:1px solid var(--accent); border-radius:var(--r-md); background:var(--accent-soft); color:var(--accent-text); font-size:12px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -1026,14 +1110,19 @@
 .sh-review-nav-dot[data-tone="danger"] { background:var(--danger); }
 .sh-review-nav-dot[data-tone="neutral"] { background:var(--ink-300); }
 .sh-asset-nav-btn[data-active="true"] .sh-review-nav-dot { box-shadow:0 0 0 2px var(--ink-900); }
-.sh-review-stepper { display:grid; grid-template-columns:repeat(8,minmax(130px,1fr)); gap:8px; padding:0 0 2px; overflow-x:auto; }
-.sh-review-step .icon { color:currentColor; }
-.sh-review-step { min-height:68px; }
-.sh-review-step[data-reviewed="true"] .sh-pim-step-index { background:var(--success); color:var(--paper); }
-.sh-review-step[data-status="in_review"]:not([data-active="true"]) { border-color:oklch(0.78 0.1 240); background:var(--info-soft); color:var(--info-text); }
-.sh-review-step[data-status="in_review"]:not([data-active="true"]) .sh-pim-step-index { background:var(--info); color:var(--paper); }
-.sh-review-step[data-status="correction"]:not([data-active="true"]) { border-color:oklch(0.85 0.08 25); background:var(--danger-soft); color:var(--danger-text); }
-.sh-review-step[data-status="correction"]:not([data-active="true"]) .sh-pim-step-index { background:var(--danger); color:var(--paper); }
+.sh-review-stepper { display:flex; align-items:center; gap:0; padding:12px 0 4px; overflow-x:auto; }
+.sh-step-pill { display:flex; align-items:center; gap:9px; padding:6px 2px; border:none; background:none; cursor:pointer; text-align:left; flex-shrink:0; border-radius:var(--r-md); }
+.sh-step-pill:hover .sh-step-circle { border-color:var(--ink-400); }
+.sh-step-circle { width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-size:11px; font-weight:800; flex-shrink:0; background:var(--ink-100); color:var(--ink-500); border:1.5px solid var(--ink-200); transition:all 140ms; }
+.sh-step-pill[data-active="true"] .sh-step-circle { background:var(--accent); color:var(--paper); border-color:var(--accent); box-shadow:0 4px 10px -4px oklch(0.55 0.22 280 / .5); }
+.sh-step-pill[data-reviewed="true"] .sh-step-circle { background:var(--success-soft); color:var(--success-text); border-color:oklch(0.83 0.08 155); }
+.sh-step-label { display:flex; flex-direction:column; gap:1px; }
+.sh-step-label-name { font-size:11.5px; font-weight:600; color:var(--ink-700); white-space:nowrap; }
+.sh-step-label-count { font-size:10px; color:var(--ink-400); }
+.sh-step-pill[data-active="true"] .sh-step-label-name { color:var(--accent); }
+.sh-step-pill[data-reviewed="true"] .sh-step-label-name { color:var(--success-text); }
+.sh-step-connector { flex:1; min-width:14px; max-width:32px; height:1.5px; background:var(--ink-200); margin:0 4px; transition:background 200ms; }
+.sh-step-connector[data-done="true"] { background:oklch(0.83 0.08 155); }
 .sh-review-actions { justify-content:flex-start; }
 .sh-review-actions .sh-review-spacer { flex:1; }
 .sh-digitize-empty { flex:1; min-height:300px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:32px; color:var(--ink-500); text-align:center; }
@@ -1254,6 +1343,12 @@
 .sh-upload-file-remove:hover { background:var(--danger-soft); color:var(--danger-text); border-color:oklch(0.86 0.09 25); }
 .sh-upload-select-zone { position:relative; display:flex; align-items:center; gap:14px; padding:18px; border:1.5px dashed var(--ink-300); border-radius:var(--r-md); background:var(--ink-50); cursor:pointer; transition:border-color 140ms, background 140ms; }
 .sh-upload-select-zone:hover { border-color:var(--accent); background:var(--accent-soft); }
+.sh-upload-group { display:flex; flex-direction:column; gap:10px; padding:12px 14px; border:var(--hairline); border-radius:var(--r-md); background:var(--ink-50); }
+.sh-upload-group-label { font-size:10px; font-weight:700; color:var(--ink-500); text-transform:uppercase; letter-spacing:.07em; }
+.sh-upload-version-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+.sh-upload-version-preview { display:flex; align-items:center; gap:8px; padding-top:4px; border-top:var(--hairline); }
+.sh-upload-version-preview-label { font-size:11px; color:var(--ink-400); }
+.sh-upload-version-id { font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--ink-900); letter-spacing:.04em; }
 .sh-upload-select-input { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; }
 .sh-upload-select-icon { width:40px; height:40px; border-radius:var(--r-md); background:var(--paper); color:var(--accent-text); display:grid; place-items:center; flex-shrink:0; border:var(--hairline); }
 .sh-upload-select-copy { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
@@ -1329,6 +1424,60 @@
 .sh-review-digitize-empty-icon { width:40px; height:40px; border:var(--hairline); border-radius:var(--r-md); background:var(--paper); color:var(--ink-400); display:grid; place-items:center; }
 .sh-review-digitize-empty-title { color:var(--ink-900); font-size:14px; font-weight:800; }
 .sh-review-digitize-empty-sub { color:var(--ink-500); font-size:12.5px; line-height:1.45; }
+.sh-asset-editor-shell[data-digitize="true"] { grid-template-columns:1fr; }
+.sh-asset-editor-shell[data-digitize="true"] .sh-asset-preview-panel { display:none; }
+.sh-digitize-center { flex:1; display:grid; place-items:center; min-height:460px; background:var(--ink-50); }
+.sh-digitize-center-inner { display:grid; justify-items:center; gap:16px; max-width:400px; text-align:center; }
+.sh-digitize-center-icon { width:60px; height:60px; border:var(--hairline); border-radius:var(--r-lg); background:var(--paper); color:var(--accent); display:grid; place-items:center; box-shadow:var(--shadow-xs); }
+.sh-digitize-center-title { font-size:17px; font-weight:800; color:var(--ink-900); }
+.sh-digitize-center-sub { font-size:13px; color:var(--ink-500); line-height:1.55; }
+.sh-digitize-generated { flex:1; padding:0; display:flex; flex-direction:column; background:var(--ink-50); overflow:hidden; } .sh-digitize-generated--editor { padding:0; } .sh-digitize-editor-img { width:100%; height:100%; object-fit:cover; object-position:top left; display:block; }
+.sh-digital-editor-full { position:fixed; inset:0; z-index:200; display:grid; grid-template-areas:"top top top top" "rail left canvas right" "bottom bottom bottom bottom"; grid-template-columns:40px 240px minmax(0,1fr) 240px; grid-template-rows:44px minmax(0,1fr) 44px; background:#c8c8c8; }
+.sh-de-topbar { grid-area:top; display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:var(--paper); border-bottom:var(--hairline); }
+.sh-de-topbar-left { display:flex; align-items:center; gap:10px; }
+.sh-de-topbar-title { font-size:14px; font-weight:700; color:var(--ink-900); }
+.sh-de-topbar-right { display:flex; align-items:center; gap:8px; }
+.sh-de-icon-rail { grid-area:rail; background:var(--ink-50); border-right:var(--hairline); display:flex; flex-direction:column; align-items:center; padding:8px 0; gap:2px; overflow-y:auto; }
+.sh-de-rail-btn { width:32px; height:32px; border:none; background:transparent; color:var(--ink-500); display:grid; place-items:center; cursor:pointer; border-radius:var(--r-sm); }
+.sh-de-rail-btn:hover { background:var(--ink-100); color:var(--ink-800); }
+.sh-de-left-panel { grid-area:left; background:var(--paper); border-right:var(--hairline); overflow-y:auto; display:flex; flex-direction:column; }
+.sh-de-canvas-tabs { display:flex; flex-direction:column; border-bottom:var(--hairline); }
+.sh-de-canvas-tab { display:flex; align-items:center; gap:8px; padding:9px 12px; border:none; border-bottom:var(--hairline); background:transparent; font-size:12.5px; color:var(--ink-700); cursor:pointer; text-align:left; font-family:var(--font-sans); }
+.sh-de-canvas-tab[data-active="true"] { background:var(--ink-50); font-weight:600; color:var(--ink-900); }
+.sh-de-canvas-tab:hover { background:var(--ink-50); }
+.sh-de-tab-pill { margin-left:auto; font-size:10px; font-weight:600; padding:2px 6px; background:var(--ink-100); border-radius:var(--r-full); color:var(--ink-600); }
+.sh-de-layers-head { display:flex; align-items:center; padding:10px 12px 6px; gap:4px; }
+.sh-de-layers-title { font-size:12px; font-weight:700; color:var(--ink-900); flex:1; }
+.sh-de-layers-actions { display:flex; gap:2px; }
+.sh-de-layers-btn { width:24px; height:24px; border:none; background:transparent; color:var(--ink-500); display:grid; place-items:center; cursor:pointer; border-radius:var(--r-sm); font-family:var(--font-sans); }
+.sh-de-layers-btn:hover { background:var(--ink-100); color:var(--ink-800); }
+.sh-de-layer-item { display:flex; align-items:center; gap:6px; padding:6px 12px; font-size:12px; color:var(--ink-700); cursor:pointer; }
+.sh-de-layer-item[data-active="true"] { background:var(--ink-50); color:var(--ink-900); font-weight:500; }
+.sh-de-layer-item:hover { background:var(--ink-50); }
+.sh-de-layer-expand { color:var(--ink-400); background:none; border:none; display:grid; place-items:center; padding:0; cursor:pointer; }
+.sh-de-layer-bar { width:3px; height:14px; background:var(--ink-300); border-radius:2px; flex-shrink:0; }
+.sh-de-layer-bar[data-color="blue"] { background:var(--accent); }
+.sh-de-layer-name { flex:1; }
+.sh-de-layer-dot { color:var(--success-text); font-size:10px; margin-left:auto; }
+.sh-de-canvas { grid-area:canvas; background:#c0c0c0; overflow:auto; display:block; padding:24px; }
+.sh-de-canvas-img { width:auto; min-width:100%; height:auto; display:block; box-shadow:0 4px 24px rgba(0,0,0,.32); background:white; }
+.sh-de-right-panel { grid-area:right; background:var(--paper); border-left:var(--hairline); overflow-y:auto; font-size:12px; }
+.sh-de-prop-section { border-bottom:var(--hairline); }
+.sh-de-prop-head { display:flex; align-items:center; gap:6px; padding:8px 12px; font-size:11.5px; font-weight:700; color:var(--ink-900); cursor:pointer; }
+.sh-de-prop-head-right { margin-left:auto; color:var(--ink-400); }
+.sh-de-prop-head-actions { margin-left:auto; display:flex; gap:6px; color:var(--ink-400); }
+.sh-de-prop-row { display:flex; align-items:center; gap:8px; padding:4px 12px 5px; min-height:26px; }
+.sh-de-prop-label { width:64px; flex-shrink:0; color:var(--ink-500); font-size:11px; }
+.sh-de-prop-val { flex:1; color:var(--ink-800); font-size:11.5px; display:flex; align-items:center; gap:4px; }
+.sh-de-prop-select { background:var(--ink-50); border:var(--hairline); border-radius:var(--r-sm); padding:3px 6px; cursor:pointer; font-size:11px; }
+.sh-de-prop-mono { font-family:var(--font-mono); font-size:11px; }
+.sh-de-status-icons { display:flex; gap:8px; color:var(--ink-400); }
+.sh-de-icon-row { display:flex; gap:6px; color:var(--ink-400); }
+.sh-de-bottombar { grid-area:bottom; background:var(--paper); border-top:var(--hairline); display:flex; align-items:center; justify-content:center; gap:2px; padding:0 16px; }
+.sh-de-tool-group { display:flex; gap:1px; }
+.sh-de-tool-btn { width:30px; height:30px; border:none; background:transparent; color:var(--ink-600); display:grid; place-items:center; cursor:pointer; border-radius:var(--r-sm); }
+.sh-de-tool-btn:hover { background:var(--ink-100); color:var(--ink-900); }
+.sh-de-tool-divider { width:1px; height:20px; background:var(--ink-200); margin:0 8px; flex-shrink:0; }
 .sh-single-doc-card[data-selected="true"],
 .sh-station-status-card[data-selected="true"] { border-color:var(--accent); background:var(--accent-soft); box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent), var(--shadow-md); }
 .sh-v3-seg button[data-active="true"],
@@ -1398,14 +1547,14 @@
     relatedDocument: doc.id === "esp" ? "LiDAR + Total Station" : doc.id === "sip" ? "ESP V7" : "ESP V7 + SIP V1",
     surveyFile: "LiDAR V7",
     lastActivityTime: doc.id === "esp" ? "24 Dec 2025, 17:30" : doc.id === "sip" ? "21 Dec 2025, 16:10" : "12 May 2026, 10:42",
-    lastActivityUser: doc.id === "esp" ? "K. Naidu" : doc.id === "sip" ? "S&T Approver" : "Survey Team",
+    lastActivityUser: doc.id === "esp" ? "Sarath" : doc.id === "sip" ? "S&T Approver" : "Survey Team",
     disabled: doc.id === "lop",
     surveyLinkedDocs: doc.id === "lop" ? ["ESP", "SIP", "LOP"] : doc.id === "sip" ? ["ESP", "SIP"] : ["ESP", "LOP"]
   }));
   const v3ToneFor = (value) => {
     const text = String(value || "").toLowerCase();
     if (text.includes("not required")) return "dark";
-    if (text.includes("approved") || text.includes("frozen") || text.includes("validated") || text.includes("processed") || text.includes("completed") || text.includes("available")) return "success";
+    if (text.includes("approved") || text.includes("frozen") || text.includes("validated") || text.includes("processed") || text.includes("completed") || text.includes("available") || (text.includes("generated") && !text.includes("not generated"))) return "success";
     if (text.includes("pending") || text.includes("review") || text.includes("current") || text.includes("draft") || text.includes("partial") || text.includes("medium")) return "warning";
     if (text.includes("critical") || text.includes("rejected") || text.includes("rework") || text.includes("high") || text.includes("12 open")) return "danger";
     if (text.includes("locked") || text.includes("not generated") || text.includes("not started") || text.includes("low")) return "neutral";
@@ -1502,7 +1651,8 @@
   };
   const StationDocumentStatus = ({ active, onChange, rowsByType }) => /* @__PURE__ */ React.createElement("section", { className: "sh-station-status", "aria-label": "Station document status" }, /* @__PURE__ */ React.createElement("div", { className: "sh-station-status-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-station-status-title" }, /* @__PURE__ */ React.createElement(Icon, { name: "layers", size: 16, style: { color: "var(--accent)" } }), "Station Documents"))), /* @__PURE__ */ React.createElement("div", { className: "sh-station-status-grid" }, STATION_DOCUMENT_STATUS.map((item, index) => {
     const fileCount = ((rowsByType == null ? void 0 : rowsByType[item.id]) || DOCUMENT_TABLE_ROWS[item.id] || []).length || Number(item.filesLabel);
-    const displayStatus = item.id === "esp" && fileCount > 0 ? "Generated" : item.status;
+    const espRowList = (rowsByType == null ? void 0 : rowsByType.esp) || [];
+    const displayStatus = item.id === "esp" && espRowList.length > 0 ? (espRowList[0].status || item.status) : item.status;
     const cardEl = /* @__PURE__ */ React.createElement(
       "button",
       {
@@ -1573,6 +1723,13 @@
     }), !rows.length && /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { colSpan: active === "esp" ? 7 : 5 }, /* @__PURE__ */ React.createElement("div", { className: "sh-single-empty" }, "No documents available for ", activeMeta.label, ".")))))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-foot sh-doc-pagination" }, /* @__PURE__ */ React.createElement("div", { className: "sh-archive-foot-left" }, /* @__PURE__ */ React.createElement("span", null, "Showing ", rows.length ? pageStart + 1 : 0, "-", pageEnd, " of ", rows.length, " documents")), /* @__PURE__ */ React.createElement("div", { className: "ds-table-pager" }, /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === 1, onClick: () => setCurrentPage((page) => Math.max(1, page - 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_left", size: 14 })), pageNumbers.map((page, index) => /* @__PURE__ */ React.createElement(React.Fragment, { key: page }, index > 0 && page - pageNumbers[index - 1] > 1 && /* @__PURE__ */ React.createElement("span", { className: "sh-page-ellipsis" }, "..."), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", "data-current": page === safeCurrentPage ? "true" : void 0, onClick: () => setCurrentPage(page) }, page))), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === totalPages, onClick: () => setCurrentPage((page) => Math.min(totalPages, page + 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 14 }))))));
   };
   const ESPWorkflowPage = ({ station, upload, digitalVersions, onBack, onReviewAssets, onOpenVersion, onClone }) => {
+    const [cloneSourceRow, setCloneSourceRow] = useStateHub(null);
+    const [cloneVerNum, setCloneVerNum] = useStateHub("V0");
+    const [cloneRevNum, setCloneRevNum] = useStateHub("R0");
+    const [cloneAltNum, setCloneAltNum] = useStateHub("A0");
+    const cloneVersionId = cloneVerNum + "-" + cloneRevNum + "-" + cloneAltNum;
+    const vOptsC = (p, n) => Array.from({ length: n }, (_, i) => p + i);
+    const confirmClone = () => { if (cloneSourceRow && onClone) { onClone({ ...cloneSourceRow, cloneVersion: cloneVersionId }); setCloneSourceRow(null); } };
     const [openMenu, setOpenMenu] = useStateHub("");
     const [menuAnchor, setMenuAnchor] = useStateHub(null);
     const [currentPage, setCurrentPage] = useStateHub(1);
@@ -1581,7 +1738,7 @@
       fileName: "AWB-ESP-MainYard-v7.dwg",
       status: "Approved",
       uploaded: "1 day ago",
-      user: "K. Naidu"
+      user: "Sarath"
     };
     const totalPages = Math.max(1, Math.ceil(digitalVersions.length / pageSize));
     const safeCurrentPage = Math.min(currentPage, totalPages);
@@ -1590,24 +1747,18 @@
     const pagedVersions = digitalVersions.slice(pageStart, pageEnd);
     const pageNumbers = totalPages <= 5 ? Array.from({ length: totalPages }, (_, index) => index + 1) : Array.from(/* @__PURE__ */ new Set([1, safeCurrentPage - 1, safeCurrentPage, safeCurrentPage + 1, totalPages])).filter((page) => page >= 1 && page <= totalPages).sort((a, b) => a - b);
     const pimButtonLabel = "Review Extracted Assets";
-    return /* @__PURE__ */ React.createElement("div", { className: "sh-content" }, /* @__PURE__ */ React.createElement(
+    const mainContent = /* @__PURE__ */ React.createElement("div", { className: "sh-content" }, /* @__PURE__ */ React.createElement(
       AppTopBar,
       {
         crumbs: ["Digital Library", { label: station.name, onClick: onBack }, "ESP"],
         searchPlaceholder: "Search ESP metadata, extracted assets, versions..."
       }
-    ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, currentUpload.fileName, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, "ESP")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, station.name, " \xB7 Engineering Scale Plan file and digital ESP versions")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "download", onClick: () => openStub("Download all ESP files") }, "Download All"), !digitalVersions.length && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: onReviewAssets }, pimButtonLabel))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "ESP Metadata"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Uploaded ESP file and extraction readiness for Aurangabad station."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-metadata-grid" }, [
-      ["Station", `${station.name} (${station.code})`],
-      ["Zone", station.zone || "—"],
-      ["Division", station.division || "—"],
-      ["Section", station.section || "—"],
-      ["Source File", currentUpload.fileName, [/* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "Download", key: "dl", onClick: () => openStub(`Download ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 12 })), /* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "View", key: "vw", onClick: () => openStub(`View ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 12 }))]],
-      ["Uploaded By", currentUpload.user || CURRENT_USER.name]
-    ].map(([label, value, actions]) => /* @__PURE__ */ React.createElement("div", { className: "sh-hub-metadata-item", key: label }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-metadata-label" }, label), actions ? /* @__PURE__ */ React.createElement("div", { className: "sh-hub-metadata-value sh-hub-metadata-file" }, value, /* @__PURE__ */ React.createElement("div", { className: "sh-meta-file-actions" }, actions)) : /* @__PURE__ */ React.createElement("div", { className: "sh-hub-metadata-value" }, value))))), /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "Digital ESP Versions"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Generated digital ESP versions created from reviewed PIM assets."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "sh-hub-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digital Version")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Created From")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digitize Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "SOD Validation")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Approval Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Last Activity")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, pagedVersions.map((row) => /* @__PURE__ */ React.createElement("tr", { key: row.id }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, row.version)), /* @__PURE__ */ React.createElement("td", null, row.createdFrom || "—"), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.digitizeStatus || "Generated")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.sodValidation || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.approvalStatus || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-name" }, row.lastActivityBy || row.updatedBy), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-role" }, row.lastActivityAt || row.updated)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-actions" }, /* @__PURE__ */ React.createElement(ESPRowAction, { icon: "eye", primary: true, onClick: () => onOpenVersion(row) }, "Open"), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-menu-wrap" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-icon", type: "button", "aria-label": `More actions for ${row.version}`, onClick: (event) => { const rect = event.currentTarget.getBoundingClientRect(); setMenuAnchor({ top: rect.bottom + 4, right: window.innerWidth - rect.right }); setOpenMenu((current) => current === row.id ? "" : row.id); } }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 14 })), openMenu === row.id && menuAnchor && /* @__PURE__ */ React.createElement("div", { className: "sh-doc-row-menu", style: { position: "fixed", top: menuAnchor.top, right: menuAnchor.right, zIndex: 9999 } }, /* @__PURE__ */ React.createElement("button", { type: "button", onClick: () => {
-      if (onClone) onClone(row);
+    ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, currentUpload.fileName, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, "ESP")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, station.name, " \xB7 Engineering Scale Plan file and digital ESP versions")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "download", onClick: () => openStub("Download all ESP files") }, "Download All"), !digitalVersions.length && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: onReviewAssets }, pimButtonLabel))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "ESP Metadata"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Uploaded ESP file and extraction readiness for Aurangabad station."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-chips-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "sh-detail-chips" }, /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Station"), `${station.name} (${station.code})`), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Zone"), station.zone || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Division"), station.division || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Section"), station.section || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Source File"), currentUpload.fileName, /* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "Download", onClick: () => openStub(`Download ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 12 })), /* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "View", onClick: () => openStub(`View ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 12 }))), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Uploaded By"), currentUpload.user || CURRENT_USER.name)))), /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "Digital ESP Versions"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Generated digital ESP versions created from reviewed PIM assets."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "sh-hub-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digital Version")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Created From")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digitize Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "SOD Validation")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Approval Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Last Activity")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, pagedVersions.map((row) => /* @__PURE__ */ React.createElement("tr", { key: row.id }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, row.version)), /* @__PURE__ */ React.createElement("td", null, row.createdFrom || "—"), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.digitizeStatus || "Generated")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.sodValidation || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.approvalStatus || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-name" }, row.lastActivityBy || row.updatedBy), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-role" }, row.lastActivityAt || row.updated)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-actions" }, /* @__PURE__ */ React.createElement(ESPRowAction, { icon: "eye", primary: true, onClick: () => onOpenVersion(row) }, "Open"), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-menu-wrap" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-icon", type: "button", "aria-label": `More actions for ${row.version}`, onClick: (event) => { const rect = event.currentTarget.getBoundingClientRect(); setMenuAnchor({ top: rect.bottom + 4, right: window.innerWidth - rect.right }); setOpenMenu((current) => current === row.id ? "" : row.id); } }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 14 })), openMenu === row.id && menuAnchor && /* @__PURE__ */ React.createElement("div", { className: "sh-doc-row-menu", style: { position: "fixed", top: menuAnchor.top, right: menuAnchor.right, zIndex: 9999 } }, /* @__PURE__ */ React.createElement("button", { type: "button", onClick: () => {
+      setCloneSourceRow(row); setCloneVerNum("V0"); setCloneRevNum("R0"); setCloneAltNum("A0");
       setOpenMenu("");
       setMenuAnchor(null);
     } }, /* @__PURE__ */ React.createElement(Icon, { name: "copy", size: 13 }), "Clone"))))))), !digitalVersions.length && /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { colSpan: 7 }, /* @__PURE__ */ React.createElement("div", { className: "sh-single-empty" }, "No digital ESP generated yet. Review extracted assets and generate the first version.")))))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-foot sh-doc-pagination" }, /* @__PURE__ */ React.createElement("div", { className: "sh-archive-foot-left" }, /* @__PURE__ */ React.createElement("span", null, "Showing ", digitalVersions.length ? pageStart + 1 : 0, "-", pageEnd, " of ", digitalVersions.length, " digital ESP versions")), /* @__PURE__ */ React.createElement("div", { className: "ds-table-pager" }, /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === 1, onClick: () => setCurrentPage((page) => Math.max(1, page - 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_left", size: 14 })), pageNumbers.map((page, index) => /* @__PURE__ */ React.createElement(React.Fragment, { key: page }, index > 0 && page - pageNumbers[index - 1] > 1 && /* @__PURE__ */ React.createElement("span", { className: "sh-page-ellipsis" }, "..."), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", "data-current": page === safeCurrentPage ? "true" : void 0, onClick: () => setCurrentPage(page) }, page))), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === totalPages, onClick: () => setCurrentPage((page) => Math.min(totalPages, page + 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 14 })))))));
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, mainContent, cloneSourceRow && ReactDOM.createPortal(/* @__PURE__ */ React.createElement("div", { className: "sh-upload-portal", onClick: () => setCloneSourceRow(null) }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell", style: { maxWidth: 480 }, onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "copy", size: 18 })), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-text" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-title" }, "Clone Digital ESP Version"), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-sub" }, "Choose version ID for the cloned copy")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "sh-upload-shell-close", onClick: () => setCloneSourceRow(null), "aria-label": "Close" }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 15 }))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-body" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-summary-bar" }, /* @__PURE__ */ React.createElement("span", null, "Cloning from ", /* @__PURE__ */ React.createElement("strong", null, cloneSourceRow.version || "\u2014"))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-group" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-group-label" }, "Version"), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-version-grid" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Version"), /* @__PURE__ */ React.createElement("select", { className: "sh-upload-grid-input", value: cloneVerNum, onChange: (e) => setCloneVerNum(e.target.value) }, vOptsC("V", 10).map((v) => /* @__PURE__ */ React.createElement("option", { key: v, value: v }, v)))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Revision"), /* @__PURE__ */ React.createElement("select", { className: "sh-upload-grid-input", value: cloneRevNum, onChange: (e) => setCloneRevNum(e.target.value) }, vOptsC("R", 10).map((v) => /* @__PURE__ */ React.createElement("option", { key: v, value: v }, v)))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Alteration"), /* @__PURE__ */ React.createElement("select", { className: "sh-upload-grid-input", value: cloneAltNum, onChange: (e) => setCloneAltNum(e.target.value) }, vOptsC("A", 10).map((v) => /* @__PURE__ */ React.createElement("option", { key: v, value: v }, v))))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-version-preview" }, /* @__PURE__ */ React.createElement("span", { className: "sh-upload-version-preview-label" }, "New Version ID"), /* @__PURE__ */ React.createElement("span", { className: "sh-upload-version-id" }, cloneVersionId)))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-foot" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", onClick: () => setCloneSourceRow(null) }, "Cancel"), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "accent", leadingIcon: "copy", onClick: confirmClone }, "Clone")))), document.body));
   };
   const DigitalESPDetailPage = ({ station, version, onBack, onOpenEditor, onOpenAsset }) => /* @__PURE__ */ React.createElement("div", { className: "sh-content" }, /* @__PURE__ */ React.createElement(
     AppTopBar,
@@ -1615,15 +1766,7 @@
       crumbs: ["Digital Library", { label: station.name, onClick: onBack }, version.fileName],
       searchPlaceholder: "Search digital ESP metadata and assets..."
     }
-  ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, version.fileName, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, "Digital ESP")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, version.version, " \xB7 ", station.name)), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "edit", onClick: onOpenEditor }, "Open ESP in Editor"), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "download", onClick: () => openStub(`Download ${version.version}`) }, "Download"))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "Digital ESP Metadata"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Metadata from the selected digital ESP version row.")), /* @__PURE__ */ React.createElement(V3Badge, null, version.digitizeStatus || "Generated")), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-metadata-grid" }, [
-    ["Version", version.version],
-    ["ESP", version.fileName],
-    ["File Type", version.fileType || "DWG"],
-    ["Digitize Status", version.digitizeStatus || "Generated"],
-    ["SOD Validation", "Pending"],
-    ["Uploaded By", `${version.uploadedBy || version.updatedBy} \xB7 ${version.uploadedAt || version.updated}`],
-    ["Last Activity", `${version.lastActivityBy || version.updatedBy} \xB7 ${version.lastActivityAt || version.updated}`]
-  ].map(([label, value]) => /* @__PURE__ */ React.createElement("div", { className: "sh-hub-metadata-item", key: label }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-metadata-label" }, label), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-metadata-value" }, value))))), /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "Assets"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Extracted digital ESP asset groups and counts.")), /* @__PURE__ */ React.createElement(StatusChip, null, "184 assets")), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "sh-hub-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Asset")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Count")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, ESP_ASSETS.map((asset) => /* @__PURE__ */ React.createElement("tr", { key: asset.type, onClick: () => onOpenAsset(asset), style: { cursor: "pointer" } }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-esp-asset-name" }, /* @__PURE__ */ React.createElement("span", { className: "sh-esp-asset-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: asset.icon, size: 14 })), /* @__PURE__ */ React.createElement("span", null, asset.type))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, asset.count)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(ESPRowAction, { icon: "eye", primary: true, onClick: (event) => {
+  ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, version.fileName, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, "Digital ESP")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, version.version, " \xB7 ", station.name)), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "edit", onClick: onOpenEditor }, "Open ESP in Editor"), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "download", onClick: () => openStub(`Download ${version.version}`) }, "Download"))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "Digital ESP Metadata"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Metadata from the selected digital ESP version row.")), /* @__PURE__ */ React.createElement(V3Badge, null, version.digitizeStatus || "Generated")), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-chips-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "sh-detail-chips" }, /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Version"), version.version), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "ESP"), version.fileName), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "File Type"), version.fileType || "DWG"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Digitize Status"), version.digitizeStatus || "Generated"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "SOD Validation"), "Pending"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Uploaded By"), `${version.uploadedBy || version.updatedBy} \xB7 ${version.uploadedAt || version.updated}`), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Last Activity"), `${version.lastActivityBy || version.updatedBy} \xB7 ${version.lastActivityAt || version.updated}`)))), /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "Assets"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Extracted digital ESP asset groups and counts.")), /* @__PURE__ */ React.createElement(StatusChip, null, "184 assets")), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "sh-hub-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Asset")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Count")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, ESP_ASSETS.map((asset) => /* @__PURE__ */ React.createElement("tr", { key: asset.type, onClick: () => onOpenAsset(asset), style: { cursor: "pointer" } }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-esp-asset-name" }, /* @__PURE__ */ React.createElement("span", { className: "sh-esp-asset-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: asset.icon, size: 14 })), /* @__PURE__ */ React.createElement("span", null, asset.type))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, asset.count)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(ESPRowAction, { icon: "eye", primary: true, onClick: (event) => {
     event.stopPropagation();
     onOpenAsset(asset);
   } }, "Open"))))))))));
@@ -1649,7 +1792,7 @@
     return /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-panel" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, asset.type, " Configuration"), /* @__PURE__ */ React.createElement("div", { className: "sh-section-sub" }, "Edit asset attributes for ESP ", ESP_DETAIL.version, " before saving a revision."))), /* @__PURE__ */ React.createElement("form", { className: "sh-asset-config-form", onSubmit: (event) => {
       event.preventDefault();
       onSave();
-    } }, Object.entries(draft).map(([label, value]) => /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-field", key: label }, /* @__PURE__ */ React.createElement("label", null, label), /* @__PURE__ */ React.createElement("input", { value, onChange: (event) => update(label, event.target.value) }))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-preview" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-title" }, /* @__PURE__ */ React.createElement(Icon, { name: asset.icon, size: 14 }), "Live Preview"), /* @__PURE__ */ React.createElement("span", { className: "sh-mini-label" }, unitLabel, " ", instanceNumber)), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-canvas" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-line" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-badge" }, identityEntry[1])))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-actions" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", onClick: onCancel }, "Cancel"), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "accent", leadingIcon: "check", onClick: onSave }, "Save Changes")));
+    } }, Object.entries(draft).map(([label, value]) => /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-field", key: label }, /* @__PURE__ */ React.createElement("label", null, label), /* @__PURE__ */ React.createElement("input", { value, onChange: (event) => update(label, event.target.value) }))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-preview" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-title" }, /* @__PURE__ */ React.createElement(Icon, { name: asset.icon, size: 14 }), "Live Preview"), /* @__PURE__ */ React.createElement("span", { className: "sh-mini-label" }, unitLabel, " ", instanceNumber)), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-canvas", "data-type": (asset.type === "Adjacent Stations" || asset.type === "Platforms" || asset.type === "Tracks" || asset.type === "Points and Turnouts" || asset.type === "Dead Ends" || asset.type === "Trap Points" || asset.type === "Gates") ? "adjacent" : "default" }, (asset.type === "Adjacent Stations" || asset.type === "Platforms" || asset.type === "Tracks" || asset.type === "Points and Turnouts" || asset.type === "Dead Ends" || asset.type === "Trap Points" || asset.type === "Gates") ? /* @__PURE__ */ React.createElement("img", { src: asset.type === "Platforms" ? "assets/platform-esp.png" : asset.type === "Tracks" ? "assets/track-esp.png" : asset.type === "Points and Turnouts" ? "assets/turnout-esp.png" : asset.type === "Dead Ends" ? "assets/deadend-esp.png" : asset.type === "Trap Points" ? "assets/trappoint-esp.png" : asset.type === "Gates" ? "assets/gate-esp.png" : "assets/adjacent-station-esp.png", className: "sh-asset-live-esp-img", alt: asset.type + " source ESP", draggable: "false" }) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-line" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-badge" }, identityEntry[1]))))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-actions" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", onClick: onCancel }, "Cancel"), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "accent", leadingIcon: "check", onClick: onSave }, "Save Changes")));
   };
   const ESPAssetNav = ({ activeAsset, onChange }) => /* @__PURE__ */ React.createElement("div", { className: "sh-asset-nav", "aria-label": "Asset groups" }, ESP_ASSETS.map((item) => /* @__PURE__ */ React.createElement("button", { className: "sh-asset-nav-btn", type: "button", "data-active": item.type === activeAsset.type ? "true" : "false", key: item.type, onClick: () => onChange(item.type) }, /* @__PURE__ */ React.createElement(Icon, { name: item.icon, size: 13 }), item.type)));
   const AssetInstanceSwitcher = ({ asset, active, onChange, onAdd, onRemove }) => /* @__PURE__ */ React.createElement("div", { className: "sh-track-switcher" }, /* @__PURE__ */ React.createElement("div", { className: "sh-track-switcher-label" }, /* @__PURE__ */ React.createElement(Icon, { name: asset.icon, size: 14 }), assetUnitLabel(asset.type)), /* @__PURE__ */ React.createElement("div", { className: "sh-track-list" }, Array.from({ length: asset.count }, (_, index) => index + 1).map((instanceNumber) => /* @__PURE__ */ React.createElement("button", { className: "sh-track-btn", type: "button", "data-active": instanceNumber === active ? "true" : "false", key: instanceNumber, onClick: () => onChange(instanceNumber) }, instanceNumber))), (onAdd || onRemove) && /* @__PURE__ */ React.createElement("div", { className: "sh-track-switcher-actions" }, onRemove && /* @__PURE__ */ React.createElement("button", { className: "sh-track-remove-btn", type: "button", disabled: asset.count <= 1, onClick: onRemove }, /* @__PURE__ */ React.createElement(Icon, { name: "minus", size: 12 }), "Remove"), onAdd && /* @__PURE__ */ React.createElement("button", { className: "sh-track-add-btn", type: "button", onClick: onAdd }, /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 12 }), "Add")));
@@ -1915,44 +2058,46 @@
   const UploadDocumentModal = ({ station, onClose, onUpload, initialDocType = "" }) => {
     const [step, setStep] = useStateHub(initialDocType ? 2 : 1);
     const [docType, setDocType] = useStateHub(initialDocType);
-    const [version, setVersion] = useStateHub(initialDocType === "ESP" ? ESP_UPLOAD_DEFAULT.version : "");
+    const [versionNum, setVersionNum] = useStateHub("V0");
+    const [revisionNum, setRevisionNum] = useStateHub("R0");
+    const [alterationNum, setAlterationNum] = useStateHub("A0");
     const [fileType, setFileType] = useStateHub(initialDocType === "ESP" ? ESP_UPLOAD_DEFAULT.fileType : "");
-    const [fileName, setFileName] = useStateHub(initialDocType === "ESP" ? station.code + "-V0-R0-A0" : "");
+    const [version, setVersion] = useStateHub("");
+    const [fileReady, setFileReady] = useStateHub(initialDocType === "ESP");
     const selected = UPLOAD_DOC_TYPES.find((item) => item.id === docType);
     const canContinue = !!docType;
     const isEspUpload = docType === "ESP";
-    const uploadVersion = version.trim() || (isEspUpload ? ESP_UPLOAD_DEFAULT.version : "");
+    const versionId = versionNum + "-" + revisionNum + "-" + alterationNum;
+    const uploadVersion = version.trim();
     const uploadFileType = fileType || (isEspUpload ? ESP_UPLOAD_DEFAULT.fileType : "");
-    const uploadFileName = fileName;
-    const canUpload = Boolean(docType && (isEspUpload || uploadVersion) && uploadFileType && uploadFileName);
+    const canUpload = isEspUpload ? Boolean(docType && versionId && fileReady) : Boolean(docType && uploadVersion && uploadFileType);
+    const versionOptions = (prefix, n) => Array.from({ length: n }, (_, i) => prefix + i);
     const chooseType = (type) => {
       setDocType(type.id);
       if (type.id === "ESP") {
-        setVersion(ESP_UPLOAD_DEFAULT.version);
+        setVersionNum("V0"); setRevisionNum("R0"); setAlterationNum("A0");
         setFileType(ESP_UPLOAD_DEFAULT.fileType);
-        setFileName(station.code + "-V0-R0-A0");
+        setFileReady(false);
       } else {
-        setVersion("");
-        setFileType("");
-        setFileName("");
+        setVersion(""); setFileType(""); setFileReady(false);
       }
       setStep(2);
     };
     const submit = (event) => {
       event.preventDefault();
       if (!canUpload) return;
-      onUpload({ docType, version: isEspUpload ? "" : uploadVersion, fileType: uploadFileType, fileName: uploadFileName });
+      onUpload({ docType, version: isEspUpload ? versionId : uploadVersion, fileType: uploadFileType, fileName: station.name + "-" + docType });
     };
     const headTitle = step === 1 ? "Upload Document" : "Upload " + ((selected == null ? void 0 : selected.label) || "Document");
     const headSub = "Station " + station.code + " \xB7 Step " + step + " of 2";
-    return ReactDOM.createPortal(/* @__PURE__ */ React.createElement("div", { className: "sh-upload-portal", onClick: onClose }, /* @__PURE__ */ React.createElement("form", { className: "sh-upload-shell", onClick: (event) => event.stopPropagation(), onSubmit: submit }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "upload", size: 18 })), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-text" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-title" }, headTitle), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-sub" }, headSub)), /* @__PURE__ */ React.createElement("button", { type: "button", className: "sh-upload-shell-close", onClick: onClose, "aria-label": "Close" }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 15 }))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-body" }, step === 1 ? /* @__PURE__ */ React.createElement("div", { className: "sh-upload-types-grid" }, UPLOAD_DOC_TYPES.map((type) => /* @__PURE__ */ React.createElement("button", { className: "sh-upload-type", type: "button", "data-active": docType === type.id ? "true" : "false", key: type.id, onClick: () => chooseType(type) }, /* @__PURE__ */ React.createElement("strong", null, /* @__PURE__ */ React.createElement(Icon, { name: type.icon, size: 16 }), type.label), /* @__PURE__ */ React.createElement("span", null, type.help)))) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-summary-bar" }, /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, selected == null ? void 0 : selected.label), " upload for ", station.name), /* @__PURE__ */ React.createElement("button", { className: "sh-upload-summary-change", type: "button", onClick: () => setStep(1) }, "Change type")), isEspUpload ? /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field", "data-span": "full" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, fileName ? "Selected file" : "Select ESP file"), !fileName ? /* @__PURE__ */ React.createElement("label", { className: "sh-upload-select-zone" }, /* @__PURE__ */ React.createElement("input", { type: "file", accept: ".dwg,.pdf", className: "sh-upload-select-input", onChange: (event) => { var _a, _b; const selectedFileName = ((_b = (_a = event.target.files) == null ? void 0 : _a[0]) == null ? void 0 : _b.name) || ESP_UPLOAD_DEFAULT.fileName; const selectedFileType = (selectedFileName.split(".").pop() || "DWG").toUpperCase(); setFileName(selectedFileName); setFileType(selectedFileType === "PDF" ? "PDF" : "DWG"); event.target.value = ""; } }), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-select-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "upload", size: 22 })), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-select-copy" }, /* @__PURE__ */ React.createElement("strong", null, "Choose ESP file to upload"), /* @__PURE__ */ React.createElement("span", null, "DWG or PDF \xB7 File name will be kept as uploaded")), /* @__PURE__ */ React.createElement("span", { className: "sh-upload-select-button" }, "Select File")) : /* @__PURE__ */ React.createElement("div", { className: "sh-upload-file-card" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-file-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 18 })), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-file-meta" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-file-name" }, uploadFileName), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-file-sub" }, uploadFileType, " \xB7 Ready to upload for ", station.name)), /* @__PURE__ */ React.createElement("button", { type: "button", className: "sh-upload-file-remove", "aria-label": "Remove file", onClick: () => setFileName("") }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 14 }))))) : /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Version"), /* @__PURE__ */ React.createElement("input", { className: "sh-upload-grid-input", value: version, placeholder: docType === "Survey Data" ? "V2026.06" : "V1-R0-A0", onChange: (event) => setVersion(event.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Document file type"), /* @__PURE__ */ React.createElement("select", { className: "sh-upload-grid-input", value: fileType, onChange: (event) => setFileType(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Select file type"), /* @__PURE__ */ React.createElement("option", { value: "DWG" }, "DWG"), /* @__PURE__ */ React.createElement("option", { value: "DXF" }, "DXF"), /* @__PURE__ */ React.createElement("option", { value: "PDF" }, "PDF"))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field", "data-span": "full" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Upload file"), /* @__PURE__ */ React.createElement("input", { className: "sh-upload-grid-input is-file", type: "file", onChange: (event) => {
+    return ReactDOM.createPortal(/* @__PURE__ */ React.createElement("div", { className: "sh-upload-portal", onClick: onClose }, /* @__PURE__ */ React.createElement("form", { className: "sh-upload-shell", onClick: (event) => event.stopPropagation(), onSubmit: submit }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "upload", size: 18 })), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-text" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-title" }, headTitle), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-sub" }, headSub)), /* @__PURE__ */ React.createElement("button", { type: "button", className: "sh-upload-shell-close", onClick: onClose, "aria-label": "Close" }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 15 }))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-body" }, step === 1 ? /* @__PURE__ */ React.createElement("div", { className: "sh-upload-types-grid" }, UPLOAD_DOC_TYPES.map((type) => /* @__PURE__ */ React.createElement("button", { className: "sh-upload-type", type: "button", "data-active": docType === type.id ? "true" : "false", key: type.id, onClick: () => chooseType(type) }, /* @__PURE__ */ React.createElement("strong", null, /* @__PURE__ */ React.createElement(Icon, { name: type.icon, size: 16 }), type.label), /* @__PURE__ */ React.createElement("span", null, type.help)))) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-summary-bar" }, /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, selected == null ? void 0 : selected.label), " upload for ", station.name), /* @__PURE__ */ React.createElement("button", { className: "sh-upload-summary-change", type: "button", onClick: () => setStep(1) }, "Change type")), isEspUpload ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-group" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-group-label" }, "Version"), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-version-grid" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Version"), /* @__PURE__ */ React.createElement("select", { className: "sh-upload-grid-input", value: versionNum, onChange: (e) => setVersionNum(e.target.value) }, versionOptions("V", 10).map((v) => /* @__PURE__ */ React.createElement("option", { key: v, value: v }, v)))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Revision"), /* @__PURE__ */ React.createElement("select", { className: "sh-upload-grid-input", value: revisionNum, onChange: (e) => setRevisionNum(e.target.value) }, versionOptions("R", 10).map((v) => /* @__PURE__ */ React.createElement("option", { key: v, value: v }, v)))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Alteration"), /* @__PURE__ */ React.createElement("select", { className: "sh-upload-grid-input", value: alterationNum, onChange: (e) => setAlterationNum(e.target.value) }, versionOptions("A", 10).map((v) => /* @__PURE__ */ React.createElement("option", { key: v, value: v }, v))))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-version-preview" }, /* @__PURE__ */ React.createElement("span", { className: "sh-upload-version-preview-label" }, "Version ID"), /* @__PURE__ */ React.createElement("span", { className: "sh-upload-version-id" }, versionId))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field", "data-span": "full" }, !fileReady ? /* @__PURE__ */ React.createElement("label", { className: "sh-upload-select-zone" }, /* @__PURE__ */ React.createElement("input", { type: "file", accept: ".dwg,.pdf", className: "sh-upload-select-input", onChange: (event) => { var _a; const f = (_a = event.target.files) == null ? void 0 : _a[0]; if (f) { const ext = (f.name.split(".").pop() || "DWG").toUpperCase(); setFileType(ext === "PDF" ? "PDF" : "DWG"); setFileReady(true); } event.target.value = ""; } }), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-select-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "upload", size: 22 })), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-select-copy" }, /* @__PURE__ */ React.createElement("strong", null, station.name + "-" + docType), /* @__PURE__ */ React.createElement("span", null, "DWG or PDF \xB7 Click or drag to select file")), /* @__PURE__ */ React.createElement("span", { className: "sh-upload-select-button" }, "Select File")) : /* @__PURE__ */ React.createElement("div", { className: "sh-upload-file-card" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-file-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 18 })), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-file-meta" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-file-name" }, station.name + "-" + docType), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-file-sub" }, uploadFileType, " \xB7 Ready to upload")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "sh-upload-file-remove", "aria-label": "Remove file", onClick: () => setFileReady(false) }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 14 })))))) : /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid" }, /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Version"), /* @__PURE__ */ React.createElement("input", { className: "sh-upload-grid-input", value: version, placeholder: docType === "Survey Data" ? "V2026.06" : "V1-R0-A0", onChange: (event) => setVersion(event.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Document file type"), /* @__PURE__ */ React.createElement("select", { className: "sh-upload-grid-input", value: fileType, onChange: (event) => setFileType(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Select file type"), /* @__PURE__ */ React.createElement("option", { value: "DWG" }, "DWG"), /* @__PURE__ */ React.createElement("option", { value: "DXF" }, "DXF"), /* @__PURE__ */ React.createElement("option", { value: "PDF" }, "PDF"))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-grid-field", "data-span": "full" }, /* @__PURE__ */ React.createElement("label", { className: "sh-upload-grid-label" }, "Upload file"), /* @__PURE__ */ React.createElement("input", { className: "sh-upload-grid-input is-file", type: "file", onChange: (event) => {
       var _a, _b;
       return setFileName(((_b = (_a = event.target.files) == null ? void 0 : _a[0]) == null ? void 0 : _b.name) || "");
     } }))))), /* @__PURE__ */ React.createElement("div", { className: "sh-upload-shell-foot" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", onClick: onClose }, "Cancel"), step === 1 ? /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "accent", disabled: !canContinue, onClick: () => setStep(2) }, "Continue") : /* @__PURE__ */ React.createElement(Btn, { type: "submit", variant: "accent", leadingIcon: "upload", disabled: !canUpload }, "Upload")))), document.body);
   };
   const REVIEW_ASSET_GROUPS = [
     { type: "Adjacent Stations", count: 3, icon: "pin" },
-    { type: "Platforms", count: 3, icon: "layers" },
+    { type: "Platforms", count: 4, icon: "layers" },
     { type: "Tracks", count: 3, icon: "track" },
     { type: "Points and Turnouts", count: 3, icon: "branch" },
     { type: "Trap Points", count: 3, icon: "alert" },
@@ -1995,7 +2140,7 @@
     const status = REVIEW_STATUSES[statusKey];
     const groupIndex = groups.findIndex((g) => g.type === activeGroup.type);
     const isFirst = groupIndex === 0 && activeInstance === 1;
-    const isLast = groupIndex === groups.length - 1 && activeInstance === activeGroup.count;
+    const isLast = groupIndex === groups.length - 1 && (isDigitizeStep || activeInstance === activeGroup.count);
     const allReviewed = groups.every((g) => statuses[g.type] === "reviewed");
     React.useEffect(() => {
       setStatuses((prev) => prev[activeGroup.type] === "pending" ? { ...prev, [activeGroup.type]: "in_review" } : prev);
@@ -2004,6 +2149,7 @@
       if (activeInstance > 1) {
         setActiveInstance(activeInstance - 1);
       } else if (groupIndex > 0) {
+        setStatuses((prev) => ({ ...prev, [activeGroup.type]: "reviewed" }));
         const prevGroup = groups[groupIndex - 1];
         setActiveType(prevGroup.type);
         setActiveInstance(prevGroup.count);
@@ -2013,6 +2159,7 @@
       if (activeInstance < activeGroup.count) {
         setActiveInstance(activeInstance + 1);
       } else if (groupIndex < groups.length - 1) {
+        setStatuses((prev) => ({ ...prev, [activeGroup.type]: "reviewed" }));
         setActiveType(groups[groupIndex + 1].type);
         setActiveInstance(1);
       }
@@ -2030,6 +2177,7 @@
       setDrafts((prev) => ({ ...prev, [draftKey]: { ...draft, [label]: value } }));
     };
     const changeType = (nextType) => {
+      setStatuses((prev) => ({ ...prev, [activeGroup.type]: "reviewed" }));
       setActiveType(nextType);
       setActiveInstance(1);
     };
@@ -2066,15 +2214,110 @@
     const saveGeneratedDigital = () => {
       if (onFinish) onFinish({ close: true });
     };
-    return /* @__PURE__ */ React.createElement("div", { className: "sh-content" }, /* @__PURE__ */ React.createElement(AppTopBar, { crumbs: ["Digital Library", { label: station.name, onClick: onBack }, breadcrumbDocLabel, pageVerbTitle + " " + activeGroup.type], searchPlaceholder: isDigitize ? "Search digital ESP assets, attributes..." : "Search extracted ESP assets, attributes..." }), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, pageVerbTitle, " ", activeGroup.type), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, station.name, " (", station.code, ") \xB7 ", documentKindLabel, sourceFileLabel ? " \xB7 " + sourceFileLabel : "")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, digitalGenerated && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: saveGeneratedDigital }, "Save and Close"))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll sh-esp-scroll" }, /* @__PURE__ */ React.createElement("div", { className: "sh-review-stepper", "aria-label": "Asset review steps" }, groups.map((item, index) => {
+    const deCanvasRef = React.useRef(null);
+    React.useEffect(() => {
+      if (digitalGenerated && deCanvasRef.current) {
+        const el = deCanvasRef.current;
+        el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
+        el.scrollTop = 0;
+      }
+    }, [digitalGenerated]);
+    if (isDigitizeStep && digitalGenerated) {
+      const deTools1 = ["cursor", "branch", "edit", "plus", "minus"];
+      const deTools2 = ["zoom", "shield", "pin", "alert", "layers"];
+      const deTools3 = ["file_check", "download", "refresh", "settings", "clock"];
+      return /* @__PURE__ */ React.createElement("div", { className: "sh-digital-editor-full" },
+        /* @__PURE__ */ React.createElement("div", { className: "sh-de-topbar" },
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-topbar-left" },
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-topbar-title" }, "Digital ESP Editor"),
+            /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, station.code),
+            /* @__PURE__ */ React.createElement(Chip, { tone: "success" }, "Generated")
+          ),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-topbar-right" },
+            /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: saveGeneratedDigital }, "Save and Close")
+          )
+        ),
+        /* @__PURE__ */ React.createElement("div", { className: "sh-de-icon-rail" },
+          ["cursor", "zoom", "branch", "layers", "pin", "shield", "alert", "edit", "plus", "settings"].map((name) => /* @__PURE__ */ React.createElement("button", { key: name, className: "sh-de-rail-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name, size: 16 })))
+        ),
+        /* @__PURE__ */ React.createElement("div", { className: "sh-de-left-panel" },
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-canvas-tabs" },
+            /* @__PURE__ */ React.createElement("button", { className: "sh-de-canvas-tab", "data-active": "true", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name: "layers", size: 13 }), "Model canvas", /* @__PURE__ */ React.createElement("span", { className: "sh-de-tab-pill" }, "Model")),
+            /* @__PURE__ */ React.createElement("button", { className: "sh-de-canvas-tab", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 13 }), "Paper canvas", /* @__PURE__ */ React.createElement("span", { className: "sh-de-tab-pill" }, "Paper"))
+          ),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-layers-head" },
+            /* @__PURE__ */ React.createElement("span", { className: "sh-de-layers-title" }, "Layers"),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-layers-actions" },
+              /* @__PURE__ */ React.createElement("button", { className: "sh-de-layers-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 13 })),
+              /* @__PURE__ */ React.createElement("button", { className: "sh-de-layers-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name: "search", size: 13 })),
+              /* @__PURE__ */ React.createElement("button", { className: "sh-de-layers-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 13 }))
+            )
+          ),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-layer-item", "data-active": "true" },
+            /* @__PURE__ */ React.createElement("span", { className: "sh-de-layer-expand" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11 })),
+            /* @__PURE__ */ React.createElement("span", { className: "sh-de-layer-bar", "data-color": "blue" }),
+            /* @__PURE__ */ React.createElement("span", { className: "sh-de-layer-name" }, "PDF Import (1/1)")
+          ),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-layer-item" },
+            /* @__PURE__ */ React.createElement("span", { className: "sh-de-layer-expand" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11 })),
+            /* @__PURE__ */ React.createElement("span", { className: "sh-de-layer-bar" }),
+            /* @__PURE__ */ React.createElement("span", { className: "sh-de-layer-name" }, "Default"),
+            /* @__PURE__ */ React.createElement("span", { className: "sh-de-layer-dot" }, "\u25CF")
+          )
+        ),
+        /* @__PURE__ */ React.createElement("div", { className: "sh-de-canvas", ref: deCanvasRef },
+          /* @__PURE__ */ React.createElement("img", { src: "assets/digitize-esp.png", className: "sh-de-canvas-img", alt: "Digital ESP Canvas", draggable: "false" })
+        ),
+        /* @__PURE__ */ React.createElement("div", { className: "sh-de-right-panel" },
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Selection", /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-head-right" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 12 }))),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Name"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val" }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 11 }), "\xA0Unnamed")),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Layer"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-select" }, /* @__PURE__ */ React.createElement(Icon, { name: "layers", size: 11 }), "\xA0PDF Import (1/1)", /* @__PURE__ */ React.createElement("span", { style: { marginLeft: "auto" } }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11 })))),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Status"), /* @__PURE__ */ React.createElement("div", { className: "sh-de-status-icons" }, /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 13 }), /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 13 }), /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 13 }), /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 13 })))
+          ),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Modify"),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Modify"), /* @__PURE__ */ React.createElement("div", { className: "sh-de-icon-row" }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 14 }), /* @__PURE__ */ React.createElement(Icon, { name: "refresh", size: 14 }), /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 14 }), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 14 }))),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Anchor"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-select" }, "\u25C9\xA0Middle\xA0", /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 11 }))),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "X,Y"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "2170.13 m\xA0\xA0378.47 m")),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "W,H"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 11 }), "\xA0104.97 m\xA0\xA062.39 m")),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Transform"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "0\xB0 / 100%"))
+          ),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 12 }), "Shapes")
+          ),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Styles", /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head-actions" }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 12 }), /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 12 }), /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 12 })))
+          ),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Properties"),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Length"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "206.56 m")),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Area"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "6.85 m\xB2"))
+          ),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Custom properties", /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-head-right" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 12 })))
+          )
+        ),
+        /* @__PURE__ */ React.createElement("div", { className: "sh-de-bottombar" },
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-tool-group" }, deTools1.map((name) => /* @__PURE__ */ React.createElement("button", { key: name, className: "sh-de-tool-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name, size: 15 })))),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-tool-divider" }),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-tool-group" }, deTools2.map((name) => /* @__PURE__ */ React.createElement("button", { key: name, className: "sh-de-tool-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name, size: 15 })))),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-tool-divider" }),
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-tool-group" }, deTools3.map((name) => /* @__PURE__ */ React.createElement("button", { key: name, className: "sh-de-tool-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name, size: 15 }))))
+        )
+      );
+    }
+    return /* @__PURE__ */ React.createElement("div", { className: "sh-content" }, /* @__PURE__ */ React.createElement(AppTopBar, { crumbs: ["Digital Library", { label: station.name, onClick: onBack }, (upload == null ? void 0 : upload.file) || (upload == null ? void 0 : upload.fileName) || "ESP File", "Review Assets"], searchPlaceholder: isDigitize ? "Search digital ESP assets, attributes..." : "Search extracted ESP assets, attributes..." }), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, isDigitizeStep ? activeGroup.type : pageVerbTitle + " " + activeGroup.type), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, station.name, " (", station.code, ") \xB7 ", documentKindLabel, sourceFileLabel ? " \xB7 " + sourceFileLabel : "")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, digitalGenerated && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: saveGeneratedDigital }, "Save and Close"))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll sh-esp-scroll" }, /* @__PURE__ */ React.createElement("div", { className: "sh-review-stepper", "aria-label": "Asset review steps" }, groups.map((item, index) => {
       const itemStatusKey = statuses[item.type] || "pending";
-      const stepStatus = REVIEW_STATUSES[itemStatusKey].label;
+      const isReviewed = itemStatusKey === "reviewed";
+      const isActive = item.type === activeType;
+      const prevReviewed = index > 0 && (statuses[groups[index - 1].type] === "reviewed");
       const itemCountLabel = item.isDigitize ? "Final step" : `${item.count} ${item.count === 1 ? "asset" : "assets"}`;
-      return /* @__PURE__ */ React.createElement("button", { className: "sh-pim-step sh-review-step", type: "button", "data-active": item.type === activeType ? "true" : "false", "data-reviewed": itemStatusKey === "reviewed" ? "true" : "false", "data-status": itemStatusKey, key: item.type, onClick: () => changeType(item.type) }, /* @__PURE__ */ React.createElement("span", { className: "sh-pim-step-index" }, index + 1), /* @__PURE__ */ React.createElement(Icon, { name: item.icon, size: 13 }), /* @__PURE__ */ React.createElement("span", { className: "sh-pim-step-copy" }, /* @__PURE__ */ React.createElement("strong", null, item.type), /* @__PURE__ */ React.createElement("span", null, itemCountLabel), /* @__PURE__ */ React.createElement("span", null, stepStatus)));
-    })), !isDigitizeStep && /* @__PURE__ */ React.createElement(AssetInstanceSwitcher, { asset: activeGroup, active: activeInstance, onChange: setActiveInstance, onAdd: addAsset, onRemove: removeAsset }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-workspace" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-editor-shell" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-panel" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, isDigitizeStep ? "Source ESP Preview" : activeGroup.type + " Preview"), /* @__PURE__ */ React.createElement("div", { className: "sh-section-sub" }, isDigitizeStep ? "Source ESP remains on the left while digital output is generated on the right." : ["Highlighted ", unitLabel.toLowerCase(), " ", activeInstance, " in source ESP for ", station.name, "."])), /* @__PURE__ */ React.createElement(StatusChip, null, isDigitizeStep ? "Ready" : activeGroup.count + " " + (activeGroup.count === 1 ? "asset" : "assets"))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-label" }, isDigitizeStep ? "ESP Source" : [unitLabel, " ", activeInstance]), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track loop" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track main" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track siding" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout a" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout b" }), !isDigitizeStep && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-highlight" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-station" }, /* @__PURE__ */ React.createElement("strong", null, station.name), /* @__PURE__ */ React.createElement("span", null, station.code, " yard limits")))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-panel" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, isDigitizeStep ? "Digital ESP" : activeGroup.type + " " + rightPanelTitle), /* @__PURE__ */ React.createElement("div", { className: "sh-section-sub" }, isDigitizeStep ? digitalGenerated ? "Generated digital ESP preview." : "Digital output will appear after digitization." : rightPanelSub)), /* @__PURE__ */ React.createElement(StatusChip, null, isDigitizeStep ? digitalGenerated ? "Generated" : "Empty" : status.label)), isDigitizeStep ? digitalGenerated ? /* @__PURE__ */ React.createElement("div", { className: "sh-pim-digitize-panel" }, /* @__PURE__ */ React.createElement("div", { className: "sh-pim-digitize-preview", "aria-label": "Digital ESP preview" }, /* @__PURE__ */ React.createElement("div", { className: "sh-pim-digital-badge" }, "Digital ESP Preview"), /* @__PURE__ */ React.createElement("div", { className: "sh-pim-digital-track a" }), /* @__PURE__ */ React.createElement("div", { className: "sh-pim-digital-track b" }), /* @__PURE__ */ React.createElement("div", { className: "sh-pim-digital-track c" }), /* @__PURE__ */ React.createElement("div", { className: "sh-pim-digital-platform one" }, "PF 1"), /* @__PURE__ */ React.createElement("div", { className: "sh-pim-digital-platform two" }, "PF 2")), /* @__PURE__ */ React.createElement("div", { className: "sh-pim-digitize-copy" }, /* @__PURE__ */ React.createElement("div", { className: "sh-pim-digitize-title" }, "Digital ESP generated"), /* @__PURE__ */ React.createElement("div", { className: "sh-pim-digitize-sub" }, "Review the generated digital version, then save and close to return to the ESP workflow."))) : /* @__PURE__ */ React.createElement("div", { className: "sh-review-digitize-empty" }, /* @__PURE__ */ React.createElement("div", { className: "sh-review-digitize-empty-inner" }, /* @__PURE__ */ React.createElement("div", { className: "sh-review-digitize-empty-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 18 })), /* @__PURE__ */ React.createElement("div", { className: "sh-review-digitize-empty-title" }, "No digital version generated"), /* @__PURE__ */ React.createElement("div", { className: "sh-review-digitize-empty-sub" }, "Click Digitize ESP to create the digital output on this side."), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "file_check", onClick: handleDigitise }, "Digitize ESP"))) : /* @__PURE__ */ React.createElement("form", { className: "sh-asset-config-form", onSubmit: (event) => {
+      return /* @__PURE__ */ React.createElement(React.Fragment, { key: item.type }, index > 0 && /* @__PURE__ */ React.createElement("div", { className: "sh-step-connector", "data-done": prevReviewed ? "true" : "false" }), /* @__PURE__ */ React.createElement("button", { className: "sh-step-pill", type: "button", "data-active": isActive ? "true" : "false", "data-reviewed": isReviewed ? "true" : "false", onClick: () => changeType(item.type) }, /* @__PURE__ */ React.createElement("div", { className: "sh-step-circle" }, isReviewed ? /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 12 }) : index + 1), /* @__PURE__ */ React.createElement("div", { className: "sh-step-label" }, /* @__PURE__ */ React.createElement("span", { className: "sh-step-label-name" }, item.type), /* @__PURE__ */ React.createElement("span", { className: "sh-step-label-count" }, itemCountLabel))));
+    })), !isDigitizeStep && /* @__PURE__ */ React.createElement(AssetInstanceSwitcher, { asset: activeGroup, active: activeInstance, onChange: setActiveInstance, onAdd: addAsset, onRemove: removeAsset }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-workspace" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-editor-shell", "data-digitize": isDigitizeStep ? "true" : "false" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-panel" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, isDigitizeStep ? "Source ESP Preview" : activeGroup.type + " Preview"), /* @__PURE__ */ React.createElement("div", { className: "sh-section-sub" }, isDigitizeStep ? "Source ESP remains on the left while digital output is generated on the right." : ["Highlighted ", unitLabel.toLowerCase(), " ", activeInstance, " in source ESP for ", station.name, "."])), /* @__PURE__ */ React.createElement(StatusChip, null, isDigitizeStep ? "Ready" : activeGroup.count + " " + (activeGroup.count === 1 ? "asset" : "assets"))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview", "data-type": (activeGroup.type === "Adjacent Stations" || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates" || isDigitizeStep) ? "adjacent" : "track" }, (activeGroup.type === "Adjacent Stations" || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates" || isDigitizeStep) ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-label" }, isDigitizeStep ? "ESP Source" : [unitLabel, " ", activeInstance]), /* @__PURE__ */ React.createElement("img", { src: isDigitizeStep ? "assets/digitize-esp.png" : activeGroup.type === "Platforms" ? "assets/platform-esp.png" : activeGroup.type === "Tracks" ? "assets/track-esp.png" : activeGroup.type === "Points and Turnouts" ? "assets/turnout-esp.png" : activeGroup.type === "Dead Ends" ? "assets/deadend-esp.png" : activeGroup.type === "Trap Points" ? "assets/trappoint-esp.png" : activeGroup.type === "Gates" ? "assets/gate-esp.png" : "assets/adjacent-station-esp.png", className: "sh-asset-esp-img", alt: activeGroup.type + " ESP source diagram", draggable: "false" })) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-label" }, isDigitizeStep ? "ESP Source" : [unitLabel, " ", activeInstance]), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track loop" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track main" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track siding" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout a" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout b" }), !isDigitizeStep && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-highlight" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-station" }, /* @__PURE__ */ React.createElement("strong", null, station.name), /* @__PURE__ */ React.createElement("span", null, station.code, " yard limits"))))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-panel" }, !(isDigitizeStep && digitalGenerated) && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, isDigitizeStep ? "Digital ESP" : activeGroup.type + " " + rightPanelTitle), /* @__PURE__ */ React.createElement("div", { className: "sh-section-sub" }, isDigitizeStep ? digitalGenerated ? "Generated digital ESP preview." : "Digital output will appear after digitization." : rightPanelSub)), /* @__PURE__ */ React.createElement(StatusChip, null, isDigitizeStep ? digitalGenerated ? "Generated" : "Empty" : status.label)), isDigitizeStep ? digitalGenerated ? /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-generated sh-digitize-generated--editor" }, /* @__PURE__ */ React.createElement("img", { src: "assets/digital-esp-editor.png", className: "sh-digitize-editor-img", alt: "Digital ESP Editor", draggable: "false" })) : /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center" }, /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-inner" }, /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 24 })), /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-title" }, "Generate Digital ESP"), /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-sub" }, "All assets have been reviewed. Click the button below to generate the digital ESP for ", station.name, "."), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "file_check", onClick: handleDigitise }, "Generate Digital ESP"))) : /* @__PURE__ */ React.createElement("form", { className: "sh-asset-config-form", onSubmit: (event) => {
       event.preventDefault();
       saveAndContinue();
-    } }, Object.entries(draft).map(([label, value]) => /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-field", key: label }, /* @__PURE__ */ React.createElement("label", null, label), /* @__PURE__ */ React.createElement("input", { value, onChange: (event) => updateField(label, event.target.value) }))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-preview" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-title" }, /* @__PURE__ */ React.createElement(Icon, { name: activeGroup.icon, size: 14 }), "Live Preview"), /* @__PURE__ */ React.createElement("span", { className: "sh-mini-label" }, unitLabel, " ", activeInstance)), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-canvas" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-line" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-badge" }, identityEntry[1])))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-actions sh-review-actions" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "chevron_left", disabled: isFirst, onClick: goPrev }, "Previous"), /* @__PURE__ */ React.createElement("span", { className: "sh-review-spacer" }), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", trailingIcon: "chevron_right", disabled: isLast, onClick: goNext }, "Next")))))), toast && /* @__PURE__ */ React.createElement("div", { className: "sh-editor-toast" }, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 14 }), toast));
+    } }, Object.entries(draft).map(([label, value]) => /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-field", key: label }, /* @__PURE__ */ React.createElement("label", null, label), /* @__PURE__ */ React.createElement("input", { value, onChange: (event) => updateField(label, event.target.value) }))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-preview" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-title" }, /* @__PURE__ */ React.createElement(Icon, { name: activeGroup.icon, size: 14 }), "Live Preview"), /* @__PURE__ */ React.createElement("span", { className: "sh-mini-label" }, unitLabel, " ", activeInstance)), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-canvas", "data-type": (activeGroup.type === "Adjacent Stations" || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates") ? "adjacent" : "default" }, (activeGroup.type === "Adjacent Stations" || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates") ? /* @__PURE__ */ React.createElement("img", { src: activeGroup.type === "Platforms" ? "assets/platform-esp.png" : activeGroup.type === "Tracks" ? "assets/track-esp.png" : activeGroup.type === "Points and Turnouts" ? "assets/turnout-esp.png" : activeGroup.type === "Dead Ends" ? "assets/deadend-esp.png" : activeGroup.type === "Trap Points" ? "assets/trappoint-esp.png" : activeGroup.type === "Gates" ? "assets/gate-esp.png" : "assets/adjacent-station-esp.png", className: "sh-asset-live-esp-img", alt: activeGroup.type + " source ESP", draggable: "false" }) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-line" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-badge" }, identityEntry[1]))))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-actions sh-review-actions" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "chevron_left", disabled: isFirst, onClick: goPrev }, "Previous"), /* @__PURE__ */ React.createElement("span", { className: "sh-review-spacer" }), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", trailingIcon: "chevron_right", disabled: isLast, onClick: goNext }, "Next")))))), toast && /* @__PURE__ */ React.createElement("div", { className: "sh-editor-toast" }, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 14 }), toast));
   };
   const PIMEditorPage = ({ station, upload, mode = "review", version, onBack, onFinish, onSave, onSaveAsNew, onSaveAndClose, onOpenEditor }) => {
     var _a;
@@ -2255,7 +2498,7 @@
       const sourceFileType = (activeEspUpload == null ? void 0 : activeEspUpload.fileType) || (((_a = sourceFileName.split(".").pop()) == null ? void 0 : _a.toUpperCase()) || "DWG");
       const nextVersion = {
         id: `digital-esp-${Date.now()}`,
-        version: "1.0",
+        version: (activeEspUpload == null ? void 0 : activeEspUpload.version) || "V0-R0-A0",
         fileName: sourceFileName,
         sourceFile: sourceFileName,
         fileType: sourceFileType,
@@ -2346,9 +2589,10 @@
       setEspRows((rows) => rows.map((row) => row.id === version.id ? { ...row, status: "Edited", tone: "info", user: CURRENT_USER.name, uploaded: "Just now" } : row));
     };
     const handleCloneVersion = (sourceVersion) => {
-      const srcParts = (sourceVersion.version || "1.0").split(".");
-      const nextMinor = parseInt(srcParts[srcParts.length - 1] || "0", 10) + 1;
-      const nextVer = srcParts.length > 1 ? `${srcParts.slice(0, -1).join(".")}.${nextMinor}` : `1.${nextMinor}`;
+      const nextVer = sourceVersion.cloneVersion || (() => {
+        const srcParts = (sourceVersion.version || "V0-R0-A0").split("-");
+        return srcParts[0] + "-" + srcParts[1] + "-A" + (parseInt((srcParts[2] || "A0").replace("A", "") || "0", 10) + 1);
+      })();
       const cloned = {
         id: `digital-esp-${Date.now()}`,
         version: nextVer,

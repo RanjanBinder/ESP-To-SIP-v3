@@ -1996,7 +1996,7 @@ const ALL_STATIONS = [
     name: "Vijayawada Junction",
     code: "BZA",
     section: "Vijayawada\u2013Gudivada",
-    zone: "SCR",
+    zone: "SCoR",
     division: "Vijayawada",
     esp: "approved",
     sip: "approved",
@@ -2005,14 +2005,14 @@ const ALL_STATIONS = [
     survey: { lidar: true, ortho: true, ts: true },
     versions: "ESP v4 \xB7 SIP v2 \xB7 LOP v1",
     lastTime: "1 day ago",
-    lastBy: "K. Naidu"
+    lastBy: "Sarath"
   },
   {
     id: 2,
     name: "Guntur Junction",
     code: "GNT",
     section: "Guntur\u2013Tenali",
-    zone: "SCR",
+    zone: "SCoR",
     division: "Vijayawada",
     esp: "approved",
     sip: "under_review",
@@ -2028,7 +2028,7 @@ const ALL_STATIONS = [
     name: "Tenali Junction",
     code: "TEL",
     section: "Guntur\u2013Tenali",
-    zone: "SCR",
+    zone: "SCoR",
     division: "Vijayawada",
     esp: "digitised",
     sip: "uploaded",
@@ -2044,7 +2044,7 @@ const ALL_STATIONS = [
     name: "Ongole",
     code: "OGL",
     section: "Ongole\u2013Nellore",
-    zone: "SCR",
+    zone: "SCoR",
     division: "Vijayawada",
     esp: "pending_review",
     sip: null,
@@ -2060,7 +2060,7 @@ const ALL_STATIONS = [
     name: "Eluru",
     code: "EE",
     section: "Vijayawada\u2013Eluru",
-    zone: "SCR",
+    zone: "SCoR",
     division: "Vijayawada",
     esp: null,
     sip: null,
@@ -2076,7 +2076,7 @@ const ALL_STATIONS = [
     name: "Rajahmundry",
     code: "RJY",
     section: "Eluru\u2013Samalkot",
-    zone: "SCR",
+    zone: "SCoR",
     division: "Vijayawada",
     esp: "approved",
     sip: "approved",
@@ -2092,7 +2092,7 @@ const ALL_STATIONS = [
     name: "Bhimavaram Town",
     code: "BVRT",
     section: "Nidadavolu\u2013Bhimavaram",
-    zone: "SCR",
+    zone: "SCoR",
     division: "Vijayawada",
     esp: "approved",
     sip: null,
@@ -2108,7 +2108,7 @@ const ALL_STATIONS = [
     name: "Nidadavolu",
     code: "NDD",
     section: "Nidadavolu\u2013Bhimavaram",
-    zone: "SCR",
+    zone: "SCoR",
     division: "Vijayawada",
     esp: "validated",
     sip: "digitised",
@@ -2124,7 +2124,7 @@ const ALL_STATIONS = [
     name: "Kakinada Port",
     code: "COA",
     section: "Samalkot\u2013Kakinada",
-    zone: "SCR",
+    zone: "SCoR",
     division: "Vijayawada",
     esp: "under_review",
     sip: null,
@@ -2140,7 +2140,7 @@ const ALL_STATIONS = [
     name: "Nuzvid",
     code: "NZD",
     section: "Vijayawada\u2013Eluru",
-    zone: "SCR",
+    zone: "SCoR",
     division: "Vijayawada",
     esp: null,
     sip: null,
@@ -2156,7 +2156,7 @@ const ALL_STATIONS = [
     name: "Chirala",
     code: "CLX",
     section: "Ongole\u2013Nellore",
-    zone: "SCR",
+    zone: "SCoR",
     division: "Vijayawada",
     esp: "approved",
     sip: null,
@@ -2166,22 +2166,6 @@ const ALL_STATIONS = [
     versions: "ESP v2",
     lastTime: "3 days ago",
     lastBy: "T. Babu"
-  },
-  {
-    id: 12,
-    name: "Bisalwas Kalan",
-    code: "BIWK",
-    section: "Nagda\u2013Ratlam",
-    zone: "WR",
-    division: "Ratlam",
-    esp: "approved",
-    sip: "under_review",
-    lop: null,
-    toc: false,
-    survey: { lidar: false, ortho: true, ts: true },
-    versions: "ESP v2 \xB7 SIP v1",
-    lastTime: "2 days ago",
-    lastBy: "K. Naidu"
   }
 ];
 const DOCUMENT_FILTERS = [
@@ -2236,41 +2220,19 @@ const SECTION_SCOPE_LABELS = {
   "EE-SLO": "Eluru\u2013Samalkot"
 };
 const ZONE_OPTIONS = [
-  { value: "SCR", label: "SCR \u2014 South Central Railway" },
-  { value: "WR", label: "WR \u2014 Western Railway" },
-  { value: "CR", label: "CR \u2014 Central Railway" },
-  { value: "NR", label: "NR \u2014 Northern Railway" },
-  { value: "ER", label: "ER \u2014 Eastern Railway" }
+  { value: "SCoR", label: "SCoR \u2014 South Coast Railway" }
 ];
 const DIVISION_OPTIONS = {
-  SCR: ["Vijayawada", "Guntur", "Hyderabad", "Guntakal", "Nanded"],
-  WR: ["Ratlam", "Vadodara", "Mumbai Central", "Ahmedabad"],
+  SCoR: ["Visakhapatnam", "Vijayawada", "Guntur", "Guntakal"],
   CR: ["Mumbai", "Pune", "Nagpur", "Solapur"],
   NR: ["Delhi", "Ambala", "Lucknow", "Firozpur"],
   ER: ["Howrah", "Sealdah", "Asansol", "Malda"]
 };
 const SECTION_OPTIONS = {
+  Visakhapatnam: ["Visakhapatnam\u2013Vizianagaram", "Visakhapatnam\u2013Bimlipatnam", "Visakhapatnam\u2013Duvvada"],
   Vijayawada: ["Vijayawada\u2013Gudivada", "Vijayawada\u2013Eluru", "Eluru\u2013Samalkot", "Samalkot\u2013Kakinada"],
-  Guntur: ["Guntur\u2013Tenali", "Guntur\u2013Nandyal"],
-  Hyderabad: ["Secunderabad\u2013Kazipet", "Hyderabad\u2013Vikarabad"],
-  Guntakal: ["Guntakal\u2013Renigunta", "Guntakal\u2013Wadi"],
-  Nanded: ["Aurangabad\u2013Ankai", "Nanded\u2013Mudkhed", "Parbhani\u2013Purna"],
-  Ratlam: ["Nagda\u2013Ratlam", "Ratlam\u2013Godhra", "Ratlam\u2013Chittaurgarh"],
-  Vadodara: ["Vadodara\u2013Godhra", "Vadodara\u2013Ahmedabad"],
-  "Mumbai Central": ["Mumbai Central\u2013Surat", "Surat\u2013Vadodara"],
-  Ahmedabad: ["Ahmedabad\u2013Viramgam", "Ahmedabad\u2013Vadodara"],
-  Mumbai: ["CSMT\u2013Kalyan", "Kalyan\u2013Kasara"],
-  Pune: ["Pune\u2013Lonavala", "Pune\u2013Daund"],
-  Nagpur: ["Nagpur\u2013Wardha", "Nagpur\u2013Itarsi"],
-  Solapur: ["Solapur\u2013Daund", "Solapur\u2013Wadi"],
-  Delhi: ["Delhi\u2013Ambala", "Delhi\u2013Ghaziabad"],
-  Ambala: ["Ambala\u2013Ludhiana", "Ambala\u2013Kalka"],
-  Lucknow: ["Lucknow\u2013Kanpur", "Lucknow\u2013Varanasi"],
-  Firozpur: ["Firozpur\u2013Ludhiana", "Firozpur\u2013Bathinda"],
-  Howrah: ["Howrah\u2013Barddhaman", "Howrah\u2013Kharagpur"],
-  Sealdah: ["Sealdah\u2013Krishnanagar", "Sealdah\u2013Bongaon"],
-  Asansol: ["Asansol\u2013Dhanbad", "Asansol\u2013Barddhaman"],
-  Malda: ["Malda\u2013New Farakka", "Malda\u2013Azimganj"]
+  Guntur: ["Guntur\u2013Tenali", "Guntur\u2013Nandyal", "Guntur\u2013Macherla"],
+  Guntakal: ["Guntakal\u2013Renigunta", "Guntakal\u2013Wadi", "Guntakal\u2013Dhone"]
 };
 const TRAIN_DIRECTIONS = [
   "Up",
@@ -2279,13 +2241,13 @@ const TRAIN_DIRECTIONS = [
   "Bidirectional"
 ];
 const AURANGABAD_STATION_DRAFT = {
-  zone: "SCR",
-  division: "Nanded",
-  section: "Aurangabad\u2013Ankai",
-  stationName: "Aurangabad",
-  stationCode: "AWB",
-  stationTitle: "Aurangabad",
-  stationId: "AWB-431240",
+  zone: "SCoR",
+  division: "Vijayawada",
+  section: "Vijayawada\u2013Gudivada",
+  stationName: "Machilipatnam",
+  stationCode: "MTM",
+  stationTitle: "Machilipatnam",
+  stationId: "MTM-120050",
   cll: "431.240",
   trainDirection: "Up \u2194 Down"
 };
@@ -2356,10 +2318,10 @@ const getDocumentTone = (status) => {
   return "neutral";
 };
 const formatLatestVersion = (station, docKey) => {
-  if (docKey === "toc") return station.toc ? "V1 R0 A0" : "Empty";
+  if (docKey === "toc") return station.toc ? "V1-R0-A0" : "Empty";
   const version = (station.versions || "").split(" \xB7 ").find((item) => item.toLowerCase().startsWith(docKey));
   if (!version) return "Empty";
-  return version.replace(/^[A-Z]+\s*/i, "").toUpperCase().replace(/^V(\d+)$/, "V$1 R0 A0");
+  return version.replace(/^[A-Z]+\s*/i, "").toUpperCase().replace(/^V(\d+)$/, "V$1-R0-A0");
 };
 const getDocumentState = (station, docKey) => docKey === "toc" ? station.toc ? "approved" : null : station[docKey];
 const getLatestApprovedVersion = (station, docKey, status) => {
@@ -2568,7 +2530,7 @@ const AddStationModal = ({ initialZone, initialDivision, initialSectionScope, ex
       "input",
       {
         value: form.stationName,
-        placeholder: "e.g. Bisalwas Kalan",
+        placeholder: "e.g. Tirupati",
         onChange: (e) => updateName(e.target.value)
       }
     )), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Code"), /* @__PURE__ */ React.createElement(
@@ -2640,13 +2602,13 @@ const BULK_REQUIRED_COLUMNS = [
 const BULK_OPTIONAL_COLUMNS = ["State", "Route", "Latitude", "Longitude", "Remarks"];
 const BULK_TEMPLATE_COLUMNS = [...BULK_REQUIRED_COLUMNS, ...BULK_OPTIONAL_COLUMNS];
 const BULK_SAMPLE_ROW = {
-  Zone: "SCR \u2014 South Central Railway",
-  Division: "Nanded",
-  Section: "Aurangabad\u2013Ankai",
-  "Station Name": "Aurangabad",
-  "Station Code": "AWB",
-  "Station Title": "Aurangabad",
-  "Station ID": "AWB-431240",
+  Zone: "SCoR \u2014 South Coast Railway",
+  Division: "Vijayawada",
+  Section: "Vijayawada\u2013Gudivada",
+  "Station Name": "Vijayawada Junction",
+  "Station Code": "BZA",
+  "Station Title": "Vijayawada Junction",
+  "Station ID": "BZA-120001",
   "Central Line Location": "431.240",
   "Train Direction": "Up \u2194 Down",
   State: "",
@@ -3269,7 +3231,7 @@ const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate })
         it.badge && /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-badge" }, it.badge)
       )
     ))
-  )), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-foot" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-user", title: collapsed ? "Sarath" : void 0 }, "S"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userinfo" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-username" }, "Sarath"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userrole" }, "Admin SCR")), /* @__PURE__ */ React.createElement("button", { className: "ds-sidebar-foot-btn", title: "Sign out", onClick: () => { try { sessionStorage.removeItem("ir-login-session"); sessionStorage.removeItem("lr-authed"); } catch(e) {} window.location.reload(); } }, /* @__PURE__ */ React.createElement(Icon, { name: "log_out", size: 15 }))));
+  )), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-foot" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-user", title: collapsed ? "Sarath" : void 0 }, "S"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userinfo" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-username" }, "Sarath"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userrole" }, "Admin SCoR")), /* @__PURE__ */ React.createElement("button", { className: "ds-sidebar-foot-btn", title: "Sign out", onClick: () => { try { sessionStorage.removeItem("ir-login-session"); sessionStorage.removeItem("lr-authed"); } catch(e) {} window.location.reload(); } }, /* @__PURE__ */ React.createElement(Icon, { name: "log_out", size: 15 }))));
 };
 const readLoginSession = () => {
   try {
@@ -3280,9 +3242,9 @@ const readLoginSession = () => {
   }
 };
 const LoginPage = ({ onLogin }) => {
-  const [railId, setRailId] = useStateLib("IR-SCR-1024");
+  const [railId, setRailId] = useStateLib("IR-SCoR-1024");
   const [password, setPassword] = useStateLib("railway");
-  const [division, setDivision] = useStateLib("Nanded");
+  const [division, setDivision] = useStateLib("Vijayawada");
   const [accessDesk, setAccessDesk] = useStateLib("approver");
   const [remember, setRemember] = useStateLib(false);
   const [error, setError] = useStateLib("");
@@ -3294,7 +3256,7 @@ const LoginPage = ({ onLogin }) => {
     }
     const session = {
       railId: railId.trim(),
-      operator: "Ashwini Vaishnav",
+      operator: "Sarath",
       division,
       accessDesk
     };
@@ -3308,7 +3270,7 @@ const LoginPage = ({ onLogin }) => {
     }
     onLogin(session);
   };
-  return /* @__PURE__ */ React.createElement("main", { className: "ir-login-shell" }, /* @__PURE__ */ React.createElement("section", { className: "ir-login-visual", "aria-label": "Indian Railways access context" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-mark", style: { background: "none", padding: 0, overflow: "hidden", borderRadius: "50%" } }, /* @__PURE__ */ React.createElement("img", { src: "ir-logo.png", alt: "Indian Railways", style: { width: "100%", height: "100%", objectFit: "cover" } })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand-title" }, "Indian Railways"), /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand-sub" }, "ESP, SIP and LOP control desk"))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-scene", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("div", { className: "ir-station-board" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-board-small" }, "\u092D\u093E\u0930\u0924\u0940\u092F \u0930\u0947\u0932"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-name" }, "Aurangabad"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-hindi" }, "\u0914\u0930\u0902\u0917\u093E\u092C\u093E\u0926"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-code" }, /* @__PURE__ */ React.createElement(Icon, { name: "train", size: 14 }), " AWB \xB7 SCR"))), /* @__PURE__ */ React.createElement("div", { className: "ir-vb-train", "aria-label": "Vande Bharat Express illustration" }, /* @__PURE__ */ React.createElement("div", { className: "ir-vb-train-label" }, /* @__PURE__ */ React.createElement("span", { className: "ir-vb-train-name" }, "\u0935\u0928\u094D\u0926\u0947 \u092D\u093E\u0930\u0924 \u090F\u0915\u094D\u0938\u092A\u094D\u0930\u0947\u0938"), /* @__PURE__ */ React.createElement("span", { className: "ir-vb-train-badge" }, "Train 18 \xB7 SCR")), /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 560 95", fill: "none", xmlns: "http://www.w3.org/2000/svg", className: "ir-vb-train-svg", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("ellipse", { cx: "280", cy: "90", rx: "272", ry: "5", fill: "rgba(14,27,44,0.07)" }), /* @__PURE__ */ React.createElement("rect", { x: "28", y: "16", width: "504", height: "62", fill: "white" }), /* @__PURE__ */ React.createElement("path", { d: "M28 16 C28 16 8 28 6 53 L6 78 L28 78 Z", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("path", { d: "M532 16 C532 16 552 28 554 53 L554 78 L532 78 Z", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "16", width: "548", height: "15", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "63", width: "548", height: "15", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "31", width: "548", height: "4", fill: "#FF7722" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "59", width: "548", height: "4", fill: "#FF7722" }), /* @__PURE__ */ React.createElement("path", { d: "M16 34 L28 34 L28 63 L16 63 C10 57 8 51 10 45 Z", fill: "#C8E6FA", opacity: "0.9" }), /* @__PURE__ */ React.createElement("path", { d: "M544 34 L532 34 L532 63 L544 63 C550 57 552 51 550 45 Z", fill: "#C8E6FA", opacity: "0.9" }), /* @__PURE__ */ React.createElement("rect", { x: "36", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "58", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "80", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "102", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "124", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "146", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "168", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "190", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "212", y: "16", width: "3", height: "62", fill: "#1B4FA8", opacity: "0.3" }), /* @__PURE__ */ React.createElement("rect", { x: "222", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "244", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "266", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "288", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "310", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "332", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "354", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "376", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "398", y: "16", width: "3", height: "62", fill: "#1B4FA8", opacity: "0.3" }), /* @__PURE__ */ React.createElement("rect", { x: "408", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "430", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "452", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "474", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "496", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "518", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("text", { x: "280", y: "53", fontFamily: "Arial,sans-serif", fontSize: "9.5", fontWeight: "900", fill: "#1B4FA8", textAnchor: "middle", letterSpacing: "2.5" }, "VANDE BHARAT EXPRESS"), /* @__PURE__ */ React.createElement("rect", { x: "30", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "52", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "108", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "230", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "252", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "308", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "430", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "452", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "508", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "0", y: "86", width: "560", height: "3", rx: "1.5", fill: "#888" }), /* @__PURE__ */ React.createElement("rect", { x: "0", y: "91", width: "560", height: "3", rx: "1.5", fill: "#888" }))), /* @__PURE__ */ React.createElement("div", { className: "ir-route-panel" }, /* @__PURE__ */ React.createElement("div", { className: "ir-route-head" }, /* @__PURE__ */ React.createElement("span", null, "Nanded Division"), /* @__PURE__ */ React.createElement("span", { className: "mono" }, "431.240 KM")), /* @__PURE__ */ React.createElement("div", { className: "ir-route-track" }, /* @__PURE__ */ React.createElement("div", { className: "ir-track-sleeper" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node a" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node b" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node c" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label a" }, "Daulatabad"), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label b" }, "AWB"), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label c" }, "Chikalthan")))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-ops" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Zone"), /* @__PURE__ */ React.createElement("strong", null, "South Central")), /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Workspace"), /* @__PURE__ */ React.createElement("strong", null, "Digital Library")), /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Status"), /* @__PURE__ */ React.createElement("strong", null, "SSO Active")))), /* @__PURE__ */ React.createElement("section", { className: "ir-login-panel" }, /* @__PURE__ */ React.createElement("form", { className: "ir-login-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-card-head" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-kicker" }, /* @__PURE__ */ React.createElement(Icon, { name: "shield", size: 13 }), " Secure access"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "ir-login-title" }, "Sign in to RailWorks"), /* @__PURE__ */ React.createElement("p", { className: "ir-login-sub" }, "Use your railway ID to access station documents, approvals and validation workspaces."))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-form" }, /* @__PURE__ */ React.createElement(Field, { label: "Rail ID", required: true }, /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ React.createElement("main", { className: "ir-login-shell" }, /* @__PURE__ */ React.createElement("section", { className: "ir-login-visual", "aria-label": "Indian Railways access context" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-mark", style: { background: "none", padding: 0, overflow: "hidden", borderRadius: "50%" } }, /* @__PURE__ */ React.createElement("img", { src: "ir-logo.png", alt: "Indian Railways", style: { width: "100%", height: "100%", objectFit: "cover" } })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand-title" }, "Indian Railways"), /* @__PURE__ */ React.createElement("div", { className: "ir-login-brand-sub" }, "ESP, SIP and LOP control desk"))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-scene", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("div", { className: "ir-station-board" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-board-small" }, "\u092D\u093E\u0930\u0924\u0940\u092F \u0930\u0947\u0932"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-name" }, "Vijayawada Jn"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-hindi" }, "\u0935\u093F\u091C\u092F\u0935\u093E\u0921\u093C\u093E"), /* @__PURE__ */ React.createElement("div", { className: "ir-board-code" }, /* @__PURE__ */ React.createElement(Icon, { name: "train", size: 14 }), " BZA \xB7 SCoR"))), /* @__PURE__ */ React.createElement("div", { className: "ir-vb-train", "aria-label": "Vande Bharat Express illustration" }, /* @__PURE__ */ React.createElement("div", { className: "ir-vb-train-label" }, /* @__PURE__ */ React.createElement("span", { className: "ir-vb-train-name" }, "\u0935\u0928\u094D\u0926\u0947 \u092D\u093E\u0930\u0924 \u090F\u0915\u094D\u0938\u092A\u094D\u0930\u0947\u0938"), /* @__PURE__ */ React.createElement("span", { className: "ir-vb-train-badge" }, "Train 18 \xB7 SCoR")), /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 560 95", fill: "none", xmlns: "http://www.w3.org/2000/svg", className: "ir-vb-train-svg", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("ellipse", { cx: "280", cy: "90", rx: "272", ry: "5", fill: "rgba(14,27,44,0.07)" }), /* @__PURE__ */ React.createElement("rect", { x: "28", y: "16", width: "504", height: "62", fill: "white" }), /* @__PURE__ */ React.createElement("path", { d: "M28 16 C28 16 8 28 6 53 L6 78 L28 78 Z", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("path", { d: "M532 16 C532 16 552 28 554 53 L554 78 L532 78 Z", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "16", width: "548", height: "15", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "63", width: "548", height: "15", fill: "#1B4FA8" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "31", width: "548", height: "4", fill: "#FF7722" }), /* @__PURE__ */ React.createElement("rect", { x: "6", y: "59", width: "548", height: "4", fill: "#FF7722" }), /* @__PURE__ */ React.createElement("path", { d: "M16 34 L28 34 L28 63 L16 63 C10 57 8 51 10 45 Z", fill: "#C8E6FA", opacity: "0.9" }), /* @__PURE__ */ React.createElement("path", { d: "M544 34 L532 34 L532 63 L544 63 C550 57 552 51 550 45 Z", fill: "#C8E6FA", opacity: "0.9" }), /* @__PURE__ */ React.createElement("rect", { x: "36", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "58", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "80", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "102", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "124", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "146", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "168", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "190", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "212", y: "16", width: "3", height: "62", fill: "#1B4FA8", opacity: "0.3" }), /* @__PURE__ */ React.createElement("rect", { x: "222", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "244", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "266", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "288", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "310", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "332", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "354", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "376", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "398", y: "16", width: "3", height: "62", fill: "#1B4FA8", opacity: "0.3" }), /* @__PURE__ */ React.createElement("rect", { x: "408", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "430", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "452", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "474", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "496", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("rect", { x: "518", y: "38", width: "16", height: "13", rx: "1.5", fill: "#C8E6FA", opacity: "0.85" }), /* @__PURE__ */ React.createElement("text", { x: "280", y: "53", fontFamily: "Arial,sans-serif", fontSize: "9.5", fontWeight: "900", fill: "#1B4FA8", textAnchor: "middle", letterSpacing: "2.5" }, "VANDE BHARAT EXPRESS"), /* @__PURE__ */ React.createElement("rect", { x: "30", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "52", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "108", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "230", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "252", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "308", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "430", y: "77", width: "100", height: "5", rx: "1.5", fill: "#3a3a3a" }), /* @__PURE__ */ React.createElement("circle", { cx: "452", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "508", cy: "82", r: "6", fill: "#1a1a1a", stroke: "#666", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "0", y: "86", width: "560", height: "3", rx: "1.5", fill: "#888" }), /* @__PURE__ */ React.createElement("rect", { x: "0", y: "91", width: "560", height: "3", rx: "1.5", fill: "#888" }))), /* @__PURE__ */ React.createElement("div", { className: "ir-route-panel" }, /* @__PURE__ */ React.createElement("div", { className: "ir-route-head" }, /* @__PURE__ */ React.createElement("span", null, "Vijayawada Division"), /* @__PURE__ */ React.createElement("span", { className: "mono" }, "120.001 KM")), /* @__PURE__ */ React.createElement("div", { className: "ir-route-track" }, /* @__PURE__ */ React.createElement("div", { className: "ir-track-sleeper" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node a" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node b" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-node c" }), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label a" }, "Kondapalli"), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label b" }, "BZA"), /* @__PURE__ */ React.createElement("div", { className: "ir-route-label c" }, "Gudivada")))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-ops" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Zone"), /* @__PURE__ */ React.createElement("strong", null, "South Coast")), /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Workspace"), /* @__PURE__ */ React.createElement("strong", null, "Digital Library")), /* @__PURE__ */ React.createElement("div", { className: "ir-login-op" }, /* @__PURE__ */ React.createElement("span", null, "Status"), /* @__PURE__ */ React.createElement("strong", null, "SSO Active")))), /* @__PURE__ */ React.createElement("section", { className: "ir-login-panel" }, /* @__PURE__ */ React.createElement("form", { className: "ir-login-card", onSubmit: submit }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-card-head" }, /* @__PURE__ */ React.createElement("div", { className: "ir-login-kicker" }, /* @__PURE__ */ React.createElement(Icon, { name: "shield", size: 13 }), " Secure access"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "ir-login-title" }, "Sign in to RailWorks"), /* @__PURE__ */ React.createElement("p", { className: "ir-login-sub" }, "Use your railway ID to access station documents, approvals and validation workspaces."))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-form" }, /* @__PURE__ */ React.createElement(Field, { label: "Rail ID", required: true }, /* @__PURE__ */ React.createElement(
     TextInput,
     {
       leadingIcon: "users",
@@ -3331,7 +3293,7 @@ const LoginPage = ({ onLogin }) => {
         setError("");
       }
     }
-  )), /* @__PURE__ */ React.createElement("div", { className: "ir-login-form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Division" }, /* @__PURE__ */ React.createElement(Select, { value: division, onChange: (event) => setDivision(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "Nanded" }, "Nanded"), /* @__PURE__ */ React.createElement("option", { value: "Vijayawada" }, "Vijayawada"), /* @__PURE__ */ React.createElement("option", { value: "Guntur" }, "Guntur"), /* @__PURE__ */ React.createElement("option", { value: "Guntakal" }, "Guntakal"))), /* @__PURE__ */ React.createElement(Field, { label: "Access desk" }, /* @__PURE__ */ React.createElement(Select, { value: accessDesk, onChange: (event) => setAccessDesk(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "approver" }, "Approver"), /* @__PURE__ */ React.createElement("option", { value: "engineering" }, "Engineering"), /* @__PURE__ */ React.createElement("option", { value: "survey" }, "Survey"), /* @__PURE__ */ React.createElement("option", { value: "ohe" }, "OHE")))), /* @__PURE__ */ React.createElement("label", { className: "ir-login-remember" }, /* @__PURE__ */ React.createElement(Checkbox, { checked: remember, onChange: setRemember, ariaLabel: "Keep me signed in" }), /* @__PURE__ */ React.createElement("span", null, "Keep me signed in on this device")), error && /* @__PURE__ */ React.createElement("div", { className: "ir-login-error" }, /* @__PURE__ */ React.createElement(Icon, { name: "alert", size: 13 }), error), /* @__PURE__ */ React.createElement("div", { className: "ir-login-submit" }, /* @__PURE__ */ React.createElement(Btn, { type: "submit", variant: "accent", size: "lg", leadingIcon: "lock" }, "Sign in"))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-foot" }, /* @__PURE__ */ React.createElement("span", { className: "ir-login-secure" }, /* @__PURE__ */ React.createElement(Icon, { name: "shield", size: 13 }), " SSO gateway"), /* @__PURE__ */ React.createElement("span", null, "Help desk 139")))));
+  )), /* @__PURE__ */ React.createElement("div", { className: "ir-login-form-grid" }, /* @__PURE__ */ React.createElement(Field, { label: "Division" }, /* @__PURE__ */ React.createElement(Select, { value: division, onChange: (event) => setDivision(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "Vijayawada" }, "Vijayawada"), /* @__PURE__ */ React.createElement("option", { value: "Vijayawada" }, "Vijayawada"), /* @__PURE__ */ React.createElement("option", { value: "Guntur" }, "Guntur"), /* @__PURE__ */ React.createElement("option", { value: "Guntakal" }, "Guntakal"))), /* @__PURE__ */ React.createElement(Field, { label: "Access desk" }, /* @__PURE__ */ React.createElement(Select, { value: accessDesk, onChange: (event) => setAccessDesk(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "approver" }, "Approver"), /* @__PURE__ */ React.createElement("option", { value: "engineering" }, "Engineering"), /* @__PURE__ */ React.createElement("option", { value: "survey" }, "Survey"), /* @__PURE__ */ React.createElement("option", { value: "ohe" }, "OHE")))), /* @__PURE__ */ React.createElement("label", { className: "ir-login-remember" }, /* @__PURE__ */ React.createElement(Checkbox, { checked: remember, onChange: setRemember, ariaLabel: "Keep me signed in" }), /* @__PURE__ */ React.createElement("span", null, "Keep me signed in on this device")), error && /* @__PURE__ */ React.createElement("div", { className: "ir-login-error" }, /* @__PURE__ */ React.createElement(Icon, { name: "alert", size: 13 }), error), /* @__PURE__ */ React.createElement("div", { className: "ir-login-submit" }, /* @__PURE__ */ React.createElement(Btn, { type: "submit", variant: "accent", size: "lg", leadingIcon: "lock" }, "Sign in"))), /* @__PURE__ */ React.createElement("div", { className: "ir-login-foot" }, /* @__PURE__ */ React.createElement("span", { className: "ir-login-secure" }, /* @__PURE__ */ React.createElement(Icon, { name: "shield", size: 13 }), " SSO gateway"), /* @__PURE__ */ React.createElement("span", null, "Help desk 139")))));
 };
 const DigitalLibraryApp = () => {
   const [session, setSession] = useStateLib(readLoginSession);
@@ -3349,7 +3311,7 @@ const DigitalLibraryPage = () => {
   const [activeNav, setActiveNav] = useStateLib("library");
   const [recentlyAdded, setRecentlyAdded] = useStateLib(null);
   const [toast, setToast] = useStateLib("");
-  const [zone, setZone] = useStateLib("SCR");
+  const [zone, setZone] = useStateLib("SCoR");
   const [division, setDivision] = useStateLib("Vijayawada");
   const [sectionScope, setSectionScope] = useStateLib("all");
   const [search, setSearch] = useStateLib("");
