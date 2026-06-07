@@ -64,10 +64,11 @@ const dashCSS = `
 .ir-main-embedded { flex: 1; width: 100%; background: var(--canvas); }
 
 /* \u2500\u2500\u2500\u2500 Top filter bar (redesigned) \u2500\u2500\u2500\u2500 */
-.ir-topbar { background: var(--canvas); border-bottom: none; display: flex; flex-direction: column; flex-shrink: 0; }
-.ir-topbar-titlerow { display: flex; align-items: center; padding: 24px 28px 12px; }
-.ir-topbar-title { font-size: 24px; font-weight: 800; color: var(--ink-900); letter-spacing: 0; line-height: 1.1; }
-.ir-topbar-sub { font-size: 13px; color: var(--ink-500); margin-top: 7px; display: flex; align-items: center; gap: 7px; }
+.ir-topbar { background: var(--paper); border-bottom: none; display: flex; flex-direction: column; flex-shrink: 0; }
+.ir-topbar-titlerow { display: flex; align-items: center; gap: 16px; padding: 22px 28px 20px; background: linear-gradient(135deg, var(--accent-soft) 0%, var(--paper) 100%); box-shadow: 0 3px 0 var(--accent), 0 4px 20px rgba(14,27,44,.07); }
+.ir-topbar-icon-badge { width: 42px; height: 42px; border-radius: 12px; background: var(--accent-soft); color: var(--accent-text); display: grid; place-items: center; flex-shrink: 0; border: 1px solid rgba(55,55,200,.14); }
+.ir-topbar-title { font-size: 28px; font-weight: 800; color: var(--ink-900); letter-spacing: -0.5px; line-height: 1.1; }
+.ir-topbar-sub { font-size: 13px; color: var(--ink-500); margin-top: 5px; display: flex; align-items: center; gap: 7px; }
 .ir-topbar-sep { color: var(--ink-300); font-size: 11px; }
 .ir-topbar-sync { display: inline-flex; align-items: center; gap: 5px; }
 .ir-sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); flex-shrink: 0; }
@@ -618,7 +619,7 @@ const TopBar = () => {
     { id: "month", label: "This Month" }
   ];
   const customLabel = fmtDateShort(dateRange.start) + " \u2013 " + fmtDateShort(dateRange.end);
-  return /* @__PURE__ */ React.createElement("div", { className: "ir-topbar" }, /* @__PURE__ */ React.createElement("div", { className: "ir-topbar-titlerow" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-topbar-title" }, "Dashboard"), /* @__PURE__ */ React.createElement("div", { className: "ir-topbar-sub" }, "South Central Railway", /* @__PURE__ */ React.createElement("span", { className: "ir-topbar-sep" }, "\u2022"), /* @__PURE__ */ React.createElement("span", { className: "ir-topbar-sync" }, /* @__PURE__ */ React.createElement("span", { className: "ir-sync-dot" }), "Updated 4 mins ago")))), /* @__PURE__ */ React.createElement("div", { className: "ir-filter-panel" }, /* @__PURE__ */ React.createElement("div", { className: "ir-fp-section" }, /* @__PURE__ */ React.createElement("div", { className: "ir-fp-label" }, "Scope"), /* @__PURE__ */ React.createElement("div", { className: "ir-fp-chips" }, /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ React.createElement("div", { className: "ir-topbar" }, /* @__PURE__ */ React.createElement("div", { className: "ir-topbar-titlerow" }, /* @__PURE__ */ React.createElement("div", { className: "ir-topbar-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "chart", size: 20 })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ir-topbar-title" }, "Dashboard"), /* @__PURE__ */ React.createElement("div", { className: "ir-topbar-sub" }, "South Central Railway", /* @__PURE__ */ React.createElement("span", { className: "ir-topbar-sep" }, "\u2022"), /* @__PURE__ */ React.createElement("span", { className: "ir-topbar-sync" }, /* @__PURE__ */ React.createElement("span", { className: "ir-sync-dot" }), "Updated 4 mins ago")))), /* @__PURE__ */ React.createElement("div", { className: "ir-filter-panel" }, /* @__PURE__ */ React.createElement("div", { className: "ir-fp-section" }, /* @__PURE__ */ React.createElement("div", { className: "ir-fp-label" }, "Scope"), /* @__PURE__ */ React.createElement("div", { className: "ir-fp-chips" }, /* @__PURE__ */ React.createElement(
     ScopeChipComp,
     {
       value: zone,

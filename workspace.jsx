@@ -1222,6 +1222,9 @@ const WorkspacePage = ({ onNavigate }) => {
 
       {/* Page header */}
       <div className="dl-page-header">
+        <div className="dl-page-icon-badge">
+          <Icon name="inbox" size={20} />
+        </div>
         <div className="dl-page-heading">
           <div className="dl-page-title">Workspace</div>
           <div className="dl-page-sub">Manage your assigned work</div>

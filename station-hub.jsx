@@ -491,11 +491,12 @@
   ];
   const shCSS = `
 .sh-content { display:flex; flex-direction:column; flex:1; min-width:0; height:100vh; overflow:hidden; background:var(--canvas); }
-.sh-record-head { background:var(--canvas); border-bottom:none; padding:24px 28px 12px; flex-shrink:0; display:flex; align-items:flex-start; gap:24px; min-height:auto; }
-.sh-record-heading { min-width:0; display:grid; gap:7px; }
+.sh-record-head { background:linear-gradient(135deg,var(--accent-soft) 0%,var(--paper) 100%); border-bottom:none; padding:22px 28px 20px; flex-shrink:0; display:flex; align-items:center; gap:16px; box-shadow:0 3px 0 var(--accent),0 4px 20px rgba(14,27,44,.07); }
+.sh-record-heading { min-width:0; display:grid; gap:5px; }
+.sh-record-icon-badge { width:42px; height:42px; border-radius:12px; background:var(--accent-soft); color:var(--accent-text); display:grid; place-items:center; flex-shrink:0; border:1px solid rgba(55,55,200,.14); }
 .sh-back-btn { height:34px; display:inline-flex; align-items:center; gap:8px; padding:0 12px; border:var(--hairline); border-radius:var(--r-md); background:transparent; color:var(--ink-500); font-family:var(--font-sans); font-size:12.5px; font-weight:500; cursor:pointer; transition:background 120ms,color 120ms,border-color 120ms; }
 .sh-record-breadcrumb { margin:0; }
-.sh-record-title { font-size:24px; font-weight:800; color:var(--ink-900); line-height:1.1; display:flex; align-items:center; gap:8px; }
+.sh-record-title { font-size:28px; font-weight:800; color:var(--ink-900); line-height:1.1; display:flex; align-items:center; gap:8px; letter-spacing:-0.5px; }
 .sh-record-sub { color:var(--ink-500); font-size:13px; line-height:1.35; }
 .sh-record-actions { display:flex; gap:8px; align-items:center; justify-content:flex-end; flex-wrap:wrap; margin-left:auto; flex-shrink:0; }
 .sh-inline-actions { display:flex; gap:8px; align-items:center; justify-content:flex-end; flex-wrap:wrap; }
@@ -850,6 +851,15 @@
 .sh-doc-file-ext[data-ext="las"],.sh-doc-file-ext[data-ext="tif"],.sh-doc-file-ext[data-ext="csv"] { background:oklch(0.94 0.04 85); color:var(--warning-text); }
 .sh-doc-file-main { display:grid; gap:5px; min-width:0; }
 .sh-doc-file-name { color:var(--ink-900); font-size:12.5px; font-weight:700; font-family:var(--font-mono); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.sh-doc-name-cell { display:flex; align-items:center; gap:8px; min-width:0; }
+.sh-doc-ft-badge { display:inline-flex; align-items:center; justify-content:center; min-width:34px; height:20px; padding:0 5px; border-radius:4px; font-size:9px; font-weight:800; font-family:var(--font-mono,monospace); letter-spacing:.04em; flex-shrink:0; border:1px solid transparent; }
+.sh-doc-ft-badge[data-ft="DWG"] { background:var(--accent-soft); color:var(--accent-text); border-color:rgba(55,55,200,.18); }
+.sh-doc-ft-badge[data-ft="PDF"] { background:oklch(0.95 0.05 25); color:oklch(0.42 0.20 25); border-color:oklch(0.88 0.07 25); }
+.sh-doc-ft-badge[data-ft="XLS"],.sh-doc-ft-badge[data-ft="XLSX"] { background:var(--success-soft); color:var(--success-text); border-color:oklch(0.85 0.10 150); }
+.sh-doc-ft-badge[data-ft="CSV"] { background:oklch(0.95 0.04 150); color:oklch(0.42 0.14 150); border-color:oklch(0.86 0.08 150); }
+.sh-doc-ft-badge[data-ft="LAS"] { background:oklch(0.94 0.04 280); color:oklch(0.42 0.18 280); border-color:oklch(0.86 0.08 280); }
+.sh-doc-ft-badge[data-ft="TIF"],.sh-doc-ft-badge[data-ft="TIFF"] { background:oklch(0.94 0.04 200); color:oklch(0.40 0.14 200); border-color:oklch(0.85 0.08 200); }
+.sh-doc-ft-badge[data-ft="DXF"] { background:oklch(0.94 0.04 250); color:oklch(0.42 0.16 250); border-color:oklch(0.86 0.08 250); }
 .sh-doc-file-meta { display:flex; align-items:center; flex-wrap:wrap; gap:7px; color:var(--ink-500); font-size:11px; }
 .sh-doc-mini-chip { min-height:20px; display:inline-flex; align-items:center; gap:4px; padding:0 6px; border-radius:5px; background:var(--ink-100); color:var(--ink-700); font-size:10.5px; font-weight:600; }
 .sh-doc-status { display:inline-flex; align-items:center; gap:6px; min-height:24px; padding:0 9px; border-radius:var(--r-full); color:var(--paper); font-size:11.5px; font-weight:600; white-space:nowrap; }
@@ -1432,6 +1442,19 @@
 .sh-digitize-center-title { font-size:17px; font-weight:800; color:var(--ink-900); }
 .sh-digitize-center-sub { font-size:13px; color:var(--ink-500); line-height:1.55; }
 .sh-digitize-generated { flex:1; padding:0; display:flex; flex-direction:column; background:var(--ink-50); overflow:hidden; } .sh-digitize-generated--editor { padding:0; } .sh-digitize-editor-img { width:100%; height:100%; object-fit:cover; object-position:top left; display:block; }
+.sh-sip-splash { position:fixed; inset:0; z-index:500; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px; animation:sh-splash-fade-in 0.35s ease forwards; }
+.sh-sip-splash[data-exit="true"] { animation:sh-splash-fade-out 0.45s ease forwards; }
+.sh-sip-splash-logo { width:200px; height:auto; animation:sh-splash-logo-in 0.55s cubic-bezier(0.34,1.26,0.64,1) 0.15s both; }
+.sh-sip-splash-texts { display:flex; flex-direction:column; align-items:center; gap:6px; animation:sh-splash-logo-in 0.45s ease 0.35s both; }
+.sh-sip-splash-title { font-size:15px; font-weight:700; color:var(--ink-900); letter-spacing:0.01em; }
+.sh-sip-splash-sub { font-size:12.5px; color:var(--ink-400); }
+.sh-sip-splash-progress { width:260px; animation:sh-splash-logo-in 0.4s ease 0.45s both; }
+.sh-sip-splash-track { width:100%; height:3px; border-radius:2px; background:var(--ink-100); overflow:hidden; }
+.sh-sip-splash-bar { height:100%; width:0%; border-radius:2px; background:linear-gradient(90deg, #3737c8 0%, #6366f1 60%, #818cf8 100%); animation:sh-splash-bar-fill 2.6s cubic-bezier(0.4,0,0.2,1) 0.55s forwards; }
+@keyframes sh-splash-fade-in { from { opacity:0 } to { opacity:1 } }
+@keyframes sh-splash-fade-out { from { opacity:1 } to { opacity:0 } }
+@keyframes sh-splash-logo-in { from { opacity:0; transform:scale(0.86) translateY(8px) } to { opacity:1; transform:scale(1) translateY(0) } }
+@keyframes sh-splash-bar-fill { 0% { width:0% } 60% { width:72% } 85% { width:91% } 100% { width:100% } }
 .sh-digital-editor-full { position:fixed; inset:0; z-index:200; display:grid; grid-template-areas:"top top top top" "rail left canvas right" "bottom bottom bottom bottom"; grid-template-columns:40px 240px minmax(0,1fr) 240px; grid-template-rows:44px minmax(0,1fr) 44px; background:#c8c8c8; }
 .sh-de-topbar { grid-area:top; display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:var(--paper); border-bottom:var(--hairline); }
 .sh-de-topbar-left { display:flex; align-items:center; gap:10px; }
@@ -1473,11 +1496,28 @@
 .sh-de-prop-mono { font-family:var(--font-mono); font-size:11px; }
 .sh-de-status-icons { display:flex; gap:8px; color:var(--ink-400); }
 .sh-de-icon-row { display:flex; gap:6px; color:var(--ink-400); }
-.sh-de-bottombar { grid-area:bottom; background:var(--paper); border-top:var(--hairline); display:flex; align-items:center; justify-content:center; gap:2px; padding:0 16px; }
+.sh-de-bottombar { grid-area:bottom; background:var(--paper); border-top:var(--hairline); display:flex; align-items:center; justify-content:center; gap:2px; padding:0 16px; position:relative; }
 .sh-de-tool-group { display:flex; gap:1px; }
 .sh-de-tool-btn { width:30px; height:30px; border:none; background:transparent; color:var(--ink-600); display:grid; place-items:center; cursor:pointer; border-radius:var(--r-sm); }
 .sh-de-tool-btn:hover { background:var(--ink-100); color:var(--ink-900); }
 .sh-de-tool-divider { width:1px; height:20px; background:var(--ink-200); margin:0 8px; flex-shrink:0; }
+.sh-de-shapes-subhead { display:flex; align-items:center; padding:7px 12px 4px; font-size:11px; font-weight:700; color:var(--ink-600); letter-spacing:.3px; }
+.sh-de-shapes-subhead-actions { display:flex; align-items:center; gap:6px; margin-left:auto; color:var(--ink-400); }
+.sh-de-shapes-subhead-actions .icon { cursor:pointer; }
+.sh-de-fill-btn { flex:1; height:26px; border:var(--hairline); border-radius:var(--r-sm); background:transparent; font-size:11.5px; color:var(--ink-600); cursor:pointer; font-family:var(--font-sans); }
+.sh-de-fill-btn:hover { background:var(--ink-50); }
+.sh-de-stroke-row { flex:1; display:flex; align-items:center; gap:5px; }
+.sh-de-stroke-line { width:26px; height:2px; background:var(--ink-800); border-radius:1px; flex-shrink:0; }
+.sh-de-stroke-val { flex:1; font-size:11.5px; color:var(--ink-800); font-family:var(--font-mono,monospace); }
+.sh-de-stroke-chevron { color:var(--ink-400); cursor:pointer; }
+.sh-de-stroke-minus { width:20px; height:20px; border:var(--hairline); border-radius:var(--r-sm); background:transparent; display:grid; place-items:center; cursor:pointer; color:var(--ink-500); flex-shrink:0; }
+.sh-de-prop-help { padding:10px 12px 14px; font-size:11px; color:var(--ink-400); line-height:1.55; text-align:center; }
+.sh-de-prop-link { color:var(--accent-text); text-decoration:underline dotted; cursor:pointer; }
+.sh-de-prop-custom-label { font-size:11.5px; color:var(--ink-700); font-weight:500; }
+.sh-de-prop-row--between { justify-content:space-between; }
+.sh-de-bottombar-left { position:absolute; left:16px; display:flex; align-items:center; gap:4px; }
+.sh-de-bottombar-measure { font-size:11.5px; font-weight:600; color:var(--ink-700); font-family:var(--font-mono,monospace); margin:0 8px; }
+.sh-de-layer-color { width:10px; height:10px; border-radius:2px; background:var(--accent); flex-shrink:0; }
 .sh-single-doc-card[data-selected="true"],
 .sh-station-status-card[data-selected="true"] { border-color:var(--accent); background:var(--accent-soft); box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent), var(--shadow-md); }
 .sh-v3-seg button[data-active="true"],
@@ -1606,7 +1646,7 @@
       title: "SIP",
       fullName: "Signal Interlocking Plan",
       status: "Not Started",
-      filesLabel: "3"
+      filesLabel: "0"
     },
     {
       id: "lop",
@@ -1618,17 +1658,13 @@
   ];
   const DOC_TAB_META = [
     { id: "esp", label: "ESP", count: 0 },
-    { id: "sip", label: "SIP", count: 3 },
+    { id: "sip", label: "SIP", count: 0 },
     { id: "lop", label: "LOP", count: 0 },
     { id: "survey", label: "Survey Data", count: 4 }
   ];
   const DOCUMENT_TABLE_ROWS = {
     esp: [],
-    sip: [
-      { fileName: "AWB-SIP-Interlocking-v3.pdf", status: "Approved", tone: "success", user: "S. Kumar", initials: "SK", role: "SSE", uploaded: "3 hours ago" },
-      { fileName: "AWB-SIP-Draft-v4.dwg", status: "Under Review", tone: "warning", user: "R. Prasad", initials: "RP", role: "DSTE", uploaded: "Today, 11:10" },
-      { fileName: "AWB-RouteLocking-v2.xlsx", status: "Verified", tone: "purple", user: "V. Rao", initials: "VR", role: "JE/Signal", uploaded: "1 day ago" }
-    ],
+    sip: [],
     lop: [],
     survey: [
       { fileName: "AWB-LiDAR-PointCloud-v2026.05.las", status: "Approved", tone: "success", user: "A. Survey", initials: "AS", role: "Survey", uploaded: "May 12, 2026" },
@@ -1652,7 +1688,8 @@
   const StationDocumentStatus = ({ active, onChange, rowsByType }) => /* @__PURE__ */ React.createElement("section", { className: "sh-station-status", "aria-label": "Station document status" }, /* @__PURE__ */ React.createElement("div", { className: "sh-station-status-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-station-status-title" }, /* @__PURE__ */ React.createElement(Icon, { name: "layers", size: 16, style: { color: "var(--accent)" } }), "Station Documents"))), /* @__PURE__ */ React.createElement("div", { className: "sh-station-status-grid" }, STATION_DOCUMENT_STATUS.map((item, index) => {
     const fileCount = ((rowsByType == null ? void 0 : rowsByType[item.id]) || DOCUMENT_TABLE_ROWS[item.id] || []).length || Number(item.filesLabel);
     const espRowList = (rowsByType == null ? void 0 : rowsByType.esp) || [];
-    const displayStatus = item.id === "esp" && espRowList.length > 0 ? (espRowList[0].status || item.status) : item.status;
+    const sipRowList = (rowsByType == null ? void 0 : rowsByType.sip) || [];
+    const displayStatus = item.id === "esp" && espRowList.length > 0 ? (espRowList[0].status || item.status) : item.id === "sip" && sipRowList.length > 0 ? (sipRowList[0].status || item.status) : item.status;
     const cardEl = /* @__PURE__ */ React.createElement(
       "button",
       {
@@ -1706,10 +1743,12 @@
     const activeDocStatus = STATION_DOCUMENT_STATUS.find((item) => item.id === active) || { title: activeMeta.label, fullName: "" };
     const activeTitle = active === "survey" ? "Survey Data" : `${activeDocStatus.title} Documents`;
     const activeIcon = { survey: "layers", esp: "file_check", sip: "branch", lop: "book" }[active] || "file_check";
-    return /* @__PURE__ */ React.createElement("section", { className: "sh-workspace-panel" }, /* @__PURE__ */ React.createElement(StationDocumentStatus, { active, onChange: switchTab, rowsByType }), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-toolbar" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-controls" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: "2px" } }, /* @__PURE__ */ React.createElement("h3", { className: "sh-doc-files-title", style: { display: "flex", alignItems: "center", gap: "8px", margin: 0 } }, /* @__PURE__ */ React.createElement(Icon, { name: activeIcon, size: 16, style: { color: "var(--accent)" } }), activeTitle), activeDocStatus.fullName && /* @__PURE__ */ React.createElement("span", { className: "sh-doc-files-sub", style: { margin: 0 } }, activeDocStatus.fullName))), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "upload", onClick: () => onUpload(activeMeta.label) }, uploadLabel)), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-card" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-scroll" }, /* @__PURE__ */ React.createElement("table", { className: "sh-doc-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, active === "esp" ? "ESP" : "File Name")), active === "esp" && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Version")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "File Type")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digitize Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Uploaded By")), active === "esp" && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Approval Status")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, pagedRows.map((row, index) => {
+    return /* @__PURE__ */ React.createElement("section", { className: "sh-workspace-panel" }, /* @__PURE__ */ React.createElement(StationDocumentStatus, { active, onChange: switchTab, rowsByType }), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-toolbar" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-controls" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: "2px" } }, /* @__PURE__ */ React.createElement("h3", { className: "sh-doc-files-title", style: { display: "flex", alignItems: "center", gap: "8px", margin: 0 } }, /* @__PURE__ */ React.createElement(Icon, { name: activeIcon, size: 16, style: { color: "var(--accent)" } }), activeTitle), activeDocStatus.fullName && /* @__PURE__ */ React.createElement("span", { className: "sh-doc-files-sub", style: { margin: 0 } }, activeDocStatus.fullName))), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "upload", onClick: () => onUpload(activeMeta.label) }, uploadLabel)), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-card" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-scroll" }, /* @__PURE__ */ React.createElement("table", { className: "sh-doc-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, active === "esp" ? "ESP" : active === "sip" ? "SIP" : "File Name")), (active === "esp" || active === "sip") && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Version")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "File Type")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digitize Status")), active === "sip" && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Generated from")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Uploaded By")), (active === "esp" || active === "sip") && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Approval Status")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, pagedRows.map((row, index) => {
       const menuKey = `${active}-${pageStart + index}-${row.fileName}`;
       const fileType = row.fileType || ((row.fileName.split(".").pop() || "").toUpperCase()) || activeDocType;
-      return /* @__PURE__ */ React.createElement("tr", { key: menuKey, onClick: () => onOpenRow(active, row), style: { cursor: active === "esp" ? "pointer" : "default" } }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-file-name" }, row.fileName)), active === "esp" && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-version" }, row.version || "—")), /* @__PURE__ */ React.createElement("td", null, fileType), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-status", "data-tone": row.tone }, row.tone === "success" && /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 13 }), row.status)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-cell" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-avatar", style: { background: avatarColor(row.initials) } }, row.initials), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-name" }, row.user), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-role" }, row.uploaded)))), active === "esp" && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-status", "data-tone": row.approvalStatus === "Approved" ? "success" : "warning" }, row.approvalStatus || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-actions" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-btn", type: "button", onClick: (event) => {
+      const rawExt = row.fileName.includes(".") ? row.fileName.split(".").pop().toUpperCase() : "";
+      const badgeLabel = rawExt && rawExt.length <= 5 ? rawExt : (row.fileType && row.fileType.length <= 5 ? row.fileType.toUpperCase() : "");
+      return /* @__PURE__ */ React.createElement("tr", { key: menuKey, onClick: () => onOpenRow(active, row), style: { cursor: (active === "esp" || active === "sip") ? "pointer" : "default" } }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-name-cell" }, badgeLabel && /* @__PURE__ */ React.createElement("span", { className: "sh-doc-ft-badge", "data-ft": badgeLabel }, badgeLabel), /* @__PURE__ */ React.createElement("span", { className: "sh-doc-file-name" }, row.fileName))), (active === "esp" || active === "sip") && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-version" }, row.version || "—")), /* @__PURE__ */ React.createElement("td", null, fileType), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-status", "data-tone": row.tone }, row.tone === "success" && /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 13 }), row.status)), active === "sip" && /* @__PURE__ */ React.createElement("td", null, row.generatedFrom ? /* @__PURE__ */ React.createElement("span", { className: "sh-doc-version" }, row.generatedFrom) : /* @__PURE__ */ React.createElement("span", { style: { color: "var(--ink-400)" } }, "—")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-cell" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-avatar", style: { background: avatarColor(row.initials) } }, row.initials), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-name" }, row.user), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-role" }, row.uploaded)))), (active === "esp" || active === "sip") && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-status", "data-tone": row.approvalStatus === "Approved" ? "success" : "warning" }, row.approvalStatus || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-actions" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-btn", type: "button", onClick: (event) => {
         event.stopPropagation();
         onOpenRow(active, row);
       } }, /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 13 }), "View"), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-menu-wrap" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-icon", type: "button", "aria-label": `More actions for ${row.fileName}`, onClick: (event) => {
@@ -1720,7 +1759,7 @@
       } }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 14 })), openMenu === menuKey && menuAnchor && /* @__PURE__ */ React.createElement("div", { className: "sh-doc-row-menu", style: { position: "fixed", top: menuAnchor.top, right: menuAnchor.right, zIndex: 9999 }, onClick: (event) => event.stopPropagation() }, ["Download", "Clone", "View History", "Replace File"].map((action) => /* @__PURE__ */ React.createElement("button", { type: "button", key: action, onClick: () => {
         if (action === "Clone") { cloneDocRow(row); } else { openStub(`${action} ${row.fileName}`); setOpenMenu(""); setMenuAnchor(null); }
       } }, /* @__PURE__ */ React.createElement(Icon, { name: action === "Download" ? "download" : action === "Clone" ? "copy" : action === "Replace File" ? "upload" : "clock", size: 13 }), action)))))));
-    }), !rows.length && /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { colSpan: active === "esp" ? 7 : 5 }, /* @__PURE__ */ React.createElement("div", { className: "sh-single-empty" }, "No documents available for ", activeMeta.label, ".")))))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-foot sh-doc-pagination" }, /* @__PURE__ */ React.createElement("div", { className: "sh-archive-foot-left" }, /* @__PURE__ */ React.createElement("span", null, "Showing ", rows.length ? pageStart + 1 : 0, "-", pageEnd, " of ", rows.length, " documents")), /* @__PURE__ */ React.createElement("div", { className: "ds-table-pager" }, /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === 1, onClick: () => setCurrentPage((page) => Math.max(1, page - 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_left", size: 14 })), pageNumbers.map((page, index) => /* @__PURE__ */ React.createElement(React.Fragment, { key: page }, index > 0 && page - pageNumbers[index - 1] > 1 && /* @__PURE__ */ React.createElement("span", { className: "sh-page-ellipsis" }, "..."), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", "data-current": page === safeCurrentPage ? "true" : void 0, onClick: () => setCurrentPage(page) }, page))), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === totalPages, onClick: () => setCurrentPage((page) => Math.min(totalPages, page + 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 14 }))))));
+    }), !rows.length && /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { colSpan: active === "esp" ? 7 : active === "sip" ? 8 : 5 }, /* @__PURE__ */ React.createElement("div", { className: "sh-single-empty" }, "No documents available for ", activeMeta.label, ".")))))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-foot sh-doc-pagination" }, /* @__PURE__ */ React.createElement("div", { className: "sh-archive-foot-left" }, /* @__PURE__ */ React.createElement("span", null, "Showing ", rows.length ? pageStart + 1 : 0, "-", pageEnd, " of ", rows.length, " documents")), /* @__PURE__ */ React.createElement("div", { className: "ds-table-pager" }, /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === 1, onClick: () => setCurrentPage((page) => Math.max(1, page - 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_left", size: 14 })), pageNumbers.map((page, index) => /* @__PURE__ */ React.createElement(React.Fragment, { key: page }, index > 0 && page - pageNumbers[index - 1] > 1 && /* @__PURE__ */ React.createElement("span", { className: "sh-page-ellipsis" }, "..."), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", "data-current": page === safeCurrentPage ? "true" : void 0, onClick: () => setCurrentPage(page) }, page))), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === totalPages, onClick: () => setCurrentPage((page) => Math.min(totalPages, page + 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 14 }))))));
   };
   const ESPWorkflowPage = ({ station, upload, digitalVersions, onBack, onReviewAssets, onOpenVersion, onClone }) => {
     const [cloneSourceRow, setCloneSourceRow] = useStateHub(null);
@@ -1753,7 +1792,7 @@
         crumbs: ["Digital Library", { label: station.name, onClick: onBack }, "ESP"],
         searchPlaceholder: "Search ESP metadata, extracted assets, versions..."
       }
-    ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, currentUpload.fileName, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, "ESP")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, station.name, " \xB7 Engineering Scale Plan file and digital ESP versions")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "download", onClick: () => openStub("Download all ESP files") }, "Download All"), !digitalVersions.length && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: onReviewAssets }, pimButtonLabel))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "ESP Metadata"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Uploaded ESP file and extraction readiness for Aurangabad station."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-chips-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "sh-detail-chips" }, /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Station"), `${station.name} (${station.code})`), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Zone"), station.zone || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Division"), station.division || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Section"), station.section || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Source File"), currentUpload.fileName, /* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "Download", onClick: () => openStub(`Download ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 12 })), /* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "View", onClick: () => openStub(`View ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 12 }))), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Uploaded By"), currentUpload.user || CURRENT_USER.name)))), /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "Digital ESP Versions"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Generated digital ESP versions created from reviewed PIM assets."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "sh-hub-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digital Version")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Created From")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digitize Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "SOD Validation")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Approval Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Last Activity")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, pagedVersions.map((row) => /* @__PURE__ */ React.createElement("tr", { key: row.id }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, row.version)), /* @__PURE__ */ React.createElement("td", null, row.createdFrom || "—"), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.digitizeStatus || "Generated")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.sodValidation || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.approvalStatus || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-name" }, row.lastActivityBy || row.updatedBy), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-role" }, row.lastActivityAt || row.updated)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-actions" }, /* @__PURE__ */ React.createElement(ESPRowAction, { icon: "eye", primary: true, onClick: () => onOpenVersion(row) }, "Open"), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-menu-wrap" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-icon", type: "button", "aria-label": `More actions for ${row.version}`, onClick: (event) => { const rect = event.currentTarget.getBoundingClientRect(); setMenuAnchor({ top: rect.bottom + 4, right: window.innerWidth - rect.right }); setOpenMenu((current) => current === row.id ? "" : row.id); } }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 14 })), openMenu === row.id && menuAnchor && /* @__PURE__ */ React.createElement("div", { className: "sh-doc-row-menu", style: { position: "fixed", top: menuAnchor.top, right: menuAnchor.right, zIndex: 9999 } }, /* @__PURE__ */ React.createElement("button", { type: "button", onClick: () => {
+    ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, currentUpload.fileName, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, "ESP")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, station.name, " \xB7 Engineering Scale Plan file and digital ESP versions")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "download", onClick: () => openStub("Download all ESP files") }, "Download All"), !digitalVersions.length && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: onReviewAssets }, pimButtonLabel))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "ESP Metadata"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Uploaded ESP file and extraction readiness for Aurangabad station."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-chips-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "sh-detail-chips" }, /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Station"), `${station.name} (${station.code})`), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Zone"), station.zone || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Division"), station.division || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Section"), station.section || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Source File"), currentUpload.fileName, /* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "Download", onClick: () => openStub(`Download ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 12 })), /* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "View", onClick: () => openStub(`View ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 12 }))), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Uploaded By"), currentUpload.user || CURRENT_USER.name)))), /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "Digital ESP Versions"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Generated digital ESP versions created from reviewed PIM assets."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "sh-hub-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digital Version")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Created From")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digitize Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "SOD Validation")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Approval Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Last Activity")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, pagedVersions.map((row) => /* @__PURE__ */ React.createElement("tr", { key: row.id }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, row.version)), /* @__PURE__ */ React.createElement("td", null, row.createdFrom || "—"), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.digitizeStatus || "Generated")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.sodValidation || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.approvalStatus || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-name" }, row.lastActivityBy || row.updatedBy), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-role" }, row.lastActivityAt || row.updated)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-actions" }, /* @__PURE__ */ React.createElement(ESPRowAction, { icon: "eye", primary: true, onClick: () => onOpenVersion(row) }, "Open"), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-menu-wrap" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-icon", type: "button", "aria-label": `More actions for ${row.version}`, onClick: (event) => { const rect = event.currentTarget.getBoundingClientRect(); setMenuAnchor({ top: rect.bottom + 4, right: window.innerWidth - rect.right }); setOpenMenu((current) => current === row.id ? "" : row.id); } }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 14 })), openMenu === row.id && menuAnchor && /* @__PURE__ */ React.createElement("div", { className: "sh-doc-row-menu", style: { position: "fixed", top: menuAnchor.top, right: menuAnchor.right, zIndex: 9999 } }, /* @__PURE__ */ React.createElement("button", { type: "button", onClick: () => {
       setCloneSourceRow(row); setCloneVerNum("V0"); setCloneRevNum("R0"); setCloneAltNum("A0");
       setOpenMenu("");
       setMenuAnchor(null);
@@ -2111,7 +2150,7 @@
     reviewed: { label: "Reviewed", tone: "success" },
     correction: { label: "Needs Correction", tone: "danger" }
   };
-  const ReviewExtractedAssetsPage = ({ station, upload, mode = "review", version, onBack, onFinish, onSaveAndClose }) => {
+  const ReviewExtractedAssetsPage = ({ station, upload, mode = "review", version, onBack, onFinish, onSaveAndClose, onSipDone }) => {
     const isDigitize = mode === "digitize";
     const verbTitle = isDigitize ? "Digitize" : "Review";
     const verbSection = isDigitize ? "Digitize ESP" : "Uploaded ESP";
@@ -2131,6 +2170,11 @@
     const isDigitizeStep = !!activeGroup.isDigitize;
     const pageVerbTitle = isDigitizeStep ? "Digitize" : verbTitle;
     const [digitalGenerated, setDigitalGenerated] = useStateHub(false);
+    const [sipEditorOpen, setSipEditorOpen] = useStateHub(false);
+    const [sipLoading, setSipLoading] = useStateHub(false);
+    const [sipLoadingExit, setSipLoadingExit] = useStateHub(false);
+    const [espLoading, setEspLoading] = useStateHub(false);
+    const [espLoadingExit, setEspLoadingExit] = useStateHub(false);
     const unitLabel = assetUnitLabel(activeGroup.type);
     const draftKey = activeGroup.type + "-" + activeInstance;
     const initialDraft = Object.fromEntries(assetConfigFor(activeGroup, activeInstance));
@@ -2211,6 +2255,16 @@
       setToast("Digital ESP generated");
       window.setTimeout(() => setToast(""), 2500);
     };
+    const openEspEditor = () => {
+      setEspLoading(true);
+      setEspLoadingExit(false);
+      window.setTimeout(() => setEspLoadingExit(true), 2900);
+      window.setTimeout(() => {
+        setEspLoading(false);
+        setEspLoadingExit(false);
+        handleDigitise();
+      }, 3350);
+    };
     const saveGeneratedDigital = () => {
       if (onFinish) onFinish({ close: true });
     };
@@ -2219,9 +2273,154 @@
       if (digitalGenerated && deCanvasRef.current) {
         const el = deCanvasRef.current;
         el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
-        el.scrollTop = 0;
+        el.scrollTop = (el.scrollHeight - el.clientHeight) / 2;
       }
     }, [digitalGenerated]);
+    const openSipEditor = () => {
+      setSipLoading(true);
+      setSipLoadingExit(false);
+      window.setTimeout(() => setSipLoadingExit(true), 2900);
+      window.setTimeout(() => {
+        setSipLoading(false);
+        setSipLoadingExit(false);
+        setSipEditorOpen(true);
+        setToast("Digital SIP generated successfully");
+        window.setTimeout(() => setToast(""), 2500);
+      }, 3350);
+    };
+    const deSipCanvasRef = React.useRef(null);
+    React.useEffect(() => {
+      if (sipEditorOpen && deSipCanvasRef.current) {
+        const el = deSipCanvasRef.current;
+        el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
+        el.scrollTop = (el.scrollHeight - el.clientHeight) / 2;
+      }
+    }, [sipEditorOpen]);
+    if (espLoading) {
+      return React.createElement("div", { className: "sh-sip-splash", "data-exit": espLoadingExit ? "true" : "false" },
+        React.createElement("img", { src: "assets/pragathi-rail-logo.png", className: "sh-sip-splash-logo", alt: "Pragathi Rail", draggable: "false" }),
+        React.createElement("div", { className: "sh-sip-splash-texts" },
+          React.createElement("div", { className: "sh-sip-splash-title" }, "Generating Digital ESP"),
+          React.createElement("div", { className: "sh-sip-splash-sub" }, station.name, " \xB7 ", station.code)
+        ),
+        React.createElement("div", { className: "sh-sip-splash-progress" },
+          React.createElement("div", { className: "sh-sip-splash-track" },
+            React.createElement("div", { className: "sh-sip-splash-bar" })
+          )
+        )
+      );
+    }
+    if (sipLoading) {
+      return React.createElement("div", { className: "sh-sip-splash", "data-exit": sipLoadingExit ? "true" : "false" },
+        React.createElement("img", { src: "assets/pragathi-rail-logo.png", className: "sh-sip-splash-logo", alt: "Pragathi Rail", draggable: "false" }),
+        React.createElement("div", { className: "sh-sip-splash-texts" },
+          React.createElement("div", { className: "sh-sip-splash-title" }, "Generating Digital SIP"),
+          React.createElement("div", { className: "sh-sip-splash-sub" }, station.name, " \xB7 ", station.code)
+        ),
+        React.createElement("div", { className: "sh-sip-splash-progress" },
+          React.createElement("div", { className: "sh-sip-splash-track" },
+            React.createElement("div", { className: "sh-sip-splash-bar" })
+          )
+        )
+      );
+    }
+    if (sipEditorOpen) {
+      const deTools1 = ["cursor", "branch", "edit", "plus", "minus"];
+      const deTools2 = ["zoom", "shield", "pin", "alert", "layers"];
+      const deTools3 = ["file_check", "download", "refresh", "settings", "clock"];
+      const saveSipAndClose = () => {
+        setSipEditorOpen(false);
+        if (onSipDone) onSipDone();
+      };
+      return React.createElement("div", { className: "sh-digital-editor-full" },
+        React.createElement("div", { className: "sh-de-topbar" },
+          React.createElement("div", { className: "sh-de-topbar-left" },
+            React.createElement("div", { className: "sh-de-topbar-title" }, "Digital SIP Editor"),
+            React.createElement("span", { className: "dl-code-pill" }, station.code),
+            React.createElement(Chip, { tone: "success" }, "Generated")
+          ),
+          React.createElement("div", { className: "sh-de-topbar-right" },
+            React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: saveSipAndClose }, "Save and Close")
+          )
+        ),
+        React.createElement("div", { className: "sh-de-icon-rail" },
+          ["cursor", "zoom", "branch", "layers", "pin", "shield", "alert", "edit", "plus", "settings"].map((name) =>
+            React.createElement("button", { key: name, className: "sh-de-rail-btn", type: "button" }, React.createElement(Icon, { name, size: 16 }))
+          )
+        ),
+        React.createElement("div", { className: "sh-de-left-panel" },
+          React.createElement("div", { className: "sh-de-canvas-tabs" },
+            React.createElement("button", { className: "sh-de-canvas-tab", "data-active": "true", type: "button" }, React.createElement(Icon, { name: "layers", size: 13 }), "Model canvas", React.createElement("span", { className: "sh-de-tab-pill" }, "Model")),
+            React.createElement("button", { className: "sh-de-canvas-tab", type: "button" }, React.createElement(Icon, { name: "file_check", size: 13 }), "Paper canvas", React.createElement("span", { className: "sh-de-tab-pill" }, "Paper"))
+          ),
+          React.createElement("div", { className: "sh-de-layers-head" },
+            React.createElement("span", { className: "sh-de-layers-title" }, "Layers"),
+            React.createElement("div", { className: "sh-de-layers-actions" },
+              React.createElement("button", { className: "sh-de-layers-btn", type: "button" }, React.createElement(Icon, { name: "more", size: 13 })),
+              React.createElement("button", { className: "sh-de-layers-btn", type: "button" }, React.createElement(Icon, { name: "search", size: 13 })),
+              React.createElement("button", { className: "sh-de-layers-btn", type: "button" }, React.createElement(Icon, { name: "plus", size: 13 }))
+            )
+          ),
+          React.createElement("div", { className: "sh-de-layer-item", "data-active": "true" },
+            React.createElement("span", { className: "sh-de-layer-expand" }, React.createElement(Icon, { name: "chevron_right", size: 11 })),
+            React.createElement("span", { className: "sh-de-layer-bar", "data-color": "blue" }),
+            React.createElement("span", { className: "sh-de-layer-name" }, "PDF Import (1/1)")
+          ),
+          React.createElement("div", { className: "sh-de-layer-item" },
+            React.createElement("span", { className: "sh-de-layer-expand" }, React.createElement(Icon, { name: "chevron_right", size: 11 })),
+            React.createElement("span", { className: "sh-de-layer-bar" }),
+            React.createElement("span", { className: "sh-de-layer-name" }, "Default"),
+            React.createElement("span", { className: "sh-de-layer-dot" }, "●")
+          )
+        ),
+        React.createElement("div", { className: "sh-de-canvas", ref: deSipCanvasRef },
+          React.createElement("img", { src: "assets/digitize-sip.png", className: "sh-de-canvas-img", alt: "Digital SIP Canvas", draggable: "false" })
+        ),
+        React.createElement("div", { className: "sh-de-right-panel" },
+          React.createElement("div", { className: "sh-de-prop-section" },
+            React.createElement("div", { className: "sh-de-prop-head" }, React.createElement(Icon, { name: "chevron_down", size: 12 }), "Selection", React.createElement("span", { style: { marginLeft: "auto" } }, React.createElement(Icon, { name: "chevron_right", size: 12 }))),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "Name"), React.createElement("span", { className: "sh-de-prop-val" }, React.createElement(Icon, { name: "edit", size: 11 }), "\xA0Unnamed")),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "Layer"), React.createElement("span", { className: "sh-de-prop-val sh-de-prop-select" }, React.createElement("span", { className: "sh-de-layer-color" }), "\xA0PDF Import (1/1)\xA0", React.createElement(Icon, { name: "chevron_down", size: 11 }), React.createElement("span", { style: { marginLeft: "auto" } }, React.createElement(Icon, { name: "arrow_right", size: 11 })))),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "Status"), React.createElement("div", { className: "sh-de-status-icons" }, React.createElement(Icon, { name: "lock", size: 13 }), React.createElement(Icon, { name: "lock", size: 13 }), React.createElement(Icon, { name: "eye", size: 13 }), React.createElement(Icon, { name: "maximize", size: 13 })))
+          ),
+          React.createElement("div", { className: "sh-de-prop-section" },
+            React.createElement("div", { className: "sh-de-prop-head" }, React.createElement(Icon, { name: "chevron_down", size: 12 }), "Modify"),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "Modify"), React.createElement("div", { className: "sh-de-icon-row" }, React.createElement(Icon, { name: "refresh", size: 14 }), React.createElement(Icon, { name: "sort", size: 14 }), React.createElement(Icon, { name: "arrow_up", size: 14 }), React.createElement(Icon, { name: "arrow_right", size: 14 }))),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "Anchor"), React.createElement("span", { className: "sh-de-prop-val sh-de-prop-select" }, React.createElement(Icon, { name: "grip", size: 11 }), "\xA0Middle\xA0", React.createElement(Icon, { name: "chevron_down", size: 11 }))),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "X,Y"), React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "3812.44 m\xA0\xA0298.17 m")),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "W,H"), React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, React.createElement(Icon, { name: "lock", size: 11 }), "\xA0412.30 m\xA0\xA0186.52 m")),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "Transform"), React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "0\xB0 / 100%"), React.createElement(Icon, { name: "refresh", size: 11, style: { color: "var(--ink-400)", marginLeft: "auto" } }))
+          ),
+          React.createElement("div", { className: "sh-de-prop-section" },
+            React.createElement("div", { className: "sh-de-prop-head" }, React.createElement(Icon, { name: "chevron_down", size: 12 }), "Shapes"),
+            React.createElement("div", { className: "sh-de-shapes-subhead" }, "Styles", React.createElement("div", { className: "sh-de-shapes-subhead-actions" }, React.createElement(Icon, { name: "edit", size: 12 }), React.createElement(Icon, { name: "plus", size: 12 }), React.createElement(Icon, { name: "more", size: 12 }))),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "Fill"), React.createElement("button", { className: "sh-de-fill-btn", type: "button" }, "Add fill")),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "Stroke"), React.createElement("div", { className: "sh-de-stroke-row" }, React.createElement("span", { className: "sh-de-stroke-line" }), React.createElement("span", { className: "sh-de-stroke-val" }, "0 mm"), React.createElement(Icon, { name: "chevron_down", size: 11, className: "sh-de-stroke-chevron" }), React.createElement("button", { className: "sh-de-stroke-minus", type: "button" }, React.createElement(Icon, { name: "minus", size: 11 })))),
+            React.createElement("div", { className: "sh-de-shapes-subhead", style: { marginTop: 4 } }, "Properties"),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "Length"), React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "2847.62 m")),
+            React.createElement("div", { className: "sh-de-prop-row" }, React.createElement("span", { className: "sh-de-prop-label" }, "Area"), React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "7691.34 m\xB2"))
+          ),
+          React.createElement("div", { className: "sh-de-prop-section" },
+            React.createElement("div", { className: "sh-de-prop-head" }, React.createElement(Icon, { name: "chevron_down", size: 12 }), "Custom properties", React.createElement("span", { style: { marginLeft: "auto" } }, React.createElement(Icon, { name: "chevron_right", size: 12 }))),
+            React.createElement("div", { className: "sh-de-prop-row sh-de-prop-row--between" }, React.createElement("span", { className: "sh-de-prop-custom-label" }, "Shape properties"), React.createElement(Icon, { name: "more", size: 13 })),
+            React.createElement("div", { className: "sh-de-prop-help" }, "Add custom properties to your shape.\xA0", React.createElement("span", { className: "sh-de-prop-link" }, "Learn more"))
+          )
+        ),
+        React.createElement("div", { className: "sh-de-bottombar" },
+          React.createElement("div", { className: "sh-de-bottombar-left" },
+            React.createElement("button", { className: "sh-de-tool-btn", type: "button" }, React.createElement(Icon, { name: "branch", size: 15 })),
+            React.createElement("button", { className: "sh-de-tool-btn", type: "button" }, React.createElement(Icon, { name: "chevron_up", size: 15 }))
+          ),
+          React.createElement("span", { className: "sh-de-bottombar-measure" }, "284.76 m"),
+          React.createElement("div", { className: "sh-de-tool-group" }, deTools1.map((name) => React.createElement("button", { key: name, className: "sh-de-tool-btn", type: "button" }, React.createElement(Icon, { name, size: 15 })))),
+          React.createElement("div", { className: "sh-de-tool-divider" }),
+          React.createElement("div", { className: "sh-de-tool-group" }, deTools2.map((name) => React.createElement("button", { key: name, className: "sh-de-tool-btn", type: "button" }, React.createElement(Icon, { name, size: 15 })))),
+          React.createElement("div", { className: "sh-de-tool-divider" }),
+          React.createElement("div", { className: "sh-de-tool-group" }, deTools3.map((name) => React.createElement("button", { key: name, className: "sh-de-tool-btn", type: "button" }, React.createElement(Icon, { name, size: 15 }))))
+        ),
+        toast && /* @__PURE__ */ React.createElement("div", { className: "sh-editor-toast" }, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 14 }), toast)
+      );
+    }
     if (isDigitizeStep && digitalGenerated) {
       const deTools1 = ["cursor", "branch", "edit", "plus", "minus"];
       const deTools2 = ["zoom", "shield", "pin", "alert", "layers"];
@@ -2234,6 +2433,7 @@
             /* @__PURE__ */ React.createElement(Chip, { tone: "success" }, "Generated")
           ),
           /* @__PURE__ */ React.createElement("div", { className: "sh-de-topbar-right" },
+            /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "branch", onClick: openSipEditor }, "Generate SIP"),
             /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: saveGeneratedDigital }, "Save and Close")
           )
         ),
@@ -2269,42 +2469,56 @@
           /* @__PURE__ */ React.createElement("img", { src: "assets/digitize-esp.png", className: "sh-de-canvas-img", alt: "Digital ESP Canvas", draggable: "false" })
         ),
         /* @__PURE__ */ React.createElement("div", { className: "sh-de-right-panel" },
+          /* \u2500\u2500 Selection \u2500\u2500 */
           /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Selection", /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-head-right" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 12 }))),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Selection", /* @__PURE__ */ React.createElement("span", { style: { marginLeft: "auto" } }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 12 }))),
             /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Name"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val" }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 11 }), "\xA0Unnamed")),
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Layer"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-select" }, /* @__PURE__ */ React.createElement(Icon, { name: "layers", size: 11 }), "\xA0PDF Import (1/1)", /* @__PURE__ */ React.createElement("span", { style: { marginLeft: "auto" } }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11 })))),
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Status"), /* @__PURE__ */ React.createElement("div", { className: "sh-de-status-icons" }, /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 13 }), /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 13 }), /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 13 }), /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 13 })))
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Layer"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-select" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-layer-color" }), "\xA0PDF Import (1/1)\xA0", /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 11 }), /* @__PURE__ */ React.createElement("span", { style: { marginLeft: "auto" } }, /* @__PURE__ */ React.createElement(Icon, { name: "arrow_right", size: 11 })))),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Status"), /* @__PURE__ */ React.createElement("div", { className: "sh-de-status-icons" }, /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 13 }), /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 13 }), /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 13 }), /* @__PURE__ */ React.createElement(Icon, { name: "maximize", size: 13 })))
           ),
+          /* \u2500\u2500 Modify \u2500\u2500 */
           /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
             /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Modify"),
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Modify"), /* @__PURE__ */ React.createElement("div", { className: "sh-de-icon-row" }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 14 }), /* @__PURE__ */ React.createElement(Icon, { name: "refresh", size: 14 }), /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 14 }), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 14 }))),
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Anchor"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-select" }, "\u25C9\xA0Middle\xA0", /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 11 }))),
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "X,Y"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "2170.13 m\xA0\xA0378.47 m")),
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "W,H"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 11 }), "\xA0104.97 m\xA0\xA062.39 m")),
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Transform"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "0\xB0 / 100%"))
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Modify"), /* @__PURE__ */ React.createElement("div", { className: "sh-de-icon-row" }, /* @__PURE__ */ React.createElement(Icon, { name: "refresh", size: 14 }), /* @__PURE__ */ React.createElement(Icon, { name: "sort", size: 14 }), /* @__PURE__ */ React.createElement(Icon, { name: "arrow_up", size: 14 }), /* @__PURE__ */ React.createElement(Icon, { name: "arrow_right", size: 14 }))),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Anchor"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-select" }, /* @__PURE__ */ React.createElement(Icon, { name: "grip", size: 11 }), "\xA0Middle\xA0", /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 11 }))),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "X,Y"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "2449.98 m\xA0\xA0432.59 m")),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "W,H"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 11 }), "\xA0297.61 m\xA0\xA0202.71 m")),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Transform"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "0\xB0 / 100%"), /* @__PURE__ */ React.createElement(Icon, { name: "refresh", size: 11, style: { color: "var(--ink-400)", marginLeft: "auto" } }))
           ),
+          /* \u2500\u2500 Shapes (expanded: Styles + Properties) \u2500\u2500 */
           /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 12 }), "Shapes")
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Shapes"),
+            /* Styles sub-head */
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-shapes-subhead" }, "Styles", /* @__PURE__ */ React.createElement("div", { className: "sh-de-shapes-subhead-actions" }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 12 }), /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 12 }), /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 12 }))),
+            /* Fill row */
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Fill"), /* @__PURE__ */ React.createElement("button", { className: "sh-de-fill-btn", type: "button" }, "Add fill")),
+            /* Stroke row */
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Stroke"), /* @__PURE__ */ React.createElement("div", { className: "sh-de-stroke-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-stroke-line" }), /* @__PURE__ */ React.createElement("span", { className: "sh-de-stroke-val" }, "0 mm"), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 11, className: "sh-de-stroke-chevron" }), /* @__PURE__ */ React.createElement("button", { className: "sh-de-stroke-minus", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name: "minus", size: 11 })))),
+            /* Properties sub-head */
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-shapes-subhead", style: { marginTop: 4 } }, "Properties"),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Length"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "1131.14 m")),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Area"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "3536.62 m\xB2"))
           ),
+          /* \u2500\u2500 Custom properties \u2500\u2500 */
           /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Styles", /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head-actions" }, /* @__PURE__ */ React.createElement(Icon, { name: "edit", size: 12 }), /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 12 }), /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 12 })))
-          ),
-          /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Properties"),
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Length"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "206.56 m")),
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-label" }, "Area"), /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-val sh-de-prop-mono" }, "6.85 m\xB2"))
-          ),
-          /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-section" },
-            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Custom properties", /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-head-right" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 12 })))
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-head" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 12 }), "Custom properties", /* @__PURE__ */ React.createElement("span", { style: { marginLeft: "auto" } }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 12 }))),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-row sh-de-prop-row--between" }, /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-custom-label" }, "Shape properties"), /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 13 })),
+            /* @__PURE__ */ React.createElement("div", { className: "sh-de-prop-help" }, "Add custom properties to your shape.\xA0", /* @__PURE__ */ React.createElement("span", { className: "sh-de-prop-link" }, "Learn more"))
           )
         ),
         /* @__PURE__ */ React.createElement("div", { className: "sh-de-bottombar" },
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-bottombar-left" },
+            /* @__PURE__ */ React.createElement("button", { className: "sh-de-tool-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name: "branch", size: 15 })),
+            /* @__PURE__ */ React.createElement("button", { className: "sh-de-tool-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_up", size: 15 }))
+          ),
+          /* @__PURE__ */ React.createElement("span", { className: "sh-de-bottombar-measure" }, "131.53 m"),
           /* @__PURE__ */ React.createElement("div", { className: "sh-de-tool-group" }, deTools1.map((name) => /* @__PURE__ */ React.createElement("button", { key: name, className: "sh-de-tool-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name, size: 15 })))),
           /* @__PURE__ */ React.createElement("div", { className: "sh-de-tool-divider" }),
           /* @__PURE__ */ React.createElement("div", { className: "sh-de-tool-group" }, deTools2.map((name) => /* @__PURE__ */ React.createElement("button", { key: name, className: "sh-de-tool-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name, size: 15 })))),
           /* @__PURE__ */ React.createElement("div", { className: "sh-de-tool-divider" }),
           /* @__PURE__ */ React.createElement("div", { className: "sh-de-tool-group" }, deTools3.map((name) => /* @__PURE__ */ React.createElement("button", { key: name, className: "sh-de-tool-btn", type: "button" }, /* @__PURE__ */ React.createElement(Icon, { name, size: 15 }))))
-        )
+        ),
+        toast && /* @__PURE__ */ React.createElement("div", { className: "sh-editor-toast" }, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 14 }), toast)
       );
     }
     return /* @__PURE__ */ React.createElement("div", { className: "sh-content" }, /* @__PURE__ */ React.createElement(AppTopBar, { crumbs: ["Digital Library", { label: station.name, onClick: onBack }, (upload == null ? void 0 : upload.file) || (upload == null ? void 0 : upload.fileName) || "ESP File", "Review Assets"], searchPlaceholder: isDigitize ? "Search digital ESP assets, attributes..." : "Search extracted ESP assets, attributes..." }), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, isDigitizeStep ? activeGroup.type : pageVerbTitle + " " + activeGroup.type), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, station.name, " (", station.code, ") \xB7 ", documentKindLabel, sourceFileLabel ? " \xB7 " + sourceFileLabel : "")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, digitalGenerated && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: saveGeneratedDigital }, "Save and Close"))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll sh-esp-scroll" }, /* @__PURE__ */ React.createElement("div", { className: "sh-review-stepper", "aria-label": "Asset review steps" }, groups.map((item, index) => {
@@ -2314,7 +2528,7 @@
       const prevReviewed = index > 0 && (statuses[groups[index - 1].type] === "reviewed");
       const itemCountLabel = item.isDigitize ? "Final step" : `${item.count} ${item.count === 1 ? "asset" : "assets"}`;
       return /* @__PURE__ */ React.createElement(React.Fragment, { key: item.type }, index > 0 && /* @__PURE__ */ React.createElement("div", { className: "sh-step-connector", "data-done": prevReviewed ? "true" : "false" }), /* @__PURE__ */ React.createElement("button", { className: "sh-step-pill", type: "button", "data-active": isActive ? "true" : "false", "data-reviewed": isReviewed ? "true" : "false", onClick: () => changeType(item.type) }, /* @__PURE__ */ React.createElement("div", { className: "sh-step-circle" }, isReviewed ? /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 12 }) : index + 1), /* @__PURE__ */ React.createElement("div", { className: "sh-step-label" }, /* @__PURE__ */ React.createElement("span", { className: "sh-step-label-name" }, item.type), /* @__PURE__ */ React.createElement("span", { className: "sh-step-label-count" }, itemCountLabel))));
-    })), !isDigitizeStep && /* @__PURE__ */ React.createElement(AssetInstanceSwitcher, { asset: activeGroup, active: activeInstance, onChange: setActiveInstance, onAdd: addAsset, onRemove: removeAsset }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-workspace" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-editor-shell", "data-digitize": isDigitizeStep ? "true" : "false" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-panel" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, isDigitizeStep ? "Source ESP Preview" : activeGroup.type + " Preview"), /* @__PURE__ */ React.createElement("div", { className: "sh-section-sub" }, isDigitizeStep ? "Source ESP remains on the left while digital output is generated on the right." : ["Highlighted ", unitLabel.toLowerCase(), " ", activeInstance, " in source ESP for ", station.name, "."])), /* @__PURE__ */ React.createElement(StatusChip, null, isDigitizeStep ? "Ready" : activeGroup.count + " " + (activeGroup.count === 1 ? "asset" : "assets"))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview", "data-type": (activeGroup.type === "Adjacent Stations" || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates" || isDigitizeStep) ? "adjacent" : "track" }, (activeGroup.type === "Adjacent Stations" || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates" || isDigitizeStep) ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-label" }, isDigitizeStep ? "ESP Source" : [unitLabel, " ", activeInstance]), /* @__PURE__ */ React.createElement("img", { src: isDigitizeStep ? "assets/digitize-esp.png" : activeGroup.type === "Platforms" ? "assets/platform-esp.png" : activeGroup.type === "Tracks" ? "assets/track-esp.png" : activeGroup.type === "Points and Turnouts" ? "assets/turnout-esp.png" : activeGroup.type === "Dead Ends" ? "assets/deadend-esp.png" : activeGroup.type === "Trap Points" ? "assets/trappoint-esp.png" : activeGroup.type === "Gates" ? "assets/gate-esp.png" : "assets/adjacent-station-esp.png", className: "sh-asset-esp-img", alt: activeGroup.type + " ESP source diagram", draggable: "false" })) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-label" }, isDigitizeStep ? "ESP Source" : [unitLabel, " ", activeInstance]), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track loop" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track main" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track siding" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout a" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout b" }), !isDigitizeStep && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-highlight" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-station" }, /* @__PURE__ */ React.createElement("strong", null, station.name), /* @__PURE__ */ React.createElement("span", null, station.code, " yard limits"))))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-panel" }, !(isDigitizeStep && digitalGenerated) && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, isDigitizeStep ? "Digital ESP" : activeGroup.type + " " + rightPanelTitle), /* @__PURE__ */ React.createElement("div", { className: "sh-section-sub" }, isDigitizeStep ? digitalGenerated ? "Generated digital ESP preview." : "Digital output will appear after digitization." : rightPanelSub)), /* @__PURE__ */ React.createElement(StatusChip, null, isDigitizeStep ? digitalGenerated ? "Generated" : "Empty" : status.label)), isDigitizeStep ? digitalGenerated ? /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-generated sh-digitize-generated--editor" }, /* @__PURE__ */ React.createElement("img", { src: "assets/digital-esp-editor.png", className: "sh-digitize-editor-img", alt: "Digital ESP Editor", draggable: "false" })) : /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center" }, /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-inner" }, /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 24 })), /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-title" }, "Generate Digital ESP"), /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-sub" }, "All assets have been reviewed. Click the button below to generate the digital ESP for ", station.name, "."), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "file_check", onClick: handleDigitise }, "Generate Digital ESP"))) : /* @__PURE__ */ React.createElement("form", { className: "sh-asset-config-form", onSubmit: (event) => {
+    })), !isDigitizeStep && /* @__PURE__ */ React.createElement(AssetInstanceSwitcher, { asset: activeGroup, active: activeInstance, onChange: setActiveInstance, onAdd: addAsset, onRemove: removeAsset }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-workspace" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-editor-shell", "data-digitize": isDigitizeStep ? "true" : "false" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-panel" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, isDigitizeStep ? "Source ESP Preview" : activeGroup.type + " Preview"), /* @__PURE__ */ React.createElement("div", { className: "sh-section-sub" }, isDigitizeStep ? "Source ESP remains on the left while digital output is generated on the right." : ["Highlighted ", unitLabel.toLowerCase(), " ", activeInstance, " in source ESP for ", station.name, "."])), /* @__PURE__ */ React.createElement(StatusChip, null, isDigitizeStep ? "Ready" : activeGroup.count + " " + (activeGroup.count === 1 ? "asset" : "assets"))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview", "data-type": (activeGroup.type === "Adjacent Stations" || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates" || isDigitizeStep) ? "adjacent" : "track" }, (activeGroup.type === "Adjacent Stations" || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates" || isDigitizeStep) ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-label" }, isDigitizeStep ? "ESP Source" : [unitLabel, " ", activeInstance]), /* @__PURE__ */ React.createElement("img", { src: isDigitizeStep ? "assets/digitize-esp.png" : activeGroup.type === "Platforms" ? "assets/platform-esp.png" : activeGroup.type === "Tracks" ? "assets/track-esp.png" : activeGroup.type === "Points and Turnouts" ? "assets/turnout-esp.png" : activeGroup.type === "Dead Ends" ? "assets/deadend-esp.png" : activeGroup.type === "Trap Points" ? "assets/trappoint-esp.png" : activeGroup.type === "Gates" ? "assets/gate-esp.png" : "assets/adjacent-station-esp.png", className: "sh-asset-esp-img", alt: activeGroup.type + " ESP source diagram", draggable: "false" })) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-label" }, isDigitizeStep ? "ESP Source" : [unitLabel, " ", activeInstance]), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track loop" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track main" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track siding" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout a" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout b" }), !isDigitizeStep && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-highlight" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-station" }, /* @__PURE__ */ React.createElement("strong", null, station.name), /* @__PURE__ */ React.createElement("span", null, station.code, " yard limits"))))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-panel" }, !(isDigitizeStep && digitalGenerated) && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, isDigitizeStep ? "Digital ESP" : activeGroup.type + " " + rightPanelTitle), /* @__PURE__ */ React.createElement("div", { className: "sh-section-sub" }, isDigitizeStep ? digitalGenerated ? "Generated digital ESP preview." : "Digital output will appear after digitization." : rightPanelSub)), /* @__PURE__ */ React.createElement(StatusChip, null, isDigitizeStep ? digitalGenerated ? "Generated" : "Empty" : status.label)), isDigitizeStep ? digitalGenerated ? /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-generated sh-digitize-generated--editor" }, /* @__PURE__ */ React.createElement("img", { src: "assets/digital-esp-editor.png", className: "sh-digitize-editor-img", alt: "Digital ESP Editor", draggable: "false" })) : /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center" }, /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-inner" }, /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 24 })), /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-title" }, "Generate Digital ESP"), /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-sub" }, "All assets have been reviewed. Click the button below to generate the digital ESP for ", station.name, "."), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "file_check", onClick: openEspEditor }, "Generate Digital ESP"))) : /* @__PURE__ */ React.createElement("form", { className: "sh-asset-config-form", onSubmit: (event) => {
       event.preventDefault();
       saveAndContinue();
     } }, Object.entries(draft).map(([label, value]) => /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-field", key: label }, /* @__PURE__ */ React.createElement("label", null, label), /* @__PURE__ */ React.createElement("input", { value, onChange: (event) => updateField(label, event.target.value) }))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-preview" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-title" }, /* @__PURE__ */ React.createElement(Icon, { name: activeGroup.icon, size: 14 }), "Live Preview"), /* @__PURE__ */ React.createElement("span", { className: "sh-mini-label" }, unitLabel, " ", activeInstance)), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-canvas", "data-type": (activeGroup.type === "Adjacent Stations" || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates") ? "adjacent" : "default" }, (activeGroup.type === "Adjacent Stations" || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates") ? /* @__PURE__ */ React.createElement("img", { src: activeGroup.type === "Platforms" ? "assets/platform-esp.png" : activeGroup.type === "Tracks" ? "assets/track-esp.png" : activeGroup.type === "Points and Turnouts" ? "assets/turnout-esp.png" : activeGroup.type === "Dead Ends" ? "assets/deadend-esp.png" : activeGroup.type === "Trap Points" ? "assets/trappoint-esp.png" : activeGroup.type === "Gates" ? "assets/gate-esp.png" : "assets/adjacent-station-esp.png", className: "sh-asset-live-esp-img", alt: activeGroup.type + " source ESP", draggable: "false" }) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-line" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-live-badge" }, identityEntry[1]))))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-actions sh-review-actions" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "chevron_left", disabled: isFirst, onClick: goPrev }, "Previous"), /* @__PURE__ */ React.createElement("span", { className: "sh-review-spacer" }), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", trailingIcon: "chevron_right", disabled: isLast, onClick: goNext }, "Next")))))), toast && /* @__PURE__ */ React.createElement("div", { className: "sh-editor-toast" }, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 14 }), toast));
@@ -2393,6 +2607,7 @@
     const [pimSession, setPimSession] = useStateHub(null);
     const [uploadedDocuments, setUploadedDocuments] = useStateHub(UPLOADED_DOCUMENT_ROWS);
     const [espRows, setEspRows] = useStateHub(DOCUMENT_TABLE_ROWS.esp);
+    const [sipRows, setSipRows] = useStateHub([]);
     const [activeEspUpload, setActiveEspUpload] = useStateHub(null);
     const [digitalEspVersions, setDigitalEspVersions] = useStateHub([]);
     const [selectedDigitalVersion, setSelectedDigitalVersion] = useStateHub(null);
@@ -2464,7 +2679,7 @@
     };
     const rowsByType = {
       esp: espRows,
-      sip: DOCUMENT_TABLE_ROWS.sip,
+      sip: sipRows,
       lop: DOCUMENT_TABLE_ROWS.lop,
       survey: DOCUMENT_TABLE_ROWS.survey
     };
@@ -2517,7 +2732,7 @@
       setDigitalEspVersions((rows) => [nextVersion, ...rows]);
       setEspRows([{
         id: nextVersion.id,
-        fileName: nextVersion.fileName,
+        fileName: `${station.code}-ESP`,
         status: "Generated",
         tone: "success",
         user: CURRENT_USER.name,
@@ -2547,6 +2762,37 @@
       }
       setShowEspDetail(true);
       setPimSession(null);
+    };
+    const handleSipDone = () => {
+      // Mark the active ESP row as Generated (user went Generate SIP instead of Save & Close on ESP editor)
+      setEspRows((rows) => {
+        if (!rows.length) return rows;
+        return rows.map((row, idx) => {
+          const isActive = activeEspUpload ? row.id === activeEspUpload.id : idx === 0;
+          return isActive ? { ...row, fileName: `${station.code}-ESP`, status: "Generated", tone: "success" } : row;
+        });
+      });
+      setSipRows((rows) => {
+        if (rows.length > 0) return rows;
+        return [{
+          fileName: `${station.code}-SIP`,
+          version: "V1-R0-A0",
+          fileType: "DWG",
+          generatedFrom: activeEspUpload ? `ESP ${activeEspUpload.version || "V7-R0-A0"}` : espRows[0] ? `ESP ${espRows[0].version || "V7-R0-A0"}` : "ESP V7-R0-A0",
+          status: "Generated",
+          tone: "success",
+          approvalStatus: "Pending",
+          user: CURRENT_USER.name,
+          initials: "AV",
+          role: CURRENT_USER.role,
+          uploaded: "Just now"
+        }];
+      });
+      setPimSession(null);
+      setShowSipDetail(false);
+      setDocumentTab("sip");
+      setToast("Digital SIP generated");
+      window.setTimeout(() => setToast(""), 2600);
     };
     const handleSaveDigitalEspAndClose = () => {
       const version = pimSession == null ? void 0 : pimSession.version;
@@ -2639,7 +2885,8 @@
               setShowEspDetail(true);
             },
             onFinish: handleGenerateDigitalEsp,
-            onSaveAndClose: handleSaveDigitalEspAndClose
+            onSaveAndClose: handleSaveDigitalEspAndClose,
+            onSipDone: handleSipDone
           }
         );
       }
@@ -2735,7 +2982,7 @@
         crumbs: onBack ? [{ label: "Digital Library", onClick: onBack }, station.name] : ["Digital Library", station.name],
         searchPlaceholder: "Search station documents, assets, versions..."
       }
-    ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, station.name, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, station.code)), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, "Station document hub for engineering diagrams and survey data")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "download", onClick: handleDownloadAll }, "Download All"))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement(StationContext, { station, onEdit: () => setEditingDetails(true) }), /* @__PURE__ */ React.createElement(DocumentTabsSection, { active: documentTab, onChange: setDocumentTab, rowsByType, onUpload: handleDocumentUploadClick, onOpenRow: handleOpenDocumentRow })), editingDetails && /* @__PURE__ */ React.createElement(EditStationMetadataV3Modal, { station, onClose: () => setEditingDetails(false), onSave: (nextStation) => {
+    ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "train", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, station.name, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, station.code)), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, "Station document hub for engineering diagrams and survey data")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "download", onClick: handleDownloadAll }, "Download All"))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement(StationContext, { station, onEdit: () => setEditingDetails(true) }), /* @__PURE__ */ React.createElement(DocumentTabsSection, { active: documentTab, onChange: setDocumentTab, rowsByType, onUpload: handleDocumentUploadClick, onOpenRow: handleOpenDocumentRow })), editingDetails && /* @__PURE__ */ React.createElement(EditStationMetadataV3Modal, { station, onClose: () => setEditingDetails(false), onSave: (nextStation) => {
       setStation(nextStation);
       setEditingDetails(false);
     } }), uploadOpen && /* @__PURE__ */ React.createElement(UploadDocumentModal, { station, initialDocType: uploadOpen === "all" ? "" : uploadOpen, onClose: () => setUploadOpen(null), onUpload: handleUploadDocument }), toast && /* @__PURE__ */ React.createElement("div", { className: "sh-toast", role: "status", "aria-live": "polite" }, /* @__PURE__ */ React.createElement(Icon, { name: "check_circle", size: 16 }), toast));

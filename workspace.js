@@ -1108,7 +1108,7 @@
         ],
         searchPlaceholder: "Search stations, documents, approvals..."
       }
-    ), /* @__PURE__ */ React.createElement("div", { className: "dl-page-header" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-heading" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-title" }, "Workspace"), /* @__PURE__ */ React.createElement("div", { className: "dl-page-sub" }, "Manage your assigned work"))), /* @__PURE__ */ React.createElement("div", { className: "ws-filter-bar" }, /* @__PURE__ */ React.createElement("div", { className: "ws-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Zone"), /* @__PURE__ */ React.createElement(
+    ), /* @__PURE__ */ React.createElement("div", { className: "dl-page-header" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "inbox", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "dl-page-heading" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-title" }, "Workspace"), /* @__PURE__ */ React.createElement("div", { className: "dl-page-sub" }, "Manage your assigned work"))), /* @__PURE__ */ React.createElement("div", { className: "ws-filter-bar" }, /* @__PURE__ */ React.createElement("div", { className: "ws-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Zone"), /* @__PURE__ */ React.createElement(
       "select",
       {
         className: "ws-filter-select",
