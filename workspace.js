@@ -1,1105 +1,521 @@
 (() => {
-  const { useState, useMemo, useEffect, useRef } = React;
-  const wsCSS = `
-/* \u2500\u2500 Workspace layout \u2500\u2500 */
-.ws-content {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-  height: 100vh;
-  overflow: hidden;
-  background: var(--canvas);
-}
-
-/* \u2500\u2500 Prominent page-level filter bar \u2500\u2500 */
-.ws-filter-bar {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
-  gap: 14px;
-  padding: 16px 28px 18px;
-  background: var(--paper);
-  border-bottom: var(--hairline);
-  flex-shrink: 0;
-  align-items: end;
-}
-.ws-filter-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-.ws-filter-field label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--ink-500);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.ws-filter-select {
-  width: 100%;
-  height: 40px;
-  padding: 0 36px 0 14px;
-  border: var(--hairline);
-  border-radius: var(--r-md);
-  background: var(--paper);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink-900);
-  outline: none;
-  appearance: none;
-  cursor: pointer;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-  transition: 120ms;
-  box-shadow: var(--shadow-xs);
-}
-.ws-filter-select:hover { border-color: var(--ink-300); background-color: var(--ink-50); }
-.ws-filter-select:focus { border-color: var(--accent); box-shadow: var(--shadow-focus); }
-.ws-filter-select[data-active="true"] {
-  border-color: var(--accent);
-  background-color: var(--accent-soft);
-  color: var(--accent-text);
-}
-.ws-filter-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-bottom: 2px;
-}
-@media (max-width: 1000px) {
-  .ws-filter-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .ws-filter-actions { grid-column: 1 / -1; justify-content: flex-end; }
-}
-
-/* \u2500\u2500 Chips bar \u2500\u2500 */
-.ws-chips-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 28px;
-  background: var(--paper);
-  border-bottom: var(--hairline);
-  flex-shrink: 0;
-}
-.ws-chips-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--ink-500);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-.ws-chips-row {
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.ws-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 26px;
-  padding: 0 10px;
-  border-radius: var(--r-full);
-  border: var(--hairline);
-  background: var(--paper);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--ink-700);
-  cursor: pointer;
-  font-family: var(--font-sans);
-  transition: background 120ms, border-color 120ms, color 120ms;
-  white-space: nowrap;
-}
-.ws-chip:hover { border-color: var(--ink-400); background: var(--ink-50); }
-.ws-chip[data-active="true"] {
-  background: var(--accent);
-  color: var(--paper);
-  border-color: var(--accent);
-  box-shadow: 0 6px 12px -8px rgba(99,91,255,0.75);
-}
-.ws-chip-x { display: inline-grid; place-items: center; }
-
-/* \u2500\u2500 Search row \u2500\u2500 */
-.ws-search-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 28px;
-  background: var(--paper);
-  border-bottom: var(--hairline);
-  flex-shrink: 0;
-}
-.ws-search-wrap {
-  position: relative;
-  flex: 1;
-  max-width: 480px;
-}
-.ws-search-input {
-  width: 100%;
-  height: 34px;
-  padding: 0 32px 0 34px;
-  border: var(--hairline);
-  border-radius: var(--r-md);
-  background: var(--ink-50);
-  font-size: 13px;
-  font-family: var(--font-sans);
-  color: var(--ink-900);
-  outline: none;
-  transition: 120ms;
-}
-.ws-search-input::placeholder { color: var(--ink-400); }
-.ws-search-input:hover { background: var(--paper); border-color: var(--ink-300); }
-.ws-search-input:focus { background: var(--paper); border-color: var(--accent); box-shadow: var(--shadow-focus); }
-.ws-search-icon {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--ink-500);
-  pointer-events: none;
-}
-.ws-search-clear {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 18px;
-  height: 18px;
-  border: none;
-  background: transparent;
-  color: var(--ink-400);
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-}
-.ws-search-clear:hover { background: var(--ink-100); color: var(--ink-700); }
-.ws-result-count {
-  font-size: 12px;
-  color: var(--ink-500);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-/* \u2500\u2500 Table area \u2500\u2500 */
-.ws-table-area {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding-bottom: 24px;
-}
-.ws-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-.ws-table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  padding: 9px 14px;
-  text-align: left;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-500);
-  background: var(--ink-50);
-  border-bottom: var(--hairline);
-  white-space: nowrap;
-}
-.ws-table tbody td {
-  padding: 10px 14px;
-  border-bottom: var(--hairline);
-  vertical-align: middle;
-  color: var(--ink-800);
-}
-.ws-table tbody tr:hover td { background: var(--ink-50); }
-.ws-table tbody tr:last-child td { border-bottom: none; }
-
-/* \u2500\u2500 Station cell \u2500\u2500 */
-.ws-station-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink-900);
-  line-height: 1.3;
-}
-
-/* \u2500\u2500 Hover tooltip wrapper (any cell value) \u2500\u2500 */
-.ws-tip {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  cursor: help;
-  border-bottom: 1px dotted var(--ink-300);
-}
-.ws-tip > .ws-tip-i {
-  color: var(--ink-300);
-  display: inline-grid;
-  place-items: center;
-}
-.ws-tip:hover > .ws-tip-i { color: var(--ink-500); }
-.ws-tip::after {
-  content: attr(data-tip);
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 0;
-  z-index: 1000;
-  min-width: 180px;
-  max-width: 320px;
-  padding: 8px 10px;
-  border-radius: var(--r-md);
-  background: var(--ink-900);
-  color: var(--paper);
-  font-size: 11.5px;
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: 0.01em;
-  white-space: pre-line;
-  text-align: left;
-  box-shadow: var(--shadow-lg);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(2px);
-  transition: opacity 120ms, transform 120ms;
-}
-.ws-tip::before {
-  content: "";
-  position: absolute;
-  bottom: calc(100% + 2px);
-  left: 14px;
-  z-index: 1000;
-  border: 6px solid transparent;
-  border-top-color: var(--ink-900);
-  opacity: 0;
-  transition: opacity 120ms;
-}
-.ws-tip:hover::after,
-.ws-tip:hover::before { opacity: 1; transform: translateY(0); }
-
-/* \u2500\u2500 Document cell \u2500\u2500 */
-.ws-doc-cell {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-}
-.ws-doc-file {
-  font-size: 12.5px;
-  font-family: var(--font-mono);
-  color: var(--ink-900);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-}
-.ws-doc-updated {
-  font-size: 11px;
-  color: var(--ink-500);
-  font-variant-numeric: tabular-nums;
-}
-
-/* \u2500\u2500 Type badge (custom palette per document family) \u2500\u2500 */
-.ws-type {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 44px;
-  height: 22px;
-  padding: 0 9px;
-  border-radius: var(--r-sm);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  border: 1px solid transparent;
-  font-family: var(--font-sans);
-}
-/* ESP \u2014 purple */
-.ws-type[data-type="ESP"] {
-  background: oklch(0.94 0.06 295);
-  color: oklch(0.38 0.18 295);
-  border-color: oklch(0.85 0.10 295);
-}
-/* SIP \u2014 teal */
-.ws-type[data-type="SIP"] {
-  background: oklch(0.94 0.05 195);
-  color: oklch(0.36 0.10 200);
-  border-color: oklch(0.85 0.07 200);
-}
-/* LOP \u2014 blue */
-.ws-type[data-type="LOP"] {
-  background: oklch(0.94 0.05 240);
-  color: oklch(0.38 0.13 240);
-  border-color: oklch(0.85 0.08 240);
-}
-/* TOC \u2014 coral */
-.ws-type[data-type="TOC"] {
-  background: oklch(0.94 0.06 30);
-  color: oklch(0.45 0.15 30);
-  border-color: oklch(0.85 0.10 30);
-}
-/* Other \u2014 neutral */
-.ws-type[data-type="Other"] {
-  background: var(--ink-100);
-  color: var(--ink-700);
-  border-color: var(--ink-200);
-}
-
-/* \u2500\u2500 Status pill (lifecycle) \u2500\u2500 */
-.ws-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  min-height: 22px;
-  padding: 0 9px;
-  border-radius: var(--r-full);
-  font-size: 11.5px;
-  font-weight: 700;
-  border: 1px solid transparent;
-}
-.ws-status::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-.ws-status[data-status="Draft"] {
-  background: var(--ink-100);
-  color: var(--ink-600);
-  border-color: var(--ink-200);
-}
-.ws-status[data-status="Active"] {
-  background: var(--success-soft);
-  color: var(--success-text);
-  border-color: oklch(0.9 0.06 155);
-}
-.ws-status[data-status="Frozen"] {
-  background: var(--info-soft);
-  color: var(--info-text);
-  border-color: oklch(0.9 0.06 240);
-}
-
-/* \u2500\u2500 Stage cell \u2500\u2500 */
-.ws-stage-col {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-}
-
-/* \u2500\u2500 Assignee cell \u2500\u2500 */
-.ws-assignee-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink-900);
-  line-height: 1.3;
-}
-.ws-assignee-role {
-  font-size: 11px;
-  color: var(--ink-500);
-  margin-top: 1px;
-}
-.ws-unassigned {
-  font-size: 12px;
-  color: var(--ink-400);
-  font-style: italic;
-}
-
-/* \u2500\u2500 Issues cell \u2500\u2500 */
-.ws-issues-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 6px;
-  border-radius: var(--r-full);
-  background: var(--danger-soft);
-  color: var(--danger-text);
-  font-size: 11.5px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-.ws-no-issues {
-  color: var(--ink-400);
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-}
-
-/* \u2500\u2500 "(you)" tag for current user rows \u2500\u2500 */
-.ws-table tbody tr[data-mine="true"] td { background: oklch(0.97 0.02 240); }
-.ws-table tbody tr[data-mine="true"]:hover td { background: oklch(0.95 0.03 240); }
-.ws-you-tag {
-  display: inline-flex;
-  align-items: center;
-  margin-left: 6px;
-  padding: 0 6px;
-  height: 17px;
-  border-radius: var(--r-sm);
-  background: var(--info-soft);
-  color: var(--info-text);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: lowercase;
-  border: 1px solid oklch(0.9 0.06 240);
-}
-
-/* \u2500\u2500 Time cell \u2500\u2500 */
-.ws-time { font-size: 12px; color: var(--ink-700); font-variant-numeric: tabular-nums; }
-.ws-time[data-overdue="true"] { color: var(--danger-text); font-weight: 700; }
-
-/* \u2500\u2500 Row actions \u2500\u2500 */
-.ws-row-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
-  position: relative;
-}
-.ws-action-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 28px;
-  padding: 0 12px;
-  border-radius: var(--r-md);
-  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--ink-200));
-  background: var(--accent-soft);
-  color: var(--accent-text);
-  font-size: 12.5px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: var(--font-sans);
-  white-space: nowrap;
-  transition: 120ms;
-}
-.ws-action-primary:hover {
-  background: color-mix(in srgb, var(--accent-soft) 72%, #fff);
-  border-color: var(--accent);
-}
-.ws-action-more {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: var(--r-md);
-  border: var(--hairline);
-  background: var(--paper);
-  color: var(--ink-500);
-  cursor: pointer;
-  transition: 120ms;
-}
-.ws-action-more:hover { background: var(--ink-50); border-color: var(--ink-300); color: var(--ink-800); }
-.ws-action-menu {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 4px);
-  z-index: 100;
-  min-width: 168px;
-  background: var(--paper);
-  border: var(--hairline);
-  border-radius: var(--r-md);
-  box-shadow: var(--shadow-lg);
-  padding: 4px;
-  display: flex;
-  flex-direction: column;
-}
-.ws-action-menu-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 6px 10px;
-  border: none;
-  background: transparent;
-  color: var(--ink-700);
-  font-size: 12.5px;
-  font-family: var(--font-sans);
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: var(--r-sm);
-  text-align: left;
-  transition: 120ms;
-}
-.ws-action-menu-item:hover { background: var(--ink-50); color: var(--ink-900); }
-.ws-action-menu-sep {
-  height: 1px;
-  background: var(--ink-100);
-  margin: 3px 0;
-}
-
-/* \u2500\u2500 Assignment modal \u2500\u2500 */
-.ws-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgba(15, 23, 42, 0.36);
-}
-.ws-modal {
-  width: min(600px, calc(100vw - 32px));
-  max-height: calc(100vh - 48px);
-  overflow: auto;
-  box-sizing: border-box;
-  background: var(--paper);
-  border: var(--hairline);
-  border-radius: var(--r-lg);
-  box-shadow: 0 18px 54px rgba(0,0,0,0.22);
-}
-.ws-modal-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 18px;
-  border-bottom: var(--hairline);
-}
-.ws-modal-title { font-size: 15px; font-weight: 700; color: var(--ink-900); }
-.ws-modal-sub { margin-top: 3px; font-size: 12px; color: var(--ink-500); }
-.ws-modal-close {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  border: var(--hairline);
-  border-radius: var(--r-md);
-  background: var(--paper);
-  color: var(--ink-500);
-  cursor: pointer;
-}
-.ws-modal-close:hover { color: var(--ink-900); background: var(--ink-50); }
-.ws-modal-summary {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  background: var(--ink-50);
-  border-bottom: var(--hairline);
-  font-size: 12.5px;
-  flex-wrap: wrap;
-}
-.ws-modal-summary-station {
-  font-weight: 600;
-  color: var(--ink-900);
-}
-.ws-modal-dot { color: var(--ink-300); }
-.ws-modal-body {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  padding: 14px 18px 16px;
-}
-.ws-modal-field {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  min-width: 0;
-}
-.ws-modal-field[data-span="full"] { grid-column: 1 / -1; }
-.ws-modal-field label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--ink-700);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.ws-modal-field input,
-.ws-modal-field select,
-.ws-modal-field textarea {
-  width: 100%;
-  box-sizing: border-box;
-  border: var(--hairline);
-  border-radius: var(--r-md);
-  background: var(--ink-50);
-  font-family: var(--font-sans);
-  font-size: 13px;
-  color: var(--ink-900);
-  outline: none;
-  transition: 120ms;
-}
-.ws-modal-field input,
-.ws-modal-field select { height: 34px; padding: 0 10px; }
-.ws-modal-field select {
-  padding-right: 28px;
-  appearance: none;
-  cursor: pointer;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  background-size: 13px;
-}
-.ws-modal-field textarea {
-  min-height: 72px;
-  padding: 8px 10px;
-  resize: vertical;
-  line-height: 1.5;
-}
-.ws-modal-field input:focus,
-.ws-modal-field select:focus,
-.ws-modal-field textarea:focus {
-  border-color: var(--accent);
-  background: var(--paper);
-  box-shadow: var(--shadow-focus);
-}
-.ws-modal-foot {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 12px 18px;
-  border-top: var(--hairline);
-}
-
-/* \u2500\u2500 Sort header \u2500\u2500 */
-.ws-sort-th {
-  cursor: pointer;
-  user-select: none;
-  white-space: nowrap;
-}
-.ws-sort-th:hover { color: var(--ink-800); }
-.ws-sort-inner { display: inline-flex; align-items: center; gap: 4px; }
-
-/* \u2500\u2500 Empty state override \u2500\u2500 */
-.ws-empty { padding: 64px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
-.ws-empty-icon { width: 48px; height: 48px; border-radius: var(--r-lg); background: var(--ink-100); display: grid; place-items: center; color: var(--ink-400); margin-bottom: 8px; }
-.ws-empty-title { font-size: 15px; font-weight: 700; color: var(--ink-900); }
-.ws-empty-sub { font-size: 13px; color: var(--ink-500); max-width: 340px; line-height: 1.45; }
-.ws-empty-actions { display: flex; gap: 8px; margin-top: 4px; }
-`;
-  const WS_CURRENT_USER = {
-    name: "Priya Nair",
-    designation: "SSE/Design",
-    department: "Engineering",
-    role: "Editor",
-    initials: "PN"
+  const { useEffect, useMemo, useRef, useState } = React;
+  const CURRENT_USER = {
+    name: "Creator 2",
+    role: "Engineering Creator",
+    initials: "C2",
+    color: "#C47ACD"
   };
-  const WS_ZONE_DIVISIONS = {
-    SCR: ["NED", "HYB"],
-    CR: ["PUNE"]
-  };
-  const WS_DIVISION_SECTIONS = {
-    NED: ["NED-AWB", "AWB-J"],
-    HYB: ["HYB-SC", "SC-KZJ"],
-    PUNE: ["PUNE-LNL", "PUNE-DD"]
-  };
-  const WS_ASSIGNEES = [
-    { id: 1, name: "Rajesh Kumar", designation: "SSE/P.Way", department: "Engineering" },
-    { id: 2, name: "Anil Sharma", designation: "JE/Drawing", department: "Engineering" },
-    { id: 3, name: "Priya Nair", designation: "SSE/Design", department: "Engineering" },
-    { id: 4, name: "Sandeep Reddy", designation: "SSE/Signal", department: "S&T" },
-    { id: 5, name: "Neha Verma", designation: "JE/Signal", department: "S&T" },
-    { id: 6, name: "Amit Choudhary", designation: "SSE/OHE", department: "OHE" },
-    { id: 7, name: "Kavita Rao", designation: "JE/OHE", department: "OHE" },
-    { id: 8, name: "Manoj Singh", designation: "AEN/Yard", department: "Engineering" }
+  const USERS = [
+    { name: "Creator 1", role: "Engineering Creator", initials: "C1", color: "#D7A3DC" },
+    { name: "Creator 2", role: "Engineering Creator", initials: "C2", color: "#C47ACD" },
+    { name: "Creator 3", role: "Engineering Creator", initials: "C3", color: "#B45CC2" },
+    { name: "Reviewer 1", role: "Engineering Reviewer", initials: "R1", color: "#E983B9" },
+    { name: "Reviewer 2", role: "Engineering Reviewer", initials: "R2", color: "#6B8FF0" },
+    { name: "Approver 1", role: "Approval Desk", initials: "A1", color: "#28A874" }
   ];
-  const INITIAL_WORK_ITEMS = [
+  const ZONES = [
     {
-      id: "WI-001",
-      priority: "Critical",
-      workItemTitle: "Assign generated LOP draft",
-      zone: "SCR",
-      division: "NED",
-      section: "NED-AWB",
-      stationCode: "AWB",
-      stationName: "Aurangabad",
-      documentType: "LOP",
-      fileName: "AWB-LOP-V0-R0-A0",
-      stage: "Unassigned",
-      assignedTo: null,
-      dueDate: null,
-      openIssues: 0,
-      validationStatus: "Pending",
-      lastUpdated: "2026-05-28 13:10"
+      code: "SCR",
+      label: "South Central Railway",
+      divisions: [
+        {
+          code: "NED",
+          label: "Nanded",
+          sections: [
+            {
+              code: "AWB-AK",
+              label: "Aurangabad - Ankai",
+              stations: [
+                { code: "AWB", label: "Aurangabad" },
+                { code: "NED", label: "Nanded" },
+                { code: "J", label: "Jalna" }
+              ]
+            },
+            {
+              code: "PAU-PBN",
+              label: "Purna - Parbhani",
+              stations: [
+                { code: "PAU", label: "Purna" },
+                { code: "PBN", label: "Parbhani" },
+                { code: "SELU", label: "Selu" }
+              ]
+            }
+          ]
+        },
+        {
+          code: "HYB",
+          label: "Hyderabad",
+          sections: [
+            {
+              code: "HYB-LPI",
+              label: "Hyderabad - Lingampalli",
+              stations: [
+                { code: "HYB", label: "Hyderabad" },
+                { code: "LPI", label: "Lingampalli" },
+                { code: "SC", label: "Secunderabad" }
+              ]
+            },
+            {
+              code: "KZJ-WL",
+              label: "Kazipet - Warangal",
+              stations: [
+                { code: "KZJ", label: "Kazipet" },
+                { code: "WGL", label: "Warangal" },
+                { code: "WL", label: "Warangal East" }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
-      id: "WI-002",
-      priority: "High",
-      workItemTitle: "Resolve validation issues",
-      zone: "SCR",
-      division: "NED",
-      section: "NED-AWB",
-      stationCode: "AWB",
-      stationName: "Aurangabad",
-      documentType: "ESP",
-      fileName: "AWB-V0-R0-A0",
-      stage: "Validation Failed",
-      assignedTo: { name: "Rajesh Kumar", designation: "SSE/P.Way", department: "Engineering" },
-      dueDate: "2026-05-30",
-      openIssues: 5,
-      validationStatus: "Issues Found",
-      lastUpdated: "2026-05-28 16:20"
-    },
-    {
-      id: "WI-003",
-      priority: "Medium",
-      workItemTitle: "Continue digital ESP editing",
-      zone: "SCR",
-      division: "NED",
-      section: "NED-AWB",
-      stationCode: "AWB",
-      stationName: "Aurangabad",
-      documentType: "ESP",
-      fileName: "AWB-V1-R0-A0",
-      stage: "In Editing",
-      assignedTo: { name: "Priya Nair", designation: "SSE/Design", department: "Engineering" },
-      dueDate: "2026-05-31",
-      openIssues: 2,
-      validationStatus: "Issues Found",
-      lastUpdated: "2026-05-28 14:05"
-    },
-    {
-      id: "WI-004",
-      priority: "Medium",
-      workItemTitle: "Start SIP draft work",
-      zone: "SCR",
-      division: "NED",
-      section: "NED-AWB",
-      stationCode: "AWB",
-      stationName: "Aurangabad",
-      documentType: "SIP",
-      fileName: "AWB-SIP-V0-R0-A0",
-      stage: "Assigned",
-      assignedTo: { name: "Sandeep Reddy", designation: "SSE/Signal", department: "S&T" },
-      dueDate: "2026-06-01",
-      openIssues: 0,
-      validationStatus: "Pending",
-      lastUpdated: "2026-05-28 15:30"
-    },
-    {
-      id: "WI-005",
-      priority: "High",
-      workItemTitle: "Address returned comments",
-      zone: "SCR",
-      division: "HYB",
-      section: "HYB-SC",
-      stationCode: "SC",
-      stationName: "Secunderabad",
-      documentType: "ESP",
-      fileName: "SC-V1-R1-A0",
-      stage: "Returned with Comments",
-      assignedTo: { name: "Manoj Singh", designation: "AEN/Yard", department: "Engineering" },
-      dueDate: "2026-05-29",
-      openIssues: 3,
-      validationStatus: "Issues Found",
-      lastUpdated: "2026-05-27 18:40"
-    },
-    {
-      id: "WI-006",
-      priority: "Low",
-      workItemTitle: "Review generated document",
-      zone: "SCR",
-      division: "HYB",
-      section: "HYB-SC",
-      stationCode: "HYB",
-      stationName: "Hyderabad",
-      documentType: "ESP",
-      fileName: "HYB-V0-R0-A0",
-      stage: "Generated",
-      assignedTo: null,
-      dueDate: null,
-      openIssues: 0,
-      validationStatus: "Pending",
-      lastUpdated: "2026-05-28 12:45"
-    },
-    {
-      id: "WI-007",
-      priority: "High",
-      workItemTitle: "Resolve TOC validation conflicts",
-      zone: "CR",
-      division: "PUNE",
-      section: "PUNE-LNL",
-      stationCode: "PUNE",
-      stationName: "Pune",
-      documentType: "TOC",
-      fileName: "PUNE-TOC-V0-R0-A0",
-      stage: "Validation Failed",
-      assignedTo: { name: "Neha Verma", designation: "JE/Signal", department: "S&T" },
-      dueDate: "2026-05-30",
-      openIssues: 4,
-      validationStatus: "Issues Found",
-      lastUpdated: "2026-05-28 11:25"
-    },
-    {
-      id: "WI-008",
-      priority: "Medium",
-      workItemTitle: "Submit ESP for review",
-      zone: "SCR",
-      division: "NED",
-      section: "AWB-J",
-      stationCode: "JLN",
-      stationName: "Jalna",
-      documentType: "ESP",
-      fileName: "JLN-V0-R0-A0",
-      stage: "Ready for Review",
-      assignedTo: { name: "Anil Sharma", designation: "JE/Drawing", department: "Engineering" },
-      dueDate: "2026-05-30",
-      openIssues: 0,
-      validationStatus: "Passed",
-      lastUpdated: "2026-05-28 17:10"
+      code: "CR",
+      label: "Central Railway",
+      divisions: [
+        {
+          code: "PUNE",
+          label: "Pune",
+          sections: [
+            {
+              code: "PUNE-LNL",
+              label: "Pune - Lonavala",
+              stations: [
+                { code: "PUNE", label: "Pune" },
+                { code: "LNL", label: "Lonavala" },
+                { code: "KAD", label: "Khadki" }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ];
-  const STAGE_TONES = {
-    "Generated": "neutral",
-    // gray
-    "Unassigned": "neutral",
-    // gray
-    "Assigned": "warning",
-    // amber
-    "Draft": "neutral",
-    // gray
-    "In Editing": "accent",
-    // teal
-    "Validation Pending": "warning",
-    // amber
-    "Validation Failed": "danger",
-    // red
-    "Ready for Review": "info",
-    // blue
-    "Submitted for Review": "info",
-    // blue
-    "Returned with Comments": "warning",
-    // amber
-    "Approved": "success"
-    // green
-  };
-  const STATUS_BY_STAGE = {
-    "Generated": "Draft",
-    "Unassigned": "Draft",
-    "Assigned": "Draft",
-    "Draft": "Active",
-    "In Editing": "Active",
-    "Validation Pending": "Active",
-    "Validation Failed": "Active",
-    "Ready for Review": "Active",
-    "Submitted for Review": "Active",
-    "Returned with Comments": "Active",
-    "Approved": "Frozen"
-  };
-  const STATUS_TONES = {
-    Draft: "neutral",
-    // gray — pre-work
-    Active: "success",
-    // green — work in progress
-    Frozen: "info"
-    // blue — post-EDAS, locked
-  };
-  const PRIORITY_TONES = {
-    Critical: "danger",
-    High: "warning",
-    Medium: "info",
-    Low: "neutral"
-  };
-  const STAGE_PRIMARY = {
-    "Generated": "Assign",
-    "Unassigned": "Assign",
-    "Assigned": "Start",
-    "Draft": "Continue",
-    "In Editing": "Continue",
-    "Validation Pending": "Run Validation",
-    "Validation Failed": "Open Issues",
-    "Ready for Review": "Submit for Review",
-    "Submitted for Review": "Track Review",
-    "Returned with Comments": "View Comments",
-    "Approved": "Export"
-  };
-  const STAGE_ACTIONS = {
-    "Generated": ["View", "Clone", "Assign"],
-    "Unassigned": ["View", "Clone", "Assign"],
-    "Assigned": ["View", "Clone", "Start", "Reassign"],
-    "Draft": ["View", "Clone", "Continue", "Assign"],
-    "In Editing": ["View", "Clone", "Continue", "Reassign"],
-    "Validation Pending": ["View", "Run Validation", "Reassign"],
-    "Validation Failed": ["View", "Open Issues", "Clone", "Reassign"],
-    "Ready for Review": ["View", "Clone", "Submit for Review", "Reassign"],
-    "Submitted for Review": ["View", "Track Review"],
-    "Returned with Comments": ["View", "View Comments", "Continue", "Reassign"],
-    "Approved": ["View", "Clone", "Export"]
-  };
-  const QUICK_FILTERS = [
-    { id: "assigned_me", label: "Assigned to Me" },
-    { id: "unassigned", label: "Unassigned" },
-    { id: "in_editing", label: "In Editing" },
-    { id: "validation_issues", label: "Validation Issues" },
-    { id: "ready_review", label: "Ready for Review" },
-    { id: "returned", label: "Returned" },
-    { id: "recently_updated", label: "Recently Updated" }
+  const DOCUMENT_TYPES = ["ESP", "SIP", "LOP"];
+  const STAGES = [
+    "Returned with Comments",
+    "In Editing",
+    "Under Review",
+    "Draft / WIP",
+    "Submitted",
+    "Assigned",
+    "Validation Pending"
   ];
-  const StageBadge = ({ stage }) => /* @__PURE__ */ React.createElement(Chip, { tone: STAGE_TONES[stage] || "neutral" }, stage);
-  const PriorityBadge = ({ priority }) => /* @__PURE__ */ React.createElement(Chip, { tone: PRIORITY_TONES[priority] || "neutral", size: "sm", dot: true }, priority);
-  const TypeBadge = ({ docType }) => /* @__PURE__ */ React.createElement("span", { className: "ws-type", "data-type": docType }, docType);
-  const StatusBadge = ({ status }) => /* @__PURE__ */ React.createElement("span", { className: "ws-status", "data-status": status }, status);
-  const RowActions = ({ item, onAssign, onToast }) => {
-    const [menuOpen, setMenuOpen] = useState(false);
-    const menuRef = useRef(null);
+  const VALIDATIONS = ["Passed", "Warning", "Failed", "Not Run"];
+  const SAMPLE_ROWS = [
+    {
+      id: "DOC-001",
+      bucket: "my",
+      zone: "SCR",
+      division: "NED",
+      section: "AWB-AK",
+      station: "Aurangabad",
+      stationCode: "AWB",
+      documentType: "ESP",
+      version: "V3-R0-A0",
+      stage: "Returned with Comments",
+      issues: 5,
+      validation: "Failed",
+      assignedTo: USERS[1],
+      drawingNo: "GM(W)SC/YARDS/NED/AWB/431/2023",
+      initiatedBy: "Creator 1",
+      initiatedOn: "05 Jun 2026",
+      previousAssignee: "Creator 1",
+      sourceFile: "AWB-ESP-2025-V7-R0-A0.pdf",
+      lastActivity: "Returned by Engineering Reviewer",
+      lastUpdated: "10 Jun 2026, 04:30 PM",
+      openComments: 3,
+      validationIssues: 2
+    },
+    {
+      id: "DOC-002",
+      bucket: "my",
+      zone: "SCR",
+      division: "NED",
+      section: "AWB-AK",
+      station: "Nanded",
+      stationCode: "NED",
+      documentType: "ESP",
+      version: "V2-R0-A0",
+      stage: "In Editing",
+      issues: 2,
+      validation: "Warning",
+      assignedTo: USERS[0],
+      drawingNo: "GM(W)SC/YARDS/NED/NED/118/2024",
+      initiatedBy: "Creator 1",
+      initiatedOn: "03 Jun 2026",
+      previousAssignee: "Creator 2",
+      sourceFile: "NED-ESP-2025-V2-R0-A0.pdf",
+      lastActivity: "Creator updated platform geometry",
+      lastUpdated: "10 Jun 2026, 02:10 PM",
+      openComments: 2,
+      validationIssues: 1
+    },
+    {
+      id: "DOC-003",
+      bucket: "my",
+      zone: "SCR",
+      division: "HYB",
+      section: "HYB-LPI",
+      station: "Hyderabad",
+      stationCode: "HYB",
+      documentType: "SIP",
+      version: "V4-R1-A0",
+      stage: "Under Review",
+      issues: 1,
+      validation: "Passed",
+      assignedTo: USERS[3],
+      drawingNo: "GM(W)SC/SIP/HYB/214/2025",
+      initiatedBy: "Creator 2",
+      initiatedOn: "01 Jun 2026",
+      previousAssignee: "Creator 3",
+      sourceFile: "HYB-SIP-2026-V4-R1-A0.pdf",
+      lastActivity: "Sent to engineering review",
+      lastUpdated: "09 Jun 2026, 06:20 PM",
+      openComments: 1,
+      validationIssues: 0
+    },
+    {
+      id: "DOC-004",
+      bucket: "my",
+      zone: "SCR",
+      division: "HYB",
+      section: "HYB-LPI",
+      station: "Lingampalli",
+      stationCode: "LPI",
+      documentType: "ESP",
+      version: "V1-R0-A0",
+      stage: "Draft / WIP",
+      issues: 0,
+      validation: "Not Run",
+      assignedTo: null,
+      drawingNo: "GM(W)SC/YARDS/HYB/LPI/077/2025",
+      initiatedBy: "Creator 3",
+      initiatedOn: "07 Jun 2026",
+      previousAssignee: "-",
+      sourceFile: "LPI-ESP-2025-V1-R0-A0.dwg",
+      lastActivity: "Created from source ESP",
+      lastUpdated: "08 Jun 2026, 11:15 AM",
+      openComments: 0,
+      validationIssues: 0
+    },
+    {
+      id: "DOC-005",
+      bucket: "my",
+      zone: "SCR",
+      division: "HYB",
+      section: "KZJ-WL",
+      station: "Warangal",
+      stationCode: "WGL",
+      documentType: "LOP",
+      version: "V2-R0-A0",
+      stage: "Submitted",
+      issues: 0,
+      validation: "Passed",
+      assignedTo: USERS[2],
+      drawingNo: "GM(W)SC/LOP/HYB/WGL/052/2026",
+      initiatedBy: "Creator 3",
+      initiatedOn: "02 Jun 2026",
+      previousAssignee: "Creator 2",
+      sourceFile: "WGL-LOP-2026-V2-R0-A0.pdf",
+      lastActivity: "Submitted for approval",
+      lastUpdated: "08 Jun 2026, 09:40 AM",
+      openComments: 0,
+      validationIssues: 0
+    }
+  ];
+  const STATION_POOL = ZONES.flatMap(
+    (zone) => zone.divisions.flatMap(
+      (division) => division.sections.flatMap(
+        (section) => section.stations.map((station) => ({
+          zone: zone.code,
+          division: division.code,
+          section: section.code,
+          sectionLabel: section.label,
+          station: station.label,
+          stationCode: station.code
+        }))
+      )
+    )
+  );
+  const makeRows = () => {
+    const rows = [...SAMPLE_ROWS];
+    for (let index = rows.length; index < 126; index += 1) {
+      const station = STATION_POOL[index % STATION_POOL.length];
+      const documentType = DOCUMENT_TYPES[index % DOCUMENT_TYPES.length];
+      const stage = STAGES[index % STAGES.length];
+      const validation = stage === "Draft / WIP" ? "Not Run" : VALIDATIONS[index % VALIDATIONS.length];
+      const bucket = index < 12 ? "my" : index < 108 ? "team" : "unassigned";
+      const assignee = bucket === "unassigned" || index % 13 === 0 ? null : USERS[index % USERS.length];
+      rows.push({
+        id: `DOC-${String(index + 1).padStart(3, "0")}`,
+        bucket,
+        zone: station.zone,
+        division: station.division,
+        section: station.section,
+        station: station.station,
+        stationCode: station.stationCode,
+        documentType,
+        version: `V${index % 5 + 1}-R${index % 2}-A0`,
+        stage,
+        issues: validation === "Failed" ? index % 6 + 1 : validation === "Warning" ? index % 3 + 1 : 0,
+        validation,
+        assignedTo: assignee,
+        drawingNo: `GM(W)SC/YARDS/${station.division}/${station.stationCode}/${String(200 + index)}/2026`,
+        initiatedBy: USERS[(index + 1) % USERS.length].name,
+        initiatedOn: `${String(index % 18 + 1).padStart(2, "0")} Jun 2026`,
+        previousAssignee: USERS[(index + 2) % USERS.length].name,
+        sourceFile: `${station.stationCode}-${documentType}-2026-${String(index + 1).padStart(3, "0")}.pdf`,
+        lastActivity: stage === "Returned with Comments" ? "Returned by Engineering Reviewer" : "Updated in document workflow",
+        lastUpdated: `${String(index % 18 + 1).padStart(2, "0")} Jun 2026, ${String(9 + index % 9).padStart(2, "0")}:${index % 2 ? "45" : "10"} ${index % 3 ? "AM" : "PM"}`,
+        openComments: validation === "Failed" ? index % 4 + 1 : index % 3,
+        validationIssues: validation === "Failed" ? index % 5 + 1 : validation === "Warning" ? 1 : 0
+      });
+    }
+    return rows;
+  };
+  const INITIAL_ROWS = makeRows();
+  const allZoneOptions = ZONES.map((zone) => ({ value: zone.code, label: zone.code }));
+  const getDivisionOptions = (zoneValue) => {
+    const zones = zoneValue === "all" ? ZONES : ZONES.filter((zone) => zone.code === zoneValue);
+    return zones.flatMap((zone) => zone.divisions.map((division) => ({ value: division.code, label: `${division.label} Division` })));
+  };
+  const getSectionOptions = (zoneValue, divisionValue) => {
+    const zones = zoneValue === "all" ? ZONES : ZONES.filter((zone) => zone.code === zoneValue);
+    return zones.flatMap(
+      (zone) => zone.divisions.filter((division) => divisionValue === "all" || division.code === divisionValue).flatMap((division) => division.sections.map((section) => ({ value: section.code, label: section.label })))
+    );
+  };
+  const getStationOptions = (zoneValue, divisionValue, sectionValue) => {
+    const zones = zoneValue === "all" ? ZONES : ZONES.filter((zone) => zone.code === zoneValue);
+    return zones.flatMap(
+      (zone) => zone.divisions.filter((division) => divisionValue === "all" || division.code === divisionValue).flatMap(
+        (division) => division.sections.filter((section) => sectionValue === "all" || section.code === sectionValue).flatMap((section) => section.stations.map((station) => ({ value: station.code, label: `${station.label} (${station.code})` })))
+      )
+    );
+  };
+  const stageTone = (stage) => {
+    if (stage === "Returned with Comments") return "danger";
+    if (stage === "Submitted" || stage === "Assigned") return "warning";
+    if (stage === "Draft / WIP") return "neutral";
+    return "info";
+  };
+  const validationTone = (validation) => {
+    if (validation === "Passed") return "success";
+    if (validation === "Warning") return "warning";
+    if (validation === "Failed") return "danger";
+    return "neutral";
+  };
+  const SortTh = ({ children, sortKey, sort, onSort, style }) => {
+    const active = sort.key === sortKey;
+    return /* @__PURE__ */ React.createElement("th", { "data-sortable": "true", "data-active": active ? "true" : void 0, onClick: () => onSort(sortKey), style }, /* @__PURE__ */ React.createElement("span", { className: "ds-th-inner" }, children, /* @__PURE__ */ React.createElement(Icon, { name: active ? sort.dir === "asc" ? "arrow_up" : "arrow_down" : "sort", size: 11, style: !active ? { opacity: 0.35 } : void 0 })));
+  };
+  const StageChip = ({ stage }) => /* @__PURE__ */ React.createElement(Chip, { tone: stageTone(stage), leadingIcon: stage === "Returned with Comments" ? "alert" : void 0 }, stage);
+  const ValidationChip = ({ validation }) => {
+    const icon = validation === "Passed" ? "check_circle" : validation === "Warning" ? "alert_tri" : validation === "Failed" ? "x" : "minus";
+    return /* @__PURE__ */ React.createElement(Chip, { tone: validationTone(validation), leadingIcon: icon }, validation);
+  };
+  const TypePill = ({ type }) => /* @__PURE__ */ React.createElement("span", { className: "ws-type-pill", "data-type": type }, type);
+  const AssigneeCell = ({ user }) => {
+    if (!user) {
+      return /* @__PURE__ */ React.createElement("span", { className: "ws-assignee" }, /* @__PURE__ */ React.createElement("span", { className: "ws-avatar ws-avatar-empty" }, /* @__PURE__ */ React.createElement(Icon, { name: "users", size: 12 })), /* @__PURE__ */ React.createElement("span", null, "Unassigned"));
+    }
+    return /* @__PURE__ */ React.createElement("span", { className: "ws-assignee" }, /* @__PURE__ */ React.createElement("span", { className: "ws-avatar", style: { background: user.color } }, user.initials), /* @__PURE__ */ React.createElement("span", null, user.name));
+  };
+  const DetailRow = ({ item }) => {
+    const details = [
+      ["Drawing No.", item.drawingNo],
+      ["Initiated By", item.initiatedBy],
+      ["Previous Assignee", item.previousAssignee],
+      ["Open Comments", String(item.openComments)],
+      ["Division", item.division],
+      ["Initiated On", item.initiatedOn],
+      ["Source File", item.sourceFile],
+      ["Validation Issues", String(item.validationIssues)],
+      ["Section", item.section],
+      ["Last Updated", item.lastUpdated],
+      ["Last Activity", item.lastActivity]
+    ];
+    return /* @__PURE__ */ React.createElement("tr", { className: "ws-detail-row" }, /* @__PURE__ */ React.createElement("td", { colSpan: "8" }, /* @__PURE__ */ React.createElement("div", { className: "ws-detail-grid" }, details.map(([label, value]) => /* @__PURE__ */ React.createElement("div", { className: "ws-detail-item", key: `${label}-${value}` }, /* @__PURE__ */ React.createElement("span", null, label), /* @__PURE__ */ React.createElement("strong", null, value))))));
+  };
+  const WorkspaceEmptyState = ({ onClear }) => /* @__PURE__ */ React.createElement("div", { className: "ds-empty" }, /* @__PURE__ */ React.createElement("div", { className: "ds-empty-art" }, /* @__PURE__ */ React.createElement(Icon, { name: "search", size: 46 })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ds-empty-title" }, "No documents found"), /* @__PURE__ */ React.createElement("div", { className: "ds-empty-desc", style: { marginTop: 6 } }, "No Workspace documents match the selected filters.")), /* @__PURE__ */ React.createElement("div", { className: "ds-empty-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", onClick: onClear }, "Clear Filters")));
+  const RowActions = ({ item, onOpen, onAssign, onToast }) => {
+    const [open, setOpen] = useState(false);
+    const ref = useRef(null);
+    const needsAssignment = !item.assignedTo;
     useEffect(() => {
-      if (!menuOpen) return;
-      const handler = (e) => {
-        if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+      if (!open) return void 0;
+      const close = (event) => {
+        if (ref.current && !ref.current.contains(event.target)) setOpen(false);
       };
-      document.addEventListener("mousedown", handler);
-      return () => document.removeEventListener("mousedown", handler);
-    }, [menuOpen]);
-    const primary = STAGE_PRIMARY[item.stage] || "View";
-    const allActions = STAGE_ACTIONS[item.stage] || ["View"];
-    const secondary = allActions.filter((a) => a !== primary);
-    const handleAction = (action) => {
-      setMenuOpen(false);
-      if (action === "Assign" || action === "Reassign") {
-        onAssign(item);
-      } else {
-        onToast(`${action}: ${item.fileName}`);
-      }
-    };
-    return /* @__PURE__ */ React.createElement("div", { className: "ws-row-actions", ref: menuRef }, /* @__PURE__ */ React.createElement("button", { className: "ws-action-primary", onClick: () => handleAction(primary) }, primary), secondary.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { className: "ws-action-more", title: "More actions", onClick: () => setMenuOpen((o) => !o) }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 14 })), menuOpen && /* @__PURE__ */ React.createElement("div", { className: "ws-action-menu" }, secondary.map((action, idx) => /* @__PURE__ */ React.createElement("button", { key: action, className: "ws-action-menu-item", onClick: () => handleAction(action) }, action)))));
+      document.addEventListener("mousedown", close);
+      return () => document.removeEventListener("mousedown", close);
+    }, [open]);
+    return /* @__PURE__ */ React.createElement("div", { className: "dl-row-actions", ref }, /* @__PURE__ */ React.createElement("button", { className: "dl-row-view-btn", onClick: () => needsAssignment ? onAssign(item) : onOpen(item) }, needsAssignment ? "Assign" : "Open"), /* @__PURE__ */ React.createElement("div", { className: "dl-row-more-wrap" }, /* @__PURE__ */ React.createElement("button", { className: "dl-action-icon", title: "More actions", onClick: () => setOpen((value) => !value) }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 14 })), open && /* @__PURE__ */ React.createElement("div", { className: "dl-row-menu" }, /* @__PURE__ */ React.createElement("button", { onClick: () => {
+      setOpen(false);
+      onOpen(item);
+    } }, /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 14 }), "View details"), /* @__PURE__ */ React.createElement("button", { onClick: () => {
+      setOpen(false);
+      onAssign(item);
+    } }, /* @__PURE__ */ React.createElement(Icon, { name: "users", size: 14 }), needsAssignment ? "Assign" : "Reassign"), /* @__PURE__ */ React.createElement("button", { onClick: () => {
+      setOpen(false);
+      onToast(`Cloned ${item.stationCode} ${item.documentType}`);
+    } }, /* @__PURE__ */ React.createElement(Icon, { name: "copy", size: 14 }), "Clone"), /* @__PURE__ */ React.createElement("button", { onClick: () => {
+      setOpen(false);
+      onToast(`Export queued for ${item.stationCode}`);
+    } }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 14 }), "Export"))));
   };
   const AssignModal = ({ item, onClose, onSave }) => {
-    const [assigneeName, setAssigneeName] = useState(item.assignedTo?.name || "");
-    const [dueDate, setDueDate] = useState(item.dueDate || "");
-    const [priority, setPriority] = useState(item.priority || "Medium");
+    var _a;
+    const [assignee, setAssignee] = useState(((_a = item.assignedTo) == null ? void 0 : _a.name) || CURRENT_USER.name);
+    const [priority, setPriority] = useState(item.issues > 2 ? "High" : "Medium");
+    const [dueDate, setDueDate] = useState("2026-06-18");
     const [notes, setNotes] = useState("");
     useEffect(() => {
-      const handler = (e) => {
-        if (e.key === "Escape") onClose();
+      const onKey = (event) => {
+        if (event.key === "Escape") onClose();
       };
-      document.addEventListener("keydown", handler);
-      return () => document.removeEventListener("keydown", handler);
+      document.addEventListener("keydown", onKey);
+      return () => document.removeEventListener("keydown", onKey);
     }, [onClose]);
-    const handleSave = () => {
-      const selectedAssignee = WS_ASSIGNEES.find((a) => a.name === assigneeName);
-      const newStage = item.stage === "Unassigned" || item.stage === "Generated" ? "Assigned" : item.stage;
+    const save = () => {
+      const selectedUser = USERS.find((user) => user.name === assignee) || USERS[1];
       onSave({
         ...item,
-        assignedTo: selectedAssignee || null,
-        dueDate: dueDate || null,
-        priority,
-        stage: newStage,
-        lastUpdated: "2026-05-29 " + (/* @__PURE__ */ new Date()).toTimeString().slice(0, 5)
+        assignedTo: selectedUser,
+        stage: item.stage === "Draft / WIP" ? "In Editing" : item.stage,
+        lastActivity: notes || `Assigned to ${selectedUser.name}`,
+        lastUpdated: "12 Jun 2026, 08:45 AM"
       });
     };
     return ReactDOM.createPortal(
-      /* @__PURE__ */ React.createElement("div", { className: "ws-modal-overlay", onClick: onClose }, /* @__PURE__ */ React.createElement(
-        "div",
-        {
-          className: "ws-modal",
-          role: "dialog",
-          "aria-modal": "true",
-          "aria-labelledby": "ws-modal-title",
-          onClick: (e) => e.stopPropagation()
-        },
-        /* @__PURE__ */ React.createElement("div", { className: "ws-modal-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ws-modal-title", id: "ws-modal-title" }, "Assign Work Item"), /* @__PURE__ */ React.createElement("div", { className: "ws-modal-sub" }, item.workItemTitle)), /* @__PURE__ */ React.createElement("button", { className: "ws-modal-close", "aria-label": "Close", onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 15 }))),
-        /* @__PURE__ */ React.createElement("div", { className: "ws-modal-summary" }, /* @__PURE__ */ React.createElement("span", { className: "ws-modal-summary-station" }, item.stationName, " (", item.stationCode, ")"), /* @__PURE__ */ React.createElement("span", { className: "ws-modal-dot" }, "\xB7"), /* @__PURE__ */ React.createElement(TypeBadge, { docType: item.documentType }), /* @__PURE__ */ React.createElement("span", { className: "ws-modal-dot" }, "\xB7"), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--ink-700)", fontWeight: 700 } }, item.fileName), /* @__PURE__ */ React.createElement("span", { className: "ws-modal-dot" }, "\xB7"), /* @__PURE__ */ React.createElement(StageBadge, { stage: item.stage })),
-        /* @__PURE__ */ React.createElement("div", { className: "ws-modal-body" }, /* @__PURE__ */ React.createElement("div", { className: "ws-modal-field", "data-span": "full" }, /* @__PURE__ */ React.createElement("label", null, "Assign To"), /* @__PURE__ */ React.createElement("select", { value: assigneeName, onChange: (e) => setAssigneeName(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "\u2014 Select assignee \u2014"), WS_ASSIGNEES.map((a) => /* @__PURE__ */ React.createElement("option", { key: a.id, value: a.name }, a.name, " \xB7 ", a.designation, " \xB7 ", a.department)))), /* @__PURE__ */ React.createElement("div", { className: "ws-modal-field" }, /* @__PURE__ */ React.createElement("label", null, "Due Date"), /* @__PURE__ */ React.createElement("input", { type: "date", value: dueDate, onChange: (e) => setDueDate(e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "ws-modal-field" }, /* @__PURE__ */ React.createElement("label", null, "Priority"), /* @__PURE__ */ React.createElement("select", { value: priority, onChange: (e) => setPriority(e.target.value) }, ["Low", "Medium", "High", "Critical"].map((p) => /* @__PURE__ */ React.createElement("option", { key: p, value: p }, p)))), /* @__PURE__ */ React.createElement("div", { className: "ws-modal-field", "data-span": "full" }, /* @__PURE__ */ React.createElement("label", null, "Notes / Instructions ", /* @__PURE__ */ React.createElement("span", { style: { fontWeight: 400, textTransform: "none", letterSpacing: 0 } }, "(optional)")), /* @__PURE__ */ React.createElement(
-          "textarea",
-          {
-            value: notes,
-            onChange: (e) => setNotes(e.target.value),
-            placeholder: "Add instructions or notes for the assignee..."
-          }
-        ))),
-        /* @__PURE__ */ React.createElement("div", { className: "ws-modal-foot" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", onClick: onClose }, "Cancel"), /* @__PURE__ */ React.createElement(Btn, { variant: "primary", onClick: handleSave, disabled: !assigneeName }, item.assignedTo ? "Reassign" : "Assign"))
-      )),
+      /* @__PURE__ */ React.createElement("div", { className: "dl-add-overlay", onClick: onClose }, /* @__PURE__ */ React.createElement("div", { className: "dl-add-modal", onClick: (event) => event.stopPropagation(), role: "dialog", "aria-modal": "true", "aria-labelledby": "ws-assign-title" }, /* @__PURE__ */ React.createElement("div", { className: "dl-add-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-add-title", id: "ws-assign-title" }, "Assign Document"), /* @__PURE__ */ React.createElement("div", { className: "dl-add-subtitle" }, item.station, " (", item.stationCode, ") - ", item.documentType, " ", item.version)), /* @__PURE__ */ React.createElement("button", { className: "dl-add-close", onClick: onClose, "aria-label": "Close" }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 15 }))), /* @__PURE__ */ React.createElement("div", { className: "ws-modal-summary" }, /* @__PURE__ */ React.createElement(TypePill, { type: item.documentType }), /* @__PURE__ */ React.createElement(StageChip, { stage: item.stage }), /* @__PURE__ */ React.createElement(ValidationChip, { validation: item.validation })), /* @__PURE__ */ React.createElement("div", { className: "dl-add-body ws-assign-body" }, /* @__PURE__ */ React.createElement("div", { className: "dl-add-field", "data-span": "full" }, /* @__PURE__ */ React.createElement("label", null, "Assign To"), /* @__PURE__ */ React.createElement("select", { value: assignee, onChange: (event) => setAssignee(event.target.value) }, USERS.map((user) => /* @__PURE__ */ React.createElement("option", { key: user.name, value: user.name }, user.name, " - ", user.role)))), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Priority"), /* @__PURE__ */ React.createElement("select", { value: priority, onChange: (event) => setPriority(event.target.value) }, /* @__PURE__ */ React.createElement("option", null, "Low"), /* @__PURE__ */ React.createElement("option", null, "Medium"), /* @__PURE__ */ React.createElement("option", null, "High"), /* @__PURE__ */ React.createElement("option", null, "Critical"))), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Due Date"), /* @__PURE__ */ React.createElement("input", { type: "date", value: dueDate, onChange: (event) => setDueDate(event.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "dl-add-field", "data-span": "full" }, /* @__PURE__ */ React.createElement("label", null, "Notes / Instructions"), /* @__PURE__ */ React.createElement("textarea", { value: notes, onChange: (event) => setNotes(event.target.value), placeholder: "Add handoff notes for the assignee..." }))), /* @__PURE__ */ React.createElement("div", { className: "dl-add-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", onClick: onClose }, "Cancel"), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "users", onClick: save }, "Assign")))),
       document.body
     );
   };
-  const SortTh = ({ children, sortKey, sort, onSort, style }) => /* @__PURE__ */ React.createElement("th", { className: "ws-sort-th", style, onClick: () => onSort(sortKey) }, /* @__PURE__ */ React.createElement("span", { className: "ws-sort-inner" }, children, sort.key === sortKey && /* @__PURE__ */ React.createElement(Icon, { name: sort.dir === "asc" ? "chevron_up" : "chevron_down", size: 11 })));
-  const WsEmptyState = ({ noItems, onGoToLibrary, onResetFilters }) => /* @__PURE__ */ React.createElement("div", { className: "ws-empty" }, /* @__PURE__ */ React.createElement("div", { className: "ws-empty-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: noItems ? "layers" : "search", size: 22 })), /* @__PURE__ */ React.createElement("div", { className: "ws-empty-title" }, noItems ? "No workspace items yet." : "No items match your filters."), /* @__PURE__ */ React.createElement("div", { className: "ws-empty-sub" }, noItems ? "Generated digital documents will appear here when work is created." : "Try adjusting your filters or search query to find work items."), /* @__PURE__ */ React.createElement("div", { className: "ws-empty-actions" }, noItems ? /* @__PURE__ */ React.createElement(Btn, { variant: "primary", onClick: onGoToLibrary }, "Go to Digital Library") : /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", onClick: onResetFilters }, "Reset Filters")));
   const WorkspacePage = ({ onNavigate }) => {
-    const assignedZones = ["SCR", "CR"];
+    const [items, setItems] = useState(INITIAL_ROWS);
+    const [activeTab, setActiveTab] = useState("my");
     const [zone, setZone] = useState("all");
     const [division, setDivision] = useState("all");
     const [section, setSection] = useState("all");
-    const [docType, setDocType] = useState("all");
-    const [activeChips, setActiveChips] = useState({});
+    const [station, setStation] = useState("all");
+    const [docTypes, setDocTypes] = useState(DOCUMENT_TYPES);
+    const [stage, setStage] = useState("all");
+    const [validation, setValidation] = useState("all");
+    const [assignee, setAssignee] = useState("all");
     const [search, setSearch] = useState("");
-    const [sort, setSort] = useState({ key: "lastUpdated", dir: "desc" });
-    const [items, setItems] = useState(INITIAL_WORK_ITEMS);
+    const [filtersOpen, setFiltersOpen] = useState(false);
+    const [sortOpen, setSortOpen] = useState(false);
+    const [sort, setSort] = useState({ key: "station", dir: "asc" });
+    const [expanded, setExpanded] = useState("DOC-001");
     const [assignItem, setAssignItem] = useState(null);
     const [toast, setToast] = useState("");
-    const availableDivisions = useMemo(() => {
-      if (zone === "all") return assignedZones.flatMap((z) => WS_ZONE_DIVISIONS[z] || []);
-      return WS_ZONE_DIVISIONS[zone] || [];
-    }, [zone]);
-    const availableSections = useMemo(() => {
-      if (division === "all") return availableDivisions.flatMap((d) => WS_DIVISION_SECTIONS[d] || []);
-      return WS_DIVISION_SECTIONS[division] || [];
-    }, [division, availableDivisions]);
+    const [pageSize, setPageSize] = useState(25);
+    const [currentPage, setCurrentPage] = useState(1);
+    const divisionOptions = useMemo(() => getDivisionOptions(zone), [zone]);
+    const sectionOptions = useMemo(() => getSectionOptions(zone, division), [zone, division]);
+    const stationOptions = useMemo(() => getStationOptions(zone, division, section), [zone, division, section]);
+    const showToast = (message) => {
+      setToast(message);
+      window.setTimeout(() => setToast(""), 2400);
+    };
     const resetFilters = () => {
       setZone("all");
       setDivision("all");
       setSection("all");
-      setDocType("all");
-      setActiveChips({});
+      setStation("all");
+      setDocTypes(DOCUMENT_TYPES);
+      setStage("all");
+      setValidation("all");
+      setAssignee("all");
       setSearch("");
+      setCurrentPage(1);
     };
-    const toggleChip = (id) => setActiveChips((prev) => ({ ...prev, [id]: !prev[id] }));
-    const PRIORITY_ORDER = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+    const tabCounts = useMemo(() => ({
+      my: 12,
+      team: 96,
+      unassigned: 18
+    }), []);
+    const queueItems = [
+      { id: "my", label: "My Work", count: tabCounts.my },
+      { id: "team", label: "Team Queue", count: tabCounts.team },
+      { id: "unassigned", label: "Unassigned", count: tabCounts.unassigned }
+    ];
     const filteredItems = useMemo(() => {
-      let list = [...items];
-      if (zone !== "all") list = list.filter((i) => i.zone === zone);
-      if (division !== "all") list = list.filter((i) => i.division === division);
-      if (section !== "all") list = list.filter((i) => i.section === section);
-      if (docType !== "all") list = list.filter((i) => i.documentType === docType);
-      if (activeChips.assigned_me) list = list.filter((i) => i.assignedTo?.name === WS_CURRENT_USER.name);
-      if (activeChips.unassigned) list = list.filter((i) => !i.assignedTo);
-      if (activeChips.in_editing) list = list.filter((i) => i.stage === "In Editing");
-      if (activeChips.validation_issues) list = list.filter((i) => i.validationStatus === "Issues Found" || i.stage === "Validation Failed");
-      if (activeChips.ready_review) list = list.filter((i) => i.stage === "Ready for Review");
-      if (activeChips.returned) list = list.filter((i) => i.stage === "Returned with Comments");
-      if (search.trim()) {
-        const q = search.trim().toLowerCase();
-        list = list.filter(
-          (i) => i.workItemTitle.toLowerCase().includes(q) || i.stationName.toLowerCase().includes(q) || i.stationCode.toLowerCase().includes(q) || i.fileName.toLowerCase().includes(q) || i.documentType.toLowerCase().includes(q) || (i.assignedTo?.name || "").toLowerCase().includes(q) || (i.assignedTo?.designation || "").toLowerCase().includes(q)
-        );
-      }
-      list.sort((a, b) => {
-        if (sort.key === "priority") {
-          const av2 = PRIORITY_ORDER[a.priority] ?? 4;
-          const bv2 = PRIORITY_ORDER[b.priority] ?? 4;
-          return sort.dir === "asc" ? av2 - bv2 : bv2 - av2;
-        }
-        if (sort.key === "openIssues") {
-          return sort.dir === "asc" ? a.openIssues - b.openIssues : b.openIssues - a.openIssues;
-        }
-        let av, bv;
-        if (sort.key === "status") {
-          av = STATUS_BY_STAGE[a.stage] || "";
-          bv = STATUS_BY_STAGE[b.stage] || "";
-        } else {
-          av = String(a[sort.key] || "");
-          bv = String(b[sort.key] || "");
-        }
-        const cmp = String(bv).localeCompare(String(av));
-        return sort.dir === "desc" ? cmp : -cmp;
+      const q = search.trim().toLowerCase();
+      const valueForSort = (item, key) => {
+        var _a;
+        if (key === "assignedTo") return ((_a = item.assignedTo) == null ? void 0 : _a.name) || "Unassigned";
+        return item[key];
+      };
+      return items.filter((item) => item.bucket === activeTab).filter((item) => zone === "all" || item.zone === zone).filter((item) => division === "all" || item.division === division).filter((item) => section === "all" || item.section === section).filter((item) => station === "all" || item.stationCode === station).filter((item) => docTypes.includes(item.documentType)).filter((item) => stage === "all" || item.stage === stage).filter((item) => validation === "all" || item.validation === validation).filter((item) => {
+        var _a;
+        return assignee === "all" || (assignee === "unassigned" ? !item.assignedTo : ((_a = item.assignedTo) == null ? void 0 : _a.name) === assignee);
+      }).filter((item) => {
+        var _a;
+        if (!q) return true;
+        return [
+          item.station,
+          item.stationCode,
+          item.documentType,
+          item.version,
+          item.stage,
+          item.validation,
+          ((_a = item.assignedTo) == null ? void 0 : _a.name) || "Unassigned",
+          item.drawingNo,
+          item.sourceFile
+        ].join(" ").toLowerCase().includes(q);
+      }).sort((a, b) => {
+        const av = valueForSort(a, sort.key);
+        const bv = valueForSort(b, sort.key);
+        const result = typeof av === "number" && typeof bv === "number" ? av - bv : String(av || "").localeCompare(String(bv || ""), void 0, { numeric: true });
+        return sort.dir === "asc" ? result : -result;
       });
-      return list;
-    }, [items, zone, division, section, docType, activeChips, search, sort]);
-    const handleSort = (key) => setSort((s) => ({ key, dir: s.key === key && s.dir === "desc" ? "asc" : "desc" }));
-    const showToast = (msg) => {
-      setToast(msg);
-      setTimeout(() => setToast(""), 2600);
+    }, [activeTab, assignee, division, docTypes, items, search, section, sort, stage, station, validation, zone]);
+    useEffect(() => {
+      setCurrentPage(1);
+    }, [activeTab, assignee, division, docTypes, pageSize, search, section, stage, station, validation, zone]);
+    const activeFilterChips = useMemo(() => {
+      const chips = [];
+      if (docTypes.length !== DOCUMENT_TYPES.length) chips.push({ key: "docTypes", label: `Types: ${docTypes.join(", ")}` });
+      if (stage !== "all") chips.push({ key: "stage", label: `Stage: ${stage}` });
+      if (validation !== "all") chips.push({ key: "validation", label: `Validation: ${validation}` });
+      if (assignee !== "all") chips.push({ key: "assignee", label: assignee === "unassigned" ? "Unassigned" : `Assignee: ${assignee}` });
+      if (search.trim()) chips.push({ key: "search", label: `Search: ${search.trim()}` });
+      return chips;
+    }, [assignee, docTypes, search, stage, validation]);
+    const removeFilterChip = (key) => {
+      if (key === "docTypes") setDocTypes(DOCUMENT_TYPES);
+      if (key === "stage") setStage("all");
+      if (key === "validation") setValidation("all");
+      if (key === "assignee") setAssignee("all");
+      if (key === "search") setSearch("");
     };
-    const handleAssignSave = (updated) => {
-      setItems((prev) => prev.map((i) => i.id === updated.id ? updated : i));
+    const handleSort = (key) => {
+      setSort((current) => ({
+        key,
+        dir: current.key === key && current.dir === "asc" ? "desc" : "asc"
+      }));
+    };
+    const saveAssignment = (updated) => {
+      setItems((current) => current.map((item) => item.id === updated.id ? updated : item));
       setAssignItem(null);
-      showToast(`Work item assigned to ${updated.assignedTo?.name}`);
+      showToast(`${updated.stationCode} assigned to ${updated.assignedTo.name}`);
     };
-    const isOverdue = (dueDate) => {
-      if (!dueDate) return false;
-      return new Date(dueDate) < /* @__PURE__ */ new Date("2026-05-29");
-    };
-    return /* @__PURE__ */ React.createElement("div", { className: "ws-content" }, /* @__PURE__ */ React.createElement(
+    const totalPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+    const safeCurrentPage = Math.min(currentPage, totalPages);
+    const pageStart = (safeCurrentPage - 1) * pageSize;
+    const pageEnd = Math.min(pageStart + pageSize, filteredItems.length);
+    const pagedItems = filteredItems.slice(pageStart, pageEnd);
+    const pageNumbers = Array.from({ length: Math.min(totalPages, 5) }, (_, index) => index + 1);
+    const scopePath = [
+      zone === "all" ? "All Zones" : zone,
+      division === "all" ? "All Divisions" : division,
+      section === "all" ? "All Sections" : section,
+      station === "all" ? "All Stations" : station
+    ];
+    return /* @__PURE__ */ React.createElement("div", { className: "dl-content ws-content" }, /* @__PURE__ */ React.createElement(
       AppTopBar,
       {
         crumbs: [
@@ -1108,117 +524,330 @@
         ],
         searchPlaceholder: "Search stations, documents, approvals..."
       }
-    ), /* @__PURE__ */ React.createElement("div", { className: "dl-page-header" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "inbox", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "dl-page-heading" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-title" }, "Workspace"), /* @__PURE__ */ React.createElement("div", { className: "dl-page-sub" }, "Manage your assigned work"))), /* @__PURE__ */ React.createElement("div", { className: "ws-filter-bar" }, /* @__PURE__ */ React.createElement("div", { className: "ws-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Zone"), /* @__PURE__ */ React.createElement(
-      "select",
-      {
-        className: "ws-filter-select",
-        "data-active": zone !== "all",
-        value: zone,
-        onChange: (e) => {
-          setZone(e.target.value);
-          setDivision("all");
-          setSection("all");
-        }
-      },
-      /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Zones"),
-      assignedZones.map((z) => /* @__PURE__ */ React.createElement("option", { key: z, value: z }, z))
-    )), /* @__PURE__ */ React.createElement("div", { className: "ws-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Division"), /* @__PURE__ */ React.createElement(
-      "select",
-      {
-        className: "ws-filter-select",
-        "data-active": division !== "all",
-        value: division,
-        onChange: (e) => {
-          setDivision(e.target.value);
-          setSection("all");
-        }
-      },
-      /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Divisions"),
-      availableDivisions.map((d) => /* @__PURE__ */ React.createElement("option", { key: d, value: d }, d))
-    )), /* @__PURE__ */ React.createElement("div", { className: "ws-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Section"), /* @__PURE__ */ React.createElement(
-      "select",
-      {
-        className: "ws-filter-select",
-        "data-active": section !== "all",
-        value: section,
-        onChange: (e) => setSection(e.target.value)
-      },
-      /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Sections"),
-      availableSections.map((s) => /* @__PURE__ */ React.createElement("option", { key: s, value: s }, s))
-    )), /* @__PURE__ */ React.createElement("div", { className: "ws-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Document Type"), /* @__PURE__ */ React.createElement(
-      "select",
-      {
-        className: "ws-filter-select",
-        "data-active": docType !== "all",
-        value: docType,
-        onChange: (e) => setDocType(e.target.value)
-      },
-      /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Types"),
-      ["ESP", "SIP", "TOC", "LOP", "Other"].map((t) => /* @__PURE__ */ React.createElement("option", { key: t, value: t }, t))
-    )), /* @__PURE__ */ React.createElement("div", { className: "ws-filter-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", onClick: resetFilters }, "Reset Filters"), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "refresh", iconOnly: true, title: "Refresh", onClick: () => showToast("Work queue refreshed") }))), /* @__PURE__ */ React.createElement("div", { className: "ws-chips-bar" }, /* @__PURE__ */ React.createElement("span", { className: "ws-chips-label" }, "Filter"), /* @__PURE__ */ React.createElement("div", { className: "ws-chips-row" }, QUICK_FILTERS.map((f) => /* @__PURE__ */ React.createElement(
+    ), /* @__PURE__ */ React.createElement("div", { className: "dl-page-header" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "inbox", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "dl-page-heading" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-title" }, "Workspace"), /* @__PURE__ */ React.createElement("div", { className: "dl-page-sub" }, "Manage documents currently being edited, reviewed, or prepared for approval.")), /* @__PURE__ */ React.createElement("div", { className: "dl-page-actions" }, /* @__PURE__ */ React.createElement("div", { className: "ws-active-docs" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 17 }), /* @__PURE__ */ React.createElement("strong", null, "126"), /* @__PURE__ */ React.createElement("span", null, "Active Documents")), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "refresh", onClick: () => showToast("Workspace refreshed") }, "Refresh"))), /* @__PURE__ */ React.createElement("div", { className: "dl-scope-bar ws-scope-bar" }, /* @__PURE__ */ React.createElement("span", { className: "dl-scope-label" }, "Queue:"), /* @__PURE__ */ React.createElement("div", { className: "ws-queue-tabs" }, queueItems.map((item) => /* @__PURE__ */ React.createElement(
       "button",
       {
-        key: f.id,
-        className: "ws-chip",
-        "data-active": !!activeChips[f.id],
-        onClick: () => toggleChip(f.id)
+        key: item.id,
+        className: "dl-bulk-row-tab",
+        "data-active": activeTab === item.id ? "true" : "false",
+        onClick: () => setActiveTab(item.id)
       },
-      f.label,
-      activeChips[f.id] && /* @__PURE__ */ React.createElement("span", { className: "ws-chip-x" }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 10 }))
-    )))), /* @__PURE__ */ React.createElement("div", { className: "ws-search-row" }, /* @__PURE__ */ React.createElement("div", { className: "ws-search-wrap" }, /* @__PURE__ */ React.createElement(Icon, { name: "search", className: "ws-search-icon", size: 15 }), /* @__PURE__ */ React.createElement(
+      item.label,
+      /* @__PURE__ */ React.createElement("span", { className: "ws-queue-count" }, item.count)
+    ))), /* @__PURE__ */ React.createElement("div", { className: "dl-vdivider" }), /* @__PURE__ */ React.createElement("span", { className: "dl-scope-label" }, "Scope:"), /* @__PURE__ */ React.createElement("div", { className: "dl-scope-controls" }, /* @__PURE__ */ React.createElement("select", { className: "dl-scope-select", value: zone, onChange: (event) => {
+      setZone(event.target.value);
+      setDivision("all");
+      setSection("all");
+      setStation("all");
+    } }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Zones"), allZoneOptions.map((option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label))), /* @__PURE__ */ React.createElement("select", { className: "dl-scope-select", value: division, onChange: (event) => {
+      setDivision(event.target.value);
+      setSection("all");
+      setStation("all");
+    } }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Divisions"), divisionOptions.map((option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label))), /* @__PURE__ */ React.createElement("select", { className: "dl-scope-select", value: section, onChange: (event) => {
+      setSection(event.target.value);
+      setStation("all");
+    } }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Sections"), sectionOptions.map((option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label))), /* @__PURE__ */ React.createElement("select", { className: "dl-scope-select", value: station, onChange: (event) => setStation(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Stations"), stationOptions.map((option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label)))), /* @__PURE__ */ React.createElement("div", { className: "dl-vdivider" }), /* @__PURE__ */ React.createElement("span", { className: "dl-scope-count" }, filteredItems.length, " documents"), /* @__PURE__ */ React.createElement("nav", { className: "ds-breadcrumb dl-scope-path", style: { fontSize: "12px" } }, scopePath.map((part, index) => /* @__PURE__ */ React.createElement(React.Fragment, { key: `${part}-${index}` }, index > 0 && /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11, className: "ds-breadcrumb-sep" }), index === scopePath.length - 1 ? /* @__PURE__ */ React.createElement("span", { className: "ds-breadcrumb-current", style: { fontSize: "12px" } }, part) : /* @__PURE__ */ React.createElement("a", { style: { fontSize: "12px" } }, part))))), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-bar" }, /* @__PURE__ */ React.createElement("div", { className: "dl-filter-row" }, /* @__PURE__ */ React.createElement("div", { className: "dl-search-wrap" }, /* @__PURE__ */ React.createElement(Icon, { name: "search", size: 14, className: "dl-search-icon" }), /* @__PURE__ */ React.createElement(
       "input",
       {
-        className: "ws-search-input",
-        placeholder: "Search station, document, file name, assignee\u2026",
+        placeholder: "Search by station, document, version, or assignee...",
         value: search,
-        onChange: (e) => setSearch(e.target.value)
+        onChange: (event) => setSearch(event.target.value)
       }
-    ), search && /* @__PURE__ */ React.createElement("button", { className: "ws-search-clear", onClick: () => setSearch(""), "aria-label": "Clear search" }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 12 }))), /* @__PURE__ */ React.createElement("span", { className: "ws-result-count" }, filteredItems.length, " item", filteredItems.length !== 1 ? "s" : "")), /* @__PURE__ */ React.createElement("div", { className: "ws-table-area" }, filteredItems.length === 0 ? /* @__PURE__ */ React.createElement(
-      WsEmptyState,
+    )), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-shell" }, /* @__PURE__ */ React.createElement(
+      Btn,
       {
-        noItems: items.length === 0,
-        onGoToLibrary: () => onNavigate && onNavigate("library"),
-        onResetFilters: resetFilters
-      }
-    ) : /* @__PURE__ */ React.createElement("table", { className: "ws-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Station"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "fileName", sort, onSort: handleSort }, "Document"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "documentType", sort, onSort: handleSort }, "Type"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "stage", sort, onSort: handleSort }, "Stage"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "status", sort, onSort: handleSort }, "Status"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "openIssues", sort, onSort: handleSort }, "Issues"), /* @__PURE__ */ React.createElement("th", null, "Assigned To"), /* @__PURE__ */ React.createElement("th", { style: { textAlign: "right" } }, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, filteredItems.map((item) => {
-      const status = STATUS_BY_STAGE[item.stage] || "Draft";
-      const isMine = item.assignedTo?.name === WS_CURRENT_USER.name;
-      const stationTip = `${item.stationName} (${item.stationCode})
-Zone: ${item.zone}
-Division: ${item.division}
-Section: ${item.section}`;
-      const docTip = `${item.fileName}
-Work item: ${item.workItemTitle}
-Last updated: ${item.lastUpdated}` + (item.dueDate ? `
-Due: ${item.dueDate}${isOverdue(item.dueDate) ? " (overdue)" : ""}` : "");
-      const typeTip = `Document family: ${item.documentType}`;
-      const stageTip = `Stage: ${item.stage}
-Priority: ${item.priority}
-Work ID: ${item.id}`;
-      const statusTip = `Lifecycle: ${status}
-${status === "Draft" ? "Pre-work \u2014 not yet active" : status === "Active" ? "Editor working or under review/validation" : "Locked after EDAS approval"}`;
-      const issuesTip = item.openIssues > 0 ? `${item.openIssues} open issue${item.openIssues !== 1 ? "s" : ""}
-Validation: ${item.validationStatus}` : `No open issues
-Validation: ${item.validationStatus}`;
-      const assigneeTip = item.assignedTo ? `${item.assignedTo.name}
-${item.assignedTo.designation} \xB7 ${item.assignedTo.department}` : "No assignee \u2014 needs assignment";
-      return /* @__PURE__ */ React.createElement("tr", { key: item.id, "data-mine": isMine ? "true" : void 0 }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "ws-tip", "data-tip": stationTip }, /* @__PURE__ */ React.createElement("span", { className: "ws-station-name" }, item.stationName))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "ws-tip", "data-tip": docTip }, /* @__PURE__ */ React.createElement("span", { className: "ws-doc-cell" }, /* @__PURE__ */ React.createElement("span", { className: "ws-doc-file" }, item.fileName), /* @__PURE__ */ React.createElement("span", { className: "ws-doc-updated" }, item.lastUpdated, item.dueDate && isOverdue(item.dueDate) && /* @__PURE__ */ React.createElement("span", { style: { color: "var(--danger-text)", fontWeight: 700, marginLeft: 6 } }, "\xB7 overdue"))))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "ws-tip", "data-tip": typeTip }, /* @__PURE__ */ React.createElement(TypeBadge, { docType: item.documentType }))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "ws-tip", "data-tip": stageTip }, /* @__PURE__ */ React.createElement(StageBadge, { stage: item.stage }))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "ws-tip", "data-tip": statusTip }, /* @__PURE__ */ React.createElement(StatusBadge, { status }))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "ws-tip", "data-tip": issuesTip }, item.openIssues > 0 ? /* @__PURE__ */ React.createElement("span", { className: "ws-issues-badge" }, item.openIssues) : /* @__PURE__ */ React.createElement("span", { className: "ws-no-issues" }, "0"))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "ws-tip", "data-tip": assigneeTip }, item.assignedTo ? /* @__PURE__ */ React.createElement("span", { className: "ws-assignee-name" }, item.assignedTo.name, isMine && /* @__PURE__ */ React.createElement("span", { className: "ws-you-tag" }, "you")) : /* @__PURE__ */ React.createElement("span", { className: "ws-unassigned" }, "Unassigned"))), /* @__PURE__ */ React.createElement("td", { style: { textAlign: "right" } }, /* @__PURE__ */ React.createElement(
+        variant: "secondary",
+        size: "sm",
+        leadingIcon: "filter",
+        trailingIcon: filtersOpen ? "chevron_up" : "chevron_down",
+        onClick: () => setFiltersOpen((open) => !open)
+      },
+      "Filters",
+      activeFilterChips.length ? ` (${activeFilterChips.length})` : ""
+    ), filtersOpen && /* @__PURE__ */ React.createElement("div", { className: "dl-filter-panel ws-filter-panel" }, /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field", "data-span": "full" }, /* @__PURE__ */ React.createElement("label", null, "Document Type"), /* @__PURE__ */ React.createElement("div", { className: "ws-doc-type-grid" }, DOCUMENT_TYPES.map((type) => /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        key: type,
+        type: "button",
+        className: "ds-fchip",
+        "data-active": docTypes.includes(type) ? "true" : "false",
+        onClick: () => {
+          setDocTypes((current) => {
+            const next = current.includes(type) ? current.filter((entry) => entry !== type) : [...current, type];
+            return next.length ? next : DOCUMENT_TYPES;
+          });
+        }
+      },
+      docTypes.includes(type) && /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 11 }),
+      type
+    )))), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Stage"), /* @__PURE__ */ React.createElement("select", { value: stage, onChange: (event) => setStage(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Stages"), STAGES.map((entry) => /* @__PURE__ */ React.createElement("option", { key: entry, value: entry }, entry)))), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Validation"), /* @__PURE__ */ React.createElement("select", { value: validation, onChange: (event) => setValidation(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Validation"), VALIDATIONS.map((entry) => /* @__PURE__ */ React.createElement("option", { key: entry, value: entry }, entry)))), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field", "data-span": "full" }, /* @__PURE__ */ React.createElement("label", null, "Assignee"), /* @__PURE__ */ React.createElement("select", { value: assignee, onChange: (event) => setAssignee(event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All Assignees"), /* @__PURE__ */ React.createElement("option", { value: "unassigned" }, "Unassigned"), USERS.map((user) => /* @__PURE__ */ React.createElement("option", { key: user.name, value: user.name }, user.name)))), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", size: "sm", onClick: resetFilters }, "Clear all"), /* @__PURE__ */ React.createElement(Btn, { variant: "primary", size: "sm", onClick: () => setFiltersOpen(false) }, "Apply")))), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-shell" }, /* @__PURE__ */ React.createElement(
+      Btn,
+      {
+        variant: "secondary",
+        size: "sm",
+        leadingIcon: "sort",
+        trailingIcon: sortOpen ? "chevron_up" : "chevron_down",
+        onClick: () => setSortOpen((open) => !open)
+      },
+      "Sort"
+    ), sortOpen && /* @__PURE__ */ React.createElement("div", { className: "dl-row-menu ws-sort-menu" }, [
+      ["station", "Station"],
+      ["documentType", "Document Type"],
+      ["version", "Version"],
+      ["stage", "Stage"],
+      ["issues", "Issues"],
+      ["validation", "Validation"],
+      ["assignedTo", "Assigned To"]
+    ].map(([key, label]) => /* @__PURE__ */ React.createElement("button", { key, "data-active": sort.key === key ? "true" : void 0, onClick: () => setSort((current) => ({ ...current, key })) }, sort.key === key && /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 13 }), label)), /* @__PURE__ */ React.createElement("button", { onClick: () => setSort((current) => ({ ...current, dir: current.dir === "asc" ? "desc" : "asc" })) }, /* @__PURE__ */ React.createElement(Icon, { name: sort.dir === "asc" ? "arrow_up" : "arrow_down", size: 13 }), sort.dir === "asc" ? "Ascending" : "Descending"))), /* @__PURE__ */ React.createElement("div", { className: "dl-vdivider" }), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", size: "sm", leadingIcon: "refresh", onClick: () => showToast("Workspace refreshed") }, "Refresh")), /* @__PURE__ */ React.createElement("div", { className: "dl-chips" }, activeFilterChips.length ? activeFilterChips.map((chip) => /* @__PURE__ */ React.createElement("button", { key: chip.key, className: "ds-fchip", "data-active": "true", onClick: () => removeFilterChip(chip.key) }, /* @__PURE__ */ React.createElement("span", null, chip.label), /* @__PURE__ */ React.createElement("span", { className: "ds-fchip-x" }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 10 })))) : /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, color: "var(--ink-500)" } }, "Filters available: document type, stage, validation, assignee"), /* @__PURE__ */ React.createElement("button", { className: "ds-fchip", style: { borderStyle: "dashed", color: "var(--ink-500)" }, onClick: () => setFiltersOpen(true) }, /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 12 }), " Add filter"))), /* @__PURE__ */ React.createElement("div", { className: "dl-table-area ws-table-area" }, /* @__PURE__ */ React.createElement("div", { className: "dl-table-container" }, /* @__PURE__ */ React.createElement("table", { className: "ds-table ws-table", style: { width: "100%" } }, /* @__PURE__ */ React.createElement("colgroup", null, /* @__PURE__ */ React.createElement("col", { style: { width: 150 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 92 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 104 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 170 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 80 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 128 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 146 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 126 } })), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement(SortTh, { sortKey: "station", sort, onSort: handleSort }, "Station"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "documentType", sort, onSort: handleSort }, "Document"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "version", sort, onSort: handleSort }, "Version"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "stage", sort, onSort: handleSort }, "Stage"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "issues", sort, onSort: handleSort }, "Issues"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "validation", sort, onSort: handleSort }, "Validation"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "assignedTo", sort, onSort: handleSort }, "Assigned To"), /* @__PURE__ */ React.createElement("th", { style: { textAlign: "right" } }, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, pagedItems.length === 0 ? /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { colSpan: "8", style: { padding: 0, border: "none" } }, /* @__PURE__ */ React.createElement("div", { style: { padding: "40px 28px" } }, /* @__PURE__ */ React.createElement(WorkspaceEmptyState, { onClear: resetFilters })))) : pagedItems.map((item) => /* @__PURE__ */ React.createElement(React.Fragment, { key: item.id }, /* @__PURE__ */ React.createElement(
+      "tr",
+      {
+        "data-selected": expanded === item.id ? "true" : void 0,
+        onDoubleClick: () => setExpanded((current) => current === item.id ? null : item.id)
+      },
+      /* @__PURE__ */ React.createElement("td", { onClick: () => setExpanded((current) => current === item.id ? null : item.id) }, /* @__PURE__ */ React.createElement("div", { className: "dl-station-cell", title: item.station }, item.station), /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, item.stationCode)),
+      /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(TypePill, { type: item.documentType })),
+      /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "ws-version" }, item.version)),
+      /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(StageChip, { stage: item.stage })),
+      /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "ws-issues", "data-active": item.issues > 0 ? "true" : void 0 }, /* @__PURE__ */ React.createElement(Icon, { name: "info", size: 14 }), item.issues)),
+      /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(ValidationChip, { validation: item.validation })),
+      /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(AssigneeCell, { user: item.assignedTo })),
+      /* @__PURE__ */ React.createElement("td", { className: "dl-action-table-cell", onClick: (event) => event.stopPropagation() }, /* @__PURE__ */ React.createElement(
         RowActions,
         {
           item,
+          onOpen: (row) => showToast(`Opening ${row.stationCode} ${row.documentType}`),
           onAssign: setAssignItem,
           onToast: showToast
         }
-      )));
-    })))), assignItem && /* @__PURE__ */ React.createElement(
-      AssignModal,
+      ))
+    ), expanded === item.id && /* @__PURE__ */ React.createElement(DetailRow, { item }))))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-foot" }, /* @__PURE__ */ React.createElement("div", { className: "dl-table-foot-left" }, /* @__PURE__ */ React.createElement("span", null, "Showing ", filteredItems.length ? pageStart + 1 : 0, "-", pageEnd, " of ", filteredItems.length, " visible documents", activeFilterChips.length > 0 && /* @__PURE__ */ React.createElement("span", { style: { color: "var(--ink-500)" } }, " - ", activeFilterChips.length, " filter", activeFilterChips.length !== 1 ? "s" : "", " active")), /* @__PURE__ */ React.createElement("label", { className: "dl-page-size" }, /* @__PURE__ */ React.createElement("span", null, "Rows per page"), /* @__PURE__ */ React.createElement("select", { value: pageSize, onChange: (event) => setPageSize(Number(event.target.value)) }, [10, 25, 50].map((size) => /* @__PURE__ */ React.createElement("option", { key: size, value: size }, size))))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-pager" }, /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === 1, onClick: () => setCurrentPage((page) => Math.max(1, page - 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_left", size: 14 })), pageNumbers.map((pageNumber) => /* @__PURE__ */ React.createElement(
+      "button",
       {
-        item: assignItem,
-        onClose: () => setAssignItem(null),
-        onSave: handleAssignSave
-      }
-    ), toast && /* @__PURE__ */ React.createElement("div", { className: "dl-toast", role: "status", "aria-live": "polite" }, /* @__PURE__ */ React.createElement(Icon, { name: "check_circle", size: 16 }), toast));
+        key: pageNumber,
+        className: "ds-page-btn",
+        "data-current": pageNumber === safeCurrentPage ? "true" : void 0,
+        onClick: () => setCurrentPage(pageNumber)
+      },
+      pageNumber
+    )), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === totalPages, onClick: () => setCurrentPage((page) => Math.min(totalPages, page + 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 14 })))))), assignItem && /* @__PURE__ */ React.createElement(AssignModal, { item: assignItem, onClose: () => setAssignItem(null), onSave: saveAssignment }), toast && /* @__PURE__ */ React.createElement("div", { className: "dl-toast", role: "status", "aria-live": "polite" }, /* @__PURE__ */ React.createElement(Icon, { name: "check_circle", size: 16 }), toast));
   };
+  const wsCSS = `
+.ws-content .dl-page-header {
+  box-shadow: 0 3px 0 var(--accent), 0 4px 20px rgba(14,27,44,.07);
+}
+
+.ws-active-docs {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink-700);
+}
+.ws-active-docs strong {
+  color: var(--ink-900);
+  font-size: 16px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.ws-active-docs span {
+  color: var(--ink-500);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ws-scope-bar {
+  flex-wrap: wrap;
+  align-items: center;
+}
+.ws-queue-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.ws-queue-count {
+  min-width: 20px;
+  height: 18px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0 6px;
+  border-radius: var(--r-full);
+  background: var(--ink-100);
+  color: var(--ink-600);
+  font-size: 10.5px;
+  font-weight: 800;
+}
+.dl-bulk-row-tab[data-active="true"] .ws-queue-count {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+.ws-filter-panel .dl-filter-field[data-span="full"] {
+  grid-column: 1 / -1;
+}
+.ws-doc-type-grid {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.ws-doc-type-grid .ds-fchip {
+  min-height: 30px;
+}
+.ws-sort-menu {
+  min-width: 172px;
+  right: 0;
+  top: calc(100% + 6px);
+}
+.ws-sort-menu button[data-active="true"] {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-weight: 800;
+}
+
+.ws-table {
+  min-width: 1080px;
+}
+.ws-version {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-800);
+}
+.ws-type-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 7px;
+  border-radius: var(--r-xs);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  border: var(--hairline);
+}
+.ws-type-pill[data-type="ESP"] {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border-color: color-mix(in srgb, var(--accent) 18%, var(--ink-200));
+}
+.ws-type-pill[data-type="SIP"] {
+  background: var(--info-soft);
+  color: var(--info-text);
+  border-color: oklch(0.9 0.06 240);
+}
+.ws-type-pill[data-type="LOP"] {
+  background: var(--warning-soft);
+  color: var(--warning-text);
+  border-color: oklch(0.9 0.08 80);
+}
+.ws-issues {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-500);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+.ws-issues[data-active="true"] {
+  color: var(--danger-text);
+}
+.ws-assignee {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--ink-800);
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ws-avatar {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-full);
+  color: var(--paper);
+  font-size: 9.5px;
+  font-weight: 800;
+}
+.ws-avatar-empty {
+  background: var(--ink-100);
+  color: var(--ink-500);
+}
+.ws-detail-row td {
+  padding: 0 14px 12px !important;
+  background: color-mix(in srgb, var(--accent-soft) 18%, var(--paper));
+}
+.ws-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  border: var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.ws-detail-item {
+  min-height: 58px;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  padding: 10px 12px;
+  border-right: var(--hairline);
+}
+.ws-detail-item:nth-child(4n) { border-right: 0; }
+.ws-detail-item span {
+  color: var(--ink-500);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+.ws-detail-item strong {
+  color: var(--ink-800);
+  font-size: 11.5px;
+  line-height: 1.35;
+  word-break: break-word;
+}
+.ws-modal-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-bottom: var(--hairline);
+  background: var(--ink-50);
+  flex-wrap: wrap;
+}
+.ws-assign-body {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.ws-assign-body textarea {
+  min-height: 92px;
+}
+
+@media (max-width: 1120px) {
+  .ws-detail-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+  .ws-detail-item:nth-child(4n) { border-right: var(--hairline); }
+  .ws-detail-item:nth-child(2n) { border-right: 0; }
+}
+@media (max-width: 760px) {
+  .ws-active-docs { width: 100%; justify-content: flex-start; }
+  .ws-scope-bar { align-items: flex-start; }
+  .ws-detail-grid,
+  .ws-assign-body { grid-template-columns: 1fr; }
+  .ws-detail-item,
+  .ws-detail-item:nth-child(2n),
+  .ws-detail-item:nth-child(4n) { border-right: 0; }
+}
+`;
   window.WorkspacePage = WorkspacePage;
   const wsStyleEl = document.createElement("style");
   wsStyleEl.textContent = wsCSS;
