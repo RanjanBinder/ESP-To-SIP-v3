@@ -58,6 +58,21 @@ const Icon = ({ name, size = 16, className = "", ...rest }) => {
     spark: <path d="M5 12h2l2-7 4 14 2-7h4" />,
     cube: <><path d="m12 3 9 5v8l-9 5-9-5V8z"/><path d="m3 8 9 5 9-5M12 13v10"/></>,
     git: <><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M8 6h6a4 4 0 0 1 4 4M12 16V8"/></>,
+    cursor: <><path d="m5 3 14 8.5-6.2 1.4L9.6 19z"/></>,
+    hand: <><path d="M8 12V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 11V4.5a1.5 1.5 0 0 1 3 0V11"/><path d="M14 11V6.5a1.5 1.5 0 0 1 3 0V13"/><path d="M8 12v-1a1.5 1.5 0 0 0-3 0v4a6 6 0 0 0 6 6h1a6 6 0 0 0 5-5.8V11"/></>,
+    zoom_in: <><circle cx="11" cy="11" r="6"/><path d="m20 20-3.5-3.5M11 8.5v5M8.5 11h5"/></>,
+    zoom_out: <><circle cx="11" cy="11" r="6"/><path d="m20 20-3.5-3.5M8.5 11h5"/></>,
+    fit_screen: <><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/><rect x="9" y="9" width="6" height="6" rx="1"/></>,
+    select_rect: <><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M11 3h2M11 21h2M3 11v2M21 11v2"/></>,
+    lasso: <><path d="M12 4c4.4 0 8 2.4 8 5.5S16.4 15 12 15s-8-2.4-8-5.5S7.6 4 12 4z"/><path d="M6.4 13.6C5.5 15 5 16.2 5 17a2 2 0 0 0 3.5 1.3"/><circle cx="9.5" cy="19.5" r="1.6"/></>,
+    link: <><path d="M10.5 13.5a4 4 0 0 0 5.7 0l2.6-2.6a4 4 0 0 0-5.7-5.7l-1.4 1.4"/><path d="M13.5 10.5a4 4 0 0 0-5.7 0l-2.6 2.6a4 4 0 0 0 5.7 5.7l1.4-1.4"/></>,
+    unlink: <><path d="M15.5 8.5 17 7a4 4 0 0 1 5.7 5.7l-1.5 1.5M8.5 15.5 7 17a4 4 0 0 1-5.7-5.7l1.5-1.5"/><path d="M4 4l16 16"/></>,
+    scissors: <><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8 7.5 20 18M8 16.5 20 6"/></>,
+    ruler: <><rect x="2" y="8" width="20" height="8" rx="1.5"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></>,
+    eye_off: <><path d="M10.6 5.2A9.6 9.6 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.2 6.3A16.6 16.6 0 0 0 2 12s3.5 7 10 7a9.9 9.9 0 0 0 4.5-1.1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2M3 3l18 18"/></>,
+    undo: <><path d="M3 8h11a6 6 0 0 1 0 12H8"/><path d="m7 4-4 4 4 4"/></>,
+    save: <><path d="M5 3h11l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M8 3v6h7V3M8 21v-7h8v7"/></>,
+    target: <><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3"/></>,
   };
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} className={"icon " + className} {...rest}>
