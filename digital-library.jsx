@@ -512,6 +512,31 @@ const libCSS = `
   min-width: 150px;
 }
 
+/* Digital Library landing header follows the Workspace header treatment. */
+.dl-library-page-header {
+  align-items: flex-start;
+  gap: 20px;
+  padding: 26px 34px 20px;
+  background: #f6f7f9;
+  box-shadow: none;
+  border-bottom: 0;
+}
+.dl-library-page-header .dl-page-icon-badge { display: none; }
+.dl-library-page-header .dl-page-heading { gap: 5px; }
+.dl-library-page-header .dl-page-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.2;
+}
+.dl-library-page-header .dl-page-sub {
+  font-size: 13.5px;
+  max-width: none;
+}
+.dl-library-page-header .dl-page-actions { gap: 10px; }
+.dl-library-page-header .dl-page-actions .ds-icon-btn,
+.dl-library-page-header .dl-page-actions .ds-btn { box-shadow: none; }
+
 
 /* \u2500\u2500 Scope bar \u2500\u2500 */
 .dl-scope-bar {
@@ -730,6 +755,7 @@ const libCSS = `
   box-shadow: 0 18px 54px rgba(0,0,0,0.22);
 }
 .dl-add-modal[data-size="wide"] { width: min(860px, calc(100vw - 32px)); }
+.dl-add-modal[data-size="choice"] { width: min(620px, calc(100vw - 32px)); }
 .dl-add-head {
   display: flex;
   align-items: center;
@@ -737,6 +763,12 @@ const libCSS = `
   gap: 16px;
   padding: 14px 18px;
   border-bottom: var(--hairline);
+}
+.dl-add-head-copy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
 }
 .dl-add-title { font-size: 15px; font-weight: 700; color: var(--ink-900); }
 .dl-add-subtitle {
@@ -757,6 +789,252 @@ const libCSS = `
   cursor: pointer;
 }
 .dl-add-close:hover { background: var(--ink-50); color: var(--ink-800); }
+.dl-add-back {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border: var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  color: var(--ink-600);
+  cursor: pointer;
+}
+.dl-add-back:hover { border-color: var(--ink-300); background: var(--ink-50); color: var(--ink-900); }
+.dl-station-choice-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 18px;
+}
+.dl-station-choice {
+  position: relative;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 16px;
+  align-items: start;
+  gap: 12px;
+  min-height: 132px;
+  padding: 16px;
+  border: 1px solid var(--ink-200);
+  border-radius: var(--r-lg);
+  background: var(--paper);
+  color: var(--ink-900);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+}
+.dl-station-choice:hover,
+.dl-station-choice:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 10px 24px rgba(99, 91, 255, .12), var(--shadow-focus);
+  transform: translateY(-1px);
+  outline: none;
+}
+.dl-station-choice-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--r-md);
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+.dl-station-choice-icon[data-tone="new"] { background: var(--info-soft); color: var(--info-text); }
+.dl-station-choice-copy { display: grid; gap: 6px; min-width: 0; }
+.dl-station-choice-title { font-size: 13.5px; font-weight: 750; line-height: 1.25; }
+.dl-station-choice-desc { color: var(--ink-500); font-size: 11.5px; line-height: 1.45; }
+.dl-station-choice-arrow { align-self: center; color: var(--ink-400); }
+.dl-existing-body { display: grid; gap: 12px; padding: 14px 18px 16px; }
+.dl-existing-search { position: relative; }
+.dl-existing-search > svg {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-400);
+  pointer-events: none;
+}
+.dl-existing-search input {
+  width: 100%;
+  height: 38px;
+  box-sizing: border-box;
+  padding: 0 12px 0 34px;
+  border: var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--ink-50);
+  color: var(--ink-900);
+  font: 12px var(--font-sans);
+  outline: none;
+}
+.dl-existing-search input:focus { border-color: var(--accent); background: var(--paper); box-shadow: var(--shadow-focus); }
+.dl-existing-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.dl-existing-count { color: var(--ink-500); font-size: 11.5px; }
+.dl-existing-add-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--accent-text);
+  font: 700 11.5px var(--font-sans);
+  cursor: pointer;
+}
+.dl-existing-add-new:hover { text-decoration: underline; }
+.dl-existing-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(310px, 1.1fr);
+  align-items: stretch;
+  gap: 12px;
+  min-height: 330px;
+}
+.dl-existing-list {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  max-height: 360px;
+  overflow: auto;
+  padding-right: 2px;
+}
+.dl-existing-option {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 11px;
+  border: 1px solid var(--ink-200);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  color: var(--ink-900);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.dl-existing-option:hover { border-color: var(--ink-300); background: var(--ink-50); }
+.dl-existing-option[data-selected="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 15%, transparent); }
+.dl-existing-option-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  background: var(--ink-100);
+  color: var(--ink-600);
+}
+.dl-existing-option[data-selected="true"] .dl-existing-option-icon { background: var(--paper); color: var(--accent-text); }
+.dl-existing-option-copy { display: grid; gap: 3px; min-width: 0; }
+.dl-existing-option-name { overflow: hidden; font-size: 12.5px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.dl-existing-option-meta { overflow: hidden; color: var(--ink-500); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.dl-existing-option-code { font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; color: var(--ink-600); }
+.dl-existing-empty {
+  display: grid;
+  place-items: center;
+  min-height: 130px;
+  padding: 18px;
+  border: 1px dashed var(--ink-300);
+  border-radius: var(--r-md);
+  color: var(--ink-500);
+  font-size: 12px;
+  text-align: center;
+}
+.dl-existing-detail {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 330px;
+  border: 1px solid var(--ink-200);
+  border-radius: var(--r-md);
+  background: var(--ink-50);
+  overflow: hidden;
+}
+.dl-existing-detail-empty {
+  display: grid;
+  place-items: center;
+  flex: 1;
+  padding: 28px;
+  color: var(--ink-500);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+.dl-existing-detail-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink-400);
+  box-shadow: inset 0 0 0 1px var(--ink-200);
+}
+.dl-existing-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--ink-200);
+  background: var(--paper);
+}
+.dl-existing-detail-name { font-size: 13.5px; font-weight: 750; color: var(--ink-900); line-height: 1.3; }
+.dl-existing-detail-source { margin-top: 3px; color: var(--success-text); font-size: 10.5px; font-weight: 700; }
+.dl-existing-detail-code {
+  flex-shrink: 0;
+  padding: 3px 7px;
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  color: var(--paper);
+  font: 700 10.5px var(--font-mono);
+}
+.dl-existing-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--ink-200);
+}
+.dl-existing-detail-field {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  min-height: 56px;
+  padding: 10px 12px;
+  background: var(--paper);
+}
+.dl-existing-detail-field[data-span="full"] { grid-column: 1 / -1; }
+.dl-existing-detail-label {
+  color: var(--ink-500);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+.dl-existing-detail-value {
+  overflow-wrap: anywhere;
+  color: var(--ink-800);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.dl-existing-detail-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: auto;
+  padding: 10px 12px;
+  color: var(--ink-500);
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+.dl-existing-detail-note svg { flex-shrink: 0; margin-top: 1px; }
 .dl-add-body {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1290,6 +1568,9 @@ const libCSS = `
   .ir-login-card { padding: 20px; }
   .ir-login-form-grid { grid-template-columns: 1fr; }
   .dl-add-body { grid-template-columns: 1fr; }
+  .dl-station-choice-body { grid-template-columns: 1fr; }
+  .dl-existing-workspace { grid-template-columns: 1fr; }
+  .dl-existing-list { max-height: 240px; }
   .dl-add-field[data-span="full"] { grid-column: auto; }
 }
 
@@ -2246,6 +2527,96 @@ const AURANGABAD_STATION_DRAFT = {
   cll: "431.240",
   trainDirection: "Up \u2194 Down"
 };
+const MASTER_STATION_CATALOG = [
+  {
+    name: "Gudivada Junction",
+    code: "GDV",
+    zone: "SCoR",
+    division: "Vijayawada",
+    section: "Vijayawada\u2013Gudivada",
+    stationTitle: "Gudivada Junction",
+    stationId: "GDV-120061",
+    cll: "42.340",
+    trainDirection: "Up \u2194 Down"
+  },
+  {
+    name: "Samalkot Junction",
+    code: "SLO",
+    zone: "SCoR",
+    division: "Vijayawada",
+    section: "Eluru\u2013Samalkot",
+    stationTitle: "Samalkot Junction",
+    stationId: "SLO-120074",
+    cll: "588.420",
+    trainDirection: "Up \u2194 Down"
+  },
+  {
+    name: "Renigunta Junction",
+    code: "RU",
+    zone: "SCoR",
+    division: "Guntakal",
+    section: "Guntakal\u2013Renigunta",
+    stationTitle: "Renigunta Junction",
+    stationId: "RU-120050",
+    cll: "308.720",
+    trainDirection: "Up \u2194 Down"
+  },
+  {
+    name: "Mangalagiri",
+    code: "MAG",
+    zone: "SCoR",
+    division: "Guntur",
+    section: "Guntur\u2013Tenali",
+    stationTitle: "Mangalagiri",
+    stationId: "MAG-120088",
+    cll: "24.860",
+    trainDirection: "Bidirectional"
+  },
+  {
+    name: "Nandyal Junction",
+    code: "NDL",
+    zone: "SCoR",
+    division: "Guntur",
+    section: "Guntur\u2013Nandyal",
+    stationTitle: "Nandyal Junction",
+    stationId: "NDL-120096",
+    cll: "256.610",
+    trainDirection: "Up \u2194 Down"
+  },
+  {
+    name: "Duvvada",
+    code: "DVD",
+    zone: "SCoR",
+    division: "Visakhapatnam",
+    section: "Visakhapatnam\u2013Duvvada",
+    stationTitle: "Duvvada",
+    stationId: "DVD-120103",
+    cll: "16.920",
+    trainDirection: "Bidirectional"
+  },
+  {
+    name: "Vizianagaram Junction",
+    code: "VZM",
+    zone: "SCoR",
+    division: "Visakhapatnam",
+    section: "Visakhapatnam\u2013Vizianagaram",
+    stationTitle: "Vizianagaram Junction",
+    stationId: "VZM-120118",
+    cll: "61.370",
+    trainDirection: "Up \u2194 Down"
+  },
+  {
+    name: "Guntakal Junction",
+    code: "GTL",
+    zone: "SCoR",
+    division: "Guntakal",
+    section: "Guntakal\u2013Dhone",
+    stationTitle: "Guntakal Junction",
+    stationId: "GTL-120129",
+    cll: "0.000",
+    trainDirection: "Bidirectional"
+  }
+];
 const getCompleteness = (s) => {
   const segs = [
     s.survey.lidar || s.survey.ortho || s.survey.ts,
@@ -2454,7 +2825,66 @@ const StatusGuide = () => {
   }, [open]);
   return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { className: "dl-status-guide-btn", onClick: toggle }, /* @__PURE__ */ React.createElement(Icon, { name: "info", size: 11 }), " Status guide"), open && ReactDOM.createPortal(/* @__PURE__ */ React.createElement("div", { className: "dl-sg-overlay", onClick: () => setOpen(false) }, /* @__PURE__ */ React.createElement("div", { className: "dl-sg-modal", role: "dialog", "aria-modal": "true", "aria-labelledby": "status-guide-title", onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "dl-sg-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { id: "status-guide-title", className: "dl-sg-title" }, "Document Status Guide"), /* @__PURE__ */ React.createElement("div", { className: "dl-sg-subtitle" }, "Statuses apply independently to ESP, SIP and LOP.")), /* @__PURE__ */ React.createElement("button", { className: "dl-sg-close", onClick: () => setOpen(false) }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 13 }))), /* @__PURE__ */ React.createElement("div", { className: "dl-sg-rows" }, STATUS_GUIDE_ROWS.map((s, i) => /* @__PURE__ */ React.createElement(React.Fragment, { key: s.key }, s.key === "returned_correction" && /* @__PURE__ */ React.createElement("div", { className: "dl-sg-divider" }), /* @__PURE__ */ React.createElement("div", { className: "dl-sg-row" }, /* @__PURE__ */ React.createElement("span", { className: "dl-sg-num" }, s.n), /* @__PURE__ */ React.createElement("span", { className: "dl-sg-status-line" }, /* @__PURE__ */ React.createElement("span", { className: "dl-sg-status", "data-tone": s.tone }, s.pulse && /* @__PURE__ */ React.createElement("span", { className: "dl-sg-pulse" }), s.check && /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 10 }), s.label), s.espOnly && /* @__PURE__ */ React.createElement("span", { className: "dl-sg-esp" }, "ESP")), /* @__PURE__ */ React.createElement("span", { className: "dl-sg-desc" }, s.desc))))), /* @__PURE__ */ React.createElement("div", { className: "dl-sg-footer" }, /* @__PURE__ */ React.createElement("strong", null, "Validated"), " is ESP-only. ", /* @__PURE__ */ React.createElement("strong", null, "Returned for Correction"), " loops back to Under Review after amendments."))), document.body));
 };
-const AddStationModal = ({ initialZone, initialDivision, initialSectionScope, existingCodes, onAdd, onClose }) => {
+const AddStationChoiceModal = ({ onChoose, onClose }) => {
+  React.useEffect(() => {
+    const onKey = (event) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+  const choices = [
+    {
+      key: "existing",
+      icon: "train",
+      title: "Existing Station",
+      description: "Select a station already available in the Master Station List."
+    },
+    {
+      key: "new",
+      icon: "plus",
+      title: "New Station",
+      description: "Create a new station record by entering its railway details manually."
+    }
+  ];
+  return ReactDOM.createPortal(/* @__PURE__ */ React.createElement("div", { className: "dl-add-overlay", onClick: onClose }, /* @__PURE__ */ React.createElement("div", { className: "dl-add-modal", "data-size": "choice", role: "dialog", "aria-modal": "true", "aria-labelledby": "add-station-choice-title", onClick: (event) => event.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "dl-add-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-add-title", id: "add-station-choice-title" }, "Add Station"), /* @__PURE__ */ React.createElement("div", { className: "dl-add-subtitle" }, "Is this an existing station or a new station?")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "dl-add-close", "aria-label": "Close add station", onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 15 }))), /* @__PURE__ */ React.createElement("div", { className: "dl-station-choice-body" }, choices.map((choice) => /* @__PURE__ */ React.createElement("button", { type: "button", className: "dl-station-choice", key: choice.key, onClick: () => onChoose(choice.key) }, /* @__PURE__ */ React.createElement("span", { className: "dl-station-choice-icon", "data-tone": choice.key }, /* @__PURE__ */ React.createElement(Icon, { name: choice.icon, size: 19 })), /* @__PURE__ */ React.createElement("span", { className: "dl-station-choice-copy" }, /* @__PURE__ */ React.createElement("span", { className: "dl-station-choice-title" }, choice.title), /* @__PURE__ */ React.createElement("span", { className: "dl-station-choice-desc" }, choice.description)), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 15, className: "dl-station-choice-arrow" })))), /* @__PURE__ */ React.createElement("div", { className: "dl-add-actions" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", onClick: onClose }, "Cancel")))), document.body);
+};
+const ExistingStationModal = ({ existingCodes, onAdd, onAddNew, onBack, onClose }) => {
+  const [query, setQuery] = useStateLib("");
+  const [selectedCode, setSelectedCode] = useStateLib("");
+  const availableStations = useMemoLib(
+    () => MASTER_STATION_CATALOG.filter((station) => !existingCodes.has(station.code)),
+    [existingCodes]
+  );
+  const matchingStations = useMemoLib(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return availableStations;
+    return availableStations.filter((station) => [station.name, station.code, station.division, station.section].some((value) => value.toLowerCase().includes(normalized)));
+  }, [availableStations, query]);
+  const selectedStation = availableStations.find((station) => station.code === selectedCode);
+  const selectedDetails = selectedStation ? [
+    { label: "Station Title", value: selectedStation.stationTitle, full: true },
+    { label: "Station ID", value: selectedStation.stationId },
+    { label: "Central Line Location", value: selectedStation.cll },
+    { label: "Zone", value: selectedStation.zone },
+    { label: "Division", value: selectedStation.division },
+    { label: "Section", value: selectedStation.section, full: true },
+    { label: "Train Direction", value: selectedStation.trainDirection, full: true }
+  ] : [];
+  React.useEffect(() => {
+    const onKey = (event) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+  const submit = (event) => {
+    event.preventDefault();
+    if (selectedStation) onAdd(selectedStation);
+  };
+  return ReactDOM.createPortal(/* @__PURE__ */ React.createElement("div", { className: "dl-add-overlay", onClick: onClose }, /* @__PURE__ */ React.createElement("form", { className: "dl-add-modal", "data-size": "wide", role: "dialog", "aria-modal": "true", "aria-labelledby": "add-existing-station-title", onClick: (event) => event.stopPropagation(), onSubmit: submit }, /* @__PURE__ */ React.createElement("div", { className: "dl-add-head" }, /* @__PURE__ */ React.createElement("div", { className: "dl-add-head-copy" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "dl-add-back", "aria-label": "Back to station type", onClick: onBack }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_left", size: 15 })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-add-title", id: "add-existing-station-title" }, "Add Existing Station"), /* @__PURE__ */ React.createElement("div", { className: "dl-add-subtitle" }, "Select a station and review its full details before adding it."))), /* @__PURE__ */ React.createElement("button", { type: "button", className: "dl-add-close", "aria-label": "Close add station", onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 15 }))), /* @__PURE__ */ React.createElement("div", { className: "dl-existing-body" }, /* @__PURE__ */ React.createElement("div", { className: "dl-existing-search" }, /* @__PURE__ */ React.createElement(Icon, { name: "search", size: 14 }), /* @__PURE__ */ React.createElement("input", { autoFocus: true, value: query, placeholder: "Search by station name, code, division or section", "aria-label": "Search Master Station List", onChange: (event) => setQuery(event.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "dl-existing-toolbar" }, /* @__PURE__ */ React.createElement("div", { className: "dl-existing-count" }, matchingStations.length, " station", matchingStations.length === 1 ? "" : "s", " available"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "dl-existing-add-new", onClick: onAddNew }, /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 12 }), "Station not listed? Add new station")), /* @__PURE__ */ React.createElement("div", { className: "dl-existing-workspace" }, /* @__PURE__ */ React.createElement("div", { className: "dl-existing-list", role: "radiogroup", "aria-label": "Available stations" }, matchingStations.length ? matchingStations.map((station) => /* @__PURE__ */ React.createElement("button", { type: "button", role: "radio", "aria-checked": selectedCode === station.code, className: "dl-existing-option", "data-selected": selectedCode === station.code ? "true" : void 0, key: station.code, onClick: () => setSelectedCode(station.code) }, /* @__PURE__ */ React.createElement("span", { className: "dl-existing-option-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: selectedCode === station.code ? "check" : "train", size: 14 })), /* @__PURE__ */ React.createElement("span", { className: "dl-existing-option-copy" }, /* @__PURE__ */ React.createElement("span", { className: "dl-existing-option-name" }, station.name), /* @__PURE__ */ React.createElement("span", { className: "dl-existing-option-meta" }, station.division, " \u00b7 ", station.section)), /* @__PURE__ */ React.createElement("span", { className: "dl-existing-option-code" }, station.code))) : /* @__PURE__ */ React.createElement("div", { className: "dl-existing-empty" }, availableStations.length ? "No stations match your search." : "Every station in the Master Station List is already in the Digital Library.")), /* @__PURE__ */ React.createElement("section", { className: "dl-existing-detail", "aria-live": "polite", "aria-label": selectedStation ? `Details for ${selectedStation.name}` : "Station details" }, selectedStation ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dl-existing-detail-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-existing-detail-name" }, selectedStation.name), /* @__PURE__ */ React.createElement("div", { className: "dl-existing-detail-source" }, "Verified Master Station List record")), /* @__PURE__ */ React.createElement("span", { className: "dl-existing-detail-code" }, selectedStation.code)), /* @__PURE__ */ React.createElement("div", { className: "dl-existing-detail-grid" }, selectedDetails.map((detail) => /* @__PURE__ */ React.createElement("div", { className: "dl-existing-detail-field", "data-span": detail.full ? "full" : void 0, key: detail.label }, /* @__PURE__ */ React.createElement("span", { className: "dl-existing-detail-label" }, detail.label), /* @__PURE__ */ React.createElement("span", { className: "dl-existing-detail-value" }, detail.value || "\u2014")))), /* @__PURE__ */ React.createElement("div", { className: "dl-existing-detail-note" }, /* @__PURE__ */ React.createElement(Icon, { name: "info", size: 13 }), /* @__PURE__ */ React.createElement("span", null, "These details will be copied to the Digital Library. Documents and survey data will start empty."))) : /* @__PURE__ */ React.createElement("div", { className: "dl-existing-detail-empty" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", { className: "dl-existing-detail-empty-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "train", size: 18 })), /* @__PURE__ */ React.createElement("div", null, "Select a station from the list to review its full details.")))))), /* @__PURE__ */ React.createElement("div", { className: "dl-add-actions" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", onClick: onBack }, "Back"), /* @__PURE__ */ React.createElement(Btn, { type: "submit", variant: "accent", leadingIcon: "plus", disabled: !selectedStation }, "Add Selected Station")))), document.body);
+};
+const AddStationModal = ({ initialZone, initialDivision, initialSectionScope, existingCodes, onAdd, onBack, onClose }) => {
   const resolveDivision = (zone, division) => (DIVISION_OPTIONS[zone] || []).includes(division) ? division : (DIVISION_OPTIONS[zone] || [])[0] || "";
   const resolveSection = (division, sectionScope) => {
     const sections = SECTION_OPTIONS[division] || [];
@@ -2520,7 +2950,7 @@ const AddStationModal = ({ initialZone, initialDivision, initialSectionScope, ex
       onClick: (e) => e.stopPropagation(),
       onSubmit: submit
     },
-    /* @__PURE__ */ React.createElement("div", { className: "dl-add-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-add-title", id: "add-station-title" }, "Add New Station"), /* @__PURE__ */ React.createElement("div", { className: "dl-add-subtitle" }, "Create a station record and add basic railway details.")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "dl-add-close", onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 15 }))),
+    /* @__PURE__ */ React.createElement("div", { className: "dl-add-head" }, /* @__PURE__ */ React.createElement("div", { className: "dl-add-head-copy" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "dl-add-back", "aria-label": "Back to station type", onClick: onBack }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_left", size: 15 })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-add-title", id: "add-station-title" }, "Add New Station"), /* @__PURE__ */ React.createElement("div", { className: "dl-add-subtitle" }, "Create a station record and add basic railway details."))), /* @__PURE__ */ React.createElement("button", { type: "button", className: "dl-add-close", "aria-label": "Close add station", onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 15 }))),
     /* @__PURE__ */ React.createElement("div", { className: "dl-add-body" }, /* @__PURE__ */ React.createElement("div", { className: "dl-add-field" }, /* @__PURE__ */ React.createElement("label", null, "Station"), /* @__PURE__ */ React.createElement(
       "input",
       {
@@ -3170,12 +3600,17 @@ const SortTh = ({ children, sortKey, sort, onSort, style }) => {
   );
 };
 const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate }) => {
+  // Live badge count from the workspace module — items awaiting the current user's
+  // action. The fallback keeps the hook call unconditional when the module script
+  // has not loaded.
+  const useWsCounts = window.useWorkspaceCounts || (() => ({ myFiles: 0, shared: 0 }));
+  const wsCounts = useWsCounts();
   const groups = [
     {
       label: "MANAGE",
       items: [
         { id: "library", icon: "book", label: "Digital Library" },
-        { id: "workspace", icon: "layers", label: "Workspace" }
+        { id: "workspace", icon: "layers", label: "Workspace", badge: wsCounts.shared ? String(wsCounts.shared) : null }
       ]
     },
     {
@@ -3300,7 +3735,7 @@ const DigitalLibraryApp = () => {
 const DigitalLibraryPage = () => {
   const [t, setTweak] = useTweaks(DL_TWEAK_DEFAULTS);
   const [stations, setStations] = useStateLib(ALL_STATIONS);
-  const [addStationOpen, setAddStationOpen] = useStateLib(false);
+  const [addStationFlow, setAddStationFlow] = useStateLib(null);
   const [hubStation, setHubStation] = useStateLib(null);
   const [activePage, setActivePage] = useStateLib("library");
   const [activeNav, setActiveNav] = useStateLib("library");
@@ -3426,7 +3861,7 @@ const DigitalLibraryPage = () => {
     setRecentlyAdded({ id: nextId, name: station.name, code: station.code });
     setToast(`${station.name} (${station.code}) added to Digital Library`);
     window.setTimeout(() => setToast(""), 3e3);
-    setAddStationOpen(false);
+    setAddStationFlow(null);
     setCurrentPage(1);
   };
   const addStationsBulk = (newStations, skippedRows = 0) => {
@@ -3490,7 +3925,7 @@ const DigitalLibraryPage = () => {
   const navigateSidebar = (page) => {
     setActiveNav(page);
     setHubStation(null);
-    if (page === "home" || page === "library" || page === "workspace") {
+    if (page === "home" || page === "library" || page === "workspace" || page === "wsMyFiles" || page === "wsShared") {
       setActivePage(page);
       return;
     }
@@ -3519,8 +3954,11 @@ const DigitalLibraryPage = () => {
       }
     ), /* @__PURE__ */ React.createElement(Dashboard, { embedded: true }));
   }
-  if (activePage === "workspace" && window.WorkspacePage) {
-    const Workspace = window.WorkspacePage;
+  // Workspace now lands on the new module (My Files · Shared Workspace). The legacy
+  // WorkspacePage queue has been replaced. wsMyFiles / wsShared are kept as valid
+  // deep-link targets that open the module on a specific tab.
+  if ((activePage === "workspace" || activePage === "wsMyFiles" || activePage === "wsShared") && window.WorkspaceModulePage) {
+    const WorkspaceModule = window.WorkspaceModulePage;
     return /* @__PURE__ */ React.createElement("div", { className: "dl-layout" }, /* @__PURE__ */ React.createElement(
       LibrarySidebar,
       {
@@ -3529,7 +3967,13 @@ const DigitalLibraryPage = () => {
         active: "workspace",
         onNavigate: navigateSidebar
       }
-    ), /* @__PURE__ */ React.createElement(Workspace, { onNavigate: navigateSidebar }));
+    ), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 0, height: "100vh", overflow: "auto", background: "#f6f7f9" } }, /* @__PURE__ */ React.createElement(
+      WorkspaceModule,
+      {
+        onNavigate: navigateSidebar,
+        initialTab: activePage === "wsShared" ? "SHARED" : "MY_FILES"
+      }
+    )));
   }
   if (activePage === "bulkUpload") {
     return /* @__PURE__ */ React.createElement("div", { className: "dl-layout" }, /* @__PURE__ */ React.createElement(
@@ -3596,11 +4040,11 @@ const DigitalLibraryPage = () => {
       crumbs: [{ label: "Home", onClick: () => navigateSidebar("home") }, "Digital Library"],
       searchPlaceholder: "Search stations, documents, approvals..."
     }
-  ), /* @__PURE__ */ React.createElement("div", { className: "dl-page-header" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "layers", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "dl-page-heading" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-title" }, "Digital Library"), /* @__PURE__ */ React.createElement("div", { className: "dl-page-sub" }, "Central repository of all station records, drawings and survey data")), /* @__PURE__ */ React.createElement("div", { className: "dl-page-actions" }, /* @__PURE__ */ React.createElement("button", { className: "ds-icon-btn", title: "Export Register" }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 16 })), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "plus", onClick: () => {
+  ), /* @__PURE__ */ React.createElement("div", { className: "dl-page-header dl-library-page-header" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "layers", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "dl-page-heading" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-title" }, "Digital Library"), /* @__PURE__ */ React.createElement("div", { className: "dl-page-sub" }, "Central repository of all station records, drawings and survey data")), /* @__PURE__ */ React.createElement("div", { className: "dl-page-actions" }, /* @__PURE__ */ React.createElement("button", { className: "ds-icon-btn", title: "Export Register" }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 16 })), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "plus", onClick: () => {
     setHubStation(null);
     setActiveNav("library");
     setActivePage("bulkUpload");
-  } }, "Add Stations in Bulk"), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "plus", onClick: () => setAddStationOpen(true) }, "Add Station"))), /* @__PURE__ */ React.createElement("div", { className: "dl-scope-bar" }, /* @__PURE__ */ React.createElement("span", { className: "dl-scope-label" }, "Scope:"), /* @__PURE__ */ React.createElement("div", { className: "dl-scope-controls" }, /* @__PURE__ */ React.createElement(
+  } }, "Add Stations in Bulk"), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "plus", onClick: () => setAddStationFlow("choose") }, "Add Station"))), /* @__PURE__ */ React.createElement("div", { className: "dl-scope-bar" }, /* @__PURE__ */ React.createElement("span", { className: "dl-scope-label" }, "Scope:"), /* @__PURE__ */ React.createElement("div", { className: "dl-scope-controls" }, /* @__PURE__ */ React.createElement(
     "select",
     {
       className: "dl-scope-select",
@@ -3842,7 +4286,7 @@ const DigitalLibraryPage = () => {
       size: 15,
       style: { color: "rgba(255,255,255,0.45)", flexShrink: 0 }
     }
-  ), /* @__PURE__ */ React.createElement("span", { className: "dl-bulk-label" }, selectedCount, " station", selectedCount !== 1 ? "s" : "", " selected"), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-sep" }), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 13 }), "Export selected"), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 13 }), "Download documents"), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "pin", size: 13 }), "Add to\u2026"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-clear", onClick: clearSelection }, "Clear selection"))), addStationOpen && /* @__PURE__ */ React.createElement(
+  ), /* @__PURE__ */ React.createElement("span", { className: "dl-bulk-label" }, selectedCount, " station", selectedCount !== 1 ? "s" : "", " selected"), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-sep" }), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 13 }), "Export selected"), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 13 }), "Download documents"), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "pin", size: 13 }), "Add to\u2026"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-clear", onClick: clearSelection }, "Clear selection"))), addStationFlow === "choose" && /* @__PURE__ */ React.createElement(AddStationChoiceModal, { onChoose: setAddStationFlow, onClose: () => setAddStationFlow(null) }), addStationFlow === "existing" && /* @__PURE__ */ React.createElement(ExistingStationModal, { existingCodes, onAdd: addStation, onAddNew: () => setAddStationFlow("newFromExisting"), onBack: () => setAddStationFlow("choose"), onClose: () => setAddStationFlow(null) }), (addStationFlow === "new" || addStationFlow === "newFromExisting") && /* @__PURE__ */ React.createElement(
     AddStationModal,
     {
       initialZone: zone,
@@ -3850,7 +4294,8 @@ const DigitalLibraryPage = () => {
       initialSectionScope: sectionScope,
       existingCodes,
       onAdd: addStation,
-      onClose: () => setAddStationOpen(false)
+      onBack: () => setAddStationFlow(addStationFlow === "newFromExisting" ? "existing" : "choose"),
+      onClose: () => setAddStationFlow(null)
     }
   ), toast && /* @__PURE__ */ React.createElement("div", { className: "dl-toast", role: "status", "aria-live": "polite" }, /* @__PURE__ */ React.createElement(Icon, { name: "check_circle", size: 16 }), toast), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Sidebar" }), /* @__PURE__ */ React.createElement(
     TweakToggle,
