@@ -1,35 +1,6 @@
 // Generated from icons.jsx. Edit the .jsx source and regenerate if needed.
 (() => {
-  var __defProp = Object.defineProperty;
-  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __propIsEnum = Object.prototype.propertyIsEnumerable;
-  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-  var __spreadValues = (a, b) => {
-    for (var prop in b || (b = {}))
-      if (__hasOwnProp.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    if (__getOwnPropSymbols)
-      for (var prop of __getOwnPropSymbols(b)) {
-        if (__propIsEnum.call(b, prop))
-          __defNormalProp(a, prop, b[prop]);
-      }
-    return a;
-  };
-  var __objRest = (source, exclude) => {
-    var target = {};
-    for (var prop in source)
-      if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
-        target[prop] = source[prop];
-    if (source != null && __getOwnPropSymbols)
-      for (var prop of __getOwnPropSymbols(source)) {
-        if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
-          target[prop] = source[prop];
-      }
-    return target;
-  };
-  const Icon = (_a) => {
-    var _b = _a, { name, size = 16, className = "" } = _b, rest = __objRest(_b, ["name", "size", "className"]);
+  const Icon = ({ name, size = 16, className = "", ...rest }) => {
     const paths = {
       search: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "11", cy: "11", r: "6" }), /* @__PURE__ */ React.createElement("path", { d: "m20 20-3.5-3.5" })),
       bell: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6" }), /* @__PURE__ */ React.createElement("path", { d: "M10 18a2 2 0 0 0 4 0" })),
@@ -87,9 +58,24 @@
       arrow_right: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M5 12h14M12 5l7 7-7 7" })),
       spark: /* @__PURE__ */ React.createElement("path", { d: "M5 12h2l2-7 4 14 2-7h4" }),
       cube: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "m12 3 9 5v8l-9 5-9-5V8z" }), /* @__PURE__ */ React.createElement("path", { d: "m3 8 9 5 9-5M12 13v10" })),
-      git: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "6", cy: "6", r: "2" }), /* @__PURE__ */ React.createElement("circle", { cx: "18", cy: "6", r: "2" }), /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "18", r: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M8 6h6a4 4 0 0 1 4 4M12 16V8" }))
+      git: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "6", cy: "6", r: "2" }), /* @__PURE__ */ React.createElement("circle", { cx: "18", cy: "6", r: "2" }), /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "18", r: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M8 6h6a4 4 0 0 1 4 4M12 16V8" })),
+      cursor: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "m5 3 14 8.5-6.2 1.4L9.6 19z" })),
+      hand: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M8 12V5.5a1.5 1.5 0 0 1 3 0V11" }), /* @__PURE__ */ React.createElement("path", { d: "M11 11V4.5a1.5 1.5 0 0 1 3 0V11" }), /* @__PURE__ */ React.createElement("path", { d: "M14 11V6.5a1.5 1.5 0 0 1 3 0V13" }), /* @__PURE__ */ React.createElement("path", { d: "M8 12v-1a1.5 1.5 0 0 0-3 0v4a6 6 0 0 0 6 6h1a6 6 0 0 0 5-5.8V11" })),
+      zoom_in: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "11", cy: "11", r: "6" }), /* @__PURE__ */ React.createElement("path", { d: "m20 20-3.5-3.5M11 8.5v5M8.5 11h5" })),
+      zoom_out: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "11", cy: "11", r: "6" }), /* @__PURE__ */ React.createElement("path", { d: "m20 20-3.5-3.5M8.5 11h5" })),
+      fit_screen: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4" }), /* @__PURE__ */ React.createElement("rect", { x: "9", y: "9", width: "6", height: "6", rx: "1" })),
+      select_rect: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3" }), /* @__PURE__ */ React.createElement("path", { d: "M11 3h2M11 21h2M3 11v2M21 11v2" })),
+      lasso: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M12 4c4.4 0 8 2.4 8 5.5S16.4 15 12 15s-8-2.4-8-5.5S7.6 4 12 4z" }), /* @__PURE__ */ React.createElement("path", { d: "M6.4 13.6C5.5 15 5 16.2 5 17a2 2 0 0 0 3.5 1.3" }), /* @__PURE__ */ React.createElement("circle", { cx: "9.5", cy: "19.5", r: "1.6" })),
+      link: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M10.5 13.5a4 4 0 0 0 5.7 0l2.6-2.6a4 4 0 0 0-5.7-5.7l-1.4 1.4" }), /* @__PURE__ */ React.createElement("path", { d: "M13.5 10.5a4 4 0 0 0-5.7 0l-2.6 2.6a4 4 0 0 0 5.7 5.7l1.4-1.4" })),
+      unlink: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M15.5 8.5 17 7a4 4 0 0 1 5.7 5.7l-1.5 1.5M8.5 15.5 7 17a4 4 0 0 1-5.7-5.7l1.5-1.5" }), /* @__PURE__ */ React.createElement("path", { d: "M4 4l16 16" })),
+      scissors: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "6", cy: "6", r: "2.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "6", cy: "18", r: "2.5" }), /* @__PURE__ */ React.createElement("path", { d: "M8 7.5 20 18M8 16.5 20 6" })),
+      ruler: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("rect", { x: "2", y: "8", width: "20", height: "8", rx: "1.5" }), /* @__PURE__ */ React.createElement("path", { d: "M7 8v3M11 8v4M15 8v3M19 8v4" })),
+      eye_off: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M10.6 5.2A9.6 9.6 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.2 6.3A16.6 16.6 0 0 0 2 12s3.5 7 10 7a9.9 9.9 0 0 0 4.5-1.1" }), /* @__PURE__ */ React.createElement("path", { d: "M9.9 9.9a3 3 0 0 0 4.2 4.2M3 3l18 18" })),
+      undo: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M3 8h11a6 6 0 0 1 0 12H8" }), /* @__PURE__ */ React.createElement("path", { d: "m7 4-4 4 4 4" })),
+      save: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M5 3h11l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" }), /* @__PURE__ */ React.createElement("path", { d: "M8 3v6h7V3M8 21v-7h8v7" })),
+      target: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "8" }), /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "3" }), /* @__PURE__ */ React.createElement("path", { d: "M12 1v3M12 20v3M1 12h3M20 12h3" }))
     };
-    return /* @__PURE__ */ React.createElement("svg", __spreadValues({ viewBox: "0 0 24 24", width: size, height: size, className: "icon " + className }, rest), paths[name] || null);
+    return /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 24 24", width: size, height: size, className: "icon " + className, ...rest }, paths[name] || null);
   };
   window.Icon = Icon;
 })();

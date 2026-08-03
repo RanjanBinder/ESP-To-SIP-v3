@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PIM Review — Tracks · Indian Railways ESP · SIP · LOP Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    html, body { margin: 0; padding: 0; overflow: hidden; height: 100%; }
+    #root { height: 100vh; }
+    .pt-shell { display: flex; min-width: 0; height: 100vh; }
+  </style>
+  <script src="react.js"></script>
+  <script src="react-dom.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    window.onerror = function (msg, src, line) {
+      var el = document.getElementById('root');
+      if (el && !el.childElementCount) {
+        el.innerHTML = '<div style="font-family:sans-serif;padding:32px;color:#c00"><strong>App error:</strong> '
+          + msg + '<br><small>' + src + ':' + line + '</small></div>';
+      }
+    };
+  </script>
+
+  <!-- Design system, in dependency order -->
+  <script src="icons.js?v=9"></script>
+  <script src="components-forms.js?v=9"></script>
+  <script src="components-data.js?v=9"></script>
+  <script src="components-nav.js?v=9"></script>
+
+  <!-- PIM Review — Tracks -->
+  <script src="pim-tracks-data.js?v=9"></script>
+  <script src="pim-tracks.js?v=9"></script>
+
+  <script>
+    // Design-system CSS is shipped as JS strings; inject it before mounting.
+    (function () {
+      var style = document.createElement('style');
+      style.textContent = (window.NAV_CSS || '') + (window.DATA_CSS || '') + (window.FORM_CSS || '');
+      document.head.appendChild(style);
+
+      var Shell = function () {
+        return React.createElement(
+          'div',
+          { className: 'pt-shell' },
+          React.createElement(window.PIMTracksPage, {
+            onBack: function () { window.location.href = 'Digital Library.html'; },
+            onComplete: function (result) { console.log('Track review completed', result); }
+          })
+        );
+      };
+
+      ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(Shell));
+    })();
+  </script>
+</body>
+</html>
