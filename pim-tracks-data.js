@@ -491,7 +491,7 @@
       REJECTION_REASONS,
       MAPPING_METHODS,
       VIEWBOX: { x: 0, y: 60, w: 1600, h: 700 },
-      CURRENT_USER: { name: "Sarath", role: "PIM Reviewer" }
+      CURRENT_USER: { id: "usr-sarath", name: "Sarath", role: "PIM Reviewer" }
     };
   })();
 })();

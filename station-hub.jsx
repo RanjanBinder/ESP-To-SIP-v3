@@ -1246,11 +1246,15 @@
 .sh-step-circle { width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-size:11px; font-weight:800; flex-shrink:0; background:var(--ink-100); color:var(--ink-500); border:1.5px solid var(--ink-200); transition:all 140ms; }
 .sh-step-pill[data-active="true"] .sh-step-circle { background:var(--accent); color:var(--paper); border-color:var(--accent); box-shadow:0 4px 10px -4px oklch(0.55 0.22 280 / .5); }
 .sh-step-pill[data-reviewed="true"] .sh-step-circle { background:var(--success-soft); color:var(--success-text); border-color:oklch(0.83 0.08 155); }
+.sh-step-pill[data-issues="true"] .sh-step-circle { background:var(--warning-soft); color:var(--warning-text); border-color:oklch(0.83 0.09 75); }
 .sh-step-label { display:flex; flex-direction:column; gap:1px; }
 .sh-step-label-name { font-size:11.5px; font-weight:600; color:var(--ink-700); white-space:nowrap; }
 .sh-step-label-count { font-size:10px; color:var(--ink-400); }
 .sh-step-pill[data-active="true"] .sh-step-label-name { color:var(--accent); }
 .sh-step-pill[data-reviewed="true"] .sh-step-label-name { color:var(--success-text); }
+.sh-step-pill[data-issues="true"] .sh-step-label-name,.sh-step-pill[data-issues="true"] .sh-step-label-count { color:var(--warning-text); }
+.sh-step-pill[data-active="true"][data-issues="true"] .sh-step-circle { background:var(--accent); color:var(--paper); border-color:var(--accent); }
+.sh-step-pill[data-active="true"][data-issues="true"] .sh-step-label-name { color:var(--accent); }
 .sh-step-connector { flex:1; min-width:14px; max-width:32px; height:1.5px; background:var(--ink-200); margin:0 4px; transition:background 200ms; }
 .sh-step-connector[data-done="true"] { background:oklch(0.83 0.08 155); }
 .sh-review-actions { justify-content:flex-start; }
@@ -1659,6 +1663,10 @@
 .sh-de-layer-dot { color:var(--success-text); font-size:10px; margin-left:auto; }
 .sh-de-canvas { grid-area:canvas; background:#c0c0c0; overflow:auto; display:block; padding:24px; }
 .sh-de-canvas-img { width:auto; min-width:100%; height:auto; display:block; box-shadow:0 4px 24px rgba(0,0,0,.32); background:white; }
+.sh-de-canvas-document { position:relative; min-width:100%; width:max-content; }
+.sh-de-canvas-document .sh-de-canvas-img { width:100%; min-width:0; }
+.sh-de-corrected-tracks { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+.sh-de-corrected-track { fill:none; stroke:#2563eb; stroke-width:2.2; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round; filter:drop-shadow(0 0 2px rgba(255,255,255,.9)); }
 .sh-de-right-panel { grid-area:right; background:var(--paper); border-left:var(--hairline); overflow-y:auto; font-size:12px; }
 .sh-de-prop-section { border-bottom:var(--hairline); }
 .sh-de-prop-head { display:flex; align-items:center; gap:6px; padding:8px 12px; font-size:11.5px; font-weight:700; color:var(--ink-900); cursor:pointer; }
@@ -2503,7 +2511,6 @@
     "Aurangabad Junction", "Chikalthan", "Daulatabad",
     "Hingoli Deccan", "Nanded", "Manmad Junction", "Latur Road"
   ];
-  const KNOWN_TRACK_IDS = TRACK_OPTIONS.map((option) => option.id);
   const REVIEW_ASSET_GROUPS = [
     { type: "Central Line Location", count: 1, icon: "pin" },
     { type: CTC_DISTANCE_TYPE, count: 3, icon: "track" },
@@ -2532,7 +2539,14 @@
     const [statuses, setStatuses] = useStateHub(() => Object.fromEntries(groups.map((g) => [g.type, "pending"])));
     const [drafts, setDrafts] = useStateHub({});
     const [toast, setToast] = useStateHub("");
-    const [trackMappingOpen, setTrackMappingOpen] = useStateHub(false);
+    const [trackReviewMeta, setTrackReviewMeta] = useStateHub({ issueCount: 0, verifiedCount: 0, rejectedCount: 0 });
+    const [trackCorrectionDocument, setTrackCorrectionDocument] = useStateHub(null);
+    const reviewTrackOptions = React.useMemo(() => {
+      const corrected = (trackCorrectionDocument?.tracks || [])
+        .filter((track) => track.status !== "REJECTED")
+        .map((track) => ({ id: track.id, name: track.name || track.id }));
+      return corrected.length ? corrected : TRACK_OPTIONS;
+    }, [trackCorrectionDocument]);
     const activeGroup = groups.find((g) => g.type === activeType) || groups[0];
     const isDigitizeStep = !!activeGroup.isDigitize;
     const [digitalGenerated, setDigitalGenerated] = useStateHub(false);
@@ -2552,14 +2566,19 @@
     const statusKey = statuses[activeGroup.type] || "pending";
     const status = REVIEW_STATUSES[statusKey];
     const groupIndex = groups.findIndex((g) => g.type === activeGroup.type);
+    const useTrackCorrectionWorkspace = activeGroup.type === "Tracks" && !!window.PIMTrackCorrectionWorkspace;
     const isFirst = groupIndex === 0 && activeInstance === 1;
     const isLast = groupIndex === groups.length - 1 && (isDigitizeStep || activeInstance === activeGroup.count);
-    const allReviewed = groups.every((g) => statuses[g.type] === "reviewed");
+    const allReviewed = groups.filter((g) => !g.isDigitize).every((g) => statuses[g.type] === "reviewed");
     React.useEffect(() => {
       setStatuses((prev) => prev[activeGroup.type] === "pending" ? { ...prev, [activeGroup.type]: "in_review" } : prev);
     }, [activeGroup.type]);
     const goPrev = () => {
-      if (activeInstance > 1) {
+      if (activeGroup.type === "Tracks" && groupIndex > 0) {
+        const prevGroup = groups[groupIndex - 1];
+        setActiveType(prevGroup.type);
+        setActiveInstance(prevGroup.count);
+      } else if (activeInstance > 1) {
         setActiveInstance(activeInstance - 1);
       } else if (groupIndex > 0) {
         setStatuses((prev) => ({ ...prev, [activeGroup.type]: "reviewed" }));
@@ -2569,7 +2588,10 @@
       }
     };
     const goNext = () => {
-      if (activeInstance < activeGroup.count) {
+      if (activeGroup.type === "Tracks" && groupIndex < groups.length - 1) {
+        setActiveType(groups[groupIndex + 1].type);
+        setActiveInstance(1);
+      } else if (activeInstance < activeGroup.count) {
         setActiveInstance(activeInstance + 1);
       } else if (groupIndex < groups.length - 1) {
         setStatuses((prev) => ({ ...prev, [activeGroup.type]: "reviewed" }));
@@ -2577,6 +2599,34 @@
         setActiveInstance(1);
       }
     };
+    const handleTrackStatusChange = React.useCallback((nextStatus, countOverride) => {
+      const payload = typeof nextStatus === "string" ? { status: nextStatus } : nextStatus || {};
+      setTrackReviewMeta((current) => ({ ...current, ...payload }));
+      const nextCount = Number(countOverride ?? payload.count ?? payload.total ?? payload.assetCount);
+      if (Number.isFinite(nextCount) && nextCount >= 0) {
+        setAssetCounts((current) => ({ ...current, Tracks: nextCount }));
+      }
+      if (!payload.status) return;
+      const normalizedStatus = String(payload.status).trim().toLowerCase().replace(/[\s-]+/g, "_");
+      const reviewStatus = {
+        completed: "reviewed",
+        complete: "reviewed",
+        verified: "reviewed",
+        reviewed: "reviewed",
+        has_issues: "correction",
+        hasissues: "correction",
+        issues: "correction",
+        needs_review: "correction",
+        correction: "correction",
+        incomplete: "in_review",
+        current: "in_review",
+        in_review: "in_review",
+        pending: "pending"
+      }[normalizedStatus];
+      if (reviewStatus) {
+        setStatuses((current) => ({ ...current, Tracks: reviewStatus }));
+      }
+    }, []);
     const markReviewed = () => {
       setStatuses((prev) => ({ ...prev, [activeGroup.type]: "reviewed" }));
       setToast(activeGroup.type + " marked as reviewed");
@@ -2613,14 +2663,16 @@
       const measured = splitMeasuredValue(draft[fieldLabel], unit);
       return React.createElement("div", { className: "sh-asset-config-field", key }, React.createElement("label", null, displayLabel), React.createElement("div", { className: "sh-fixed-measure-input" }, React.createElement("input", { type: "number", inputMode: "decimal", step, value: measured.amount, onChange: (event) => updateField(fieldLabel, `${event.target.value}|${unit}`) }), React.createElement("span", { className: "sh-fixed-measure-suffix" }, unit)));
     };
-    const getTrackOption = (trackId) => TRACK_OPTIONS.find((option) => option.id === trackId);
+    const getTrackOption = (trackId) => reviewTrackOptions.find((option) => option.id === trackId);
     const parseBridgeTrackIds = (value) => String(value || "").split("|").map((item) => item.trim()).filter(Boolean);
     const getBridgeTrackLabel = (trackId) => {
       const option = getTrackOption(trackId);
       return option ? option.name : trackId;
     };
     const changeType = (nextType) => {
-      setStatuses((prev) => ({ ...prev, [activeGroup.type]: "reviewed" }));
+      if (activeGroup.type !== "Tracks") {
+        setStatuses((prev) => ({ ...prev, [activeGroup.type]: "reviewed" }));
+      }
       setActiveType(nextType);
       setActiveInstance(1);
     };
@@ -2732,7 +2784,7 @@
       const dN = getDraftForInstance(n);
       const header = getBridgeAccordionHeader(n);
       const bridgeTrackIds = parseBridgeTrackIds(dN["Track Name"]);
-      const availableTrackOptions = TRACK_OPTIONS.filter((option) => !bridgeTrackIds.includes(option.id));
+      const availableTrackOptions = reviewTrackOptions.filter((option) => !bridgeTrackIds.includes(option.id));
       const chainage = splitMeasuredValue(dN["Chainage"] || "", "m");
       const fcsb = splitMeasuredValue(dN["FCSB"] || "", "m");
       return /* @__PURE__ */ React.createElement("div", { className: "sh-bridge-card", key: n }, /* @__PURE__ */ React.createElement("div", { className: "sh-bridge-card-header", role: "button", tabIndex: 0, onClick: () => toggleBridgeItem(n), onKeyDown: (event) => {
@@ -2755,6 +2807,11 @@
       window.setTimeout(() => setToast(""), 2500);
     };
     const openEspEditor = () => {
+      if (!allReviewed) {
+        setToast("Resolve every asset review issue before generating the Digital ESP.");
+        window.setTimeout(() => setToast(""), 3000);
+        return;
+      }
       setEspLoading(true);
       setEspLoadingExit(false);
       window.setTimeout(() => setEspLoadingExit(true), 2900);
@@ -2768,7 +2825,11 @@
     const reviewConfigTitle = isDigitizeStep ? "Digital ESP" : isCtcDistanceType(activeGroup.type) ? getReviewInstanceTitle(activeGroup.type, activeInstance) : activeGroup.type + " " + rightPanelTitle;
     const reviewInstanceTitle = getReviewInstanceTitle(activeGroup.type, activeInstance);
     const saveGeneratedDigital = () => {
-      if (onFinish) onFinish({ close: true });
+      if (onFinish) onFinish({
+        close: true,
+        trackCorrectionDocument,
+        correctedTracks: trackCorrectionDocument?.tracks?.filter((track) => track.status !== "REJECTED") || []
+      });
     };
     const deCanvasRef = React.useRef(null);
     React.useEffect(() => {
@@ -2968,7 +3029,12 @@
           )
         ),
         /* @__PURE__ */ React.createElement("div", { className: "sh-de-canvas", ref: deCanvasRef },
-          /* @__PURE__ */ React.createElement("img", { src: "assets/digitize-esp.png", className: "sh-de-canvas-img", alt: "Digital ESP Canvas", draggable: "false" })
+          /* @__PURE__ */ React.createElement("div", { className: "sh-de-canvas-document" },
+            /* @__PURE__ */ React.createElement("img", { src: "assets/digitize-esp.png", className: "sh-de-canvas-img", alt: "Digital ESP Canvas", draggable: "false" }),
+            trackCorrectionDocument && /* @__PURE__ */ React.createElement("svg", { className: "sh-de-corrected-tracks", viewBox: "0 60 1600 700", preserveAspectRatio: "none", "aria-label": "Corrected Track geometry" },
+              trackCorrectionDocument.tracks.filter((track) => track.status !== "REJECTED").map((track) => /* @__PURE__ */ React.createElement("polyline", { key: track.id, className: "sh-de-corrected-track", points: track.geometry.coordinates.map((point) => point.join(",")).join(" ") }))
+            )
+          )
         ),
         /* @__PURE__ */ React.createElement("div", { className: "sh-de-right-panel" },
           /* \u2500\u2500 Selection \u2500\u2500 */
@@ -3023,27 +3089,27 @@
         toast && /* @__PURE__ */ React.createElement("div", { className: "sh-editor-toast" }, /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 14 }), toast)
       );
     }
-    if (trackMappingOpen && window.PIMTracksPage) {
-      return /* @__PURE__ */ React.createElement(window.PIMTracksPage, {
-        station: { ...station, yardLimitStart: "431.240 km", yardLimitEnd: "432.720 km" },
-        onBack: () => setTrackMappingOpen(false),
-        onComplete: () => {
-          setTrackMappingOpen(false);
-          setStatuses((rows) => ({ ...rows, Tracks: "reviewed" }));
-          setToast("Track extraction review completed");
-          window.setTimeout(() => setToast(""), 2600);
-        }
-      });
-    }
-    return /* @__PURE__ */ React.createElement("div", { className: "sh-content" }, /* @__PURE__ */ React.createElement(AppTopBar, { crumbs: ["Digital Library", { label: station.name, onClick: onBack }, "ESP Preview"], searchPlaceholder: "" }), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, "ESP Preview")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, digitalGenerated && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: saveGeneratedDigital }, "Save and Close"))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll sh-esp-scroll" }, /* @__PURE__ */ React.createElement("div", { className: "sh-review-stepper", "aria-label": "Asset review steps" }, groups.map((item, index) => {
+    return /* @__PURE__ */ React.createElement("div", { className: "sh-content" }, /* @__PURE__ */ React.createElement(AppTopBar, { crumbs: ["Digital Library", { label: station.name, onClick: onBack }, "Review Assets"], searchPlaceholder: "" }), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, "ESP Preview")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, digitalGenerated && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: saveGeneratedDigital }, "Save and Close"))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll sh-esp-scroll", "data-track-correction": useTrackCorrectionWorkspace ? "true" : "false" }, /* @__PURE__ */ React.createElement("div", { className: "sh-review-stepper", "aria-label": "Asset review steps" }, groups.map((item, index) => {
       const itemStatusKey = statuses[item.type] || "pending";
       const isReviewed = itemStatusKey === "reviewed";
+      const hasIssues = itemStatusKey === "correction";
       const isActive = item.type === activeType;
       const prevReviewed = index > 0 && (statuses[groups[index - 1].type] === "reviewed");
-      const itemCountLabel = item.isDigitize ? "Final step" : `${item.count} ${item.count === 1 ? "asset" : "assets"}`;
-      return /* @__PURE__ */ React.createElement(React.Fragment, { key: item.type }, index > 0 && /* @__PURE__ */ React.createElement("div", { className: "sh-step-connector", "data-done": prevReviewed ? "true" : "false" }), /* @__PURE__ */ React.createElement("button", { className: "sh-step-pill", type: "button", "data-active": isActive ? "true" : "false", "data-reviewed": isReviewed ? "true" : "false", onClick: () => changeType(item.type) }, /* @__PURE__ */ React.createElement("div", { className: "sh-step-circle" }, isReviewed ? /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 12 }) : index + 1), /* @__PURE__ */ React.createElement("div", { className: "sh-step-label" }, /* @__PURE__ */ React.createElement("span", { className: "sh-step-label-name" }, item.type), /* @__PURE__ */ React.createElement("span", { className: "sh-step-label-count" }, itemCountLabel))));
-    })), !isDigitizeStep && activeGroup.type !== "Central Line Location" && !isBridgeReviewType(activeGroup.type) && /* @__PURE__ */ React.createElement(AssetInstanceSwitcher, { asset: activeGroup, active: activeInstance, onChange: setActiveInstance, onAdd: addAsset }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-workspace" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-editor-shell", "data-digitize": isDigitizeStep ? "true" : "false" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-panel" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, reviewPreviewTitle)), /* @__PURE__ */ React.createElement("button", { className: "sh-asset-zoom-btn", type: "button", title: "Zoom", "aria-label": "Zoom source ESP preview" }, /* @__PURE__ */ React.createElement(Icon, { name: "zoom", size: 15 }))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview", "data-type": (activeGroup.type === "Central Line Location" || isCtcDistanceType(activeGroup.type) || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates" || isDigitizeStep) ? "adjacent" : "track" }, (activeGroup.type === "Central Line Location" || isCtcDistanceType(activeGroup.type) || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates" || isDigitizeStep) ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-label" }, isDigitizeStep ? "ESP Source" : reviewInstanceTitle), /* @__PURE__ */ React.createElement("img", { src: isDigitizeStep ? "assets/digitize-esp.png" : activeGroup.type === "Central Line Location" ? "assets/central-line-location-esp.png" : activeGroup.type === "Platforms" ? "assets/platform-esp.png" : activeGroup.type === "Tracks" ? "assets/track-esp.png" : activeGroup.type === "Points and Turnouts" ? "assets/turnout-esp.png" : activeGroup.type === "Dead Ends" ? "assets/deadend-esp.png" : activeGroup.type === "Trap Points" ? "assets/trappoint-esp.png" : activeGroup.type === "Gates" ? "assets/gate-esp.png" : "assets/adjacent-station-esp.png", className: "sh-asset-esp-img", alt: activeGroup.type + " ESP source diagram", draggable: "false" })) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-label" }, isDigitizeStep ? "ESP Source" : reviewInstanceTitle), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track loop" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track main" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track siding" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout a" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout b" }), !isDigitizeStep && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-highlight" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-station" }, /* @__PURE__ */ React.createElement("strong", null, station.name), /* @__PURE__ */ React.createElement("span", null, station.code, " yard limits"))))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-panel" }, !(isDigitizeStep && digitalGenerated) && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, reviewConfigTitle)), isDigitizeStep ? /* @__PURE__ */ React.createElement(StatusChip, null, digitalGenerated ? "Generated" : "Empty") : activeGroup.type === "Central Line Location" || isBridgeReviewType(activeGroup.type) ? /* @__PURE__ */ React.createElement("button", { className: "sh-asset-add-btn", type: "button", onClick: addAsset }, /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 14 }), " Add") : /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, flexShrink: 0 } }, activeGroup.type === "Tracks" && window.PIMTracksPage && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", size: "sm", leadingIcon: "track", type: "button", onClick: () => setTrackMappingOpen(true) }, "Open Track Mapping Review"), activeGroup.count > 1 && /* @__PURE__ */ React.createElement("button", { className: "sh-asset-delete-btn", type: "button", title: "Delete " + reviewInstanceTitle, onClick: () => removeAssetAt(activeInstance) }, /* @__PURE__ */ React.createElement(Icon, { name: "trash", size: 14 })))), isDigitizeStep ? digitalGenerated ? /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-generated sh-digitize-generated--editor" }, /* @__PURE__ */ React.createElement("img", { src: "assets/digital-esp-editor.png", className: "sh-digitize-editor-img", alt: "Digital ESP Editor", draggable: "false" })) : /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center" }, /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-inner" }, /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 24 })), /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-title" }, "Generate Digital ESP"), /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-sub" }, "All assets have been reviewed. Click the button below to generate the digital ESP for ", station.name, "."), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "file_check", onClick: openEspEditor }, "Generate Digital ESP"))) : activeGroup.type === "Central Line Location" ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-cll-accordion" }, Array.from({ length: activeGroup.count }, (_, idx) => { const n = idx + 1; const isOpen = openCllItems.includes(n); const dN = getDraftForInstance(n); const header = getCllAccordionHeader(n); const mFieldForN = (fLabel, dLabel, fUnit, k) => { const mv = splitMeasuredValue(dN[fLabel] || "", fUnit); return React.createElement("div", { className: "sh-asset-config-field", key: k }, React.createElement("label", null, dLabel), React.createElement("div", { className: "sh-measure-input" }, React.createElement("input", { value: mv.amount, onChange: (e) => updateFieldForInstance(n, fLabel, e.target.value + "|" + mv.unit) }), React.createElement("span", { className: "sh-measure-separator" }, "|"), React.createElement("select", { value: mv.unit, onChange: (e) => updateFieldForInstance(n, fLabel, mv.amount + "|" + e.target.value) }, measuredUnits.map((u) => React.createElement("option", { key: u, value: u }, u))))); }; return React.createElement("div", { className: "sh-cll-accordion-item", key: n, "data-open": isOpen ? "true" : "false" }, React.createElement("button", { className: "sh-cll-accordion-header", type: "button", onClick: () => toggleCllItem(n) }, React.createElement("span", { className: "sh-cll-accordion-title" }, header), React.createElement(Icon, { name: isOpen ? "chevron_up" : "plus", size: 14 })), isOpen && React.createElement("div", { className: "sh-cll-accordion-content" }, React.createElement("div", { className: "sh-asset-config-field sh-asset-config-field--full", key: "f-st-" + n }, React.createElement("label", null, "Station Text"), React.createElement("input", { value: dN["Station"] || "", onChange: (e) => updateFieldForInstance(n, "Station", e.target.value) })), mFieldForN("Location (KM)", "Location (km)", "km", "f-loc-" + n), mFieldForN("Chainage (m)", "Location Chainage", "m", "f-ch-" + n), mFieldForN("FCSB (m)", "FCSB (m)", "m", "f-fcsb-" + n))); })), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-actions sh-review-actions" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "chevron_left", disabled: isFirst, onClick: goPrev }, "Previous"), /* @__PURE__ */ React.createElement("span", { className: "sh-review-spacer" }), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", trailingIcon: "chevron_right", disabled: isLast, onClick: goNext }, "Next"))) : isBridgeReviewType(activeGroup.type) ? renderBridgeAccordion() : /* @__PURE__ */ React.createElement("form", { className: "sh-asset-config-form", onSubmit: handleReviewFormSubmit }, isCtcDistanceType(activeGroup.type) ? [
-      /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-field", key: "f-track-pair", "data-span": "full" }, /* @__PURE__ */ React.createElement("div", { className: "sh-ctc-pair-field" }, /* @__PURE__ */ React.createElement("label", null, "Track Pair"), /* @__PURE__ */ React.createElement("div", { className: "sh-ctc-pair-inputs" }, /* @__PURE__ */ React.createElement("select", { value: draft.track_1_id || "", onChange: (event) => updateTrackPair(1, event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Select track"), TRACK_OPTIONS.map((option) => /* @__PURE__ */ React.createElement("option", { key: `track-1-${option.id}`, value: option.id }, option.name))), /* @__PURE__ */ React.createElement("span", { className: "sh-ctc-pair-arrow", "aria-hidden": "true" }, "\u2194"), /* @__PURE__ */ React.createElement("select", { value: draft.track_2_id || "", onChange: (event) => updateTrackPair(2, event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Select track"), TRACK_OPTIONS.map((option) => /* @__PURE__ */ React.createElement("option", { key: `track-2-${option.id}`, value: option.id }, option.name)))), ctcFormErrors[draftKey] && /* @__PURE__ */ React.createElement("div", { className: "sh-ctc-inline-error" }, ctcFormErrors[draftKey]))),
+      const baseCountLabel = `${item.count} ${item.count === 1 ? "asset" : "assets"}`;
+      const itemCountLabel = item.isDigitize ? "Final step" : item.type === "Tracks" && trackReviewMeta.issueCount > 0 ? `${baseCountLabel} · ${trackReviewMeta.issueCount} issues` : baseCountLabel;
+      return /* @__PURE__ */ React.createElement(React.Fragment, { key: item.type }, index > 0 && /* @__PURE__ */ React.createElement("div", { className: "sh-step-connector", "data-done": prevReviewed ? "true" : "false" }), /* @__PURE__ */ React.createElement("button", { className: "sh-step-pill", type: "button", "data-active": isActive ? "true" : "false", "data-reviewed": isReviewed ? "true" : "false", "data-issues": hasIssues ? "true" : "false", onClick: () => changeType(item.type) }, /* @__PURE__ */ React.createElement("div", { className: "sh-step-circle" }, isReviewed ? /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 12 }) : hasIssues ? /* @__PURE__ */ React.createElement(Icon, { name: "alert", size: 12 }) : index + 1), /* @__PURE__ */ React.createElement("div", { className: "sh-step-label" }, /* @__PURE__ */ React.createElement("span", { className: "sh-step-label-name" }, item.type), /* @__PURE__ */ React.createElement("span", { className: "sh-step-label-count" }, itemCountLabel))));
+    })), useTrackCorrectionWorkspace && /* @__PURE__ */ React.createElement(window.PIMTrackCorrectionWorkspace, {
+      station,
+      initialDocument: trackCorrectionDocument,
+      sourceDocument: { id: upload?.id || "esp-source", fileName: upload?.fileName || "Uploaded ESP", previewImage: "assets/track-esp.png" },
+      onPrevious: goPrev,
+      onNext: goNext,
+      canPrevious: groupIndex > 0,
+      canNext: groupIndex < groups.length - 1,
+      onStatusChange: handleTrackStatusChange,
+      onDocumentChange: setTrackCorrectionDocument
+    }), !useTrackCorrectionWorkspace && !isDigitizeStep && activeGroup.type !== "Central Line Location" && !isBridgeReviewType(activeGroup.type) && /* @__PURE__ */ React.createElement(AssetInstanceSwitcher, { asset: activeGroup, active: activeInstance, onChange: setActiveInstance, onAdd: addAsset }), !useTrackCorrectionWorkspace && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-workspace" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-editor-shell", "data-digitize": isDigitizeStep ? "true" : "false" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-panel" }, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, reviewPreviewTitle)), /* @__PURE__ */ React.createElement("button", { className: "sh-asset-zoom-btn", type: "button", title: "Zoom", "aria-label": "Zoom source ESP preview" }, /* @__PURE__ */ React.createElement(Icon, { name: "zoom", size: 15 }))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview", "data-type": (activeGroup.type === "Central Line Location" || isCtcDistanceType(activeGroup.type) || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates" || isDigitizeStep) ? "adjacent" : "track" }, (activeGroup.type === "Central Line Location" || isCtcDistanceType(activeGroup.type) || activeGroup.type === "Platforms" || activeGroup.type === "Tracks" || activeGroup.type === "Points and Turnouts" || activeGroup.type === "Dead Ends" || activeGroup.type === "Trap Points" || activeGroup.type === "Gates" || isDigitizeStep) ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-label" }, isDigitizeStep ? "ESP Source" : reviewInstanceTitle), /* @__PURE__ */ React.createElement("img", { src: isDigitizeStep ? "assets/digitize-esp.png" : activeGroup.type === "Central Line Location" ? "assets/central-line-location-esp.png" : activeGroup.type === "Platforms" ? "assets/platform-esp.png" : activeGroup.type === "Tracks" ? "assets/track-esp.png" : activeGroup.type === "Points and Turnouts" ? "assets/turnout-esp.png" : activeGroup.type === "Dead Ends" ? "assets/deadend-esp.png" : activeGroup.type === "Trap Points" ? "assets/trappoint-esp.png" : activeGroup.type === "Gates" ? "assets/gate-esp.png" : "assets/adjacent-station-esp.png", className: "sh-asset-esp-img", alt: activeGroup.type + " ESP source diagram", draggable: "false" })) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-label" }, isDigitizeStep ? "ESP Source" : reviewInstanceTitle), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track loop" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track main" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-track siding" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout a" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-turnout b" }), !isDigitizeStep && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-highlight" }), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-preview-station" }, /* @__PURE__ */ React.createElement("strong", null, station.name), /* @__PURE__ */ React.createElement("span", null, station.code, " yard limits"))))), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-panel" }, !(isDigitizeStep && digitalGenerated) && /* @__PURE__ */ React.createElement("div", { className: "sh-asset-panel-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-section-title" }, reviewConfigTitle)), isDigitizeStep ? /* @__PURE__ */ React.createElement(StatusChip, null, digitalGenerated ? "Generated" : "Empty") : activeGroup.type === "Central Line Location" || isBridgeReviewType(activeGroup.type) ? /* @__PURE__ */ React.createElement("button", { className: "sh-asset-add-btn", type: "button", onClick: addAsset }, /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 14 }), " Add") : /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, flexShrink: 0 } }, activeGroup.count > 1 && /* @__PURE__ */ React.createElement("button", { className: "sh-asset-delete-btn", type: "button", title: "Delete " + reviewInstanceTitle, onClick: () => removeAssetAt(activeInstance) }, /* @__PURE__ */ React.createElement(Icon, { name: "trash", size: 14 })))), isDigitizeStep ? digitalGenerated ? /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-generated sh-digitize-generated--editor" }, /* @__PURE__ */ React.createElement("img", { src: "assets/digital-esp-editor.png", className: "sh-digitize-editor-img", alt: "Digital ESP Editor", draggable: "false" })) : /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center" }, /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-inner" }, /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 24 })), /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-title" }, "Generate Digital ESP"), /* @__PURE__ */ React.createElement("div", { className: "sh-digitize-center-sub" }, "All assets have been reviewed. Click the button below to generate the digital ESP for ", station.name, "."), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "file_check", onClick: openEspEditor }, "Generate Digital ESP"))) : activeGroup.type === "Central Line Location" ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "sh-cll-accordion" }, Array.from({ length: activeGroup.count }, (_, idx) => { const n = idx + 1; const isOpen = openCllItems.includes(n); const dN = getDraftForInstance(n); const header = getCllAccordionHeader(n); const mFieldForN = (fLabel, dLabel, fUnit, k) => { const mv = splitMeasuredValue(dN[fLabel] || "", fUnit); return React.createElement("div", { className: "sh-asset-config-field", key: k }, React.createElement("label", null, dLabel), React.createElement("div", { className: "sh-measure-input" }, React.createElement("input", { value: mv.amount, onChange: (e) => updateFieldForInstance(n, fLabel, e.target.value + "|" + mv.unit) }), React.createElement("span", { className: "sh-measure-separator" }, "|"), React.createElement("select", { value: mv.unit, onChange: (e) => updateFieldForInstance(n, fLabel, mv.amount + "|" + e.target.value) }, measuredUnits.map((u) => React.createElement("option", { key: u, value: u }, u))))); }; return React.createElement("div", { className: "sh-cll-accordion-item", key: n, "data-open": isOpen ? "true" : "false" }, React.createElement("button", { className: "sh-cll-accordion-header", type: "button", onClick: () => toggleCllItem(n) }, React.createElement("span", { className: "sh-cll-accordion-title" }, header), React.createElement(Icon, { name: isOpen ? "chevron_up" : "plus", size: 14 })), isOpen && React.createElement("div", { className: "sh-cll-accordion-content" }, React.createElement("div", { className: "sh-asset-config-field sh-asset-config-field--full", key: "f-st-" + n }, React.createElement("label", null, "Station Text"), React.createElement("input", { value: dN["Station"] || "", onChange: (e) => updateFieldForInstance(n, "Station", e.target.value) })), mFieldForN("Location (KM)", "Location (km)", "km", "f-loc-" + n), mFieldForN("Chainage (m)", "Location Chainage", "m", "f-ch-" + n), mFieldForN("FCSB (m)", "FCSB (m)", "m", "f-fcsb-" + n))); })), /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-actions sh-review-actions" }, /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "chevron_left", disabled: isFirst, onClick: goPrev }, "Previous"), /* @__PURE__ */ React.createElement("span", { className: "sh-review-spacer" }), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", trailingIcon: "chevron_right", disabled: isLast, onClick: goNext }, "Next"))) : isBridgeReviewType(activeGroup.type) ? renderBridgeAccordion() : /* @__PURE__ */ React.createElement("form", { className: "sh-asset-config-form", onSubmit: handleReviewFormSubmit }, isCtcDistanceType(activeGroup.type) ? [
+      /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-field", key: "f-track-pair", "data-span": "full" }, /* @__PURE__ */ React.createElement("div", { className: "sh-ctc-pair-field" }, /* @__PURE__ */ React.createElement("label", null, "Track Pair"), /* @__PURE__ */ React.createElement("div", { className: "sh-ctc-pair-inputs" }, /* @__PURE__ */ React.createElement("select", { value: draft.track_1_id || "", onChange: (event) => updateTrackPair(1, event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Select track"), reviewTrackOptions.map((option) => /* @__PURE__ */ React.createElement("option", { key: `track-1-${option.id}`, value: option.id }, option.name))), /* @__PURE__ */ React.createElement("span", { className: "sh-ctc-pair-arrow", "aria-hidden": "true" }, "\u2194"), /* @__PURE__ */ React.createElement("select", { value: draft.track_2_id || "", onChange: (event) => updateTrackPair(2, event.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Select track"), reviewTrackOptions.map((option) => /* @__PURE__ */ React.createElement("option", { key: `track-2-${option.id}`, value: option.id }, option.name)))), ctcFormErrors[draftKey] && /* @__PURE__ */ React.createElement("div", { className: "sh-ctc-inline-error" }, ctcFormErrors[draftKey]))),
       /* @__PURE__ */ React.createElement("div", { className: "sh-asset-config-field", key: "f-distance" }, /* @__PURE__ */ React.createElement("label", null, "Distance"), /* @__PURE__ */ React.createElement("div", { className: "sh-ctc-distance-input" }, /* @__PURE__ */ React.createElement("input", { type: "number", inputMode: "decimal", step: "0.01", min: "0", value: draft["Distance"] || "", onChange: (event) => updateField("Distance", event.target.value), onBlur: (event) => updateField("Distance", formatCtcDistanceValue(event.target.value)) }), /* @__PURE__ */ React.createElement("span", { className: "sh-ctc-distance-suffix" }, "m")))
     ] : activeGroup.type === "Platforms" ? [
       /* @__PURE__ */ React.createElement("div", { className: "sh-field-section", key: "platform-section-platform" }, /* @__PURE__ */ React.createElement("span", { className: "sh-field-section-label" }, "Platform"), /* @__PURE__ */ React.createElement("div", { className: "sh-field-section-line" })),
@@ -3252,7 +3318,9 @@
         updatedBy: CURRENT_USER.name,
         updated: "Just now",
         lastActivityBy: CURRENT_USER.name,
-        lastActivityAt: "Just now"
+        lastActivityAt: "Just now",
+        trackCorrectionDocument: options.trackCorrectionDocument || null,
+        trackAssetCount: options.correctedTracks?.length || 0
       };
       setDigitalEspVersions((rows) => [nextVersion, ...rows]);
       setEspRows([{
