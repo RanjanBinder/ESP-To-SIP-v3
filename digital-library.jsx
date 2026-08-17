@@ -427,6 +427,20 @@ const libCSS = `
   background: var(--ink-100);
   color: var(--ink-700);
 }
+
+/* Collapsible section headings — light-theme repaint of the
+   ds-sidebar-section-btn classes defined in components-nav. */
+.dl-layout .ds-sidebar-section-btn { color: var(--ink-400); }
+.dl-layout .ds-sidebar-section-btn:hover { color: var(--ink-800); }
+.dl-layout .ds-sidebar-item[data-disabled="true"] { color: var(--ink-400); }
+.dl-layout .ds-sidebar-item[data-disabled="true"]:hover {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink-400);
+  box-shadow: none;
+}
+.dl-layout .ds-sidebar-item[data-disabled="true"] .icon,
+.dl-layout .ds-sidebar-item[data-disabled="true"]:hover .icon { color: var(--ink-300); }
 .dl-layout .ds-sidebar-foot {
   background: rgba(255,255,255,.72);
   border-top: 1px solid rgba(10,37,64,.08);
@@ -1884,6 +1898,15 @@ const libCSS = `
 
 /* Hairline divider between groups since section labels are hidden */
 .ds-sidebar[data-collapsed="true"] .ds-sidebar-nav > div:not(.ds-sidebar-item) {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ink-100);
+}
+
+/* Collapsed: section headings disappear entirely and every item shows as an
+   icon (the component force-opens all sections while collapsed). */
+.ds-sidebar[data-collapsed="true"] .ds-sidebar-section-btn { display: none; }
+.ds-sidebar[data-collapsed="true"] .ds-sidebar-group + .ds-sidebar-group {
   margin-top: 8px;
   padding-top: 8px;
   border-top: 1px solid var(--ink-100);
@@ -3599,34 +3622,74 @@ const SortTh = ({ children, sortKey, sort, onSort, style }) => {
     /* @__PURE__ */ React.createElement("span", { className: "ds-th-inner" }, children, active ? /* @__PURE__ */ React.createElement(Icon, { name: sort.dir === "asc" ? "arrow_up" : "arrow_down", size: 11 }) : /* @__PURE__ */ React.createElement(Icon, { name: "sort", size: 11, style: { opacity: 0.35 } }))
   );
 };
+// "modEsp" is the ESP Design module (landing + guided workflow). The file
+// workspace it replaced stays reachable on its own ids and as tabs on the
+// ESP landing page.
+const ESP_PAGES = new Set(["workspace", "wsMyFiles", "wsShared"]);
+// RAPID modules listed under the "Modules" section. Icons match the module tiles
+// on Home. Items marked `disabled` are listed for visibility but not selectable.
+const RAPID_MODULES = [
+  { id: "modTad", icon: "track", label: "RAPID Track Alignment Design" },
+  { id: "modEsp", icon: "layers", label: "RAPID ESP" },
+  { id: "modSip", icon: "branch", label: "RAPID SIP" },
+  { id: "modToc", icon: "file_check", label: "RAPID TOC", disabled: true },
+  { id: "modKavach", icon: "shield", label: "RAPID Kavach", disabled: true }
+];
 const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate }) => {
-  // Live badge count from the workspace module — items awaiting the current user's
-  // action. The fallback keeps the hook call unconditional when the module script
-  // has not loaded.
-  const useWsCounts = window.useWorkspaceCounts || (() => ({ myFiles: 0, shared: 0 }));
-  const wsCounts = useWsCounts();
-  const groups = [
+  const [openGroups, setOpenGroups] = useStateLib({ main: true, modules: true, system: true });
+  const toggleGroup = (id) => setOpenGroups((o) => ({ ...o, [id]: !o[id] }));
+  const sections = [
     {
-      label: "MANAGE",
-      items: [
-        { id: "library", icon: "book", label: "Digital Library" },
-        { id: "workspace", icon: "layers", label: "Workspace", badge: wsCounts.shared ? String(wsCounts.shared) : null }
+      id: "main", label: "Main", items: [
+        { id: "home", icon: "home", label: "Home" },
+        { id: "library", icon: "book", label: "Digital Library" }
       ]
     },
+    { id: "modules", label: "Modules", items: RAPID_MODULES },
     {
-      label: "REVIEW",
-      items: [
-        { id: "approvals", icon: "check_circle", label: "Approvals", badge: "7" }
-      ]
-    },
-    {
-      label: "SYSTEM",
-      items: [
+      id: "system", label: "System", items: [
+        { id: "users", icon: "users", label: "User Management" },
         { id: "help", icon: "info", label: "Help" },
         { id: "settings", icon: "settings", label: "Settings" }
       ]
     }
   ];
+  const go = (it) => { if (!it.disabled && onNavigate) onNavigate(it.id); };
+  const renderItem = (it) => /* @__PURE__ */ React.createElement(
+    "div",
+    {
+      key: it.id,
+      className: "ds-sidebar-item",
+      "data-active": active === it.id ? "true" : "false",
+      "data-disabled": it.disabled ? "true" : void 0,
+      title: it.disabled ? it.label + " — not released yet" : collapsed ? it.label : void 0,
+      onClick: () => go(it)
+    },
+    /* @__PURE__ */ React.createElement(Icon, { name: it.icon }),
+    /* @__PURE__ */ React.createElement("span", null, it.label),
+    it.badge && /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-badge" }, it.badge)
+  );
+  const renderSection = (sec) => {
+    // while the rail is collapsed there is no heading to click, so never let a
+    // closed section hide its icons
+    const isOpen = collapsed || !!openGroups[sec.id];
+    return /* @__PURE__ */ React.createElement(
+      "div",
+      { className: "ds-sidebar-group", key: sec.id },
+      /* @__PURE__ */ React.createElement(
+        "button",
+        {
+          className: "ds-sidebar-section-btn",
+          "data-open": isOpen ? "true" : "false",
+          "aria-expanded": isOpen,
+          onClick: () => toggleGroup(sec.id)
+        },
+        /* @__PURE__ */ React.createElement("span", null, sec.label),
+        /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 13, className: "ds-sidebar-section-caret" })
+      ),
+      isOpen && sec.items.map(renderItem)
+    );
+  };
   return /* @__PURE__ */ React.createElement("aside", { className: "ds-sidebar", "data-collapsed": collapsed ? "true" : "false" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-brand" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-mark" }, /* @__PURE__ */ React.createElement("img", { src: "ir-logo.png", alt: "Indian Railways" })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-title" }, "Indian Railways"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-sub" })), /* @__PURE__ */ React.createElement(
     "button",
     {
@@ -3635,33 +3698,11 @@ const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate })
       title: collapsed ? "Expand sidebar" : "Collapse sidebar"
     },
     /* @__PURE__ */ React.createElement(Icon, { name: collapsed ? "panel_left_open" : "panel_left_close", size: 16 })
-  )), /* @__PURE__ */ React.createElement("nav", { className: "ds-sidebar-nav" }, /* @__PURE__ */ React.createElement(
-    "div",
-    {
-      className: "ds-sidebar-item",
-      "data-active": active === "home" ? "true" : "false",
-      title: collapsed ? "Home" : void 0,
-      onClick: () => onNavigate && onNavigate("home")
-    },
-    /* @__PURE__ */ React.createElement(Icon, { name: "home" }),
-    /* @__PURE__ */ React.createElement("span", null, "Home")
-  ), groups.map(
-    (g) => /* @__PURE__ */ React.createElement("div", { key: g.label }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-section" }, g.label), g.items.map(
-      (it) => /* @__PURE__ */ React.createElement(
-        "div",
-        {
-          key: it.id,
-          className: "ds-sidebar-item",
-          "data-active": active === it.id ? "true" : "false",
-          title: collapsed ? it.label : void 0,
-          onClick: () => onNavigate && onNavigate(it.id)
-        },
-        /* @__PURE__ */ React.createElement(Icon, { name: it.icon }),
-        /* @__PURE__ */ React.createElement("span", null, it.label),
-        it.badge && /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-badge" }, it.badge)
-      )
-    ))
-  )), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-foot" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-user", title: collapsed ? "Sarath" : void 0 }, "S"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userinfo" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-username" }, "Sarath"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userrole" }, "Admin SCoR")), /* @__PURE__ */ React.createElement("button", { className: "ds-sidebar-foot-btn", title: "Sign out", onClick: () => { try { sessionStorage.removeItem("ir-login-session"); sessionStorage.removeItem("lr-authed"); } catch(e) {} window.location.reload(); } }, /* @__PURE__ */ React.createElement(Icon, { name: "log_out", size: 15 }))));
+  )), /* @__PURE__ */ React.createElement(
+    "nav",
+    { className: "ds-sidebar-nav" },
+    sections.map(renderSection)
+  ), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-foot" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-user", title: collapsed ? "Sarath" : void 0 }, "S"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userinfo" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-username" }, "Sarath"), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userrole" }, "Admin SCoR")), /* @__PURE__ */ React.createElement("button", { className: "ds-sidebar-foot-btn", title: "Sign out", onClick: () => { try { sessionStorage.removeItem("ir-login-session"); sessionStorage.removeItem("lr-authed"); } catch(e) {} window.location.reload(); } }, /* @__PURE__ */ React.createElement(Icon, { name: "log_out", size: 15 }))));
 };
 const readLoginSession = () => {
   try {
@@ -3919,13 +3960,18 @@ const DigitalLibraryPage = () => {
   const secLabel = SECTION_SCOPE_LABELS;
   const navLabels = {
     approvals: "Approvals",
+    users: "User Management",
     help: "Help",
-    settings: "Settings"
+    settings: "Settings",
+    // these module pages are not built yet — acknowledge the click rather than
+    // dropping the user back on the library with no explanation
+    modTad: "RAPID Track Alignment Design",
+    modSip: "RAPID SIP"
   };
   const navigateSidebar = (page) => {
     setActiveNav(page);
     setHubStation(null);
-    if (page === "home" || page === "library" || page === "workspace" || page === "wsMyFiles" || page === "wsShared") {
+    if (page === "home" || page === "library" || page === "modEsp" || ESP_PAGES.has(page)) {
       setActivePage(page);
       return;
     }
@@ -3954,26 +4000,40 @@ const DigitalLibraryPage = () => {
       }
     ), /* @__PURE__ */ React.createElement(Dashboard, { embedded: true }));
   }
-  // Workspace now lands on the new module (My Files · Shared Workspace). The legacy
-  // WorkspacePage queue has been replaced. wsMyFiles / wsShared are kept as valid
-  // deep-link targets that open the module on a specific tab.
-  if ((activePage === "workspace" || activePage === "wsMyFiles" || activePage === "wsShared") && window.WorkspaceModulePage) {
+  if (activePage === "modEsp" && window.EspModulePage) {
+    const EspModule = window.EspModulePage;
+    return /* @__PURE__ */ React.createElement("div", { className: "dl-layout" }, /* @__PURE__ */ React.createElement(
+      LibrarySidebar,
+      {
+        collapsed: t.sidebarCollapsed,
+        onToggle: () => setTweak("sidebarCollapsed", !t.sidebarCollapsed),
+        active: "modEsp",
+        onNavigate: navigateSidebar
+      }
+    ), /* @__PURE__ */ React.createElement("div", { className: "dl-content" }, /* @__PURE__ */ React.createElement(AppTopBar, { crumbs: [{ label: "Home", onClick: () => navigateSidebar("home") }, "RAPID ESP"], searchPlaceholder: "Search ESP designs, stations and files..." }), /* @__PURE__ */ React.createElement("main", { style: { flex: "1 1 0", width: "100%", minWidth: 0, minHeight: 0, overflow: "hidden", display: "flex" } }, /* @__PURE__ */ React.createElement(
+      EspModule,
+      { onNavigate: navigateSidebar }
+    ))));
+  }
+  // The file workspace (My Files · Shared Workspace) that used to be the ESP
+  // page. Still reachable on its own ids and from the ESP landing tabs.
+  if (ESP_PAGES.has(activePage) && window.WorkspaceModulePage) {
     const WorkspaceModule = window.WorkspaceModulePage;
     return /* @__PURE__ */ React.createElement("div", { className: "dl-layout" }, /* @__PURE__ */ React.createElement(
       LibrarySidebar,
       {
         collapsed: t.sidebarCollapsed,
         onToggle: () => setTweak("sidebarCollapsed", !t.sidebarCollapsed),
-        active: "workspace",
+        active: "modEsp",
         onNavigate: navigateSidebar
       }
-    ), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 0, height: "100vh", overflow: "auto", background: "#f6f7f9" } }, /* @__PURE__ */ React.createElement(
+    ), /* @__PURE__ */ React.createElement("div", { className: "dl-content" }, /* @__PURE__ */ React.createElement(AppTopBar, { crumbs: [{ label: "Home", onClick: () => navigateSidebar("home") }, { label: "RAPID ESP", onClick: () => navigateSidebar("modEsp") }, activePage === "wsShared" ? "Shared Workspace" : "My Files"], searchPlaceholder: "Search ESP files and workspace items..." }), /* @__PURE__ */ React.createElement("main", { style: { flex: "1 1 0", minWidth: 0, minHeight: 0, overflow: "auto", background: "#f6f7f9" } }, /* @__PURE__ */ React.createElement(
       WorkspaceModule,
       {
         onNavigate: navigateSidebar,
         initialTab: activePage === "wsShared" ? "SHARED" : "MY_FILES"
       }
-    )));
+    ))));
   }
   if (activePage === "bulkUpload") {
     return /* @__PURE__ */ React.createElement("div", { className: "dl-layout" }, /* @__PURE__ */ React.createElement(

@@ -18,7 +18,19 @@ const sidebarCSS = `
 .ds-sidebar-project-name { font-size: 13px; font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ds-sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 8px; }
 .ds-sidebar-section { padding: 12px 12px 4px; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.58); font-weight: 700; }
-.ds-sidebar-item { display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 7px 10px; border-radius: var(--r-md); color: rgba(255,255,255,0.78); cursor: pointer; font-size: 13.5px; font-weight: 600; transition: background 120ms, color 120ms, box-shadow 120ms, transform 120ms; position: relative; }
+/* Section heading that also collapses its group. Deliberately styled as a
+   heading, not a nav row — it must never compete with the items under it. */
+.ds-sidebar-section-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 13px 12px 5px; border: none; background: transparent; font: inherit; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.52); font-weight: 700; text-align: left; cursor: pointer; transition: color 120ms; }
+.ds-sidebar-section-btn:hover { color: rgba(255,255,255,0.9); }
+.ds-sidebar-section-caret { margin-left: auto; opacity: 0.65; transition: transform 160ms; }
+.ds-sidebar-section-btn[data-open="false"] .ds-sidebar-section-caret { transform: rotate(-90deg); }
+.ds-sidebar-group + .ds-sidebar-group { margin-top: 2px; }
+.ds-sidebar-item { display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 7px 10px; border-radius: var(--r-md); color: rgba(255,255,255,0.78); cursor: pointer; font-size: 13.5px; font-weight: 600; line-height: 1.3; transition: background 120ms, color 120ms, box-shadow 120ms, transform 120ms; position: relative; }
+/* long product names wrap rather than overflow the rail */
+.ds-sidebar-item > span:not(.ds-sidebar-badge) { min-width: 0; overflow-wrap: anywhere; }
+.ds-sidebar-item[data-disabled="true"] { color: rgba(255,255,255,0.34); cursor: not-allowed; }
+.ds-sidebar-item[data-disabled="true"]:hover { background: transparent; color: rgba(255,255,255,0.34); }
+.ds-sidebar-item[data-disabled="true"] .icon { color: rgba(255,255,255,0.24); }
 .ds-sidebar-item:hover { background: var(--sidebar-item-hover); color: var(--paper); }
 .ds-sidebar-item[data-active="true"] { background: var(--sidebar-item-active); color: var(--sidebar-item-active-text); box-shadow: 0 8px 18px -10px rgba(0,0,0,0.48), inset 0 0 0 1px rgba(255,255,255,0.45); }
 .ds-sidebar-item[data-active="true"]::before { content: ""; position: absolute; left: -8px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: var(--stripe-cyan); }
@@ -28,6 +40,49 @@ const sidebarCSS = `
 .ds-sidebar-item[data-active="true"] .icon { color: var(--accent); }
 .ds-sidebar-badge { margin-left: auto; font-size: 11px; padding: 1px 7px; border-radius: var(--r-full); background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.78); font-weight: 700; font-variant-numeric: tabular-nums; }
 .ds-sidebar-badge[data-tone="accent"] { background: rgba(99,91,255,0.24); color: #FFFFFF; }
+.ds-sidebar-badge[data-tone="danger"] { background: rgba(223,27,65,0.22); color: #FFFFFF; }
+.ds-sidebar-item[data-active="true"] .ds-sidebar-badge[data-tone="accent"] { background: var(--accent); color: var(--paper); }
+.ds-sidebar-item[data-active="true"] .ds-sidebar-badge[data-tone="danger"] { background: var(--danger); color: var(--paper); }
+
+/* scope switcher row */
+.ds-sidebar-scope { margin: 12px 12px 2px; padding: 9px 11px; border-radius: var(--r-md); border: 1px solid rgba(255,255,255,0.13); background: rgba(255,255,255,0.07); display: flex; align-items: center; gap: 9px; cursor: pointer; transition: 150ms; }
+.ds-sidebar-scope:hover { border-color: rgba(255,255,255,0.26); background: rgba(255,255,255,0.12); }
+.ds-sidebar-scope-body { min-width: 0; flex: 1; }
+.ds-sidebar-scope-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+.ds-sidebar-scope-value { font-size: 12.5px; font-weight: 700; color: var(--paper); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* collapsible nav groups (Modules, System, …) */
+.ds-sidebar-group { margin-top: 4px; }
+.ds-sidebar-parent { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 34px; padding: 7px 10px; border: none; background: transparent; border-radius: var(--r-md); color: rgba(255,255,255,0.78); cursor: pointer; font: inherit; font-size: 13.5px; font-weight: 600; text-align: left; transition: background 120ms, color 120ms; }
+.ds-sidebar-parent:hover { background: var(--sidebar-item-hover); color: var(--paper); }
+.ds-sidebar-parent .icon { color: rgba(255,255,255,0.62); }
+.ds-sidebar-parent:hover .icon { color: var(--paper); }
+.ds-sidebar-parent[data-has-active="true"] { color: var(--paper); }
+.ds-sidebar-caret { margin-left: auto; transition: transform 160ms; color: rgba(255,255,255,0.45); }
+.ds-sidebar-parent[data-open="true"] .ds-sidebar-caret { transform: rotate(90deg); }
+.ds-sidebar-children { margin: 2px 0 6px 13px; padding-left: 9px; border-left: 1px solid rgba(255,255,255,0.12); display: flex; flex-direction: column; gap: 1px; }
+.ds-sidebar-child { display: flex; align-items: flex-start; gap: 9px; min-height: 30px; padding: 6px 9px; border-radius: var(--r-sm); color: rgba(255,255,255,0.72); cursor: pointer; font-size: 13px; font-weight: 600; line-height: 1.3; transition: background 120ms, color 120ms; }
+.ds-sidebar-child:hover { background: var(--sidebar-item-hover); color: var(--paper); }
+.ds-sidebar-child[data-active="true"] { background: var(--sidebar-item-active); color: var(--sidebar-item-active-text); box-shadow: 0 8px 18px -12px rgba(0,0,0,0.5); }
+.ds-sidebar-child[data-disabled="true"] { color: rgba(255,255,255,0.38); cursor: not-allowed; }
+.ds-sidebar-child[data-disabled="true"]:hover { background: transparent; color: rgba(255,255,255,0.38); }
+.ds-sidebar-child .icon { color: rgba(255,255,255,0.55); }
+.ds-sidebar-child[data-active="true"] .icon { color: var(--accent); }
+/* full product names ("RAPID Track Alignment Design") are longer than the rail,
+   so labels wrap rather than truncate. Everything else in the row is nudged to
+   sit optically centred on the FIRST line, not on the wrapped block. */
+.ds-sidebar-child-label { min-width: 0; overflow-wrap: anywhere; }
+.ds-sidebar-child .ds-sidebar-dot { margin-top: 5px; }
+.ds-sidebar-child .ds-sidebar-tag { margin-top: 2px; }
+.ds-sidebar-child .ds-sidebar-count { margin-top: 1px; }
+/* margin makes the dot occupy the same 16px slot as a child .icon, so dot-led
+   and icon-led children share one label baseline */
+.ds-sidebar-dot { width: 7px; height: 7px; margin: 0 4.5px; border-radius: 2px; flex-shrink: 0; background: var(--dot, rgba(255,255,255,0.4)); box-shadow: 0 0 0 2px rgba(255,255,255,0.10); }
+.ds-sidebar-child[data-disabled="true"] .ds-sidebar-dot { background: rgba(255,255,255,0.22); box-shadow: none; }
+.ds-sidebar-tag { margin-left: auto; flex-shrink: 0; font-size: 8.5px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 4px; border-radius: var(--r-xs); background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.6); }
+.ds-sidebar-count { margin-left: auto; flex-shrink: 0; font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; color: rgba(255,255,255,0.6); }
+.ds-sidebar-child[data-active="true"] .ds-sidebar-count,
+.ds-sidebar-child[data-active="true"] .ds-sidebar-tag { color: var(--ink-600); background: rgba(10,37,64,0.08); }
 .ds-sidebar-foot { border-top: 1px solid var(--sidebar-border); padding: 10px; display: flex; align-items: center; gap: 10px; background: rgba(6,24,44,0.20); }
 .ds-sidebar-user { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--stripe-violet), #2DD4BF); display: grid; place-items: center; color: var(--paper); font-size: 11px; font-weight: 800; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); }
 .ds-sidebar-userinfo { flex: 1; min-width: 0; }
@@ -43,17 +98,31 @@ const sidebarCSS = `
   .ds-sidebar-section,
   .ds-sidebar-item span:not(.ds-sidebar-badge),
   .ds-sidebar-badge,
+  .ds-sidebar-scope-body,
+  .ds-sidebar-section-btn,
+  .ds-sidebar-parent span,
+  .ds-sidebar-caret,
+  .ds-sidebar-child-label,
+  .ds-sidebar-tag,
+  .ds-sidebar-count,
   .ds-sidebar-userinfo,
   .ds-sidebar-foot-btn { display: none; }
   .ds-sidebar-nav { padding: 12px 8px; }
   .ds-sidebar-item { justify-content: center; padding: 9px 0; min-height: 38px; }
   .ds-sidebar-item[data-active="true"]::before { left: -8px; top: 9px; bottom: 9px; }
+  .ds-sidebar-scope { justify-content: center; padding: 9px 0; }
+  .ds-sidebar-parent { justify-content: center; }
+  .ds-sidebar-children { margin-left: 0; padding-left: 0; border-left: none; }
+  .ds-sidebar-child { justify-content: center; }
   .ds-sidebar-foot { justify-content: center; padding: 12px 8px; }
 }
 `;
 
-const Sidebar = ({ active = "schemas", onSelect }) => {
-  const groups = [
+/* Default nav — kept so existing callers (app.jsx) render unchanged. */
+const SIDEBAR_DEFAULTS = {
+  brand: { mark: "ES", title: <>Verge<span style={{color:"var(--accent)"}}>·</span>Rail</>, sub: "ESP → SIP automation" },
+  project: { avatar: "NE", name: "Northern Eastern Corridor" },
+  groups: [
     { label: "Workspace", items: [
       { id: "overview", icon: "home", label: "Overview" },
       { id: "fleet", icon: "train", label: "Fleet", badge: "248" },
@@ -70,47 +139,166 @@ const Sidebar = ({ active = "schemas", onSelect }) => {
       { id: "policies", icon: "shield", label: "Policies" },
       { id: "docs", icon: "book", label: "Docs" },
     ]},
-  ];
+  ],
+  user: { initials: "AM", name: "Anya Möller", role: "Lead engineer", action: "settings", actionTitle: "Settings" },
+};
+
+/*
+  Sidebar
+  ───────
+  A group is one of four shapes:
+    { label, items }                                 → section heading + flat items
+    { items }                                        → flat items, no heading
+    { id, label, header, collapsible, items }        → collapsible SECTION heading
+    { id, label, icon, collapsible, items }          → expandable parent nav row
+
+  Item fields: id, label, icon | dot (colour), badge/badgeTone, count, tag, disabled.
+*/
+const Sidebar = ({ active = "schemas", onSelect, brand, project, scope, groups, user }) => {
+  const cfg = {
+    brand: brand || SIDEBAR_DEFAULTS.brand,
+    project: project === undefined ? SIDEBAR_DEFAULTS.project : project,
+    groups: groups || SIDEBAR_DEFAULTS.groups,
+    user: user || SIDEBAR_DEFAULTS.user,
+  };
+
+  const [open, setOpen] = useState(() => {
+    const seed = {};
+    cfg.groups.forEach((g, i) => {
+      if (g.collapsible) seed[g.id || i] = g.defaultOpen !== false;
+    });
+    return seed;
+  });
+
+  const select = (it) => { if (!it.disabled && onSelect) onSelect(it.id); };
+
+  const renderItem = (it) => (
+    <div
+      key={it.id}
+      className="ds-sidebar-item"
+      data-active={active === it.id}
+      data-disabled={it.disabled || undefined}
+      title={it.title || undefined}
+      onClick={() => select(it)}
+    >
+      {it.icon && <Icon name={it.icon} />}
+      <span>{it.label}</span>
+      {it.badge && <span className="ds-sidebar-badge" data-tone={it.badgeTone}>{it.badge}</span>}
+    </div>
+  );
+
+  const renderChild = (it) => (
+    <div
+      key={it.id}
+      className="ds-sidebar-child"
+      data-active={active === it.id}
+      data-disabled={it.disabled || undefined}
+      style={it.dot ? { "--dot": it.dot } : null}
+      title={it.title || it.label}
+      onClick={() => select(it)}
+    >
+      {it.dot ? <span className="ds-sidebar-dot" /> : it.icon ? <Icon name={it.icon} size={14} /> : null}
+      <span className="ds-sidebar-child-label">{it.label}</span>
+      {it.tag ? <span className="ds-sidebar-tag">{it.tag}</span>
+        : it.count != null ? <span className="ds-sidebar-count">{it.count}</span> : null}
+    </div>
+  );
+
   return (
     <aside className="ds-sidebar">
       <div className="ds-sidebar-brand">
-        <div className="ds-sidebar-mark"><span>ES</span></div>
-        <div>
-          <div className="ds-sidebar-title">Verge<span style={{color:"var(--accent)"}}>·</span>Rail</div>
-          <div className="ds-sidebar-sub">ESP → SIP automation</div>
+        <div className="ds-sidebar-mark"><span>{cfg.brand.mark}</span></div>
+        <div style={{ minWidth: 0 }}>
+          <div className="ds-sidebar-title">{cfg.brand.title}</div>
+          {cfg.brand.sub && <div className="ds-sidebar-sub">{cfg.brand.sub}</div>}
         </div>
       </div>
-      <div className="ds-sidebar-project" title="Switch project">
-        <div className="ds-sidebar-project-avatar">NE</div>
-        <div className="ds-sidebar-project-name">Northern Eastern Corridor</div>
-        <Icon name="chevron_down" size={14} />
-      </div>
-      <nav className="ds-sidebar-nav">
-        {groups.map((g) => (
-          <div key={g.label}>
-            <div className="ds-sidebar-section">{g.label}</div>
-            {g.items.map((it) => (
-              <div
-                key={it.id}
-                className="ds-sidebar-item"
-                data-active={active === it.id}
-                onClick={() => onSelect && onSelect(it.id)}
-              >
-                <Icon name={it.icon} />
-                <span>{it.label}</span>
-                {it.badge && <span className="ds-sidebar-badge" data-tone={it.badgeTone}>{it.badge}</span>}
-              </div>
-            ))}
+
+      {cfg.project && (
+        <div className="ds-sidebar-project" title="Switch project">
+          <div className="ds-sidebar-project-avatar">{cfg.project.avatar}</div>
+          <div className="ds-sidebar-project-name">{cfg.project.name}</div>
+          <Icon name="chevron_down" size={14} />
+        </div>
+      )}
+
+      {scope && (
+        <div className="ds-sidebar-scope" title={scope.title || "Change scope"}>
+          <Icon name={scope.icon || "target"} size={15} style={{ color: "rgba(255,255,255,0.55)" }} />
+          <div className="ds-sidebar-scope-body">
+            <div className="ds-sidebar-scope-label">{scope.label}</div>
+            <div className="ds-sidebar-scope-value">{scope.value}</div>
           </div>
-        ))}
-      </nav>
-      <div className="ds-sidebar-foot">
-        <div className="ds-sidebar-user">AM</div>
-        <div className="ds-sidebar-userinfo">
-          <div className="ds-sidebar-username">Anya Möller</div>
-          <div className="ds-sidebar-userrole">Lead engineer</div>
+          <Icon name="chevron_down" size={13} style={{ color: "rgba(255,255,255,0.45)" }} />
         </div>
-        <button className="ds-sidebar-foot-btn" title="Settings"><Icon name="settings" size={15} /></button>
+      )}
+
+      <nav className="ds-sidebar-nav">
+        {cfg.groups.map((g, gi) => {
+          const key = g.id || g.label || gi;
+          if (!g.collapsible) {
+            return (
+              <div key={key}>
+                {g.label && <div className="ds-sidebar-section">{g.label}</div>}
+                {g.items.map(renderItem)}
+              </div>
+            );
+          }
+          const isOpen = !!open[g.id || gi];
+          const hasActive = g.items.some((it) => it.id === active);
+          // section-heading variant: heading + flat items, no nested rail
+          if (g.header) {
+            return (
+              <div className="ds-sidebar-group" key={key}>
+                <button
+                  className="ds-sidebar-section-btn"
+                  data-open={isOpen}
+                  aria-expanded={isOpen}
+                  onClick={() => setOpen((o) => ({ ...o, [g.id || gi]: !o[g.id || gi] }))}
+                >
+                  <span>{g.label}</span>
+                  <Icon name="chevron_down" size={13} className="ds-sidebar-section-caret" />
+                </button>
+                {isOpen && (g.items.length
+                  ? g.items.map(renderItem)
+                  : <div className="ds-sidebar-item" data-disabled="true"><span>{g.emptyLabel || "Nothing available"}</span></div>)}
+              </div>
+            );
+          }
+          return (
+            <div className="ds-sidebar-group" key={key}>
+              <button
+                className="ds-sidebar-parent"
+                data-open={isOpen}
+                data-has-active={hasActive}
+                aria-expanded={isOpen}
+                onClick={() => setOpen((o) => ({ ...o, [g.id || gi]: !o[g.id || gi] }))}
+              >
+                {g.icon && <Icon name={g.icon} />}
+                <span>{g.label}</span>
+                <Icon name="chevron_right" size={13} className="ds-sidebar-caret" />
+              </button>
+              {isOpen && (
+                <div className="ds-sidebar-children">
+                  {g.items.length
+                    ? g.items.map(renderChild)
+                    : renderChild({ id: `${key}-empty`, label: g.emptyLabel || "Nothing available", disabled: true, dot: "rgba(255,255,255,0.22)" })}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </nav>
+
+      <div className="ds-sidebar-foot">
+        <div className="ds-sidebar-user">{cfg.user.initials}</div>
+        <div className="ds-sidebar-userinfo">
+          <div className="ds-sidebar-username">{cfg.user.name}</div>
+          <div className="ds-sidebar-userrole">{cfg.user.role}</div>
+        </div>
+        <button className="ds-sidebar-foot-btn" title={cfg.user.actionTitle || "Settings"}>
+          <Icon name={cfg.user.action || "settings"} size={15} />
+        </button>
       </div>
     </aside>
   );

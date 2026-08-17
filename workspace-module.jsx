@@ -3074,7 +3074,7 @@
     return (
       <div className="rw-page">
         <header className="rw-header">
-          <button className="rw-back" onClick={onBack}><Icon name="chevron_left" size={16} /> Workspace</button>
+          <button className="rw-back" onClick={onBack}><Icon name="chevron_left" size={16} /> RAPID ESP</button>
           <div className="rw-head-copy">
             <div className="rw-title-line"><h1>{packageData.title}</h1><Chip tone={submitted ? "info" : "warning"} size="sm">{submitted ? "Submitted" : "Draft"}</Chip></div>
             <div className="rw-meta"><span className="mono">{packageData.id}</span><i /> <span>{packageData.station.name} ({packageData.station.code})</span><i /> <span>Owner: R. Kumar</span><i /> <span>Target: {packageData.targetDate}</span></div>
@@ -3181,7 +3181,7 @@
       <div className="rp-page">
         <div className="rp-breadcrumb-bar">
           <nav className="ds-breadcrumb" aria-label="Breadcrumb">
-            <button onClick={onBack}>Workspace</button>
+            <button onClick={onBack}>RAPID ESP</button>
             <Icon name="chevron_right" size={12} className="ds-breadcrumb-sep" />
             <span className="ds-breadcrumb-current">Create Revision</span>
           </nav>
@@ -3802,7 +3802,7 @@
       <div className="mf-page">
         <header style={{ display: "flex", alignItems: "flex-start", gap: 20, flexWrap: "wrap" }}>
           <div style={{ minWidth: 0 }}>
-            <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, letterSpacing: "-.02em" }}>Workspace</h1>
+            <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, letterSpacing: "-.02em" }}>RAPID ESP</h1>
             <div style={{ marginTop: 5, fontSize: 13.5, color: "#64748b" }}>
               {CURRENT_USER.name} · {CURRENT_USER.designation} · {CURRENT_USER.division} division, {CURRENT_USER.zone}
             </div>
