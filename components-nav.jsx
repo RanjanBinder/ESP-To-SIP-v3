@@ -170,9 +170,11 @@ const Sidebar = ({ active = "schemas", onSelect, brand, project, scope, groups, 
     return seed;
   });
 
+  const [openItems, setOpenItems] = useState({});
+
   const select = (it) => { if (!it.disabled && onSelect) onSelect(it.id); };
 
-  const renderItem = (it) => (
+  const renderRow = (it) => (
     <div
       key={it.id}
       className="ds-sidebar-item"
@@ -186,6 +188,39 @@ const Sidebar = ({ active = "schemas", onSelect, brand, project, scope, groups, 
       {it.badge && <span className="ds-sidebar-badge" data-tone={it.badgeTone}>{it.badge}</span>}
     </div>
   );
+
+  // An item carrying `children` renders as an expandable parent: clicking the row
+  // selects the item and opens it, clicking the caret alone just toggles.
+  const renderItem = (it) => {
+    if (!it.children || !it.children.length) return renderRow(it);
+    const childActive = it.children.some((c) => c.id === active);
+    const isOpen = openItems[it.id] === undefined ? childActive : !!openItems[it.id];
+    return (
+      <React.Fragment key={it.id}>
+        <div
+          className="ds-sidebar-item"
+          data-active={active === it.id}
+          data-disabled={it.disabled || undefined}
+          title={it.title || undefined}
+          onClick={() => { select(it); setOpenItems((o) => ({ ...o, [it.id]: true })); }}
+        >
+          {it.icon && <Icon name={it.icon} />}
+          <span>{it.label}</span>
+          <span
+            className="ds-sidebar-caret"
+            role="button"
+            aria-expanded={isOpen}
+            aria-label={`${isOpen ? "Collapse" : "Expand"} ${it.label}`}
+            style={{ display: "flex", marginLeft: "auto", transform: isOpen ? "rotate(90deg)" : "none", transition: "transform 160ms" }}
+            onClick={(e) => { e.stopPropagation(); setOpenItems((o) => ({ ...o, [it.id]: !isOpen })); }}
+          >
+            <Icon name="chevron_right" size={13} />
+          </span>
+        </div>
+        {isOpen && <div className="ds-sidebar-children">{it.children.map(renderChild)}</div>}
+      </React.Fragment>
+    );
+  };
 
   const renderChild = (it) => (
     <div

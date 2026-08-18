@@ -151,10 +151,11 @@ const Sidebar = ({ active = "schemas", onSelect, brand, project, scope, groups, 
     });
     return seed;
   });
+  const [openItems, setOpenItems] = useState({});
   const select = (it) => {
     if (!it.disabled && onSelect) onSelect(it.id);
   };
-  const renderItem = (it) => /* @__PURE__ */ React.createElement(
+  const renderRow = (it) => /* @__PURE__ */ React.createElement(
     "div",
     {
       key: it.id,
@@ -168,6 +169,42 @@ const Sidebar = ({ active = "schemas", onSelect, brand, project, scope, groups, 
     /* @__PURE__ */ React.createElement("span", null, it.label),
     it.badge && /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-badge", "data-tone": it.badgeTone }, it.badge)
   );
+  // An item carrying `children` renders as an expandable parent: clicking the row
+  // selects the item and opens it, clicking the caret alone just toggles.
+  const renderItem = (it) => {
+    if (!it.children || !it.children.length) return renderRow(it);
+    const childActive = it.children.some((c) => c.id === active);
+    const isOpen = openItems[it.id] === void 0 ? childActive : !!openItems[it.id];
+    return /* @__PURE__ */ React.createElement(
+      React.Fragment,
+      { key: it.id },
+      /* @__PURE__ */ React.createElement(
+        "div",
+        {
+          className: "ds-sidebar-item",
+          "data-active": active === it.id,
+          "data-disabled": it.disabled || void 0,
+          title: it.title || void 0,
+          onClick: () => { select(it); setOpenItems((o) => ({ ...o, [it.id]: true })); }
+        },
+        it.icon && /* @__PURE__ */ React.createElement(Icon, { name: it.icon }),
+        /* @__PURE__ */ React.createElement("span", null, it.label),
+        /* @__PURE__ */ React.createElement(
+          "span",
+          {
+            className: "ds-sidebar-caret",
+            role: "button",
+            "aria-expanded": isOpen,
+            "aria-label": (isOpen ? "Collapse " : "Expand ") + it.label,
+            style: { display: "flex", marginLeft: "auto", transform: isOpen ? "rotate(90deg)" : "none", transition: "transform 160ms" },
+            onClick: (e) => { e.stopPropagation(); setOpenItems((o) => ({ ...o, [it.id]: !isOpen })); }
+          },
+          /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 13 })
+        )
+      ),
+      isOpen && /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-children" }, it.children.map(renderChild))
+    );
+  };
   const renderChild = (it) => /* @__PURE__ */ React.createElement(
     "div",
     {

@@ -1,4 +1,4 @@
-const { useState: useStateD, useMemo: useMemoD } = React;
+const { useState: useStateD, useMemo: useMemoD, useEffect: useEffectD, useRef: useRefD } = React;
 const MODULES = [
   {
     id: "tad",
@@ -75,6 +75,30 @@ const ROLES = {
   }
 };
 const SCOPE_TOTAL = 247;
+const MODULE_ACCESS_STATS = {
+  tad: {
+    summary: "12 active designs",
+    rows: [["Under review", 4], ["Completed", 3]]
+  },
+  esp: {
+    summary: "128 stations",
+    rows: [["Approved", 74], ["Need attention", 27]],
+    accent: true
+  },
+  sip: {
+    summary: "74 ESP-ready",
+    rows: [["Generated", 41], ["Approved", 14]],
+    accent: true
+  },
+  toc: {
+    summary: "41 SIP-ready",
+    rows: [["Generated", 18], ["Issues", 3]]
+  },
+  kavach: {
+    summary: "9 active designs",
+    rows: [["Validation pending", 3], ["Completed", 4]]
+  }
+};
 const MODULE_STATS = {
   tad: {
     headline: "12",
@@ -125,6 +149,15 @@ const PIPELINE = [
   { id: "sip_gen", label: "SIP generated", desc: "Interlocking plan drafted", count: 74, module: "sip", color: "#14B8A6" },
   { id: "sip_approved", label: "SIP approved", desc: "Ready for TOC generation", count: 52, module: "sip", color: "#0D9488" }
 ];
+const STAGE_DOCS = [
+  { label: "Not started", esp: 18, sip: 33 },
+  { label: "In progress", esp: 22, sip: 12 },
+  { label: "Under validation", esp: 16, sip: 8 },
+  { label: "Under review", esp: 12, sip: 9 },
+  { label: "Submitted", esp: 8, sip: 5 },
+  { label: "Approved", esp: 74, sip: 41 },
+  { label: "Returned", esp: 6, sip: 3 }
+];
 const APPROVALS = [
   { doc: "SIP", station: "Vijayawada Junction", code: "BZA", ver: "v1.2", who: "R. Sharma", tone: "danger", label: "Overdue", age: "12d" },
   { doc: "ESP", station: "Guntur Junction", code: "GNT", ver: "v2.0", who: "K. Naidu", tone: "danger", label: "Overdue", age: "8d" },
@@ -171,76 +204,130 @@ const rapidCSS = `
 /* \u2500\u2500 shell \u2500\u2500 */
 .rh-app { display: grid; grid-template-columns: 252px 1fr; height: 100vh; overflow: hidden; background: var(--canvas); }
 .rh-app .ds-sidebar { width: 252px; height: 100vh; overflow: hidden; }
-.rh-main { display: flex; flex-direction: column; height: 100vh; overflow: hidden; min-width: 0; }
+.rh-main { display: flex; flex-direction: column; height: 100vh; overflow: hidden; min-width: 0; container: rh-home / inline-size; }
 /* embedded in Digital Library's own shell \u2014 it owns the sidebar and the height */
 .rh-main-embedded { flex: 1; width: 100%; height: 100%; min-width: 0; background: var(--canvas); }
 
 /* \u2500\u2500 topbar \u2500\u2500 */
-.rh-topbar { flex-shrink: 0; background: var(--paper); border-bottom: var(--hairline); padding: 16px 28px 0; }
-.rh-topbar-row { display: flex; align-items: flex-start; gap: 16px; }
-.rh-hello { font-size: 21px; font-weight: 800; letter-spacing: -0.025em; color: var(--ink-900); line-height: 1.15; }
-/* separators are drawn on the item, so a wrap never leaves a dangling "\xB7" */
-.rh-hello-sub { font-size: 12.5px; color: var(--ink-500); margin-top: 3px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.rh-hello-sub > * + *::before { content: "\xB7"; color: var(--ink-300); margin-right: 8px; }
+.rh-topbar { flex-shrink: 0; background: var(--paper); border-bottom: var(--hairline); padding: 0 24px; }
 .rh-live { display: inline-flex; align-items: center; gap: 5px; color: var(--success-text); font-weight: 600; }
 .rh-live i { width: 6px; height: 6px; border-radius: 50%; background: var(--success); display: block; }
 .rh-topbar-spacer { flex: 1; min-width: 12px; }
-.rh-topbar-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-.rh-roleswitch { display: flex; align-items: center; gap: 7px; height: 34px; padding: 0 4px 0 11px; border: var(--hairline); border-radius: var(--r-md); background: var(--ink-50); }
-.rh-roleswitch label { font-size: 10px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-400); }
-.rh-roleswitch select { height: 26px; border: none; background: transparent; font-size: 12.5px; font-weight: 700; color: var(--ink-900); cursor: pointer; outline: none; }
 
-/* scope bar */
-.rh-scopebar { display: flex; align-items: center; gap: 8px; padding: 12px 0 13px; flex-wrap: wrap; }
-.rh-scope-label { font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-400); margin-right: 2px; }
-.rh-scope { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px 0 12px; border-radius: var(--r-md); border: var(--hairline); background: var(--paper); font-size: 12.5px; font-weight: 600; color: var(--ink-900); cursor: pointer; font-family: inherit; white-space: nowrap; transition: 120ms; }
-.rh-scope:hover { border-color: var(--ink-300); background: var(--ink-50); }
-.rh-scope .icon { color: var(--ink-400); }
-.rh-scope-div { width: 1px; height: 18px; background: var(--ink-200); margin: 0 6px; }
+/* Digital Library Home header */
+.rh-home-head-main { min-height: 66px; padding: 13px 0 10px; display: flex; align-items: center; gap: 20px; }
+.rh-home-head-copy { min-width: 0; }
+.rh-home-title { margin: 0; color: var(--ink-900); font-size: 20px; font-weight: 800; line-height: 1.15; letter-spacing: -0.025em; }
+.rh-home-title-pipe { margin: 0 7px; color: var(--ink-300); font-weight: 500; }
+.rh-home-meta { margin-top: 4px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: var(--ink-500); font-size: 11.5px; }
+.rh-home-meta > * + *::before { content: "\xB7"; margin-right: 8px; color: var(--ink-300); }
+.rh-home-head-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.rh-home-head-actions .ds-search { width: 270px; }
+.rh-home-head-actions .ds-search-input { height: 32px; padding-right: 12px; font-size: 12px; box-shadow: none; }
+.rh-home-head-actions .ds-search-kbd { display: none; }
+
+/* applied filters row */
+.rh-scopebar { min-height: 45px; padding: 8px 0 10px; border-top: 1px solid var(--ink-100); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.rh-scope-label { margin-right: 1px; color: var(--ink-400); font-size: 9px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; }
+.rh-filter-chip { height: 26px; padding: 0 10px; border: 1px solid #D9DAF4; border-radius: var(--r-full); background: #F7F7FE; color: var(--ink-500); display: inline-flex; align-items: center; gap: 5px; font: inherit; font-size: 11px; cursor: pointer; white-space: nowrap; transition: 120ms; }
+.rh-filter-chip:hover { border-color: #B9BCEB; background: #F1F1FC; }
+.rh-filter-chip b { color: #30309C; font-weight: 750; }
+.rh-scope-summary { color: var(--ink-400); font-size: 10.5px; white-space: nowrap; }
 .rh-updated { font-size: 11px; color: var(--ink-400); font-variant-numeric: tabular-nums; }
+.rh-filter-open { height: 30px; padding: 0 9px 0 10px; border: 1px solid #3737C8; border-radius: var(--r-md); background: #3737C8; color: #fff; display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 10px -6px rgba(55,55,200,.75); }
+.rh-filter-open:hover { background: #2F2FAE; border-color: #2F2FAE; }
+.rh-filter-count { min-width: 17px; height: 17px; padding: 0 5px; border-radius: var(--r-full); background: rgba(255,255,255,.18); display: grid; place-items: center; font-size: 9.5px; }
+
+/* right-side filter drawer */
+.rh-filter-scrim { position: fixed; inset: 0; z-index: 110; padding: 0; border: 0; background: rgba(14,27,44,.30); cursor: default; animation: rhScrimIn 140ms ease-out; }
+.rh-filter-drawer { position: fixed; z-index: 111; top: 0; right: 0; bottom: 0; width: min(336px, calc(100vw - 24px)); background: var(--paper); box-shadow: -18px 0 38px rgba(14,27,44,.14); display: flex; flex-direction: column; outline: none; animation: rhDrawerIn 170ms ease-out; }
+@keyframes rhScrimIn { from { opacity: 0; } }
+@keyframes rhDrawerIn { from { transform: translateX(18px); opacity: .7; } }
+@media (prefers-reduced-motion: reduce) { .rh-filter-scrim, .rh-filter-drawer { animation: none; } }
+.rh-filter-drawer-head { min-height: 60px; padding: 14px 17px; border-bottom: var(--hairline); display: flex; align-items: flex-start; gap: 12px; }
+.rh-filter-drawer-title { color: var(--ink-900); font-size: 14px; font-weight: 800; }
+.rh-filter-drawer-sub { margin-top: 2px; color: var(--ink-500); font-size: 10.5px; }
+.rh-filter-close { margin-left: auto; width: 28px; height: 28px; border: var(--hairline); border-radius: var(--r-md); background: var(--paper); color: var(--ink-500); display: grid; place-items: center; cursor: pointer; }
+.rh-filter-close:hover { background: var(--ink-50); color: var(--ink-900); }
+.rh-filter-drawer-body { flex: 1; min-height: 0; overflow-y: auto; padding: 14px 17px 24px; display: flex; flex-direction: column; gap: 14px; }
+.rh-filter-field { display: grid; gap: 5px; }
+.rh-filter-field label { color: var(--ink-500); font-size: 9.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.rh-filter-select { width: 100%; height: 34px; padding: 0 10px; border: 1px solid #D8E0EA; border-radius: var(--r-md); background: var(--paper); color: var(--ink-900); font: inherit; font-size: 12px; font-weight: 600; outline: none; }
+.rh-filter-select:focus { border-color: #3737C8; box-shadow: 0 0 0 3px rgba(55,55,200,.10); }
+.rh-filter-select:disabled { background: var(--ink-50); color: var(--ink-400); cursor: not-allowed; }
+.rh-filter-hint { color: var(--ink-400); font-size: 10px; }
+.rh-filter-drawer-foot { padding: 12px 17px; border-top: var(--hairline); background: var(--ink-50); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.rh-filter-reset, .rh-filter-apply { height: 34px; padding: 0 13px; border-radius: var(--r-md); font: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer; }
+.rh-filter-reset { border: var(--hairline); background: var(--paper); color: var(--ink-700); }
+.rh-filter-apply { margin-left: auto; border: 1px solid #3737C8; background: #3737C8; color: #fff; }
+.rh-filter-chip:focus-visible, .rh-filter-open:focus-visible, .rh-filter-close:focus-visible, .rh-filter-reset:focus-visible, .rh-filter-apply:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+
+@media (max-width: 920px) {
+  .rh-home-head-main { align-items: flex-start; flex-wrap: wrap; }
+  .rh-home-head-actions { width: 100%; margin-left: 0; }
+  .rh-home-head-actions .ds-search { width: auto; flex: 1; }
+  .rh-scope-summary { display: none; }
+}
+@media (max-width: 640px) {
+  .rh-topbar { padding-left: 15px; padding-right: 15px; }
+  .rh-home-title { font-size: 18px; }
+  .rh-home-head-actions { align-items: stretch; }
+  .rh-home-head-actions .ds-search { min-width: 0; }
+  .rh-updated { display: none; }
+  .rh-filter-drawer { width: 100vw; }
+}
 
 /* \u2500\u2500 content \u2500\u2500 */
 .rh-content { flex: 1; overflow-y: auto; padding: 22px 28px 60px; display: flex; flex-direction: column; gap: 22px; }
-.rh-sec { display: flex; flex-direction: column; gap: 12px; }
+.rh-sec { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
 .rh-sec-head { display: flex; align-items: baseline; gap: 10px; }
+.rh-sec-head, .rh-empty { grid-column: 1 / -1; }
 .rh-content > .rh-sec > .rh-sec-head { display: none; }
 .rh-sec-title { font-size: 12px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-500); }
 .rh-sec-note { font-size: 12px; color: var(--ink-400); }
 .rh-sec-link { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--accent-text); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
 .rh-sec-link:hover { text-decoration: underline; }
 
-/* \u2500\u2500 KPI strip \u2500\u2500 */
-.rh-kpis { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; }
-.rh-kpi { position: relative; background: var(--paper); border: var(--hairline); border-radius: var(--r-lg); padding: 15px 16px 14px 18px; overflow: hidden; cursor: pointer; transition: 150ms; }
-.rh-kpi::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--k, var(--ink-300)); }
-.rh-kpi:hover { border-color: var(--ink-300); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
-.rh-kpi[data-sel="true"] { border-color: var(--accent); background: var(--accent-soft); }
-.rh-kpi-label { font-size: 11.5px; font-weight: 600; color: var(--ink-500); display: flex; align-items: center; gap: 6px; }
-.rh-kpi-label .icon { color: var(--ink-400); }
-.rh-kpi-value { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-top: 7px; color: var(--ink-900); font-variant-numeric: tabular-nums; }
-.rh-kpi-value small { font-size: 14px; font-weight: 600; color: var(--ink-400); margin-left: 3px; }
-.rh-kpi-foot { margin-top: 5px; font-size: 11.5px; color: var(--ink-500); display: flex; align-items: center; gap: 5px; }
-.rh-kpi-foot b { font-weight: 700; }
+/* \u2500\u2500 module access strip \u2500\u2500 */
+.rh-module-access { min-width: 0; display: grid; gap: 12px; }
+.rh-module-access-title { margin: 0; color: var(--ink-500); font-size: 12px; font-weight: 800; letter-spacing: .07em; line-height: 1; text-transform: uppercase; }
+.rh-module-access-grid { min-width: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+.rh-access-card { position: relative; min-width: 0; min-height: 158px; height: 100%; padding: 14px 15px 13px; border: var(--hairline); border-radius: var(--r-lg); background: var(--paper); display: grid; grid-template-rows: auto 1fr auto; row-gap: 10px; overflow: hidden; transition: border-color 150ms, box-shadow 150ms, transform 150ms; }
+.rh-access-card[data-accent="true"]::before { content: ""; position: absolute; z-index: 1; top: -1px; left: -1px; right: -1px; height: 3px; border-radius: var(--r-lg) var(--r-lg) 0 0; background: #4141D8; }
+.rh-access-card:hover { border-color: #C7D2E1; box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+.rh-access-head { min-width: 0; min-height: 54px; display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: start; gap: 10px; }
+.rh-access-icon { width: 34px; height: 34px; border-radius: 9px; background: #F1F1FF; color: #3737C8; display: grid; place-items: center; }
+.rh-access-copy { min-width: 0; }
+.rh-access-name { margin: 1px 0 0; color: var(--ink-900); font-size: 13.5px; font-weight: 700; letter-spacing: -.012em; line-height: 1.25; }
+.rh-access-summary { margin-top: 5px; color: var(--ink-400); font-size: 11px; line-height: 1.25; }
+.rh-access-metrics { align-self: start; display: grid; gap: 9px; margin: 0; }
+.rh-access-row { min-width: 0; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.rh-access-row dt { min-width: 0; color: var(--ink-500); font-size: 11px; line-height: 1.35; }
+.rh-access-row dd { margin: 0; color: var(--ink-900); font-size: 12px; font-weight: 800; line-height: 1.35; font-variant-numeric: tabular-nums; }
+.rh-access-open { align-self: end; width: max-content; max-width: 100%; padding: 0; border: 0; background: transparent; color: #3030B5; display: inline-flex; align-items: center; gap: 4px; font: inherit; font-size: 11.5px; font-weight: 750; cursor: pointer; }
+.rh-access-open:hover { color: #202090; text-decoration: underline; }
+.rh-access-open:focus-visible { outline: none; border-radius: var(--r-xs); box-shadow: var(--shadow-focus); }
 
 /* \u2500\u2500 module tiles \u2500\u2500 */
-.rh-mod-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
-.rh-mod-grid-sm { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
-.rh-mod { background: var(--paper); border: var(--hairline); border-radius: var(--r-lg); padding: 16px 18px 14px; display: flex; flex-direction: column; gap: 13px; position: relative; overflow: hidden; transition: 160ms; }
+.rh-mod-grid, .rh-mod-grid-sm { display: contents; }
+.rh-mod-grid > .rh-mod { grid-column: span 3; }
+.rh-mod-grid-sm > .rh-mod { grid-column: span 2; }
+.rh-mod { background: var(--paper); border: var(--hairline); border-radius: var(--r-lg); padding: 16px 18px 14px; display: grid; grid-template-columns: minmax(96px, .8fr) minmax(180px, 1.2fr); grid-template-rows: auto minmax(52px, 1fr) auto; column-gap: 16px; row-gap: 12px; min-width: 0; min-height: 212px; height: 100%; position: relative; overflow: hidden; transition: 160ms; }
 .rh-mod[data-open="true"] { cursor: pointer; }
 .rh-mod[data-open="true"]:hover { border-color: color-mix(in srgb, var(--m) 45%, var(--ink-200)); box-shadow: var(--shadow-md); transform: translateY(-2px); }
 .rh-mod[data-open="false"] { background: linear-gradient(180deg, var(--ink-50), var(--paper)); border-style: dashed; }
-.rh-mod-top { display: flex; align-items: flex-start; gap: 11px; }
+.rh-mod-top { grid-column: 1 / -1; grid-row: 1; display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: flex-start; column-gap: 11px; min-width: 0; min-height: 54px; }
 .rh-mod-icon { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; background: color-mix(in srgb, var(--m) 12%, var(--paper)); color: var(--m); border: 1px solid color-mix(in srgb, var(--m) 22%, transparent); }
 .rh-mod[data-open="false"] .rh-mod-icon { background: var(--ink-100); color: var(--ink-400); border-color: var(--ink-200); }
-.rh-mod-name { font-size: 14.5px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.015em; display: flex; align-items: center; gap: 7px; }
-.rh-mod-code { font-family: var(--font-mono); font-size: 9.5px; font-weight: 800; letter-spacing: 0.04em; padding: 1.5px 5px; border-radius: var(--r-xs); background: color-mix(in srgb, var(--m) 12%, var(--paper)); color: var(--m); }
+.rh-mod-name { min-width: 0; font-size: 14.5px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.015em; line-height: 1.25; display: flex; align-items: center; flex-wrap: wrap; column-gap: 7px; row-gap: 2px; }
+.rh-mod-code { flex: 0 0 auto; white-space: nowrap; font-family: var(--font-mono); font-size: 9.5px; font-weight: 800; letter-spacing: 0.04em; padding: 1.5px 5px; border-radius: var(--r-xs); background: color-mix(in srgb, var(--m) 12%, var(--paper)); color: var(--m); }
 .rh-mod[data-open="false"] .rh-mod-code { background: var(--ink-100); color: var(--ink-500); }
-.rh-mod-desc { font-size: 11.5px; color: var(--ink-500); margin-top: 3px; line-height: 1.45; }
+.rh-mod-desc { min-height: 2.9em; font-size: 11.5px; color: var(--ink-500); margin-top: 3px; line-height: 1.45; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .rh-mod-stage { margin-left: auto; flex-shrink: 0; }
-.rh-mod-figure { display: flex; align-items: baseline; gap: 7px; }
-.rh-mod-counts { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
-.rh-mod-count { padding: 10px 11px; border: var(--hairline); border-radius: var(--r-md); background: var(--ink-50); }
-.rh-mod-count b { display: block; font-size: 20px; color: var(--ink-900); font-variant-numeric: tabular-nums; }
+.rh-mod-figure { grid-column: 1; grid-row: 2; align-self: center; min-width: 0; display: flex; align-items: baseline; gap: 7px; }
+.rh-mod-counts { grid-column: 2; grid-row: 2; align-self: center; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+.rh-mod-count { min-width: 0; min-height: 50px; padding: 8px 10px; border: var(--hairline); border-radius: var(--r-md); background: var(--ink-50); display: flex; flex-direction: column; justify-content: center; }
+.rh-mod-count b { display: block; font-size: 19px; line-height: 1.15; color: var(--ink-900); font-variant-numeric: tabular-nums; }
 .rh-mod-count span { font-size: 10.5px; color: var(--ink-500); }
 .rh-mod-headline { font-size: 24px; font-weight: 700; letter-spacing: -0.03em; color: var(--ink-900); font-variant-numeric: tabular-nums; line-height: 1; }
 .rh-mod-headline-label { font-size: 11.5px; color: var(--ink-500); }
@@ -256,15 +343,31 @@ const rapidCSS = `
 .rh-mod-alert[data-tone="warning"] { background: var(--warning-soft); color: var(--warning-text); }
 .rh-mod-alert[data-tone="info"] { background: var(--info-soft); color: var(--info-text); }
 /* centres in whatever space the tallest sibling tile leaves behind */
-.rh-mod-placeholder { margin: auto 0; font-size: 11.5px; color: var(--ink-400); line-height: 1.5; }
-.rh-mod-foot { margin-top: auto; padding-top: 11px; border-top: var(--hairline); display: flex; align-items: center; gap: 10px; }
+.rh-mod-placeholder { grid-column: 1 / -1; grid-row: 2; align-self: center; margin: 0; font-size: 11.5px; color: var(--ink-400); line-height: 1.5; }
+.rh-mod-foot { grid-column: 1 / -1; grid-row: 3; margin-top: 0; padding-top: 11px; border-top: var(--hairline); display: flex; align-items: center; gap: 10px; }
 .rh-mod-cta { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--m); background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
 .rh-mod-cta:hover { text-decoration: underline; }
 .rh-mod-quiet { font-size: 11.5px; color: var(--ink-400); margin-left: auto; }
 .rh-mod-locked { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--ink-400); font-weight: 600; }
 
+/* The three-up row keeps the same card height with tighter internal geometry. */
+.rh-mod-grid-sm > .rh-mod { grid-template-columns: minmax(76px, .72fr) minmax(140px, 1.28fr); padding: 14px 15px 13px; column-gap: 12px; row-gap: 10px; }
+.rh-mod-grid-sm .rh-mod-top { grid-template-columns: 34px minmax(0, 1fr) auto; column-gap: 10px; min-height: 72px; }
+.rh-mod-grid-sm .rh-mod-icon { width: 34px; height: 34px; border-radius: 9px; }
+.rh-mod-grid-sm .rh-mod-name { font-size: 13.5px; }
+.rh-mod-grid-sm .rh-mod-desc { font-size: 11px; }
+.rh-mod-grid-sm .rh-mod-headline { font-size: 22px; }
+.rh-mod-grid-sm .rh-mod-count { min-height: 48px; padding: 7px 9px; }
+.rh-mod-grid-sm .rh-mod-count b { font-size: 18px; }
+.rh-mod-grid-sm .rh-mod-foot { padding-top: 9px; }
+
 /* \u2500\u2500 cards \u2500\u2500 */
 .rh-card { background: var(--paper); border: var(--hairline); border-radius: var(--r-lg); display: flex; flex-direction: column; overflow: hidden; }
+.rh-content > .rh-card { flex-shrink: 0; }
+.rh-grid-2 > .rh-card-fill { align-self: stretch; }
+.rh-card-fill .rh-table-wrap { flex: 1; }
+.rh-card-fill .rh-table { height: 100%; }
+.rh-card-fill .rh-meter-track { width: auto; flex: 1; min-width: 44px; }
 .rh-card-head { padding: 14px 18px; border-bottom: var(--hairline); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .rh-card-title { font-size: 13.5px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.01em; }
 .rh-card-sub { font-size: 11.5px; color: var(--ink-500); margin-top: 2px; }
@@ -332,6 +435,9 @@ const rapidCSS = `
 .rh-meter-track { width: 62px; height: 6px; border-radius: 99px; background: var(--ink-100); overflow: hidden; flex-shrink: 0; }
 .rh-meter-fill { height: 100%; border-radius: 99px; }
 .rh-meter-pct { font-size: 11.5px; font-weight: 700; color: var(--ink-700); font-variant-numeric: tabular-nums; min-width: 32px; text-align: right; }
+.rh-legend { display: flex; align-items: center; gap: 14px; font-size: 11.5px; color: var(--ink-500); }
+.rh-legend-item { display: flex; align-items: center; gap: 6px; }
+.rh-legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 .rh-overall { font-size: 13.5px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .rh-num { font-size: 13px; font-weight: 600; color: var(--ink-700); font-variant-numeric: tabular-nums; }
 
@@ -339,14 +445,44 @@ const rapidCSS = `
 .rh-empty { border: 1px dashed var(--ink-300); border-radius: var(--r-lg); padding: 28px; text-align: center; color: var(--ink-500); font-size: 13px; background: var(--paper); }
 
 @media (max-width: 1380px) {
-  .rh-kpis { grid-template-columns: repeat(3, minmax(0,1fr)); }
   .rh-grid-2, .rh-grid-2b { grid-template-columns: minmax(0, 1fr); }
 }
+@media (max-width: 1240px) {
+  .rh-mod-grid-sm > .rh-mod { grid-column: span 3; }
+  .rh-mod-grid-sm > .rh-mod:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc((100% - 16px) / 2); justify-self: center; }
+}
 @media (max-width: 1080px) {
-  .rh-mod-grid, .rh-mod-grid-sm { grid-template-columns: minmax(0, 1fr); }
-  .rh-kpis { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .rh-mod-grid > .rh-mod, .rh-mod-grid-sm > .rh-mod { grid-column: 1 / -1; min-height: 0; }
+  .rh-mod-grid-sm > .rh-mod:last-child:nth-child(odd) { width: auto; justify-self: stretch; }
+}
+@container rh-home (max-width: 1100px) {
+  .rh-module-access-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .rh-access-card { grid-column: span 2; }
+  .rh-access-card:first-child:nth-last-child(2) { grid-column: 2 / span 2; }
+  .rh-access-card:first-child:nth-last-child(2) + .rh-access-card { grid-column: 4 / span 2; }
+  .rh-access-card:nth-child(4):nth-last-child(2) { grid-column: 2 / span 2; }
+  .rh-access-card:nth-child(4):nth-last-child(2) + .rh-access-card { grid-column: 4 / span 2; }
+}
+@container rh-home (max-width: 760px) {
+  .rh-module-access-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rh-access-card, .rh-access-card:first-child:nth-last-child(2), .rh-access-card:first-child:nth-last-child(2) + .rh-access-card, .rh-access-card:nth-child(4):nth-last-child(2), .rh-access-card:nth-child(4):nth-last-child(2) + .rh-access-card { grid-column: auto; }
+  .rh-access-card:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc((100% - 12px) / 2); justify-self: center; }
+}
+@container rh-home (max-width: 480px) {
+  .rh-module-access-grid { grid-template-columns: minmax(0, 1fr); }
+  .rh-access-card:last-child:nth-child(odd) { grid-column: auto; width: auto; justify-self: stretch; }
 }
 `;
+const MODULE_ACTIONS = {
+  esp: [
+    { id: "espCreate", icon: "plus", label: "Create ESP" },
+    { id: "espUpdate", icon: "edit", label: "Update ESP" }
+  ],
+  sip: [
+    { id: "sipCreate", icon: "plus", label: "Create SIP" },
+    { id: "sipUpdate", icon: "edit", label: "Update SIP" }
+  ]
+};
 const buildSidebarNav = (role, granted) => ({
   brand: { mark: "R", title: "RAPID", sub: "Indian Railways" },
   // "Vijayawada Division" → "Vijayawada"; the 252px rail has no room for the noun
@@ -387,7 +523,8 @@ const buildSidebarNav = (role, granted) => ({
         icon: m.icon,
         label: m.name,
         disabled: m.stage === "soon",
-        title: m.stage === "soon" ? `${m.name} \u2014 not released yet` : m.name
+        title: m.stage === "soon" ? `${m.name} \u2014 not released yet` : m.name,
+        children: m.stage === "soon" ? void 0 : MODULE_ACTIONS[m.id]
       }))
     },
     {
@@ -404,33 +541,90 @@ const buildSidebarNav = (role, granted) => ({
     }
   ]
 });
-const ScopeBar = ({ role }) => {
-  const [zone, setZone] = useStateD("SCR \u2014 South Central Railway");
-  const [division, setDivision] = useStateD("All divisions");
-  const [section, setSection] = useStateD("All sections");
-  return /* @__PURE__ */ React.createElement("div", { className: "rh-scopebar" }, /* @__PURE__ */ React.createElement("span", { style: { marginRight: "auto", fontSize: 12.5, color: "var(--ink-600)" } }, "Selected section: ", /* @__PURE__ */ React.createElement("b", { style: { color: "var(--ink-900)" } }, section)), /* @__PURE__ */ React.createElement("span", { className: "rh-scope-label" }, "Global filters"), /* @__PURE__ */ React.createElement("select", { className: "rh-scope", value: zone, onChange: (e) => { setZone(e.target.value); setDivision("All divisions"); setSection("All sections"); } }, /* @__PURE__ */ React.createElement("option", null, "SCR \u2014 South Central Railway")), /* @__PURE__ */ React.createElement("select", { className: "rh-scope", value: division, onChange: (e) => { setDivision(e.target.value); setSection("All sections"); } }, ["All divisions", "Vijayawada Division", "Guntur Division", "Hyderabad Division", "Nanded Division"].map((v) => /* @__PURE__ */ React.createElement("option", { key: v }, v))), /* @__PURE__ */ React.createElement("select", { className: "rh-scope", value: section, onChange: (e) => setSection(e.target.value) }, ["All sections", "Vijayawada\u2013Gudivada", "Guntur\u2013Tenali", "Ongole\u2013Singarayakonda"].map((v) => /* @__PURE__ */ React.createElement("option", { key: v }, v))), /* @__PURE__ */ React.createElement("span", { className: "rh-scope-div" }), /* @__PURE__ */ React.createElement("button", { className: "rh-scope" }, "FY 2026\u201327", /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 13 })), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", size: "sm", leadingIcon: "refresh" }, "Refresh"), /* @__PURE__ */ React.createElement("span", { className: "rh-updated" }, "Updated 4 min ago"));
+const DASHBOARD_FILTER_DEFAULTS = Object.freeze({
+  viewBy: "Division",
+  zone: "SCR \u2014 South Central Railway",
+  division: "All divisions",
+  section: "All sections",
+  financialYear: "FY 2026\u201327",
+  module: "All modules"
+});
+const DIVISION_SECTIONS = {
+  "Vijayawada Division": ["Vijayawada\u2013Gudivada", "Vijayawada\u2013Tenali"],
+  "Guntur Division": ["Guntur\u2013Tenali", "Guntur\u2013Nallapadu"],
+  "Hyderabad Division": ["Secunderabad\u2013Kazipet", "Kazipet\u2013Dornakal"],
+  "Nanded Division": ["Nanded\u2013Mudkhed", "Mudkhed\u2013Adilabad"]
 };
-const KpiStrip = ({ selected, onSelect, canApprove }) => {
-  const cards = [
-    { id: "scope", label: "Stations in scope", icon: "train", value: SCOPE_TOTAL, foot: "SCR zone \xB7 4 divisions", color: "var(--ink-400)" },
-    { id: "esp", label: "ESP approved", icon: "layers", value: 97, suffix: "/247", foot: "39% of scope", color: "#3737C8" },
-    { id: "sip", label: "SIP approved", icon: "branch", value: 52, suffix: "/247", foot: "21% of scope", color: "#0D9488" },
-    canApprove && { id: "queue", label: "Pending my approval", icon: "inbox", value: 14, foot: "5 overdue", color: "var(--danger)", hot: true },
-    { id: "disc", label: "Open discrepancies", icon: "alert", value: 43, foot: "12 critical", color: "var(--warning)" }
-  ].filter(Boolean);
-  return /* @__PURE__ */ React.createElement("div", { className: "rh-kpis" }, cards.map((c) => /* @__PURE__ */ React.createElement(
-    "div",
-    {
-      key: c.id,
-      className: "rh-kpi",
-      style: { "--k": c.color },
-      "data-sel": selected === c.id,
-      onClick: () => onSelect(selected === c.id ? null : c.id)
-    },
-    /* @__PURE__ */ React.createElement("div", { className: "rh-kpi-label" }, /* @__PURE__ */ React.createElement(Icon, { name: c.icon, size: 13 }), c.label),
-    /* @__PURE__ */ React.createElement("div", { className: "rh-kpi-value" }, c.value, c.suffix && /* @__PURE__ */ React.createElement("small", null, c.suffix)),
-    /* @__PURE__ */ React.createElement("div", { className: "rh-kpi-foot", style: c.hot ? { color: "var(--danger-text)", fontWeight: 600 } : null }, c.foot)
-  )));
+const DashboardFilterField = ({ id, label, hint, children }) => /* @__PURE__ */ React.createElement("div", { className: "rh-filter-field" }, /* @__PURE__ */ React.createElement("label", { htmlFor: id }, label), children, hint && /* @__PURE__ */ React.createElement("span", { className: "rh-filter-hint" }, hint));
+const ScopeBar = ({ role }) => {
+  const [filtersOpen, setFiltersOpen] = useStateD(false);
+  const [appliedFilters, setAppliedFilters] = useStateD({ ...DASHBOARD_FILTER_DEFAULTS });
+  const [draftFilters, setDraftFilters] = useStateD({ ...DASHBOARD_FILTER_DEFAULTS });
+  const [updatedLabel, setUpdatedLabel] = useStateD("Updated 4 min ago");
+  const openerRef = useRefD(null);
+  const drawerRef = useRefD(null);
+  const stage = "SIP generated";
+  const { viewBy, zone, division, section, financialYear, module } = appliedFilters;
+  const zoneCode = zone.split(" \u2014 ")[0];
+  const filterCount = 4 + (module === "All modules" ? 0 : 1);
+  const draftFilterCount = 4 + (draftFilters.module === "All modules" ? 0 : 1);
+  const sectionOptions = DIVISION_SECTIONS[draftFilters.division] || [];
+  const chips = [
+    { label: "View by", value: viewBy },
+    { label: "Zone", value: zoneCode },
+    { label: "FY", value: financialYear },
+    { label: "Stage", value: stage },
+    ...module === "All modules" ? [] : [{ label: "Module", value: module }]
+  ];
+  const openFilters = (event) => {
+    openerRef.current = event.currentTarget;
+    setDraftFilters({ ...appliedFilters });
+    setFiltersOpen(true);
+  };
+  const closeFilters = () => {
+    setFiltersOpen(false);
+    window.setTimeout(() => openerRef.current?.focus(), 0);
+  };
+  const updateDraft = (changes) => setDraftFilters((current) => ({ ...current, ...changes }));
+  const applyFilters = () => {
+    setAppliedFilters({ ...draftFilters });
+    closeFilters();
+  };
+  useEffectD(() => {
+    if (!filtersOpen) return void 0;
+    const drawer = drawerRef.current;
+    drawer?.querySelector(".rh-filter-close")?.focus();
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeFilters();
+        return;
+      }
+      if (event.key !== "Tab" || !drawer) return;
+      const focusable = [...drawer.querySelectorAll("button:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex='-1'])")];
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [filtersOpen]);
+  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "rh-home-head-main" }, /* @__PURE__ */ React.createElement("div", { className: "rh-home-head-copy" }, /* @__PURE__ */ React.createElement("h1", { className: "rh-home-title", "aria-label": "Rapid Platform | Dashboard" }, "Rapid Platform", /* @__PURE__ */ React.createElement("span", { className: "rh-home-title-pipe" }, "|"), "Dashboard"), /* @__PURE__ */ React.createElement("div", { className: "rh-home-meta" }, /* @__PURE__ */ React.createElement("span", null, role.label), /* @__PURE__ */ React.createElement("span", null, "Mon, 17 Aug 2026"), /* @__PURE__ */ React.createElement("span", { className: "rh-live" }, /* @__PURE__ */ React.createElement("i", null), Object.keys(role.grants).length, " modules active"))), /* @__PURE__ */ React.createElement("div", { className: "rh-home-head-actions" }, /* @__PURE__ */ React.createElement(HeaderSearch, { placeholder: "Search stations, drawings, approvals\u2026" }), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", size: "sm", leadingIcon: "refresh", onClick: () => setUpdatedLabel("Updated just now") }, "Refresh"))), /* @__PURE__ */ React.createElement("div", { className: "rh-scopebar" }, /* @__PURE__ */ React.createElement("span", { className: "rh-scope-label" }, "Applied"), chips.map((chip) => /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-chip", key: chip.label, onClick: openFilters }, /* @__PURE__ */ React.createElement("span", null, chip.label), /* @__PURE__ */ React.createElement("b", null, chip.value))), /* @__PURE__ */ React.createElement("span", { className: "rh-scope-summary" }, zoneCode, " \xB7 ", division, " \xB7 ", section), /* @__PURE__ */ React.createElement("div", { className: "rh-topbar-spacer" }), /* @__PURE__ */ React.createElement("span", { className: "rh-updated", "aria-live": "polite" }, updatedLabel), /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-open", onClick: openFilters }, /* @__PURE__ */ React.createElement(Icon, { name: "filter", size: 13 }), "Filters", /* @__PURE__ */ React.createElement("span", { className: "rh-filter-count" }, filterCount))), filtersOpen && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-scrim", "aria-label": "Close filters", onClick: closeFilters }), /* @__PURE__ */ React.createElement("aside", { ref: drawerRef, tabIndex: -1, className: "rh-filter-drawer", role: "dialog", "aria-modal": "true", "aria-labelledby": "dashboard-filter-title" }, /* @__PURE__ */ React.createElement("div", { className: "rh-filter-drawer-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "rh-filter-drawer-title", id: "dashboard-filter-title" }, "Filters"), /* @__PURE__ */ React.createElement("div", { className: "rh-filter-drawer-sub" }, "Zone \u2192 Division \u2192 Section cascade")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-close", "aria-label": "Close filters", onClick: closeFilters }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 14 }))), /* @__PURE__ */ React.createElement("div", { className: "rh-filter-drawer-body" }, /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-view-by", label: "View by", hint: "Sets the grouping used by dashboard reporting" }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-view-by", className: "rh-filter-select", value: draftFilters.viewBy, onChange: (e) => updateDraft({ viewBy: e.target.value }) }, /* @__PURE__ */ React.createElement("option", null, "Zone"), /* @__PURE__ */ React.createElement("option", null, "Division"), /* @__PURE__ */ React.createElement("option", null, "Section"))), /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-zone", label: "Zone", hint: "Your admin scope" }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-zone", className: "rh-filter-select", value: draftFilters.zone, onChange: (e) => updateDraft({ zone: e.target.value, division: "All divisions", section: "All sections" }) }, /* @__PURE__ */ React.createElement("option", null, "SCR \u2014 South Central Railway"))), /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-division", label: "Division", hint: "Choosing a division resets the section" }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-division", className: "rh-filter-select", value: draftFilters.division, onChange: (e) => updateDraft({ division: e.target.value, section: "All sections" }) }, /* @__PURE__ */ React.createElement("option", null, "All divisions"), /* @__PURE__ */ React.createElement("option", null, "Vijayawada Division"), /* @__PURE__ */ React.createElement("option", null, "Guntur Division"), /* @__PURE__ */ React.createElement("option", null, "Hyderabad Division"), /* @__PURE__ */ React.createElement("option", null, "Nanded Division"))), /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-section", label: "Section", hint: draftFilters.division === "All divisions" ? "Choose a division to select a section" : `Sections in ${draftFilters.division}` }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-section", className: "rh-filter-select", value: draftFilters.section, disabled: draftFilters.division === "All divisions", onChange: (e) => updateDraft({ section: e.target.value }) }, /* @__PURE__ */ React.createElement("option", null, "All sections"), sectionOptions.map((option) => /* @__PURE__ */ React.createElement("option", { key: option }, option)))), /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-financial-year", label: "Financial year", hint: "Approvals and aging are counted within the year" }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-financial-year", className: "rh-filter-select", value: draftFilters.financialYear, onChange: (e) => updateDraft({ financialYear: e.target.value }) }, /* @__PURE__ */ React.createElement("option", null, "FY 2026\u201327"), /* @__PURE__ */ React.createElement("option", null, "FY 2025\u201326"))), /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-module", label: "Module", hint: "Narrows widgets to one module's work" }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-module", className: "rh-filter-select", value: draftFilters.module, onChange: (e) => updateDraft({ module: e.target.value }) }, /* @__PURE__ */ React.createElement("option", null, "All modules"), /* @__PURE__ */ React.createElement("option", null, "RAPID Track Alignment Design"), /* @__PURE__ */ React.createElement("option", null, "RAPID ESP"), /* @__PURE__ */ React.createElement("option", null, "RAPID SIP"), /* @__PURE__ */ React.createElement("option", null, "RAPID TOC"), /* @__PURE__ */ React.createElement("option", null, "RAPID Kavach")))), /* @__PURE__ */ React.createElement("div", { className: "rh-filter-drawer-foot" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-reset", onClick: () => setDraftFilters({ ...DASHBOARD_FILTER_DEFAULTS }) }, "Reset filters"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-apply", onClick: applyFilters }, "Apply ", draftFilterCount, " filters")))));
+};
+const ModuleAccessStrip = ({ modules }) => {
+  if (!modules.length) return null;
+  return /* @__PURE__ */ React.createElement("section", { className: "rh-module-access", "aria-labelledby": "rh-module-access-title" }, /* @__PURE__ */ React.createElement("h2", { className: "rh-module-access-title", id: "rh-module-access-title" }, "Module access"), /* @__PURE__ */ React.createElement("div", { className: "rh-module-access-grid" }, modules.map((mod) => {
+    const access = MODULE_ACCESS_STATS[mod.id];
+    if (!access) return null;
+    return /* @__PURE__ */ React.createElement("article", { className: "rh-access-card", "data-accent": !!access.accent, key: mod.id }, /* @__PURE__ */ React.createElement("div", { className: "rh-access-head" }, /* @__PURE__ */ React.createElement("span", { className: "rh-access-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: mod.icon, size: 17 })), /* @__PURE__ */ React.createElement("div", { className: "rh-access-copy" }, /* @__PURE__ */ React.createElement("h3", { className: "rh-access-name" }, mod.name), /* @__PURE__ */ React.createElement("div", { className: "rh-access-summary" }, access.summary))), /* @__PURE__ */ React.createElement("dl", { className: "rh-access-metrics" }, access.rows.map(([label, value]) => /* @__PURE__ */ React.createElement("div", { className: "rh-access-row", key: label }, /* @__PURE__ */ React.createElement("dt", null, label), /* @__PURE__ */ React.createElement("dd", null, value)))), /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-access-open", "aria-label": `Open ${mod.name} module` }, "Open module ", /* @__PURE__ */ React.createElement(Icon, { name: "arrow_right", size: 12 })));
+  })));
 };
 const SplitBar = ({ split }) => {
   const total = split.reduce((s, x) => s + x.value, 0) || 1;
@@ -445,6 +639,14 @@ const LegacyModuleTile = ({ mod, grant, compact }) => {
 const ModuleTile = ({ mod, grant, compact }) => {
   const stats = MODULE_STATS[mod.id];
   return /* @__PURE__ */ React.createElement("div", { className: "rh-mod", style: { "--m": mod.color }, "data-open": true }, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-top" }, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: mod.icon, size: compact ? 17 : 19 })), /* @__PURE__ */ React.createElement("div", { style: { minWidth: 0, flex: 1 } }, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-name" }, mod.name, /* @__PURE__ */ React.createElement("span", { className: "rh-mod-code" }, mod.code)), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-desc" }, mod.full))), stats && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-figure" }, /* @__PURE__ */ React.createElement("span", { className: "rh-mod-headline" }, stats.headline), /* @__PURE__ */ React.createElement("span", { className: "rh-mod-headline-label" }, stats.headlineLabel)), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-counts" }, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-count" }, /* @__PURE__ */ React.createElement("b", null, stats.generated), /* @__PURE__ */ React.createElement("span", null, "Generated")), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-count" }, /* @__PURE__ */ React.createElement("b", null, stats.approved), /* @__PURE__ */ React.createElement("span", null, "Approved")))), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-foot" }, /* @__PURE__ */ React.createElement("button", { className: "rh-mod-cta" }, "Open module", /* @__PURE__ */ React.createElement(Icon, { name: "arrow_right", size: 13 })), /* @__PURE__ */ React.createElement("span", { className: "rh-mod-quiet" }, grant === "view" ? "Read-only access" : "Full access")));
+};
+const StageDocsBar = ({ value, max, color }) => /* @__PURE__ */ React.createElement("div", { className: "rh-meter" }, /* @__PURE__ */ React.createElement("div", { className: "rh-meter-track" }, /* @__PURE__ */ React.createElement("div", { className: "rh-meter-fill", style: { width: `${value / max * 100}%`, background: color } })), /* @__PURE__ */ React.createElement("span", { className: "rh-meter-pct" }, value));
+const StageDocsRow = ({ s, max }) => /* @__PURE__ */ React.createElement("tr", { key: s.label }, /* @__PURE__ */ React.createElement("td", null, s.label), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(StageDocsBar, { value: s.esp, max, color: "#3737C8" })), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(StageDocsBar, { value: s.sip, max, color: "#0D9488" })));
+const StageDocsCard = () => {
+  const max = Math.max(...STAGE_DOCS.flatMap((s) => [s.esp, s.sip]));
+  const head = /* @__PURE__ */ React.createElement("div", { className: "rh-card-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "rh-card-title" }, "Documents by workflow stage"), /* @__PURE__ */ React.createElement("div", { className: "rh-card-sub" }, "ESP and SIP comparison")), /* @__PURE__ */ React.createElement("div", { className: "rh-card-head-right" }, /* @__PURE__ */ React.createElement("span", { className: "rh-legend" }, /* @__PURE__ */ React.createElement("span", { className: "rh-legend-item" }, /* @__PURE__ */ React.createElement("span", { className: "rh-legend-dot", style: { background: "#3737C8" } }), "ESP"), /* @__PURE__ */ React.createElement("span", { className: "rh-legend-item" }, /* @__PURE__ */ React.createElement("span", { className: "rh-legend-dot", style: { background: "#0D9488" } }), "SIP"))));
+  const table = /* @__PURE__ */ React.createElement("div", { className: "rh-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "rh-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Stage"), /* @__PURE__ */ React.createElement("th", null, "ESP"), /* @__PURE__ */ React.createElement("th", null, "SIP"))), /* @__PURE__ */ React.createElement("tbody", null, STAGE_DOCS.map((s) => /* @__PURE__ */ React.createElement(StageDocsRow, { key: s.label, s, max })))));
+  return /* @__PURE__ */ React.createElement("div", { className: "rh-card rh-card-fill" }, head, table);
 };
 const PipelineCard = () => {
   const max = PIPELINE[0].count;
@@ -473,19 +675,13 @@ const ActivityCard = () => /* @__PURE__ */ React.createElement("div", { classNam
 const DashboardPage = ({ embedded = false }) => {
   const [roleId, setRoleId] = useStateD("zone_admin");
   const [nav, setNav] = useStateD("home");
-  const [kpi, setKpi] = useStateD(null);
-  const [zone, setZone] = useStateD("SCR \u2014 South Central Railway");
-  const [division, setDivision] = useStateD("All divisions");
-  const [section, setSection] = useStateD("All sections");
   const role = ROLES[roleId];
   const granted = useMemoD(
     () => MODULES.filter((m) => !!role.grants[m.id]),
     [roleId]
   );
-  const primary = granted.filter((m) => m.stage === "live");
-  const secondary = granted.filter((m) => m.stage !== "live");
   const sidebarNav = useMemoD(() => buildSidebarNav(role, granted), [roleId, granted]);
-  const main = /* @__PURE__ */ React.createElement("div", { className: embedded ? "rh-main rh-main-embedded" : "rh-main" }, /* @__PURE__ */ React.createElement("div", { className: "rh-topbar" }, /* @__PURE__ */ React.createElement("div", { className: "rh-topbar-row" }, /* @__PURE__ */ React.createElement("div", { style: { minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { className: "rh-hello" }, "Good morning, ", role.user.name.split(" ")[0]), /* @__PURE__ */ React.createElement("div", { className: "rh-hello-sub" }, /* @__PURE__ */ React.createElement("span", null, role.label), /* @__PURE__ */ React.createElement("span", null, "Mon, 17 Aug 2026"), /* @__PURE__ */ React.createElement("span", { className: "rh-live" }, /* @__PURE__ */ React.createElement("i", null), granted.filter((m) => m.stage !== "soon").length, " modules active"))), /* @__PURE__ */ React.createElement("div", { className: "rh-topbar-spacer" }), /* @__PURE__ */ React.createElement("div", { className: "rh-topbar-actions" }, /* @__PURE__ */ React.createElement("div", { className: "rh-roleswitch", title: "Prototype control \u2014 re-renders the page for another role" }, /* @__PURE__ */ React.createElement("label", { htmlFor: "rh-role" }, "Role"), /* @__PURE__ */ React.createElement("select", { id: "rh-role", value: roleId, onChange: (e) => setRoleId(e.target.value) }, Object.keys(ROLES).map((k) => /* @__PURE__ */ React.createElement("option", { key: k, value: k }, ROLES[k].label)))), /* @__PURE__ */ React.createElement(HeaderSearch, { placeholder: "Search stations, drawings, approvals\u2026" }), /* @__PURE__ */ React.createElement("button", { className: "ds-icon-btn", title: "Notifications" }, /* @__PURE__ */ React.createElement(Icon, { name: "bell", size: 15 }), /* @__PURE__ */ React.createElement("span", { className: "ds-dot" })))), /* @__PURE__ */ React.createElement(ScopeBar, { role })), /* @__PURE__ */ React.createElement("div", { className: "rh-content" }, /* @__PURE__ */ React.createElement(KpiStrip, { selected: kpi, onSelect: setKpi, canApprove: role.can.approve }), /* @__PURE__ */ React.createElement("div", { className: "rh-sec" }, /* @__PURE__ */ React.createElement("div", { className: "rh-sec-head" }, /* @__PURE__ */ React.createElement("span", { className: "rh-sec-title" }, "Your modules"), /* @__PURE__ */ React.createElement("span", { className: "rh-sec-note" }, granted.length, " of ", MODULES.length, " granted to ", role.label), role.can.users && /* @__PURE__ */ React.createElement("button", { className: "rh-sec-link" }, "Manage access \u2192")), granted.length === 0 && /* @__PURE__ */ React.createElement("div", { className: "rh-empty" }, "No modules are assigned to this role yet. Contact your zone administrator."), primary.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "rh-mod-grid" }, primary.map((m) => /* @__PURE__ */ React.createElement(ModuleTile, { key: m.id, mod: m, grant: role.grants[m.id] }))), secondary.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "rh-mod-grid-sm" }, secondary.map((m) => /* @__PURE__ */ React.createElement(ModuleTile, { key: m.id, mod: m, grant: role.grants[m.id], compact: true })))), /* @__PURE__ */ React.createElement("div", { className: "rh-grid-2" }, /* @__PURE__ */ React.createElement(PipelineCard, null), /* @__PURE__ */ React.createElement(AttentionCard, { canApprove: role.can.approve })), /* @__PURE__ */ React.createElement("div", { className: "rh-grid-2b" }, /* @__PURE__ */ React.createElement(DivisionTable, null), /* @__PURE__ */ React.createElement(ActivityCard, null))));
+  const main = /* @__PURE__ */ React.createElement("div", { className: embedded ? "rh-main rh-main-embedded" : "rh-main" }, /* @__PURE__ */ React.createElement("div", { className: "rh-topbar" }, /* @__PURE__ */ React.createElement(ScopeBar, { role })), /* @__PURE__ */ React.createElement("div", { className: "rh-content" }, /* @__PURE__ */ React.createElement(ModuleAccessStrip, { modules: granted }), granted.length === 0 && /* @__PURE__ */ React.createElement("div", { className: "rh-empty" }, "No modules are assigned to this role yet. Contact your zone administrator."), /* @__PURE__ */ React.createElement("div", { className: "rh-grid-2" }, /* @__PURE__ */ React.createElement(PipelineCard, null), /* @__PURE__ */ React.createElement(StageDocsCard, null)), /* @__PURE__ */ React.createElement("div", { className: "rh-grid-2b" }, /* @__PURE__ */ React.createElement(AttentionCard, { canApprove: role.can.approve }), /* @__PURE__ */ React.createElement(ActivityCard, null)), /* @__PURE__ */ React.createElement(DivisionTable, null)));
   if (embedded) return main;
   return /* @__PURE__ */ React.createElement("div", { className: "rh-app" }, /* @__PURE__ */ React.createElement(Sidebar, { active: nav, onSelect: setNav, project: null, ...sidebarNav }), main);
 };

@@ -223,7 +223,7 @@ const tableCSS = `
 const Checkbox = ({ checked, indeterminate, onChange, ariaLabel }) => (
   <span
     role="checkbox"
-    aria-checked={checked}
+    aria-checked={indeterminate && !checked ? "mixed" : checked}
     aria-label={ariaLabel}
     tabIndex={0}
     className="ds-checkbox"

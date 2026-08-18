@@ -1,0 +1,1827 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RAPID — Indian Railways · Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <style>
+/* ESP-SIP Design System — tokens */
+:root {
+  /* Brand */
+  --ink-900: #0E1B2C;
+  --ink-800: #182838;
+  --ink-700: #2A3B4E;
+  --ink-600: #475569;
+  --ink-500: #64748B;
+  --ink-400: #94A3B8;
+  --ink-300: #CBD3DC;
+  --ink-200: #E4E8EE;
+  --ink-100: #EFF2F6;
+  --ink-50:  #F6F8FA;
+
+  --canvas: #FAFAF7;
+  --paper:  #FFFFFF;
+
+  --accent:        #3737c8;
+  --accent-hover:  #2b2bad;
+  --accent-active: #232391;
+  --accent-soft:   #ebebf9;
+  --accent-text:   #2929a0;
+
+  --stripe-blue-950: #06182C;
+  --stripe-blue-900: #0A2540;
+  --stripe-blue-800: #12395B;
+  --stripe-blue-700: #174A73;
+  --stripe-cyan: #00D4FF;
+  --stripe-violet: #3737c8;
+  --sidebar-bg: linear-gradient(180deg, #0A2540 0%, #0D335F 52%, #174A73 100%);
+  --sidebar-glow: radial-gradient(circle at 18% 0%, rgba(99,91,255,0.38), transparent 34%), radial-gradient(circle at 100% 24%, rgba(0,212,255,0.20), transparent 30%);
+  --sidebar-border: rgba(255,255,255,0.12);
+  --sidebar-text: #FFFFFF;
+  --sidebar-muted: #ADBDCC;
+  --sidebar-item: rgba(255,255,255,0.06);
+  --sidebar-item-hover: rgba(255,255,255,0.12);
+  --sidebar-item-active: #FFFFFF;
+  --sidebar-item-active-text: #0A2540;
+
+  --success:      oklch(0.62 0.13 155);
+  --success-soft: oklch(0.96 0.04 155);
+  --success-text: oklch(0.42 0.12 155);
+
+  --warning:      oklch(0.78 0.13 78);
+  --warning-soft: oklch(0.97 0.05 85);
+  --warning-text: oklch(0.45 0.10 70);
+
+  --danger:       oklch(0.60 0.18 25);
+  --danger-soft:  oklch(0.96 0.04 25);
+  --danger-text:  oklch(0.45 0.16 25);
+
+  --info:         oklch(0.62 0.13 240);
+  --info-soft:    oklch(0.96 0.04 240);
+  --info-text:    oklch(0.42 0.13 240);
+
+  --neutral-soft: var(--ink-100);
+  --neutral-text: var(--ink-600);
+
+  /* Radii */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-full: 999px;
+
+  /* Shadow */
+  --shadow-xs: 0 1px 0 rgba(14,27,44,0.04);
+  --shadow-sm: 0 1px 2px rgba(14,27,44,0.06), 0 1px 0 rgba(14,27,44,0.03);
+  --shadow-md: 0 4px 12px -2px rgba(14,27,44,0.08), 0 2px 4px -1px rgba(14,27,44,0.04);
+  --shadow-lg: 0 16px 32px -8px rgba(14,27,44,0.14), 0 4px 8px -2px rgba(14,27,44,0.06);
+  --shadow-focus: 0 0 0 3px rgba(55,55,200,0.22);
+
+  /* Spacing */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px;
+  --s-5: 20px; --s-6: 24px; --s-7: 32px; --s-8: 40px; --s-9: 56px;
+
+  /* Type */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  /* Borders */
+  --hairline: 1px solid var(--ink-200);
+  --hairline-strong: 1px solid var(--ink-300);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  color: var(--ink-900);
+  background: var(--canvas);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01", "ss03";
+}
+button { font-family: inherit; }
+input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+::selection { background: var(--accent-soft); color: var(--accent-text); }
+
+/* Subtle scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--ink-200); border-radius: 999px; border: 2px solid var(--canvas); }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-300); }
+
+/* Helpers */
+.mono { font-family: var(--font-mono); font-feature-settings: normal; }
+.hairline { border: var(--hairline); }
+.muted { color: var(--ink-500); }
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Icons (currentColor strokes) */
+.icon { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.75; fill: none; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.icon-sm { width: 14px; height: 14px; }
+.icon-lg { width: 20px; height: 20px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+// Generated from icons.jsx. Edit the .jsx source and regenerate if needed.
+(() => {
+  const Icon = ({ name, size = 16, className = "", ...rest }) => {
+    const paths = {
+      search: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "11", cy: "11", r: "6" }), /* @__PURE__ */ React.createElement("path", { d: "m20 20-3.5-3.5" })),
+      bell: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6" }), /* @__PURE__ */ React.createElement("path", { d: "M10 18a2 2 0 0 0 4 0" })),
+      settings: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "3" }), /* @__PURE__ */ React.createElement("path", { d: "M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" })),
+      home: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M3 11.5 12 4l9 7.5" }), /* @__PURE__ */ React.createElement("path", { d: "M5 10v10h14V10" })),
+      train: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("rect", { x: "4", y: "3", width: "16", height: "14", rx: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M4 11h16M9 21l-2-2M15 21l2-2" }), /* @__PURE__ */ React.createElement("circle", { cx: "9", cy: "14", r: "1" }), /* @__PURE__ */ React.createElement("circle", { cx: "15", cy: "14", r: "1" })),
+      track: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M5 3v18M19 3v18M3 7h18M3 12h18M3 17h18" })),
+      file: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" }), /* @__PURE__ */ React.createElement("path", { d: "M14 3v5h5" })),
+      layers: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "m12 3 9 5-9 5-9-5z" }), /* @__PURE__ */ React.createElement("path", { d: "m3 13 9 5 9-5" }), /* @__PURE__ */ React.createElement("path", { d: "m3 18 9 5 9-5" })),
+      chart: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M3 3v18h18" }), /* @__PURE__ */ React.createElement("path", { d: "m7 14 4-4 4 4 5-6" })),
+      users: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "9", cy: "8", r: "3.5" }), /* @__PURE__ */ React.createElement("path", { d: "M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" }), /* @__PURE__ */ React.createElement("path", { d: "M17 11a3 3 0 1 0 0-6" }), /* @__PURE__ */ React.createElement("path", { d: "M21 20c0-2.5-1.5-4.6-3.6-5.5" })),
+      shield: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M12 3 4 6v6c0 4.5 3.5 8 8 9 4.5-1 8-4.5 8-9V6z" }), /* @__PURE__ */ React.createElement("path", { d: "m9 12 2 2 4-4" })),
+      book: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M4 4h11a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4z" }), /* @__PURE__ */ React.createElement("path", { d: "M4 4v12a4 4 0 0 1 4-4h11" })),
+      chevron_down: /* @__PURE__ */ React.createElement("path", { d: "m6 9 6 6 6-6" }),
+      chevron_right: /* @__PURE__ */ React.createElement("path", { d: "m9 6 6 6-6 6" }),
+      chevron_left: /* @__PURE__ */ React.createElement("path", { d: "m15 6-6 6 6 6" }),
+      chevron_up: /* @__PURE__ */ React.createElement("path", { d: "m6 15 6-6 6 6" }),
+      chevrons_left: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "m11 6-6 6 6 6" }), /* @__PURE__ */ React.createElement("path", { d: "m19 6-6 6 6 6" })),
+      panel_left_close: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("rect", { x: "3", y: "3", width: "18", height: "18", rx: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M9 3v18" }), /* @__PURE__ */ React.createElement("path", { d: "m16 15-3-3 3-3" })),
+      panel_left_open: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("rect", { x: "3", y: "3", width: "18", height: "18", rx: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M9 3v18" }), /* @__PURE__ */ React.createElement("path", { d: "m14 9 3 3-3 3" })),
+      plus: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M12 5v14M5 12h14" })),
+      minus: /* @__PURE__ */ React.createElement("path", { d: "M5 12h14" }),
+      maximize: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5" }), /* @__PURE__ */ React.createElement("path", { d: "M8 3 3 8M16 3l5 5M21 16l-5 5M3 16l5 5" })),
+      minimize: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M8 3v5H3M16 3v5h5M21 16h-5v5M3 16h5v5" }), /* @__PURE__ */ React.createElement("path", { d: "M3 8l5-5M21 8l-5-5M16 21l5-5M8 21l-5-5" })),
+      x: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "m6 6 12 12M18 6 6 18" })),
+      check: /* @__PURE__ */ React.createElement("path", { d: "m5 12 4 4 10-10" }),
+      check_circle: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9" }), /* @__PURE__ */ React.createElement("path", { d: "m8 12 3 3 5-5" })),
+      alert: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.1" })),
+      alert_tri: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "m12 3 10 18H2z" }), /* @__PURE__ */ React.createElement("path", { d: "M12 10v4M12 18v.1" })),
+      info: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v.1M11 12h1v5h1" })),
+      clock: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9" }), /* @__PURE__ */ React.createElement("path", { d: "M12 7v5l3 2" })),
+      lock: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("rect", { x: "5", y: "10", width: "14", height: "11", rx: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M8 10V7a4 4 0 0 1 8 0v3" })),
+      upload: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }), /* @__PURE__ */ React.createElement("path", { d: "m17 8-5-5-5 5" }), /* @__PURE__ */ React.createElement("path", { d: "M12 3v12" })),
+      download: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }), /* @__PURE__ */ React.createElement("path", { d: "m7 10 5 5 5-5" }), /* @__PURE__ */ React.createElement("path", { d: "M12 15V3" })),
+      filter: /* @__PURE__ */ React.createElement("path", { d: "M3 4h18l-7 9v6l-4 2v-8z" }),
+      sort: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M7 4v16M3 8l4-4 4 4" }), /* @__PURE__ */ React.createElement("path", { d: "M17 20V4M13 16l4 4 4-4" })),
+      more: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "5", cy: "12", r: "1.2" }), /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "1.2" }), /* @__PURE__ */ React.createElement("circle", { cx: "19", cy: "12", r: "1.2" })),
+      eye: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" }), /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "3" })),
+      edit: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M11 4H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-6" }), /* @__PURE__ */ React.createElement("path", { d: "M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z" })),
+      trash: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M6 6l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" })),
+      copy: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("rect", { x: "8", y: "8", width: "13", height: "13", rx: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" })),
+      refresh: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M21 12a9 9 0 1 1-3-6.7" }), /* @__PURE__ */ React.createElement("path", { d: "M21 3v6h-6" })),
+      play: /* @__PURE__ */ React.createElement("path", { d: "m6 4 14 8-14 8z", fill: "currentColor", stroke: "none" }),
+      pause: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("rect", { x: "6", y: "4", width: "4", height: "16" }), /* @__PURE__ */ React.createElement("rect", { x: "14", y: "4", width: "4", height: "16" })),
+      flag: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M4 22V4M4 4h14l-3 5 3 5H4" })),
+      pin: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M12 22v-7" }), /* @__PURE__ */ React.createElement("path", { d: "m17 9-5 6-5-6 1-6h8z" })),
+      branch: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "6", cy: "6", r: "2" }), /* @__PURE__ */ React.createElement("circle", { cx: "6", cy: "18", r: "2" }), /* @__PURE__ */ React.createElement("circle", { cx: "18", cy: "8", r: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M6 8v8M18 10v2a4 4 0 0 1-4 4H8" })),
+      file_check: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" }), /* @__PURE__ */ React.createElement("path", { d: "M14 3v5h5" }), /* @__PURE__ */ React.createElement("path", { d: "m9 14 2 2 4-4" })),
+      log_out: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" }), /* @__PURE__ */ React.createElement("path", { d: "m16 17 5-5-5-5" }), /* @__PURE__ */ React.createElement("path", { d: "M21 12H9" })),
+      command: /* @__PURE__ */ React.createElement("path", { d: "M18 6a3 3 0 1 0-3 3v6a3 3 0 1 0 3-3H9a3 3 0 1 0 3 3V9a3 3 0 1 0-3-3z" }),
+      grip: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "9", cy: "6", r: "1" }), /* @__PURE__ */ React.createElement("circle", { cx: "9", cy: "12", r: "1" }), /* @__PURE__ */ React.createElement("circle", { cx: "9", cy: "18", r: "1" }), /* @__PURE__ */ React.createElement("circle", { cx: "15", cy: "6", r: "1" }), /* @__PURE__ */ React.createElement("circle", { cx: "15", cy: "12", r: "1" }), /* @__PURE__ */ React.createElement("circle", { cx: "15", cy: "18", r: "1" })),
+      inbox: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M22 12h-6l-2 3h-4l-2-3H2" }), /* @__PURE__ */ React.createElement("path", { d: "M5.5 5h13l3.5 7v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z" })),
+      arrow_up: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M12 19V5M5 12l7-7 7 7" })),
+      arrow_down: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M12 5v14M5 12l7 7 7-7" })),
+      arrow_right: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M5 12h14M12 5l7 7-7 7" })),
+      spark: /* @__PURE__ */ React.createElement("path", { d: "M5 12h2l2-7 4 14 2-7h4" }),
+      cube: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "m12 3 9 5v8l-9 5-9-5V8z" }), /* @__PURE__ */ React.createElement("path", { d: "m3 8 9 5 9-5M12 13v10" })),
+      git: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "6", cy: "6", r: "2" }), /* @__PURE__ */ React.createElement("circle", { cx: "18", cy: "6", r: "2" }), /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "18", r: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M8 6h6a4 4 0 0 1 4 4M12 16V8" })),
+      cursor: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "m5 3 14 8.5-6.2 1.4L9.6 19z" })),
+      hand: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M8 12V5.5a1.5 1.5 0 0 1 3 0V11" }), /* @__PURE__ */ React.createElement("path", { d: "M11 11V4.5a1.5 1.5 0 0 1 3 0V11" }), /* @__PURE__ */ React.createElement("path", { d: "M14 11V6.5a1.5 1.5 0 0 1 3 0V13" }), /* @__PURE__ */ React.createElement("path", { d: "M8 12v-1a1.5 1.5 0 0 0-3 0v4a6 6 0 0 0 6 6h1a6 6 0 0 0 5-5.8V11" })),
+      zoom_in: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "11", cy: "11", r: "6" }), /* @__PURE__ */ React.createElement("path", { d: "m20 20-3.5-3.5M11 8.5v5M8.5 11h5" })),
+      zoom_out: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "11", cy: "11", r: "6" }), /* @__PURE__ */ React.createElement("path", { d: "m20 20-3.5-3.5M8.5 11h5" })),
+      fit_screen: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4" }), /* @__PURE__ */ React.createElement("rect", { x: "9", y: "9", width: "6", height: "6", rx: "1" })),
+      select_rect: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3" }), /* @__PURE__ */ React.createElement("path", { d: "M11 3h2M11 21h2M3 11v2M21 11v2" })),
+      lasso: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M12 4c4.4 0 8 2.4 8 5.5S16.4 15 12 15s-8-2.4-8-5.5S7.6 4 12 4z" }), /* @__PURE__ */ React.createElement("path", { d: "M6.4 13.6C5.5 15 5 16.2 5 17a2 2 0 0 0 3.5 1.3" }), /* @__PURE__ */ React.createElement("circle", { cx: "9.5", cy: "19.5", r: "1.6" })),
+      link: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M10.5 13.5a4 4 0 0 0 5.7 0l2.6-2.6a4 4 0 0 0-5.7-5.7l-1.4 1.4" }), /* @__PURE__ */ React.createElement("path", { d: "M13.5 10.5a4 4 0 0 0-5.7 0l-2.6 2.6a4 4 0 0 0 5.7 5.7l1.4-1.4" })),
+      unlink: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M15.5 8.5 17 7a4 4 0 0 1 5.7 5.7l-1.5 1.5M8.5 15.5 7 17a4 4 0 0 1-5.7-5.7l1.5-1.5" }), /* @__PURE__ */ React.createElement("path", { d: "M4 4l16 16" })),
+      scissors: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "6", cy: "6", r: "2.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "6", cy: "18", r: "2.5" }), /* @__PURE__ */ React.createElement("path", { d: "M8 7.5 20 18M8 16.5 20 6" })),
+      ruler: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("rect", { x: "2", y: "8", width: "20", height: "8", rx: "1.5" }), /* @__PURE__ */ React.createElement("path", { d: "M7 8v3M11 8v4M15 8v3M19 8v4" })),
+      eye_off: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M10.6 5.2A9.6 9.6 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.2 6.3A16.6 16.6 0 0 0 2 12s3.5 7 10 7a9.9 9.9 0 0 0 4.5-1.1" }), /* @__PURE__ */ React.createElement("path", { d: "M9.9 9.9a3 3 0 0 0 4.2 4.2M3 3l18 18" })),
+      undo: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M3 8h11a6 6 0 0 1 0 12H8" }), /* @__PURE__ */ React.createElement("path", { d: "m7 4-4 4 4 4" })),
+      redo: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M21 8H10a6 6 0 0 0 0 12h6" }), /* @__PURE__ */ React.createElement("path", { d: "m17 4 4 4-4 4" })),
+      save: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("path", { d: "M5 3h11l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" }), /* @__PURE__ */ React.createElement("path", { d: "M8 3v6h7V3M8 21v-7h8v7" })),
+      target: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "8" }), /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "3" }), /* @__PURE__ */ React.createElement("path", { d: "M12 1v3M12 20v3M1 12h3M20 12h3" }))
+    };
+    return /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 24 24", width: size, height: size, className: "icon " + className, ...rest }, paths[name] || null);
+  };
+  window.Icon = Icon;
+})();
+  </script>
+  <script>
+const { useState: useStateForm, useRef: useRefForm } = React;
+const buttonCSS = `
+.ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: var(--r-md); font-size: 13.5px; font-weight: 700; letter-spacing: 0; cursor: pointer; border: 1px solid transparent; transition: background 120ms, border-color 120ms, color 120ms, box-shadow 120ms, transform 120ms; white-space: nowrap; user-select: none; line-height: 1; font-family: inherit; color: inherit; background: transparent; }
+.ds-btn:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.ds-btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+.ds-btn[data-size="sm"] { height: 28px; padding: 0 10px; font-size: 12.5px; gap: 5px; }
+.ds-btn[data-size="lg"] { height: 44px; padding: 0 18px; font-size: 14.5px; gap: 8px; }
+.ds-btn[data-size="xs"] { height: 24px; padding: 0 8px; font-size: 12px; }
+.ds-btn[data-icon-only="true"] { padding: 0; width: 36px; }
+.ds-btn[data-icon-only="true"][data-size="sm"] { width: 28px; }
+.ds-btn[data-icon-only="true"][data-size="lg"] { width: 44px; }
+
+/* primary */
+.ds-btn[data-variant="primary"] { background: linear-gradient(180deg, var(--accent), var(--accent-hover)); color: var(--paper); border-color: color-mix(in srgb, var(--accent-hover) 88%, #000); box-shadow: 0 1px 0 rgba(255,255,255,0.22) inset, 0 7px 14px -8px rgba(99,91,255,0.72), 0 1px 2px rgba(10,37,64,0.14); }
+.ds-btn[data-variant="primary"]:hover:not([disabled]) { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 84%, #fff), var(--accent)); box-shadow: 0 1px 0 rgba(255,255,255,0.26) inset, 0 10px 18px -10px rgba(99,91,255,0.78), 0 2px 4px rgba(10,37,64,0.14); transform: translateY(-1px); }
+.ds-btn[data-variant="primary"]:active:not([disabled]) { background: var(--accent-active); transform: translateY(0); }
+
+/* accent */
+.ds-btn[data-variant="accent"] { background: linear-gradient(180deg, var(--stripe-blue-800), var(--stripe-blue-900)); color: var(--paper); border-color: var(--stripe-blue-900); box-shadow: 0 1px 0 rgba(255,255,255,0.14) inset, 0 8px 16px -10px rgba(10,37,64,0.70); }
+.ds-btn[data-variant="accent"]:hover:not([disabled]) { background: linear-gradient(180deg, var(--stripe-blue-700), var(--stripe-blue-800)); border-color: var(--stripe-blue-800); transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255,255,255,0.16) inset, 0 12px 20px -12px rgba(10,37,64,0.78); }
+.ds-btn[data-variant="accent"]:active:not([disabled]) { background: var(--stripe-blue-950); transform: translateY(0); }
+
+/* secondary */
+.ds-btn[data-variant="secondary"] { background: #FFFFFF; color: var(--ink-800); border-color: #D8E0EA; box-shadow: var(--shadow-xs); }
+.ds-btn[data-variant="secondary"]:hover:not([disabled]) { background: var(--ink-50); border-color: #C7D2E1; color: var(--accent-text); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+.ds-btn[data-variant="secondary"]:active:not([disabled]) { background: var(--ink-100); }
+
+/* ghost */
+.ds-btn[data-variant="ghost"] { background: transparent; color: var(--ink-700); }
+.ds-btn[data-variant="ghost"]:hover:not([disabled]) { background: var(--accent-soft); color: var(--accent-text); }
+.ds-btn[data-variant="ghost"][data-danger="true"] { color: var(--danger-text); }
+.ds-btn[data-variant="ghost"][data-danger="true"]:hover:not([disabled]) { background: var(--danger-soft); }
+
+/* danger */
+.ds-btn[data-variant="danger"] { background: var(--danger); color: var(--paper); border-color: var(--danger); }
+.ds-btn[data-variant="danger"]:hover:not([disabled]) { background: #C81436; transform: translateY(-1px); }
+
+/* link */
+.ds-btn[data-variant="link"] { background: transparent; color: var(--accent-text); padding: 0; height: auto; }
+.ds-btn[data-variant="link"]:hover { text-decoration: underline; }
+
+.ds-btn-group { display: inline-flex; }
+.ds-btn-group .ds-btn { border-radius: 0; }
+.ds-btn-group .ds-btn:first-child { border-radius: var(--r-md) 0 0 var(--r-md); }
+.ds-btn-group .ds-btn:last-child { border-radius: 0 var(--r-md) var(--r-md) 0; }
+.ds-btn-group .ds-btn:not(:first-child) { border-left-color: var(--ink-200); margin-left: -1px; }
+.ds-btn-split { display: inline-flex; }
+.ds-btn-split .ds-btn:first-child { border-radius: var(--r-md) 0 0 var(--r-md); border-right: 1px solid rgba(255,255,255,0.18); }
+.ds-btn-split .ds-btn:last-child { border-radius: 0 var(--r-md) var(--r-md) 0; padding: 0 8px; }
+
+.ds-btn-spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: dsSpin 0.7s linear infinite; }
+@keyframes dsSpin { to { transform: rotate(360deg); } }
+`;
+const Btn = ({ variant = "secondary", size, leadingIcon, trailingIcon, iconOnly, danger, loading, children, ...rest }) => /* @__PURE__ */ React.createElement(
+  "button",
+  {
+    className: "ds-btn",
+    "data-variant": variant,
+    "data-size": size,
+    "data-danger": danger,
+    "data-icon-only": iconOnly,
+    disabled: rest.disabled || loading,
+    ...rest
+  },
+  loading ? /* @__PURE__ */ React.createElement("span", { className: "ds-btn-spinner" }) : leadingIcon && /* @__PURE__ */ React.createElement(Icon, { name: leadingIcon, size: size === "sm" ? 13 : size === "lg" ? 16 : 14 }),
+  !iconOnly && children,
+  trailingIcon && !loading && /* @__PURE__ */ React.createElement(Icon, { name: trailingIcon, size: size === "sm" ? 13 : 14 })
+);
+window.Btn = Btn;
+const fieldCSS = `
+.ds-field { display: flex; flex-direction: column; gap: 6px; }
+.ds-label { font-size: 12.5px; font-weight: 600; color: var(--ink-800); display: flex; align-items: center; gap: 4px; letter-spacing: -0.005em; }
+.ds-label-opt { font-weight: 400; color: var(--ink-500); font-size: 11.5px; }
+.ds-label-req { color: var(--danger); }
+.ds-help { font-size: 12px; color: var(--ink-500); line-height: 1.4; }
+.ds-err { font-size: 12px; color: var(--danger-text); display: flex; align-items: center; gap: 4px; }
+
+.ds-input { width: 100%; height: 36px; padding: 0 12px; border: var(--hairline); border-radius: var(--r-md); background: var(--paper); font-size: 13.5px; outline: none; transition: 120ms; color: var(--ink-900); }
+.ds-input::placeholder { color: var(--ink-400); }
+.ds-input:hover:not(:focus):not([disabled]) { border-color: var(--ink-300); }
+.ds-input:focus { border-color: var(--accent); box-shadow: var(--shadow-focus); }
+.ds-input[data-invalid="true"] { border-color: var(--danger); }
+.ds-input[data-invalid="true"]:focus { box-shadow: 0 0 0 3px oklch(0.6 0.18 25 / 0.18); }
+.ds-input[disabled] { background: var(--ink-50); color: var(--ink-500); cursor: not-allowed; }
+
+.ds-input-group { position: relative; display: flex; align-items: stretch; }
+.ds-input-group .ds-input { flex: 1; }
+.ds-input-group .icon-left, .ds-input-group .icon-right { position: absolute; top: 50%; transform: translateY(-50%); color: var(--ink-500); pointer-events: none; }
+.ds-input-group .icon-left { left: 11px; }
+.ds-input-group .icon-right { right: 11px; }
+.ds-input-group[data-has-left] .ds-input { padding-left: 36px; }
+.ds-input-group[data-has-right] .ds-input { padding-right: 36px; }
+.ds-input-affix { display: inline-flex; align-items: center; padding: 0 12px; background: var(--ink-50); border: var(--hairline); color: var(--ink-500); font-size: 13px; font-family: var(--font-mono); }
+.ds-input-affix.left { border-right: 0; border-radius: var(--r-md) 0 0 var(--r-md); }
+.ds-input-affix.right { border-left: 0; border-radius: 0 var(--r-md) var(--r-md) 0; }
+.ds-input-affix + .ds-input { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.ds-input:has(+ .ds-input-affix.right), .ds-input + .ds-input-affix.right { /* combined */ }
+
+.ds-textarea { width: 100%; padding: 10px 12px; border: var(--hairline); border-radius: var(--r-md); background: var(--paper); font-size: 13.5px; outline: none; transition: 120ms; color: var(--ink-900); resize: vertical; min-height: 88px; line-height: 1.5; }
+.ds-textarea:focus { border-color: var(--accent); box-shadow: var(--shadow-focus); }
+
+.ds-select { width: 100%; height: 36px; padding: 0 36px 0 12px; border: var(--hairline); border-radius: var(--r-md); background: var(--paper); font-size: 13.5px; outline: none; appearance: none; cursor: pointer; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; background-size: 16px; }
+.ds-select:focus { border-color: var(--accent); box-shadow: var(--shadow-focus); }
+
+.ds-toggle { position: relative; display: inline-block; width: 34px; height: 20px; }
+.ds-toggle input { display: none; }
+.ds-toggle-slider { position: absolute; inset: 0; background: var(--ink-300); border-radius: var(--r-full); cursor: pointer; transition: 180ms; }
+.ds-toggle-slider::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--paper); transition: 180ms; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+.ds-toggle input:checked + .ds-toggle-slider { background: var(--accent); }
+.ds-toggle input:checked + .ds-toggle-slider::after { transform: translateX(14px); }
+
+.ds-radio { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--ink-300); background: var(--paper); cursor: pointer; display: inline-grid; place-items: center; transition: 120ms; flex-shrink: 0; }
+.ds-radio[data-checked="true"] { border-color: var(--accent); border-width: 5px; }
+.ds-radio:hover { border-color: var(--ink-500); }
+
+.ds-radio-card { display: flex; gap: 12px; padding: 14px; border: var(--hairline); border-radius: var(--r-md); cursor: pointer; transition: 120ms; background: var(--paper); }
+.ds-radio-card:hover { border-color: var(--ink-300); }
+.ds-radio-card[data-checked="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 1px var(--accent) inset; }
+.ds-radio-card-title { font-weight: 600; font-size: 13.5px; }
+.ds-radio-card-desc { font-size: 12.5px; color: var(--ink-500); margin-top: 2px; }
+`;
+const Field = ({ label, required, optional, help, error, children, hint }) => /* @__PURE__ */ React.createElement("div", { className: "ds-field" }, label && /* @__PURE__ */ React.createElement("label", { className: "ds-label" }, /* @__PURE__ */ React.createElement("span", null, label), required && /* @__PURE__ */ React.createElement("span", { className: "ds-label-req" }, "*"), optional && /* @__PURE__ */ React.createElement("span", { className: "ds-label-opt" }, "(optional)")), children, error ? /* @__PURE__ */ React.createElement("div", { className: "ds-err" }, /* @__PURE__ */ React.createElement(Icon, { name: "alert", size: 12 }), error) : help ? /* @__PURE__ */ React.createElement("div", { className: "ds-help" }, help) : null);
+const TextInput = ({ leadingIcon, trailingIcon, invalid, prefix, suffix, ...rest }) => /* @__PURE__ */ React.createElement("div", { className: "ds-input-group", "data-has-left": leadingIcon ? "true" : void 0, "data-has-right": trailingIcon ? "true" : void 0 }, prefix && /* @__PURE__ */ React.createElement("span", { className: "ds-input-affix left" }, prefix), leadingIcon && /* @__PURE__ */ React.createElement(Icon, { name: leadingIcon, className: "icon-left", size: 15 }), /* @__PURE__ */ React.createElement("input", { className: "ds-input", "data-invalid": invalid, ...rest }), trailingIcon && /* @__PURE__ */ React.createElement(Icon, { name: trailingIcon, className: "icon-right", size: 15 }), suffix && /* @__PURE__ */ React.createElement("span", { className: "ds-input-affix right" }, suffix));
+const Select = ({ children, ...rest }) => /* @__PURE__ */ React.createElement("select", { className: "ds-select", ...rest }, children);
+const Textarea = (props) => /* @__PURE__ */ React.createElement("textarea", { className: "ds-textarea", ...props });
+const Toggle = ({ checked, onChange }) => /* @__PURE__ */ React.createElement("label", { className: "ds-toggle" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: !!checked, onChange: (e) => onChange && onChange(e.target.checked) }), /* @__PURE__ */ React.createElement("span", { className: "ds-toggle-slider" }));
+const Radio = ({ checked, onChange }) => /* @__PURE__ */ React.createElement("span", { className: "ds-radio", "data-checked": checked, onClick: () => onChange && onChange(true), role: "radio", "aria-checked": checked });
+const RadioCard = ({ checked, onChange, icon, title, desc }) => /* @__PURE__ */ React.createElement("div", { className: "ds-radio-card", "data-checked": checked, onClick: () => onChange && onChange(true) }, /* @__PURE__ */ React.createElement(Radio, { checked }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ds-radio-card-title", style: { display: "flex", alignItems: "center", gap: 6 } }, icon && /* @__PURE__ */ React.createElement(Icon, { name: icon, size: 14 }), title), /* @__PURE__ */ React.createElement("div", { className: "ds-radio-card-desc" }, desc)));
+const uploadCSS = `
+.ds-upload { border: 1.5px dashed var(--ink-300); border-radius: var(--r-lg); padding: 24px; background: var(--ink-50); display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; cursor: pointer; transition: 150ms; position: relative; }
+.ds-upload:hover { border-color: var(--accent); background: var(--accent-soft); }
+.ds-upload[data-drag="true"] { border-color: var(--accent); background: var(--accent-soft); border-style: solid; }
+.ds-upload-icon { width: 44px; height: 44px; border-radius: var(--r-md); background: var(--paper); display: grid; place-items: center; color: var(--ink-700); border: var(--hairline); }
+.ds-upload-title { font-weight: 600; font-size: 14px; color: var(--ink-900); }
+.ds-upload-sub { font-size: 12.5px; color: var(--ink-500); }
+.ds-upload-link { color: var(--accent-text); font-weight: 600; cursor: pointer; }
+.ds-upload-formats { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; justify-content: center; }
+.ds-upload-formats span { font-family: var(--font-mono); font-size: 10.5px; padding: 1px 6px; border-radius: 4px; background: var(--paper); color: var(--ink-600); border: var(--hairline); }
+
+.ds-file-card { display: flex; align-items: center; gap: 12px; padding: 12px; border: var(--hairline); border-radius: var(--r-md); background: var(--paper); }
+.ds-file-icon { width: 36px; height: 36px; border-radius: var(--r-sm); display: grid; place-items: center; flex-shrink: 0; font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.04em; }
+.ds-file-name { font-weight: 600; font-size: 13.5px; color: var(--ink-900); }
+.ds-file-meta { font-size: 11.5px; color: var(--ink-500); display: flex; gap: 8px; align-items: center; margin-top: 2px; }
+.ds-file-meta .sep { color: var(--ink-300); }
+.ds-file-prog { flex: 1; max-width: 200px; height: 4px; background: var(--ink-100); border-radius: 2px; overflow: hidden; margin: 0 8px; }
+.ds-file-prog-fill { height: 100%; background: var(--accent); transition: width 200ms; }
+.ds-file-actions { display: flex; gap: 4px; }
+`;
+const UploadCard = ({ multi = true }) => {
+  const [drag, setDrag] = useStateForm(false);
+  return /* @__PURE__ */ React.createElement(
+    "div",
+    {
+      className: "ds-upload",
+      "data-drag": drag,
+      onDragOver: (e) => {
+        e.preventDefault();
+        setDrag(true);
+      },
+      onDragLeave: () => setDrag(false),
+      onDrop: (e) => {
+        e.preventDefault();
+        setDrag(false);
+      }
+    },
+    /* @__PURE__ */ React.createElement("div", { className: "ds-upload-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "upload", size: 20 })),
+    /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ds-upload-title" }, "Drop ESP schema files here"), /* @__PURE__ */ React.createElement("div", { className: "ds-upload-sub" }, "or ", /* @__PURE__ */ React.createElement("span", { className: "ds-upload-link" }, "browse from your computer"), multi ? " \u2014 up to 25 at once" : "")),
+    /* @__PURE__ */ React.createElement("div", { className: "ds-upload-formats" }, /* @__PURE__ */ React.createElement("span", null, ".xml"), /* @__PURE__ */ React.createElement("span", null, ".esp"), /* @__PURE__ */ React.createElement("span", null, ".yaml"), /* @__PURE__ */ React.createElement("span", null, ".zip"))
+  );
+};
+const FileCard = ({ name, ext = "XML", size = "284 KB", status = "uploaded", progress = 100, meta }) => {
+  const colors = {
+    XML: { bg: "var(--info-soft)", color: "var(--info-text)" },
+    ESP: { bg: "var(--accent-soft)", color: "var(--accent-text)" },
+    YAML: { bg: "var(--success-soft)", color: "var(--success-text)" },
+    ZIP: { bg: "var(--warning-soft)", color: "var(--warning-text)" },
+    PDF: { bg: "var(--danger-soft)", color: "var(--danger-text)" }
+  };
+  const c = colors[ext] || { bg: "var(--ink-100)", color: "var(--ink-700)" };
+  return /* @__PURE__ */ React.createElement("div", { className: "ds-file-card" }, /* @__PURE__ */ React.createElement("div", { className: "ds-file-icon", style: { background: c.bg, color: c.color } }, ext), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { className: "ds-file-name", style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, name), /* @__PURE__ */ React.createElement("div", { className: "ds-file-meta" }, /* @__PURE__ */ React.createElement("span", null, size), meta && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "sep" }, "\xB7"), /* @__PURE__ */ React.createElement("span", null, meta)), /* @__PURE__ */ React.createElement("span", { className: "sep" }, "\xB7"), status === "uploading" && /* @__PURE__ */ React.createElement(Chip, { tone: "info", pulse: true }, "Uploading ", progress, "%"), status === "uploaded" && /* @__PURE__ */ React.createElement(Chip, { tone: "success", leadingIcon: "check" }, "Validated"), status === "error" && /* @__PURE__ */ React.createElement(Chip, { tone: "danger", leadingIcon: "alert" }, "Parse failed"), status === "warning" && /* @__PURE__ */ React.createElement(Chip, { tone: "warning", leadingIcon: "alert_tri" }, "3 warnings"))), status === "uploading" && /* @__PURE__ */ React.createElement("div", { className: "ds-file-prog" }, /* @__PURE__ */ React.createElement("div", { className: "ds-file-prog-fill", style: { width: `${progress}%` } })), /* @__PURE__ */ React.createElement("div", { className: "ds-file-actions" }, status === "uploading" ? /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", size: "sm", iconOnly: true, leadingIcon: "x" }) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", size: "sm", iconOnly: true, leadingIcon: "eye" }), /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", size: "sm", iconOnly: true, leadingIcon: "trash", danger: true }))));
+};
+const modalCSS = `
+.ds-modal-backdrop { position: absolute; inset: 0; background: oklch(0.18 0.02 240 / 0.4); backdrop-filter: blur(2px); display: grid; place-items: center; z-index: 50; animation: dsFadeIn 180ms; }
+@keyframes dsFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dsSlideUp { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.ds-modal { background: var(--paper); border-radius: var(--r-xl); width: min(520px, calc(100% - 32px)); box-shadow: var(--shadow-lg); overflow: hidden; display: flex; flex-direction: column; max-height: calc(100% - 32px); animation: dsSlideUp 200ms ease-out; }
+.ds-modal-lg { width: min(720px, calc(100% - 32px)); }
+.ds-modal-head { padding: 18px 20px; display: flex; align-items: flex-start; gap: 12px; border-bottom: var(--hairline); }
+.ds-modal-icon { width: 36px; height: 36px; border-radius: var(--r-md); background: var(--danger-soft); color: var(--danger-text); display: grid; place-items: center; flex-shrink: 0; }
+.ds-modal-title { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+.ds-modal-sub { font-size: 13px; color: var(--ink-500); margin-top: 2px; }
+.ds-modal-close { width: 30px; height: 30px; border-radius: var(--r-sm); border: none; background: transparent; color: var(--ink-500); cursor: pointer; display: grid; place-items: center; margin-left: auto; }
+.ds-modal-close:hover { background: var(--ink-100); color: var(--ink-800); }
+.ds-modal-body { padding: 20px; overflow-y: auto; }
+.ds-modal-foot { padding: 14px 20px; border-top: var(--hairline); display: flex; align-items: center; justify-content: flex-end; gap: 8px; background: var(--ink-50); }
+.ds-modal-foot-left { margin-right: auto; font-size: 12.5px; color: var(--ink-500); display: flex; align-items: center; gap: 6px; }
+`;
+const Modal = ({ open, onClose, icon, iconTone = "danger", title, subtitle, children, footer, size }) => {
+  if (!open) return null;
+  return /* @__PURE__ */ React.createElement("div", { className: "ds-modal-backdrop", onClick: onClose }, /* @__PURE__ */ React.createElement("div", { className: "ds-modal" + (size === "lg" ? " ds-modal-lg" : ""), onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "ds-modal-head" }, icon && /* @__PURE__ */ React.createElement("div", { className: "ds-modal-icon", style: {
+    background: `var(--${iconTone}-soft)`,
+    color: `var(--${iconTone}-text)`
+  } }, /* @__PURE__ */ React.createElement(Icon, { name: icon, size: 18 })), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { className: "ds-modal-title" }, title), subtitle && /* @__PURE__ */ React.createElement("div", { className: "ds-modal-sub" }, subtitle)), /* @__PURE__ */ React.createElement("button", { className: "ds-modal-close", onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { name: "x" }))), /* @__PURE__ */ React.createElement("div", { className: "ds-modal-body" }, children), footer && /* @__PURE__ */ React.createElement("div", { className: "ds-modal-foot" }, footer)));
+};
+const emptyCSS = `
+.ds-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 48px 24px; gap: 16px; background: var(--paper); border: var(--hairline); border-radius: var(--r-lg); }
+.ds-empty-art { width: 96px; height: 96px; display: grid; place-items: center; }
+.ds-empty-title { font-size: 17px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink-900); }
+.ds-empty-desc { font-size: 13.5px; color: var(--ink-500); max-width: 360px; line-height: 1.55; }
+.ds-empty-actions { display: flex; gap: 8px; }
+`;
+const EmptyArt = ({ kind = "search" }) => {
+  if (kind === "search") return /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 96 96", width: "96", height: "96", fill: "none" }, /* @__PURE__ */ React.createElement("rect", { x: "14", y: "22", width: "68", height: "56", rx: "6", fill: "var(--ink-50)", stroke: "var(--ink-200)", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("rect", { x: "22", y: "32", width: "32", height: "3", rx: "1.5", fill: "var(--ink-200)" }), /* @__PURE__ */ React.createElement("rect", { x: "22", y: "40", width: "48", height: "3", rx: "1.5", fill: "var(--ink-100)" }), /* @__PURE__ */ React.createElement("rect", { x: "22", y: "48", width: "40", height: "3", rx: "1.5", fill: "var(--ink-100)" }), /* @__PURE__ */ React.createElement("circle", { cx: "62", cy: "62", r: "14", fill: "var(--accent-soft)", stroke: "var(--accent)", strokeWidth: "1.75" }), /* @__PURE__ */ React.createElement("path", { d: "m72 72 6 6", stroke: "var(--accent)", strokeWidth: "2.5", strokeLinecap: "round" }));
+  if (kind === "inbox") return /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 96 96", width: "96", height: "96", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M16 50h18l4 6h20l4-6h18v22a6 6 0 0 1-6 6H22a6 6 0 0 1-6-6z", fill: "var(--ink-50)", stroke: "var(--ink-300)", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("path", { d: "m22 50 4-26h44l4 26", fill: "var(--paper)", stroke: "var(--ink-300)", strokeWidth: "1.5" }), /* @__PURE__ */ React.createElement("circle", { cx: "74", cy: "26", r: "10", fill: "var(--accent)" }), /* @__PURE__ */ React.createElement("path", { d: "M70 26h8M74 22v8", stroke: "white", strokeWidth: "2", strokeLinecap: "round" }));
+  if (kind === "track") return /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 96 96", width: "96", height: "96", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M24 14v68M72 14v68", stroke: "var(--ink-300)", strokeWidth: "3", strokeLinecap: "round" }), /* @__PURE__ */ React.createElement("path", { d: "M14 24h68M14 40h68M14 56h68M14 72h68", stroke: "var(--ink-200)", strokeWidth: "2", strokeLinecap: "round" }), /* @__PURE__ */ React.createElement("rect", { x: "36", y: "34", width: "24", height: "28", rx: "4", fill: "var(--accent-soft)", stroke: "var(--accent)", strokeWidth: "1.75" }), /* @__PURE__ */ React.createElement("circle", { cx: "42", cy: "58", r: "2", fill: "var(--accent)" }), /* @__PURE__ */ React.createElement("circle", { cx: "54", cy: "58", r: "2", fill: "var(--accent)" }));
+  return null;
+};
+const EmptyState = ({ kind, title, description, primary, secondary }) => /* @__PURE__ */ React.createElement("div", { className: "ds-empty" }, /* @__PURE__ */ React.createElement("div", { className: "ds-empty-art" }, /* @__PURE__ */ React.createElement(EmptyArt, { kind })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ds-empty-title" }, title), /* @__PURE__ */ React.createElement("div", { className: "ds-empty-desc", style: { marginTop: 6 } }, description)), /* @__PURE__ */ React.createElement("div", { className: "ds-empty-actions" }, secondary && /* @__PURE__ */ React.createElement(Btn, { variant: "secondary" }, secondary), primary && /* @__PURE__ */ React.createElement(Btn, { variant: "primary", leadingIcon: "plus" }, primary)));
+const validationCSS = `
+.ds-valid { background: var(--paper); border: var(--hairline); border-radius: var(--r-lg); overflow: hidden; }
+.ds-valid-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: var(--hairline); }
+.ds-valid-head-icon { width: 32px; height: 32px; border-radius: var(--r-sm); display: grid; place-items: center; flex-shrink: 0; }
+.ds-valid-head-title { font-size: 14.5px; font-weight: 600; }
+.ds-valid-head-sub { font-size: 12px; color: var(--ink-500); margin-top: 1px; }
+.ds-valid-summary { display: flex; gap: 16px; padding: 10px 16px; border-bottom: var(--hairline); background: var(--ink-50); }
+.ds-valid-stat { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; color: var(--ink-700); }
+.ds-valid-stat .num { font-family: var(--font-mono); font-weight: 700; font-variant-numeric: tabular-nums; }
+.ds-valid-list { display: flex; flex-direction: column; }
+.ds-valid-item { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; padding: 12px 16px; border-bottom: var(--hairline); cursor: pointer; transition: 100ms; align-items: start; }
+.ds-valid-item:last-child { border-bottom: none; }
+.ds-valid-item:hover { background: var(--ink-50); }
+.ds-valid-sev { width: 22px; height: 22px; border-radius: var(--r-sm); display: grid; place-items: center; }
+.ds-valid-sev[data-sev="error"] { background: var(--danger-soft); color: var(--danger-text); }
+.ds-valid-sev[data-sev="warning"] { background: var(--warning-soft); color: var(--warning-text); }
+.ds-valid-sev[data-sev="info"] { background: var(--info-soft); color: var(--info-text); }
+.ds-valid-sev[data-sev="pass"] { background: var(--success-soft); color: var(--success-text); }
+.ds-valid-body { min-width: 0; }
+.ds-valid-title { font-size: 13.5px; font-weight: 600; color: var(--ink-900); }
+.ds-valid-desc { font-size: 12.5px; color: var(--ink-600); margin-top: 3px; line-height: 1.5; }
+.ds-valid-meta { font-size: 11.5px; font-family: var(--font-mono); color: var(--ink-500); margin-top: 6px; display: flex; gap: 8px; align-items: center; }
+.ds-valid-meta .sep { color: var(--ink-300); }
+.ds-valid-meta .link { color: var(--accent-text); cursor: pointer; }
+.ds-valid-meta .link:hover { text-decoration: underline; }
+.ds-valid-code { background: var(--ink-50); border: var(--hairline); border-radius: var(--r-sm); padding: 8px 10px; margin-top: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-800); white-space: pre-wrap; overflow-x: auto; }
+.ds-valid-code .hl { background: var(--danger-soft); color: var(--danger-text); padding: 0 2px; border-radius: 2px; }
+.ds-valid-actions { display: flex; gap: 4px; }
+`;
+const ValidationPanel = () => {
+  const items = [
+    { sev: "error", title: "Brake force assertion missing for class 745", desc: "Schema requires brakeForce.min for all rolling stock classes. Coupling assemblies will fail conformance at compile time.", file: "EU-RST-220.esp", line: 142, rule: "RST.brake.001" },
+    { sev: "error", title: "Unresolved reference: pantograph.geometry.profile", desc: 'Profile token "DB-1450-AC" is not registered in the active EN 50367 catalog.', file: "pantograph.yaml", line: 23, rule: "PNT.ref.014" },
+    { sev: "warning", title: "Deprecated field: maxTractionEffort", desc: "Use tractionEnvelope.max instead. Field will be removed in schema v5.0.", file: "EU-RST-220.esp", line: 84, rule: "DEP.field.07" },
+    { sev: "warning", title: "Coverage below threshold for door cycle SIP-08", desc: "Only 81% of operating conditions are exercised. Recommended threshold is 95%.", file: "sip-08.yaml", line: 1, rule: "COV.min.95" },
+    { sev: "info", title: "Schema includes 14 derived assertions from baseline", desc: "Derived assertions inherit from EU-RST-200. Edits propagate to dependent procedures.", file: "EU-RST-220.esp", line: 1, rule: "INFO.derive" },
+    { sev: "pass", title: "All gauge measurements satisfy EN 14363 envelope", desc: "12 of 12 wheelset profile checks within tolerance \xB10.4 mm.", rule: "WHL.gauge.001" }
+  ];
+  const counts = items.reduce((a, b) => (a[b.sev] = (a[b.sev] || 0) + 1, a), {});
+  const sevIcon = { error: "alert", warning: "alert_tri", info: "info", pass: "check" };
+  return /* @__PURE__ */ React.createElement("div", { className: "ds-valid" }, /* @__PURE__ */ React.createElement("div", { className: "ds-valid-head" }, /* @__PURE__ */ React.createElement("div", { className: "ds-valid-head-icon", style: { background: "var(--warning-soft)", color: "var(--warning-text)" } }, /* @__PURE__ */ React.createElement(Icon, { name: "alert_tri", size: 16 })), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { className: "ds-valid-head-title" }, "Validation report \xB7 EU-RST-220"), /* @__PURE__ */ React.createElement("div", { className: "ds-valid-head-sub" }, "Run #4827 \xB7 Completed 12s ago \xB7 Total time 4.21s")), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", size: "sm", leadingIcon: "refresh" }, "Re-run"), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", size: "sm", leadingIcon: "download" }, "Export")), /* @__PURE__ */ React.createElement("div", { className: "ds-valid-summary" }, /* @__PURE__ */ React.createElement("div", { className: "ds-valid-stat" }, /* @__PURE__ */ React.createElement(Icon, { name: "alert", size: 13, style: { color: "var(--danger)" } }), /* @__PURE__ */ React.createElement("span", null, "Errors"), /* @__PURE__ */ React.createElement("span", { className: "num" }, counts.error || 0)), /* @__PURE__ */ React.createElement("div", { className: "ds-valid-stat" }, /* @__PURE__ */ React.createElement(Icon, { name: "alert_tri", size: 13, style: { color: "var(--warning)" } }), /* @__PURE__ */ React.createElement("span", null, "Warnings"), /* @__PURE__ */ React.createElement("span", { className: "num" }, counts.warning || 0)), /* @__PURE__ */ React.createElement("div", { className: "ds-valid-stat" }, /* @__PURE__ */ React.createElement(Icon, { name: "info", size: 13, style: { color: "var(--info)" } }), /* @__PURE__ */ React.createElement("span", null, "Info"), /* @__PURE__ */ React.createElement("span", { className: "num" }, counts.info || 0)), /* @__PURE__ */ React.createElement("div", { className: "ds-valid-stat" }, /* @__PURE__ */ React.createElement(Icon, { name: "check_circle", size: 13, style: { color: "var(--success)" } }), /* @__PURE__ */ React.createElement("span", null, "Passed"), /* @__PURE__ */ React.createElement("span", { className: "num tabular" }, "214")), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }), /* @__PURE__ */ React.createElement("div", { className: "ds-valid-stat", style: { color: "var(--ink-500)" } }, /* @__PURE__ */ React.createElement("span", null, "Coverage"), /* @__PURE__ */ React.createElement("span", { className: "num" }, "87.4%"))), /* @__PURE__ */ React.createElement("div", { className: "ds-valid-list" }, items.map((it, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "ds-valid-item" }, /* @__PURE__ */ React.createElement("div", { className: "ds-valid-sev", "data-sev": it.sev }, /* @__PURE__ */ React.createElement(Icon, { name: sevIcon[it.sev], size: 13 })), /* @__PURE__ */ React.createElement("div", { className: "ds-valid-body" }, /* @__PURE__ */ React.createElement("div", { className: "ds-valid-title" }, it.title), /* @__PURE__ */ React.createElement("div", { className: "ds-valid-desc" }, it.desc), i === 0 && /* @__PURE__ */ React.createElement("div", { className: "ds-valid-code" }, `<class id="745"><brakes>
+  <type>EP</type>
+  `, /* @__PURE__ */ React.createElement("span", { className: "hl" }, `<!-- expected: <force min="\u2026" /> -->`), `
+</brakes></class>`), /* @__PURE__ */ React.createElement("div", { className: "ds-valid-meta" }, it.file && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "link" }, it.file, ":", it.line), /* @__PURE__ */ React.createElement("span", { className: "sep" }, "\xB7")), /* @__PURE__ */ React.createElement("span", null, "Rule ", it.rule), it.sev !== "pass" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "sep" }, "\xB7"), /* @__PURE__ */ React.createElement("span", { className: "link" }, "View docs")))), /* @__PURE__ */ React.createElement("div", { className: "ds-valid-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", size: "sm", leadingIcon: "eye" }, "Reveal"), it.sev !== "pass" && /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", size: "sm" }, "Suppress"))))));
+};
+window.Field = Field;
+window.TextInput = TextInput;
+window.Select = Select;
+window.Textarea = Textarea;
+window.Toggle = Toggle;
+window.Radio = Radio;
+window.RadioCard = RadioCard;
+window.UploadCard = UploadCard;
+window.FileCard = FileCard;
+window.Modal = Modal;
+window.EmptyState = EmptyState;
+window.ValidationPanel = ValidationPanel;
+window.FORM_CSS = buttonCSS + fieldCSS + uploadCSS + modalCSS + emptyCSS + validationCSS;
+  </script>
+  <script>
+const { useState: useStateData } = React;
+const chipCSS = `
+.ds-chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: var(--r-full); font-size: 12px; font-weight: 600; letter-spacing: 0.005em; line-height: 1.5; border: 1px solid transparent; white-space: nowrap; }
+.ds-chip-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.ds-chip[data-tone="success"] { background: var(--success-soft); color: var(--success-text); border-color: oklch(0.9 0.06 155); }
+.ds-chip[data-tone="success"] .ds-chip-dot { background: var(--success); }
+.ds-chip[data-tone="warning"] { background: var(--warning-soft); color: var(--warning-text); border-color: oklch(0.9 0.08 80); }
+.ds-chip[data-tone="warning"] .ds-chip-dot { background: var(--warning); }
+.ds-chip[data-tone="danger"] { background: var(--danger-soft); color: var(--danger-text); border-color: oklch(0.9 0.07 25); }
+.ds-chip[data-tone="danger"] .ds-chip-dot { background: var(--danger); }
+.ds-chip[data-tone="info"] { background: var(--info-soft); color: var(--info-text); border-color: oklch(0.9 0.06 240); }
+.ds-chip[data-tone="info"] .ds-chip-dot { background: var(--info); }
+.ds-chip[data-tone="accent"] { background: var(--accent-soft); color: var(--accent-text); border-color: color-mix(in srgb, var(--accent) 22%, var(--accent-soft)); }
+.ds-chip[data-tone="accent"] .ds-chip-dot { background: var(--accent); }
+.ds-chip[data-tone="neutral"] { background: var(--ink-100); color: var(--ink-700); border-color: var(--ink-200); }
+.ds-chip[data-tone="neutral"] .ds-chip-dot { background: var(--ink-500); }
+.ds-chip[data-size="lg"] { font-size: 13px; padding: 4px 12px; }
+.ds-chip[data-variant="solid"] { border: none; }
+.ds-chip[data-variant="solid"][data-tone="success"] { background: var(--success); color: white; }
+.ds-chip[data-variant="solid"][data-tone="warning"] { background: var(--warning); color: var(--ink-900); }
+.ds-chip[data-variant="solid"][data-tone="danger"] { background: var(--danger); color: white; }
+.ds-chip[data-variant="solid"][data-tone="info"] { background: var(--info); color: white; }
+.ds-chip[data-variant="solid"][data-tone="accent"] { background: var(--accent); color: white; }
+.ds-chip[data-variant="solid"][data-tone="neutral"] { background: var(--ink-800); color: white; }
+.ds-chip-pulse { width: 6px; height: 6px; position: relative; }
+.ds-chip-pulse::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: currentColor; }
+.ds-chip-pulse::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: currentColor; animation: dsPulse 1.6s infinite; opacity: 0.6; }
+@keyframes dsPulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2.6); opacity: 0; } }
+`;
+const Chip = ({ tone = "neutral", variant, size, dot, pulse, leadingIcon, children }) => /* @__PURE__ */ React.createElement("span", { className: "ds-chip", "data-tone": tone, "data-variant": variant, "data-size": size }, pulse ? /* @__PURE__ */ React.createElement("span", { className: "ds-chip-pulse", style: { color: `var(--${tone === "neutral" ? "ink-500" : tone})` } }) : dot && /* @__PURE__ */ React.createElement("span", { className: "ds-chip-dot" }), leadingIcon && /* @__PURE__ */ React.createElement(Icon, { name: leadingIcon, size: 11 }), children);
+const kpiCSS = `
+.ds-kpi { background: var(--paper); border: var(--hairline); border-radius: var(--r-lg); padding: 18px; display: flex; flex-direction: column; gap: 4px; position: relative; overflow: hidden; transition: 150ms; box-shadow: var(--shadow-xs); }
+.ds-kpi:hover { border-color: var(--accent); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.ds-kpi-head { display: flex; align-items: center; gap: 8px; color: var(--ink-500); font-size: 12.5px; font-weight: 500; }
+.ds-kpi-head .icon { color: var(--ink-400); }
+.ds-kpi-value { font-size: 30px; font-weight: 600; letter-spacing: -0.025em; color: var(--ink-900); font-variant-numeric: tabular-nums; line-height: 1.1; margin-top: 4px; }
+.ds-kpi-unit { font-size: 16px; font-weight: 500; color: var(--ink-500); margin-left: 4px; }
+.ds-kpi-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; gap: 10px; }
+.ds-kpi-delta { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ds-kpi-delta[data-dir="up"] { color: var(--success-text); }
+.ds-kpi-delta[data-dir="down"] { color: var(--danger-text); }
+.ds-kpi-delta[data-dir="flat"] { color: var(--ink-500); }
+.ds-kpi-spark { height: 32px; width: 90px; }
+.ds-kpi-spark path { fill: none; stroke: var(--accent); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.ds-kpi-spark .fill { fill: var(--accent-soft); stroke: none; opacity: 0.6; }
+.ds-kpi-meta { font-size: 12px; color: var(--ink-500); }
+.ds-kpi[data-variant="dark"] { background: linear-gradient(180deg, var(--stripe-blue-800), var(--stripe-blue-900)); color: var(--paper); border-color: var(--stripe-blue-900); }
+.ds-kpi[data-variant="dark"] .ds-kpi-head, .ds-kpi[data-variant="dark"] .ds-kpi-meta { color: var(--ink-300); }
+.ds-kpi[data-variant="dark"] .ds-kpi-value { color: var(--paper); }
+.ds-kpi[data-variant="dark"] .ds-kpi-head .icon { color: var(--ink-400); }
+.ds-kpi-bigchip { position: absolute; top: 16px; right: 16px; }
+`;
+const Sparkline = ({ data, height = 32, width = 90, area = true }) => {
+  const min = Math.min(...data), max = Math.max(...data);
+  const pad = 2;
+  const range = max - min || 1;
+  const points = data.map((d, i) => [pad + i * (width - pad * 2) / (data.length - 1), height - pad - (d - min) / range * (height - pad * 2)]);
+  const path = "M " + points.map((p) => p.join(",")).join(" L ");
+  const fill = `M ${points[0][0]},${height} L ${points.map((p) => p.join(",")).join(" L ")} L ${points[points.length - 1][0]},${height} Z`;
+  return /* @__PURE__ */ React.createElement("svg", { className: "ds-kpi-spark", viewBox: `0 0 ${width} ${height}` }, area && /* @__PURE__ */ React.createElement("path", { className: "fill", d: fill }), /* @__PURE__ */ React.createElement("path", { d: path }));
+};
+const KPICard = ({ label, icon, value, unit, delta, deltaDir = "up", spark, meta, variant, chip }) => /* @__PURE__ */ React.createElement("div", { className: "ds-kpi", "data-variant": variant }, chip && /* @__PURE__ */ React.createElement("div", { className: "ds-kpi-bigchip" }, chip), /* @__PURE__ */ React.createElement("div", { className: "ds-kpi-head" }, icon && /* @__PURE__ */ React.createElement(Icon, { name: icon, size: 14 }), /* @__PURE__ */ React.createElement("span", null, label)), /* @__PURE__ */ React.createElement("div", { className: "ds-kpi-value tabular" }, value, unit && /* @__PURE__ */ React.createElement("span", { className: "ds-kpi-unit" }, unit)), /* @__PURE__ */ React.createElement("div", { className: "ds-kpi-foot" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10 } }, delta != null && /* @__PURE__ */ React.createElement("span", { className: "ds-kpi-delta", "data-dir": deltaDir }, /* @__PURE__ */ React.createElement(Icon, { name: deltaDir === "up" ? "arrow_up" : deltaDir === "down" ? "arrow_down" : "arrow_right", size: 11 }), delta), meta && /* @__PURE__ */ React.createElement("span", { className: "ds-kpi-meta" }, meta)), spark && /* @__PURE__ */ React.createElement(Sparkline, { data: spark })));
+const stepperCSS = `
+.ds-stepper { display: flex; align-items: stretch; gap: 0; }
+.ds-step { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; padding-right: 24px; position: relative; }
+.ds-step:last-child { padding-right: 0; }
+.ds-step-head { display: flex; align-items: center; gap: 10px; }
+.ds-step-circle { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; flex-shrink: 0; transition: 150ms; }
+.ds-step[data-state="pending"] .ds-step-circle { background: var(--paper); color: var(--ink-500); border: 1.5px solid var(--ink-200); }
+.ds-step[data-state="active"] .ds-step-circle { background: var(--accent); color: var(--paper); border: 1.5px solid var(--accent); box-shadow: var(--shadow-focus); }
+.ds-step[data-state="done"] .ds-step-circle { background: var(--accent); color: var(--paper); border: 1.5px solid var(--accent); }
+.ds-step[data-state="error"] .ds-step-circle { background: var(--danger-soft); color: var(--danger-text); border: 1.5px solid var(--danger); }
+.ds-step-bar { flex: 1; height: 2px; background: var(--ink-200); border-radius: 1px; position: relative; overflow: hidden; }
+.ds-step-bar-fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); transition: width 300ms ease; }
+.ds-step[data-state="done"] .ds-step-bar-fill { width: 100%; }
+.ds-step[data-state="active"] .ds-step-bar-fill { width: 50%; }
+.ds-step-body { padding-left: 36px; }
+.ds-step-label { font-size: 13px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.005em; }
+.ds-step[data-state="pending"] .ds-step-label { color: var(--ink-500); font-weight: 500; }
+.ds-step-sub { font-size: 12px; color: var(--ink-500); margin-top: 2px; }
+
+.ds-stepper-vert { display: flex; flex-direction: column; gap: 0; }
+.ds-step-vert { display: grid; grid-template-columns: 28px 1fr; gap: 12px 14px; padding-bottom: 14px; position: relative; }
+.ds-step-vert:not(:last-child)::before { content: ""; position: absolute; left: 13px; top: 28px; bottom: 0; width: 2px; background: var(--ink-200); }
+.ds-step-vert[data-state="done"]:not(:last-child)::before { background: var(--accent); }
+.ds-step-vert-circle { grid-row: 1; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; background: var(--paper); border: 1.5px solid var(--ink-200); color: var(--ink-500); z-index: 1; }
+.ds-step-vert[data-state="done"] .ds-step-vert-circle { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+.ds-step-vert[data-state="active"] .ds-step-vert-circle { background: var(--accent); color: var(--paper); border-color: var(--accent); box-shadow: var(--shadow-focus); }
+.ds-step-vert[data-state="error"] .ds-step-vert-circle { background: var(--danger-soft); border-color: var(--danger); color: var(--danger-text); }
+.ds-step-vert-body .ds-step-label { font-size: 14px; }
+.ds-step-vert-meta { display: flex; gap: 12px; margin-top: 4px; font-size: 11.5px; color: var(--ink-500); font-family: var(--font-mono); }
+`;
+const Stepper = ({ steps, current }) => /* @__PURE__ */ React.createElement("div", { className: "ds-stepper" }, steps.map((s, i) => {
+  const state = s.state || (i < current ? "done" : i === current ? "active" : "pending");
+  return /* @__PURE__ */ React.createElement("div", { key: i, className: "ds-step", "data-state": state }, /* @__PURE__ */ React.createElement("div", { className: "ds-step-head" }, /* @__PURE__ */ React.createElement("div", { className: "ds-step-circle" }, state === "done" ? /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 13 }) : state === "error" ? /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 13 }) : i + 1), i < steps.length - 1 && /* @__PURE__ */ React.createElement("div", { className: "ds-step-bar" }, /* @__PURE__ */ React.createElement("div", { className: "ds-step-bar-fill" }))), /* @__PURE__ */ React.createElement("div", { className: "ds-step-body" }, /* @__PURE__ */ React.createElement("div", { className: "ds-step-label" }, s.label), s.sub && /* @__PURE__ */ React.createElement("div", { className: "ds-step-sub" }, s.sub)));
+}));
+const StepperVertical = ({ steps, current }) => /* @__PURE__ */ React.createElement("div", { className: "ds-stepper-vert" }, steps.map((s, i) => {
+  const state = s.state || (i < current ? "done" : i === current ? "active" : "pending");
+  return /* @__PURE__ */ React.createElement("div", { key: i, className: "ds-step-vert", "data-state": state }, /* @__PURE__ */ React.createElement("div", { className: "ds-step-vert-circle" }, state === "done" ? /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 13 }) : state === "error" ? /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 13 }) : i + 1), /* @__PURE__ */ React.createElement("div", { className: "ds-step-vert-body" }, /* @__PURE__ */ React.createElement("div", { className: "ds-step-label" }, s.label), s.sub && /* @__PURE__ */ React.createElement("div", { className: "ds-step-sub" }, s.sub), s.meta && /* @__PURE__ */ React.createElement("div", { className: "ds-step-vert-meta" }, s.meta.map((m, j) => /* @__PURE__ */ React.createElement("span", { key: j }, m)))));
+}));
+const tableCSS = `
+.ds-table-wrap { background: var(--paper); border: var(--hairline); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-xs); }
+.ds-table-toolbar { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: var(--hairline); background: linear-gradient(180deg, #FFFFFF, var(--ink-50)); }
+.ds-table-toolbar-title { font-size: 14px; font-weight: 600; }
+.ds-table-toolbar-count { font-size: 12px; color: var(--ink-500); font-variant-numeric: tabular-nums; }
+.ds-table-toolbar-spacer { flex: 1; }
+.ds-table-scroll { overflow-x: auto; }
+.ds-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ds-table thead th { text-align: left; font-weight: 600; color: var(--ink-500); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; padding: 9px 14px; background: var(--ink-50); border-bottom: var(--hairline); white-space: nowrap; user-select: none; }
+.ds-table thead th[data-sort] { cursor: pointer; }
+.ds-table thead th[data-sort]:hover { color: var(--ink-800); }
+.ds-table thead th .ds-th-inner { display: inline-flex; align-items: center; gap: 4px; }
+.ds-table thead th[data-active] { color: var(--accent-text); }
+.ds-table tbody td { padding: 13px 14px; border-bottom: var(--hairline); vertical-align: middle; }
+.ds-table tbody tr { transition: background 100ms; }
+.ds-table tbody tr:hover { background: var(--ink-50); }
+.ds-table tbody tr[data-selected="true"] { background: var(--accent-soft); }
+.ds-table tbody tr[data-selected="true"]:hover { background: color-mix(in srgb, var(--accent-soft) 82%, var(--accent)); }
+.ds-table tbody tr:last-child td { border-bottom: none; }
+.ds-table .col-checkbox { width: 36px; padding-right: 0; }
+.ds-table .col-mono { font-family: var(--font-mono); font-size: 12px; color: var(--ink-700); }
+.ds-table .col-actions { width: 60px; text-align: right; }
+.ds-table-name { display: flex; align-items: center; gap: 10px; }
+.ds-table-name-icon { width: 30px; height: 30px; border-radius: var(--r-sm); background: var(--accent-soft); display: grid; place-items: center; color: var(--accent-text); flex-shrink: 0; }
+.ds-table-name-title { font-weight: 600; color: var(--ink-900); }
+.ds-table-name-sub { font-size: 11.5px; color: var(--ink-500); font-family: var(--font-mono); margin-top: 1px; }
+.ds-table-owner { display: flex; align-items: center; gap: 8px; }
+.ds-table-owner-avatar { width: 24px; height: 24px; border-radius: 50%; color: var(--paper); font-size: 10px; font-weight: 700; display: grid; place-items: center; }
+.ds-table-foot { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-top: var(--hairline); font-size: 12.5px; color: var(--ink-600); }
+.ds-table-pager { display: flex; align-items: center; gap: 4px; }
+.ds-page-btn { width: 28px; height: 28px; border-radius: var(--r-sm); border: var(--hairline); background: var(--paper); color: var(--ink-700); cursor: pointer; display: grid; place-items: center; }
+.ds-page-btn:hover { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent); }
+.ds-page-btn[disabled] { opacity: 0.4; cursor: default; }
+.ds-page-btn[data-current="true"] { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+
+/* Checkbox cell */
+.ds-checkbox { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--ink-300); background: var(--paper); cursor: pointer; display: inline-grid; place-items: center; transition: 120ms; }
+.ds-checkbox[data-checked="true"], .ds-checkbox[data-indeterminate="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.ds-checkbox:hover { border-color: var(--accent); }
+.ds-checkbox svg { width: 11px; height: 11px; }
+`;
+const Checkbox = ({ checked, indeterminate, onChange, ariaLabel }) => /* @__PURE__ */ React.createElement(
+  "span",
+  {
+    role: "checkbox",
+    "aria-checked": indeterminate && !checked ? "mixed" : checked,
+    "aria-label": ariaLabel,
+    tabIndex: 0,
+    className: "ds-checkbox",
+    "data-checked": checked,
+    "data-indeterminate": indeterminate && !checked,
+    onClick: (e) => {
+      e.stopPropagation();
+      onChange && onChange(!checked);
+    },
+    onKeyDown: (e) => {
+      if (e.key === " ") {
+        e.preventDefault();
+        onChange && onChange(!checked);
+      }
+    }
+  },
+  checked && /* @__PURE__ */ React.createElement(Icon, { name: "check" }),
+  indeterminate && !checked && /* @__PURE__ */ React.createElement("span", { style: { width: 8, height: 1.5, background: "currentColor", borderRadius: 1 } })
+);
+const SortHeader = ({ children, sort, current, onSort }) => {
+  const active = current?.key === sort;
+  return /* @__PURE__ */ React.createElement("th", { "data-sort": sort, "data-active": active || void 0, onClick: () => onSort(sort) }, /* @__PURE__ */ React.createElement("span", { className: "ds-th-inner" }, children, active ? /* @__PURE__ */ React.createElement(Icon, { name: current.dir === "asc" ? "arrow_up" : "arrow_down", size: 11 }) : /* @__PURE__ */ React.createElement(Icon, { name: "sort", size: 11, style: { opacity: 0.4 } })));
+};
+const DataTable = ({ rows: rowsProp }) => {
+  const baseRows = rowsProp || [
+    { id: "ESP-220-A1", name: "Brake assurance \u2014 EU-RST", schema: "v3.4.1", owner: "Anya M.", ownerColor: "#635BFF", region: "Northern EU", status: "active", lastRun: "2h ago", coverage: 96 },
+    { id: "ESP-118-C3", name: "Pantograph inspection", schema: "v2.1.0", owner: "Reza H.", ownerColor: "#5B8DEF", region: "Iberia", status: "passed", lastRun: "13m ago", coverage: 100 },
+    { id: "ESP-441-B2", name: "Door cycle conformance", schema: "v1.8.2", owner: "Kenji T.", ownerColor: "#6BAA75", region: "DACH", status: "warning", lastRun: "1h ago", coverage: 81 },
+    { id: "ESP-302-F1", name: "Traction inverter telemetry", schema: "v4.0.0-rc", owner: "Sara V.", ownerColor: "#B57BE6", region: "Benelux", status: "failed", lastRun: "5m ago", coverage: 64 },
+    { id: "ESP-093-A2", name: "Wheelset profile baseline", schema: "v2.0.1", owner: "Tomas K.", ownerColor: "#E8B04B", region: "Scandinavia", status: "draft", lastRun: "\u2014", coverage: 0 },
+    { id: "ESP-560-D1", name: "HVAC envelope sweep", schema: "v1.3.0", owner: "Mira O.", ownerColor: "#4FB3A9", region: "Northern EU", status: "running", lastRun: "now", coverage: 42 }
+  ];
+  const [rows, setRows] = useStateData(baseRows);
+  const [selected, setSelected] = useStateData({});
+  const [sort, setSort] = useStateData({ key: "id", dir: "asc" });
+  const allChecked = rows.length > 0 && rows.every((r) => selected[r.id]);
+  const someChecked = rows.some((r) => selected[r.id]) && !allChecked;
+  const toggleAll = () => {
+    const v = !allChecked;
+    const next = {};
+    rows.forEach((r) => next[r.id] = v);
+    setSelected(next);
+  };
+  const onSort = (key) => {
+    setSort((s) => {
+      const dir = s.key === key && s.dir === "asc" ? "desc" : "asc";
+      const sorted = [...rows].sort((a, b) => {
+        const av = a[key], bv = b[key];
+        if (typeof av === "number") return dir === "asc" ? av - bv : bv - av;
+        return dir === "asc" ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+      });
+      setRows(sorted);
+      return { key, dir };
+    });
+  };
+  const statusChip = (s) => {
+    const map = {
+      active: /* @__PURE__ */ React.createElement(Chip, { tone: "success", dot: true }, "Active"),
+      passed: /* @__PURE__ */ React.createElement(Chip, { tone: "success", leadingIcon: "check" }, "Passed"),
+      warning: /* @__PURE__ */ React.createElement(Chip, { tone: "warning", leadingIcon: "alert_tri" }, "Warnings"),
+      failed: /* @__PURE__ */ React.createElement(Chip, { tone: "danger", leadingIcon: "alert" }, "Failed"),
+      draft: /* @__PURE__ */ React.createElement(Chip, { tone: "neutral" }, "Draft"),
+      running: /* @__PURE__ */ React.createElement(Chip, { tone: "info", pulse: true }, "Running")
+    };
+    return map[s] || /* @__PURE__ */ React.createElement(Chip, null, s);
+  };
+  const selectedCount = Object.values(selected).filter(Boolean).length;
+  return /* @__PURE__ */ React.createElement("div", { className: "ds-table-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "ds-table-toolbar" }, selectedCount > 0 ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Checkbox, { checked: allChecked, indeterminate: someChecked, onChange: toggleAll }), /* @__PURE__ */ React.createElement("span", { className: "ds-table-toolbar-title" }, selectedCount, " selected"), /* @__PURE__ */ React.createElement("div", { className: "ds-table-toolbar-spacer" }), /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", size: "sm", leadingIcon: "download" }, "Export"), /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", size: "sm", leadingIcon: "copy" }, "Duplicate"), /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", size: "sm", leadingIcon: "trash", danger: true }, "Delete")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "ds-table-toolbar-title" }, "ESP schemas"), /* @__PURE__ */ React.createElement("span", { className: "ds-table-toolbar-count" }, rows.length, " of 248"), /* @__PURE__ */ React.createElement("div", { className: "ds-table-toolbar-spacer" }), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", size: "sm", leadingIcon: "filter" }, "Filter"), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", size: "sm", leadingIcon: "download" }, "Export"), /* @__PURE__ */ React.createElement(Btn, { variant: "primary", size: "sm", leadingIcon: "plus" }, "New schema"))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-scroll" }, /* @__PURE__ */ React.createElement("table", { className: "ds-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { className: "col-checkbox" }, /* @__PURE__ */ React.createElement(Checkbox, { checked: allChecked, indeterminate: someChecked, onChange: toggleAll })), /* @__PURE__ */ React.createElement(SortHeader, { sort: "id", current: sort, onSort }, "Schema ID"), /* @__PURE__ */ React.createElement(SortHeader, { sort: "name", current: sort, onSort }, "Name"), /* @__PURE__ */ React.createElement("th", null, "Owner"), /* @__PURE__ */ React.createElement(SortHeader, { sort: "region", current: sort, onSort }, "Region"), /* @__PURE__ */ React.createElement(SortHeader, { sort: "coverage", current: sort, onSort }, "Coverage"), /* @__PURE__ */ React.createElement("th", null, "Status"), /* @__PURE__ */ React.createElement(SortHeader, { sort: "lastRun", current: sort, onSort }, "Last run"), /* @__PURE__ */ React.createElement("th", { className: "col-actions" }))), /* @__PURE__ */ React.createElement("tbody", null, rows.map((r) => /* @__PURE__ */ React.createElement("tr", { key: r.id, "data-selected": !!selected[r.id] }, /* @__PURE__ */ React.createElement("td", { className: "col-checkbox" }, /* @__PURE__ */ React.createElement(Checkbox, { checked: !!selected[r.id], onChange: (v) => setSelected((s) => ({ ...s, [r.id]: v })) })), /* @__PURE__ */ React.createElement("td", { className: "col-mono" }, r.id), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "ds-table-name" }, /* @__PURE__ */ React.createElement("div", { className: "ds-table-name-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: "layers", size: 14 })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ds-table-name-title" }, r.name), /* @__PURE__ */ React.createElement("div", { className: "ds-table-name-sub" }, r.schema)))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "ds-table-owner" }, /* @__PURE__ */ React.createElement("div", { className: "ds-table-owner-avatar", style: { background: r.ownerColor } }, r.owner.split(" ").map((x) => x[0]).join("")), /* @__PURE__ */ React.createElement("span", null, r.owner))), /* @__PURE__ */ React.createElement("td", null, r.region), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(CoverageBar, { value: r.coverage })), /* @__PURE__ */ React.createElement("td", null, statusChip(r.status)), /* @__PURE__ */ React.createElement("td", { className: "col-mono", style: { color: "var(--ink-500)" } }, r.lastRun), /* @__PURE__ */ React.createElement("td", { className: "col-actions" }, /* @__PURE__ */ React.createElement("button", { className: "ds-icon-btn", style: { width: 28, height: 28, border: "none", background: "transparent" } }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 16 })))))))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-foot" }, /* @__PURE__ */ React.createElement("span", null, "Showing 1\u20136 of 248"), /* @__PURE__ */ React.createElement("div", { className: "ds-table-pager" }, /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: true }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_left", size: 14 })), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", "data-current": "true" }, "1"), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn" }, "2"), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn" }, "3"), /* @__PURE__ */ React.createElement("span", { style: { padding: "0 6px", color: "var(--ink-400)" } }, "\u2026"), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn" }, "42"), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn" }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 14 })))));
+};
+const CoverageBar = ({ value }) => {
+  const tone = value >= 95 ? "success" : value >= 80 ? "warning" : value >= 1 ? "danger" : "neutral";
+  const color = `var(--${tone === "neutral" ? "ink-300" : tone})`;
+  return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, minWidth: 120 } }, /* @__PURE__ */ React.createElement("div", { style: { flex: 1, height: 6, background: "var(--ink-100)", borderRadius: 3, overflow: "hidden" } }, /* @__PURE__ */ React.createElement("div", { style: { height: "100%", width: `${value}%`, background: color, borderRadius: 3, transition: "width 300ms" } })), /* @__PURE__ */ React.createElement("span", { className: "mono tabular", style: { fontSize: 11.5, color: "var(--ink-700)", minWidth: 32, textAlign: "right" } }, value, "%"));
+};
+window.Chip = Chip;
+window.KPICard = KPICard;
+window.Sparkline = Sparkline;
+window.Stepper = Stepper;
+window.StepperVertical = StepperVertical;
+window.DataTable = DataTable;
+window.Checkbox = Checkbox;
+window.CoverageBar = CoverageBar;
+window.DATA_CSS = chipCSS + kpiCSS + stepperCSS + tableCSS;
+  </script>
+  <script>
+const { useState, useEffect, useRef, useMemo } = React;
+const sidebarCSS = `
+.ds-sidebar { width: 244px; background: var(--sidebar-bg); color: var(--sidebar-text); border-right: 1px solid rgba(10,37,64,0.32); display: flex; flex-direction: column; height: 100%; position: relative; overflow: hidden; box-shadow: 12px 0 34px -28px rgba(10,37,64,0.9); }
+.ds-sidebar::before { content: ""; position: absolute; inset: 0; background: var(--sidebar-glow); pointer-events: none; }
+.ds-sidebar > * { position: relative; z-index: 1; }
+.ds-sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 18px 16px; border-bottom: 1px solid var(--sidebar-border); }
+.ds-sidebar-mark { width: 30px; height: 30px; border-radius: 8px; background: rgba(255,255,255,0.16); color: var(--paper); display: grid; place-items: center; font-weight: 800; font-family: var(--font-mono); font-size: 12px; letter-spacing: -0.02em; position: relative; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18), 0 8px 18px rgba(0,0,0,0.18); }
+.ds-sidebar-mark::after { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, transparent 35%, rgba(99,91,255,0.95) 35%, rgba(99,91,255,0.95) 50%, rgba(0,212,255,0.82) 50%, transparent 64%); opacity: 0.95; }
+.ds-sidebar-mark span { position: relative; z-index: 1; }
+.ds-sidebar-title { font-weight: 700; font-size: 14px; letter-spacing: 0; line-height: 1; color: var(--paper); }
+.ds-sidebar-sub { font-size: 11px; color: var(--sidebar-muted); margin-top: 2px; }
+.ds-sidebar-project { margin: 14px 12px 4px; padding: 8px 10px; border-radius: var(--r-md); border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.07); color: var(--paper); display: flex; align-items: center; gap: 8px; cursor: pointer; transition: 150ms; box-shadow: inset 0 1px 0 rgba(255,255,255,0.08); }
+.ds-sidebar-project:hover { border-color: rgba(255,255,255,0.24); background: rgba(255,255,255,0.12); }
+.ds-sidebar-project-avatar { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, var(--stripe-violet), var(--stripe-cyan)); color: var(--paper); display: grid; place-items: center; font-size: 10px; font-weight: 800; }
+.ds-sidebar-project-name { font-size: 13px; font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ds-sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 8px; }
+.ds-sidebar-section { padding: 12px 12px 4px; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.58); font-weight: 700; }
+/* Section heading that also collapses its group. Deliberately styled as a
+   heading, not a nav row \u2014 it must never compete with the items under it. */
+.ds-sidebar-section-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 13px 12px 5px; border: none; background: transparent; font: inherit; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.52); font-weight: 700; text-align: left; cursor: pointer; transition: color 120ms; }
+.ds-sidebar-section-btn:hover { color: rgba(255,255,255,0.9); }
+.ds-sidebar-section-caret { margin-left: auto; opacity: 0.65; transition: transform 160ms; }
+.ds-sidebar-section-btn[data-open="false"] .ds-sidebar-section-caret { transform: rotate(-90deg); }
+.ds-sidebar-group + .ds-sidebar-group { margin-top: 2px; }
+.ds-sidebar-item { display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 7px 10px; border-radius: var(--r-md); color: rgba(255,255,255,0.78); cursor: pointer; font-size: 13.5px; font-weight: 600; line-height: 1.3; transition: background 120ms, color 120ms, box-shadow 120ms, transform 120ms; position: relative; }
+/* long product names wrap rather than overflow the rail */
+.ds-sidebar-item > span:not(.ds-sidebar-badge) { min-width: 0; overflow-wrap: anywhere; }
+.ds-sidebar-item[data-disabled="true"] { color: rgba(255,255,255,0.34); cursor: not-allowed; }
+.ds-sidebar-item[data-disabled="true"]:hover { background: transparent; color: rgba(255,255,255,0.34); }
+.ds-sidebar-item[data-disabled="true"] .icon { color: rgba(255,255,255,0.24); }
+.ds-sidebar-item:hover { background: var(--sidebar-item-hover); color: var(--paper); }
+.ds-sidebar-item[data-active="true"] { background: var(--sidebar-item-active); color: var(--sidebar-item-active-text); box-shadow: 0 8px 18px -10px rgba(0,0,0,0.48), inset 0 0 0 1px rgba(255,255,255,0.45); }
+.ds-sidebar-item[data-active="true"]::before { content: ""; position: absolute; left: -8px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: var(--stripe-cyan); }
+.ds-sidebar-item[data-active="true"] .ds-sidebar-badge { background: rgba(10,37,64,0.08); color: var(--stripe-blue-900); }
+.ds-sidebar-item .icon { color: rgba(255,255,255,0.62); }
+.ds-sidebar-item:hover .icon { color: var(--paper); }
+.ds-sidebar-item[data-active="true"] .icon { color: var(--accent); }
+.ds-sidebar-badge { margin-left: auto; font-size: 11px; padding: 1px 7px; border-radius: var(--r-full); background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.78); font-weight: 700; font-variant-numeric: tabular-nums; }
+.ds-sidebar-badge[data-tone="accent"] { background: rgba(99,91,255,0.24); color: #FFFFFF; }
+.ds-sidebar-badge[data-tone="danger"] { background: rgba(223,27,65,0.22); color: #FFFFFF; }
+.ds-sidebar-item[data-active="true"] .ds-sidebar-badge[data-tone="accent"] { background: var(--accent); color: var(--paper); }
+.ds-sidebar-item[data-active="true"] .ds-sidebar-badge[data-tone="danger"] { background: var(--danger); color: var(--paper); }
+
+/* scope switcher row */
+.ds-sidebar-scope { margin: 12px 12px 2px; padding: 9px 11px; border-radius: var(--r-md); border: 1px solid rgba(255,255,255,0.13); background: rgba(255,255,255,0.07); display: flex; align-items: center; gap: 9px; cursor: pointer; transition: 150ms; }
+.ds-sidebar-scope:hover { border-color: rgba(255,255,255,0.26); background: rgba(255,255,255,0.12); }
+.ds-sidebar-scope-body { min-width: 0; flex: 1; }
+.ds-sidebar-scope-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+.ds-sidebar-scope-value { font-size: 12.5px; font-weight: 700; color: var(--paper); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* collapsible nav groups (Modules, System, \u2026) */
+.ds-sidebar-group { margin-top: 4px; }
+.ds-sidebar-parent { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 34px; padding: 7px 10px; border: none; background: transparent; border-radius: var(--r-md); color: rgba(255,255,255,0.78); cursor: pointer; font: inherit; font-size: 13.5px; font-weight: 600; text-align: left; transition: background 120ms, color 120ms; }
+.ds-sidebar-parent:hover { background: var(--sidebar-item-hover); color: var(--paper); }
+.ds-sidebar-parent .icon { color: rgba(255,255,255,0.62); }
+.ds-sidebar-parent:hover .icon { color: var(--paper); }
+.ds-sidebar-parent[data-has-active="true"] { color: var(--paper); }
+.ds-sidebar-caret { margin-left: auto; transition: transform 160ms; color: rgba(255,255,255,0.45); }
+.ds-sidebar-parent[data-open="true"] .ds-sidebar-caret { transform: rotate(90deg); }
+.ds-sidebar-children { margin: 2px 0 6px 13px; padding-left: 9px; border-left: 1px solid rgba(255,255,255,0.12); display: flex; flex-direction: column; gap: 1px; }
+.ds-sidebar-child { display: flex; align-items: flex-start; gap: 9px; min-height: 30px; padding: 6px 9px; border-radius: var(--r-sm); color: rgba(255,255,255,0.72); cursor: pointer; font-size: 13px; font-weight: 600; line-height: 1.3; transition: background 120ms, color 120ms; }
+.ds-sidebar-child:hover { background: var(--sidebar-item-hover); color: var(--paper); }
+.ds-sidebar-child[data-active="true"] { background: var(--sidebar-item-active); color: var(--sidebar-item-active-text); box-shadow: 0 8px 18px -12px rgba(0,0,0,0.5); }
+.ds-sidebar-child[data-disabled="true"] { color: rgba(255,255,255,0.38); cursor: not-allowed; }
+.ds-sidebar-child[data-disabled="true"]:hover { background: transparent; color: rgba(255,255,255,0.38); }
+.ds-sidebar-child .icon { color: rgba(255,255,255,0.55); }
+.ds-sidebar-child[data-active="true"] .icon { color: var(--accent); }
+/* full product names ("RAPID Track Alignment Design") are longer than the rail,
+   so labels wrap rather than truncate. Everything else in the row is nudged to
+   sit optically centred on the FIRST line, not on the wrapped block. */
+.ds-sidebar-child-label { min-width: 0; overflow-wrap: anywhere; }
+.ds-sidebar-child .ds-sidebar-dot { margin-top: 5px; }
+.ds-sidebar-child .ds-sidebar-tag { margin-top: 2px; }
+.ds-sidebar-child .ds-sidebar-count { margin-top: 1px; }
+/* margin makes the dot occupy the same 16px slot as a child .icon, so dot-led
+   and icon-led children share one label baseline */
+.ds-sidebar-dot { width: 7px; height: 7px; margin: 0 4.5px; border-radius: 2px; flex-shrink: 0; background: var(--dot, rgba(255,255,255,0.4)); box-shadow: 0 0 0 2px rgba(255,255,255,0.10); }
+.ds-sidebar-child[data-disabled="true"] .ds-sidebar-dot { background: rgba(255,255,255,0.22); box-shadow: none; }
+.ds-sidebar-tag { margin-left: auto; flex-shrink: 0; font-size: 8.5px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 4px; border-radius: var(--r-xs); background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.6); }
+.ds-sidebar-count { margin-left: auto; flex-shrink: 0; font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; color: rgba(255,255,255,0.6); }
+.ds-sidebar-child[data-active="true"] .ds-sidebar-count,
+.ds-sidebar-child[data-active="true"] .ds-sidebar-tag { color: var(--ink-600); background: rgba(10,37,64,0.08); }
+.ds-sidebar-foot { border-top: 1px solid var(--sidebar-border); padding: 10px; display: flex; align-items: center; gap: 10px; background: rgba(6,24,44,0.20); }
+.ds-sidebar-user { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--stripe-violet), #2DD4BF); display: grid; place-items: center; color: var(--paper); font-size: 11px; font-weight: 800; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); }
+.ds-sidebar-userinfo { flex: 1; min-width: 0; }
+.ds-sidebar-username { font-size: 13px; font-weight: 700; line-height: 1.2; color: var(--paper); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ds-sidebar-userrole { font-size: 11px; color: var(--sidebar-muted); }
+.ds-sidebar-foot-btn { width: 28px; height: 28px; border-radius: var(--r-sm); border: 1px solid transparent; background: transparent; color: rgba(255,255,255,0.64); cursor: pointer; display: grid; place-items: center; }
+.ds-sidebar-foot-btn:hover { background: rgba(255,255,255,0.12); color: var(--paper); border-color: rgba(255,255,255,0.12); }
+@media (max-width: 760px) {
+  .ds-sidebar { width: 72px; }
+  .ds-sidebar-brand { justify-content: center; padding: 16px 10px; }
+  .ds-sidebar-brand > div:not(.ds-sidebar-mark),
+  .ds-sidebar-project,
+  .ds-sidebar-section,
+  .ds-sidebar-item span:not(.ds-sidebar-badge),
+  .ds-sidebar-badge,
+  .ds-sidebar-scope-body,
+  .ds-sidebar-section-btn,
+  .ds-sidebar-parent span,
+  .ds-sidebar-caret,
+  .ds-sidebar-child-label,
+  .ds-sidebar-tag,
+  .ds-sidebar-count,
+  .ds-sidebar-userinfo,
+  .ds-sidebar-foot-btn { display: none; }
+  .ds-sidebar-nav { padding: 12px 8px; }
+  .ds-sidebar-item { justify-content: center; padding: 9px 0; min-height: 38px; }
+  .ds-sidebar-item[data-active="true"]::before { left: -8px; top: 9px; bottom: 9px; }
+  .ds-sidebar-scope { justify-content: center; padding: 9px 0; }
+  .ds-sidebar-parent { justify-content: center; }
+  .ds-sidebar-children { margin-left: 0; padding-left: 0; border-left: none; }
+  .ds-sidebar-child { justify-content: center; }
+  .ds-sidebar-foot { justify-content: center; padding: 12px 8px; }
+}
+`;
+const SIDEBAR_DEFAULTS = {
+  brand: { mark: "ES", title: /* @__PURE__ */ React.createElement(React.Fragment, null, "Verge", /* @__PURE__ */ React.createElement("span", { style: { color: "var(--accent)" } }, "\xB7"), "Rail"), sub: "ESP \u2192 SIP automation" },
+  project: { avatar: "NE", name: "Northern Eastern Corridor" },
+  groups: [
+    { label: "Workspace", items: [
+      { id: "overview", icon: "home", label: "Overview" },
+      { id: "fleet", icon: "train", label: "Fleet", badge: "248" },
+      { id: "lines", icon: "track", label: "Lines & track" }
+    ] },
+    { label: "Automation", items: [
+      { id: "schemas", icon: "layers", label: "ESP schemas", badge: "12", badgeTone: "accent" },
+      { id: "procedures", icon: "file_check", label: "SIP procedures" },
+      { id: "runs", icon: "branch", label: "Validation runs" },
+      { id: "reports", icon: "chart", label: "Reports" }
+    ] },
+    { label: "Admin", items: [
+      { id: "team", icon: "users", label: "Team" },
+      { id: "policies", icon: "shield", label: "Policies" },
+      { id: "docs", icon: "book", label: "Docs" }
+    ] }
+  ],
+  user: { initials: "AM", name: "Anya M\xF6ller", role: "Lead engineer", action: "settings", actionTitle: "Settings" }
+};
+const Sidebar = ({ active = "schemas", onSelect, brand, project, scope, groups, user }) => {
+  const cfg = {
+    brand: brand || SIDEBAR_DEFAULTS.brand,
+    project: project === void 0 ? SIDEBAR_DEFAULTS.project : project,
+    groups: groups || SIDEBAR_DEFAULTS.groups,
+    user: user || SIDEBAR_DEFAULTS.user
+  };
+  const [open, setOpen] = useState(() => {
+    const seed = {};
+    cfg.groups.forEach((g, i) => {
+      if (g.collapsible) seed[g.id || i] = g.defaultOpen !== false;
+    });
+    return seed;
+  });
+  const [openItems, setOpenItems] = useState({});
+  const select = (it) => {
+    if (!it.disabled && onSelect) onSelect(it.id);
+  };
+  const renderRow = (it) => /* @__PURE__ */ React.createElement(
+    "div",
+    {
+      key: it.id,
+      className: "ds-sidebar-item",
+      "data-active": active === it.id,
+      "data-disabled": it.disabled || void 0,
+      title: it.title || void 0,
+      onClick: () => select(it)
+    },
+    it.icon && /* @__PURE__ */ React.createElement(Icon, { name: it.icon }),
+    /* @__PURE__ */ React.createElement("span", null, it.label),
+    it.badge && /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-badge", "data-tone": it.badgeTone }, it.badge)
+  );
+  // An item carrying `children` renders as an expandable parent: clicking the row
+  // selects the item and opens it, clicking the caret alone just toggles.
+  const renderItem = (it) => {
+    if (!it.children || !it.children.length) return renderRow(it);
+    const childActive = it.children.some((c) => c.id === active);
+    const isOpen = openItems[it.id] === void 0 ? childActive : !!openItems[it.id];
+    return /* @__PURE__ */ React.createElement(
+      React.Fragment,
+      { key: it.id },
+      /* @__PURE__ */ React.createElement(
+        "div",
+        {
+          className: "ds-sidebar-item",
+          "data-active": active === it.id,
+          "data-disabled": it.disabled || void 0,
+          title: it.title || void 0,
+          onClick: () => { select(it); setOpenItems((o) => ({ ...o, [it.id]: true })); }
+        },
+        it.icon && /* @__PURE__ */ React.createElement(Icon, { name: it.icon }),
+        /* @__PURE__ */ React.createElement("span", null, it.label),
+        /* @__PURE__ */ React.createElement(
+          "span",
+          {
+            className: "ds-sidebar-caret",
+            role: "button",
+            "aria-expanded": isOpen,
+            "aria-label": (isOpen ? "Collapse " : "Expand ") + it.label,
+            style: { display: "flex", marginLeft: "auto", transform: isOpen ? "rotate(90deg)" : "none", transition: "transform 160ms" },
+            onClick: (e) => { e.stopPropagation(); setOpenItems((o) => ({ ...o, [it.id]: !isOpen })); }
+          },
+          /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 13 })
+        )
+      ),
+      isOpen && /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-children" }, it.children.map(renderChild))
+    );
+  };
+  const renderChild = (it) => /* @__PURE__ */ React.createElement(
+    "div",
+    {
+      key: it.id,
+      className: "ds-sidebar-child",
+      "data-active": active === it.id,
+      "data-disabled": it.disabled || void 0,
+      style: it.dot ? { "--dot": it.dot } : null,
+      title: it.title || it.label,
+      onClick: () => select(it)
+    },
+    it.dot ? /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-dot" }) : it.icon ? /* @__PURE__ */ React.createElement(Icon, { name: it.icon, size: 14 }) : null,
+    /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-child-label" }, it.label),
+    it.tag ? /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-tag" }, it.tag) : it.count != null ? /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-count" }, it.count) : null
+  );
+  return /* @__PURE__ */ React.createElement("aside", { className: "ds-sidebar" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-brand" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-mark" }, /* @__PURE__ */ React.createElement("span", null, cfg.brand.mark)), /* @__PURE__ */ React.createElement("div", { style: { minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-title" }, cfg.brand.title), cfg.brand.sub && /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-sub" }, cfg.brand.sub))), cfg.project && /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-project", title: "Switch project" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-project-avatar" }, cfg.project.avatar), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-project-name" }, cfg.project.name), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 14 })), scope && /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-scope", title: scope.title || "Change scope" }, /* @__PURE__ */ React.createElement(Icon, { name: scope.icon || "target", size: 15, style: { color: "rgba(255,255,255,0.55)" } }), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-scope-body" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-scope-label" }, scope.label), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-scope-value" }, scope.value)), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 13, style: { color: "rgba(255,255,255,0.45)" } })), /* @__PURE__ */ React.createElement("nav", { className: "ds-sidebar-nav" }, cfg.groups.map((g, gi) => {
+    const key = g.id || g.label || gi;
+    if (!g.collapsible) {
+      return /* @__PURE__ */ React.createElement("div", { key }, g.label && /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-section" }, g.label), g.items.map(renderItem));
+    }
+    const isOpen = !!open[g.id || gi];
+    const hasActive = g.items.some((it) => it.id === active);
+    if (g.header) {
+      return /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-group", key }, /* @__PURE__ */ React.createElement(
+        "button",
+        {
+          className: "ds-sidebar-section-btn",
+          "data-open": isOpen,
+          "aria-expanded": isOpen,
+          onClick: () => setOpen((o) => ({ ...o, [g.id || gi]: !o[g.id || gi] }))
+        },
+        /* @__PURE__ */ React.createElement("span", null, g.label),
+        /* @__PURE__ */ React.createElement(Icon, { name: "chevron_down", size: 13, className: "ds-sidebar-section-caret" })
+      ), isOpen && (g.items.length ? g.items.map(renderItem) : /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-item", "data-disabled": "true" }, /* @__PURE__ */ React.createElement("span", null, g.emptyLabel || "Nothing available"))));
+    }
+    return /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-group", key }, /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        className: "ds-sidebar-parent",
+        "data-open": isOpen,
+        "data-has-active": hasActive,
+        "aria-expanded": isOpen,
+        onClick: () => setOpen((o) => ({ ...o, [g.id || gi]: !o[g.id || gi] }))
+      },
+      g.icon && /* @__PURE__ */ React.createElement(Icon, { name: g.icon }),
+      /* @__PURE__ */ React.createElement("span", null, g.label),
+      /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 13, className: "ds-sidebar-caret" })
+    ), isOpen && /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-children" }, g.items.length ? g.items.map(renderChild) : renderChild({ id: `${key}-empty`, label: g.emptyLabel || "Nothing available", disabled: true, dot: "rgba(255,255,255,0.22)" })));
+  })), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-foot" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-user" }, cfg.user.initials), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userinfo" }, /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-username" }, cfg.user.name), /* @__PURE__ */ React.createElement("div", { className: "ds-sidebar-userrole" }, cfg.user.role)), /* @__PURE__ */ React.createElement("button", { className: "ds-sidebar-foot-btn", title: cfg.user.actionTitle || "Settings" }, /* @__PURE__ */ React.createElement(Icon, { name: cfg.user.action || "settings", size: 15 }))));
+};
+const headerCSS = `
+.ds-header { display: flex; align-items: center; gap: 14px; padding: 12px 24px; background: rgba(255,255,255,0.92); border-bottom: var(--hairline); min-height: 60px; box-shadow: 0 1px 0 rgba(10,37,64,0.03); backdrop-filter: saturate(140%) blur(12px); }
+.ds-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-500); flex: 0 1 auto; min-width: 0; }
+.ds-breadcrumb a { color: var(--ink-500); text-decoration: none; cursor: pointer; padding: 3px 6px; border-radius: var(--r-sm); }
+.ds-breadcrumb a:hover { background: var(--accent-soft); color: var(--accent-text); }
+.ds-breadcrumb button { border: none; background: transparent; color: var(--ink-500); cursor: pointer; padding: 3px 6px; border-radius: var(--r-sm); font: inherit; }
+.ds-breadcrumb button:hover { background: var(--accent-soft); color: var(--accent-text); }
+.ds-breadcrumb .ds-breadcrumb-current { color: var(--ink-900); font-weight: 700; padding: 3px 6px; }
+.ds-breadcrumb .ds-breadcrumb-sep { color: var(--ink-300); }
+.ds-header-spacer { flex: 1; }
+.ds-header-actions { display: flex; align-items: center; gap: 8px; }
+.ds-icon-btn { width: 34px; height: 34px; border-radius: var(--r-md); border: 1px solid #D8E0EA; background: #FFFFFF; color: var(--ink-600); cursor: pointer; display: grid; place-items: center; position: relative; transition: background 120ms, border-color 120ms, color 120ms, box-shadow 120ms, transform 120ms; box-shadow: var(--shadow-xs); }
+.ds-icon-btn:hover { background: var(--ink-50); color: var(--accent-text); border-color: #C7D2E1; box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+.ds-icon-btn:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.ds-icon-btn[data-shape="circle"] { border-radius: 50%; }
+.ds-icon-btn .ds-dot { position: absolute; top: 7px; right: 7px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); border: 2px solid var(--paper); }
+.ds-header-kbd { display: inline-flex; align-items: center; gap: 2px; padding: 1px 5px; border-radius: 4px; border: 1px solid var(--ink-200); background: var(--ink-50); color: var(--ink-500); font-size: 10.5px; font-family: var(--font-mono); }
+.ds-app-topbar { min-height: 64px; padding: 0 24px 0 28px; background: rgba(255,255,255,0.94); border-bottom: var(--hairline); display: flex; align-items: center; gap: 16px; flex-shrink: 0; box-shadow: 0 1px 0 rgba(10,37,64,0.03); backdrop-filter: saturate(140%) blur(12px); }
+.ds-app-topbar .ds-breadcrumb { font-size: 13px; }
+.ds-app-topbar-spacer { flex: 1; min-width: 16px; }
+.ds-app-topbar-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+@media (max-width: 960px) {
+  .ds-app-topbar { flex-wrap: wrap; height: auto; padding-top: 10px; padding-bottom: 10px; }
+  .ds-app-topbar-spacer { display: none; }
+  .ds-app-topbar .ds-search { order: 3; width: 100%; }
+}
+`;
+const Header = ({ crumbs = ["ESP schemas", "EU-RST-220"], env = "STAGING" }) => /* @__PURE__ */ React.createElement("header", { className: "ds-header" }, /* @__PURE__ */ React.createElement("nav", { className: "ds-breadcrumb", "aria-label": "Breadcrumb" }, crumbs.slice(0, -1).map((c, i) => /* @__PURE__ */ React.createElement(React.Fragment, { key: i }, /* @__PURE__ */ React.createElement("a", null, c), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 12, className: "ds-breadcrumb-sep" }))), /* @__PURE__ */ React.createElement("span", { className: "ds-breadcrumb-current" }, crumbs[crumbs.length - 1])), /* @__PURE__ */ React.createElement("div", { className: "ds-header-spacer" }), /* @__PURE__ */ React.createElement(HeaderSearch, null), /* @__PURE__ */ React.createElement("div", { className: "ds-header-actions" }, /* @__PURE__ */ React.createElement("button", { className: "ds-icon-btn", title: "Notifications" }, /* @__PURE__ */ React.createElement(Icon, { name: "bell" }), /* @__PURE__ */ React.createElement("span", { className: "ds-dot" })), /* @__PURE__ */ React.createElement("button", { className: "ds-icon-btn", "data-shape": "circle", title: "Create" }, /* @__PURE__ */ React.createElement(Icon, { name: "plus" })), /* @__PURE__ */ React.createElement(Btn, { variant: "primary", leadingIcon: "plus" }, "New run")));
+const AppTopBar = ({
+  crumbs = ["Home"],
+  searchPlaceholder = "Search stations, documents, approvals..."
+}) => {
+  const safeCrumbs = crumbs.length ? crumbs : ["Home"];
+  const renderCrumb = (crumb, index) => {
+    const label = typeof crumb === "string" ? crumb : crumb.label;
+    const onClick = typeof crumb === "string" ? null : crumb.onClick;
+    const isLast = index === safeCrumbs.length - 1;
+    if (isLast) return /* @__PURE__ */ React.createElement("span", { className: "ds-breadcrumb-current", key: `${label}-${index}` }, label);
+    return /* @__PURE__ */ React.createElement(React.Fragment, { key: `${label}-${index}` }, onClick ? /* @__PURE__ */ React.createElement("button", { type: "button", onClick }, label) : /* @__PURE__ */ React.createElement("a", null, label), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 12, className: "ds-breadcrumb-sep" }));
+  };
+  return /* @__PURE__ */ React.createElement("header", { className: "ds-app-topbar" }, /* @__PURE__ */ React.createElement("nav", { className: "ds-breadcrumb", "aria-label": "Breadcrumb" }, safeCrumbs.map(renderCrumb)), /* @__PURE__ */ React.createElement("div", { className: "ds-app-topbar-spacer" }), /* @__PURE__ */ React.createElement(HeaderSearch, { placeholder: searchPlaceholder }), /* @__PURE__ */ React.createElement("div", { className: "ds-app-topbar-actions" }, /* @__PURE__ */ React.createElement("button", { className: "ds-icon-btn", title: "Refresh" }, /* @__PURE__ */ React.createElement(Icon, { name: "refresh", size: 15 })), /* @__PURE__ */ React.createElement("button", { className: "ds-icon-btn", title: "Notifications" }, /* @__PURE__ */ React.createElement(Icon, { name: "bell", size: 15 }), /* @__PURE__ */ React.createElement("span", { className: "ds-dot" })), /* @__PURE__ */ React.createElement("button", { className: "ds-icon-btn", "data-shape": "circle", title: "Create" }, /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 15 }))));
+};
+const searchCSS = `
+.ds-search { position: relative; width: 360px; max-width: 100%; }
+.ds-search-input { width: 100%; height: 36px; padding: 0 70px 0 36px; border-radius: var(--r-md); border: 1px solid #D8E0EA; background: #FFFFFF; font-size: 13.5px; outline: none; transition: 120ms; color: var(--ink-900); box-shadow: var(--shadow-xs); }
+.ds-search-input::placeholder { color: var(--ink-500); }
+.ds-search-input:hover { background: var(--paper); border-color: #C7D2E1; }
+.ds-search-input:focus { background: var(--paper); border-color: var(--accent); box-shadow: var(--shadow-focus); }
+.ds-search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--ink-500); pointer-events: none; }
+.ds-search-kbd { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+.ds-search-pop { position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: var(--paper); border: var(--hairline); border-radius: var(--r-lg); box-shadow: var(--shadow-lg); padding: 8px; z-index: 30; }
+.ds-search-section { padding: 8px 10px 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-500); font-weight: 600; }
+.ds-search-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md); cursor: pointer; font-size: 13px; }
+.ds-search-item:hover, .ds-search-item[data-focus="true"] { background: var(--accent-soft); color: var(--accent-text); }
+.ds-search-item-icon { width: 24px; height: 24px; border-radius: var(--r-sm); background: var(--accent-soft); display: grid; place-items: center; color: var(--accent-text); }
+.ds-search-item-meta { margin-left: auto; font-size: 11px; color: var(--ink-500); font-family: var(--font-mono); }
+.ds-search-empty { padding: 24px; text-align: center; color: var(--ink-500); font-size: 13px; }
+`;
+const HeaderSearch = ({ placeholder = "Search schemas, procedures, runs\u2026" } = {}) => {
+  const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
+  const ref = useRef(null);
+  useEffect(() => {
+    const onClick = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    const onKey = (e) => {
+      var _a, _b;
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        (_b = (_a = ref.current) == null ? void 0 : _a.querySelector("input")) == null ? void 0 : _b.focus();
+      }
+    };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
+  const recents = [
+    { icon: "book", label: "Aurangabad \xB7 Station Hub", meta: "station" },
+    { icon: "file_check", label: "SIP V1 awaiting approval", meta: "approval" },
+    { icon: "layers", label: "ESP V7 approved and frozen", meta: "document" },
+    { icon: "train", label: "South Central Railway scope", meta: "zone" }
+  ];
+  const filtered = q ? recents.filter((r) => r.label.toLowerCase().includes(q.toLowerCase())) : recents;
+  return /* @__PURE__ */ React.createElement("div", { className: "ds-search", ref }, /* @__PURE__ */ React.createElement(Icon, { name: "search", className: "ds-search-icon", size: 15 }), /* @__PURE__ */ React.createElement(
+    "input",
+    {
+      className: "ds-search-input",
+      placeholder,
+      value: q,
+      onChange: (e) => {
+        setQ(e.target.value);
+        setOpen(true);
+      },
+      onFocus: () => setOpen(true)
+    }
+  ), /* @__PURE__ */ React.createElement("span", { className: "ds-header-kbd ds-search-kbd" }, /* @__PURE__ */ React.createElement(Icon, { name: "command", size: 10 }), "K"), open && /* @__PURE__ */ React.createElement("div", { className: "ds-search-pop" }, /* @__PURE__ */ React.createElement("div", { className: "ds-search-section" }, q ? "Results" : "Recent"), filtered.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "ds-search-empty" }, 'No matches for "', q, '"') : filtered.map((r, i) => /* @__PURE__ */ React.createElement("div", { className: "ds-search-item", key: i, "data-focus": i === 0 }, /* @__PURE__ */ React.createElement("div", { className: "ds-search-item-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: r.icon, size: 14 })), /* @__PURE__ */ React.createElement("span", null, r.label), /* @__PURE__ */ React.createElement("span", { className: "ds-search-item-meta" }, r.meta)))));
+};
+const filterSearchCSS = `
+.ds-fsearch { display: flex; flex-direction: column; gap: 10px; }
+.ds-fsearch-row { display: flex; gap: 8px; align-items: center; }
+.ds-fsearch-input { position: relative; flex: 1; }
+.ds-fsearch-input input { width: 100%; height: 40px; padding: 0 12px 0 38px; border-radius: var(--r-md); border: var(--hairline); background: var(--paper); font-size: 14px; outline: none; }
+.ds-fsearch-input input:focus { border-color: var(--accent); box-shadow: var(--shadow-focus); }
+.ds-fsearch-input .icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-500); }
+.ds-fsearch-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ds-fchip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: var(--r-full); border: var(--hairline); background: var(--paper); font-size: 12.5px; font-weight: 500; color: var(--ink-700); cursor: pointer; }
+.ds-fchip:hover { border-color: var(--accent); color: var(--accent-text); }
+.ds-fchip[data-active="true"] { background: var(--accent); color: var(--paper); border-color: var(--accent); box-shadow: 0 4px 10px -6px rgba(99,91,255,0.65); }
+.ds-fchip-x { display: inline-grid; place-items: center; width: 14px; height: 14px; border-radius: 50%; }
+.ds-fchip[data-active="true"] .ds-fchip-x:hover { background: rgba(255,255,255,0.16); }
+`;
+const FilterSearch = () => {
+  const [active, setActive] = useState({ "Status: Active": true, "Region: EU": true });
+  const chips = ["Status: Active", "Region: EU", "Schema: Brake", "Owner: any", "Updated: 7d"];
+  return /* @__PURE__ */ React.createElement("div", { className: "ds-fsearch" }, /* @__PURE__ */ React.createElement("div", { className: "ds-fsearch-row" }, /* @__PURE__ */ React.createElement("div", { className: "ds-fsearch-input" }, /* @__PURE__ */ React.createElement(Icon, { name: "search" }), /* @__PURE__ */ React.createElement("input", { placeholder: "Filter procedures by ID, line, owner\u2026", defaultValue: "brake assurance" })), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "filter" }, "Filters"), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "sort" }, "Sort")), /* @__PURE__ */ React.createElement("div", { className: "ds-fsearch-chips" }, chips.map((c) => /* @__PURE__ */ React.createElement("button", { key: c, className: "ds-fchip", "data-active": !!active[c], onClick: () => setActive((a) => ({ ...a, [c]: !a[c] })) }, /* @__PURE__ */ React.createElement("span", null, c), active[c] && /* @__PURE__ */ React.createElement("span", { className: "ds-fchip-x" }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 10 })))), /* @__PURE__ */ React.createElement("button", { className: "ds-fchip", style: { borderStyle: "dashed", color: "var(--ink-500)" } }, /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 12 }), " Add filter")));
+};
+const tabsCSS = `
+.ds-tabs { display: flex; align-items: center; gap: 4px; border-bottom: var(--hairline); }
+.ds-tab { position: relative; padding: 10px 14px; font-size: 13.5px; font-weight: 600; color: var(--ink-500); cursor: pointer; background: transparent; border: none; display: inline-flex; align-items: center; gap: 8px; border-radius: var(--r-sm) var(--r-sm) 0 0; }
+.ds-tab:hover { color: var(--accent-text); background: var(--accent-soft); }
+.ds-tab[data-active="true"] { color: var(--accent-text); }
+.ds-tab[data-active="true"]::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px; height: 2px; background: var(--accent); border-radius: 2px 2px 0 0; }
+.ds-tab-count { font-size: 11px; padding: 1px 7px; border-radius: var(--r-full); background: var(--ink-100); color: var(--ink-600); font-weight: 600; font-variant-numeric: tabular-nums; }
+.ds-tab[data-active="true"] .ds-tab-count { background: var(--accent); color: var(--paper); }
+
+.ds-pilltabs { display: inline-flex; padding: 3px; background: var(--ink-100); border-radius: var(--r-md); box-shadow: inset 0 0 0 1px rgba(10,37,64,0.04); }
+.ds-pilltab { padding: 5px 12px; font-size: 12.5px; font-weight: 600; color: var(--ink-600); border-radius: 6px; cursor: pointer; background: transparent; border: none; }
+.ds-pilltab:hover { color: var(--accent-text); }
+.ds-pilltab[data-active="true"] { background: var(--paper); color: var(--accent-text); box-shadow: var(--shadow-sm); }
+`;
+const Tabs = ({ items, active, onChange }) => /* @__PURE__ */ React.createElement("div", { className: "ds-tabs", role: "tablist" }, items.map((it) => /* @__PURE__ */ React.createElement("button", { key: it.id, className: "ds-tab", "data-active": active === it.id, onClick: () => onChange(it.id) }, it.icon && /* @__PURE__ */ React.createElement(Icon, { name: it.icon, size: 14 }), /* @__PURE__ */ React.createElement("span", null, it.label), it.count != null && /* @__PURE__ */ React.createElement("span", { className: "ds-tab-count" }, it.count))));
+const PillTabs = ({ items, active, onChange }) => /* @__PURE__ */ React.createElement("div", { className: "ds-pilltabs", role: "tablist" }, items.map((it) => /* @__PURE__ */ React.createElement("button", { key: it.id, className: "ds-pilltab", "data-active": active === it.id, onClick: () => onChange(it.id) }, it.label)));
+window.Sidebar = Sidebar;
+window.Header = Header;
+window.AppTopBar = AppTopBar;
+window.HeaderSearch = HeaderSearch;
+window.FilterSearch = FilterSearch;
+window.Tabs = Tabs;
+window.PillTabs = PillTabs;
+window.NAV_CSS = sidebarCSS + headerCSS + searchCSS + filterSearchCSS + tabsCSS;
+  </script>
+  <script>
+const { useState: useStateD, useMemo: useMemoD, useEffect: useEffectD, useRef: useRefD } = React;
+const MODULES = [
+  {
+    id: "tad",
+    code: "TAD",
+    name: "RAPID Track Alignment Design",
+    short: "Track Alignment",
+    full: "Horizontal & vertical alignment, curves, gradients and chainage.",
+    icon: "track",
+    color: "#0EA5E9",
+    stage: "pilot"
+  },
+  {
+    id: "esp",
+    code: "ESP",
+    name: "RAPID ESP",
+    short: "ESP",
+    full: "Engineering Scale Plan \u2014 digitise, validate against SOD, approve.",
+    icon: "layers",
+    color: "#3737C8",
+    stage: "live"
+  },
+  {
+    id: "sip",
+    code: "SIP",
+    name: "RAPID SIP",
+    short: "SIP",
+    full: "Signal Interlocking Plan \u2014 generate from an approved ESP.",
+    icon: "branch",
+    color: "#0D9488",
+    stage: "live"
+  },
+  {
+    id: "toc",
+    code: "TOC",
+    name: "RAPID TOC",
+    short: "TOC",
+    full: "Table of Controls \u2014 derived from the approved interlocking plan.",
+    icon: "file_check",
+    color: "#B45309",
+    stage: "soon"
+  },
+  {
+    id: "kavach",
+    code: "KVC",
+    name: "RAPID Kavach",
+    short: "Kavach",
+    full: "Kavach asset planning, RFID mapping and station static data.",
+    icon: "shield",
+    color: "#BE123C",
+    stage: "soon"
+  }
+];
+const ROLES = {
+  zone_admin: {
+    label: "Zone Admin",
+    user: { name: "Ashwini Vaishnaw", initials: "AV", designation: "Sr. DSTE \xB7 Zone Admin" },
+    scope: { zone: "SCR \u2014 South Central Railway", division: "All divisions", section: "All sections" },
+    grants: { tad: "full", esp: "full", sip: "full", toc: "full", kavach: "full" },
+    can: { library: true, approve: true, users: true, drillDivision: true }
+  },
+  div_engineer: {
+    label: "Division Engineer",
+    user: { name: "K. Naidu", initials: "KN", designation: "SSE/Signal \xB7 Vijayawada" },
+    scope: { zone: "SCR \u2014 South Central Railway", division: "Vijayawada Division", section: "All sections" },
+    grants: { esp: "edit", sip: "edit" },
+    can: { library: true, approve: false, users: false, drillDivision: false }
+  },
+  approver: {
+    label: "Approver",
+    user: { name: "R. Sharma", initials: "RS", designation: "Sr. DEN \xB7 SCR" },
+    scope: { zone: "SCR \u2014 South Central Railway", division: "All divisions", section: "All sections" },
+    grants: { esp: "view", sip: "view", toc: "view" },
+    can: { library: true, approve: true, users: false, drillDivision: true }
+  }
+};
+const SCOPE_TOTAL = 247;
+const MODULE_ACCESS_STATS = {
+  tad: {
+    summary: "12 active designs",
+    rows: [["Under review", 4], ["Completed", 3]]
+  },
+  esp: {
+    summary: "128 stations",
+    rows: [["Approved", 74], ["Need attention", 27]],
+    accent: true
+  },
+  sip: {
+    summary: "74 ESP-ready",
+    rows: [["Generated", 41], ["Approved", 14]],
+    accent: true
+  },
+  toc: {
+    summary: "41 SIP-ready",
+    rows: [["Generated", 18], ["Issues", 3]]
+  },
+  kavach: {
+    summary: "9 active designs",
+    rows: [["Validation pending", 3], ["Completed", 4]]
+  }
+};
+const MODULE_STATS = {
+  tad: {
+    headline: "12",
+    headlineLabel: "sections in design",
+    split: [
+      { label: "Approved", value: 3, color: "#16A34A" },
+      { label: "Under design", value: 7, color: "#0EA5E9" },
+      { label: "On hold", value: 2, color: "#CBD3DC" }
+    ],
+    note: "Pilot \u2014 Vijayawada\u2013Gudivada doubling",
+    generated: 8, approved: 3
+  },
+  esp: {
+    headline: "247",
+    headlineLabel: "stations in scope",
+    split: [
+      { label: "Approved", value: 97, color: "#16A34A" },
+      { label: "In progress", value: 108, color: "#3737C8" },
+      { label: "Not started", value: 42, color: "#CBD3DC" }
+    ],
+    alerts: [
+      { tone: "danger", text: "14 awaiting your approval" },
+      { tone: "warning", text: "43 open discrepancies" }
+    ],
+    generated: 205, approved: 97
+  },
+  sip: {
+    headline: "97",
+    headlineLabel: "stations ESP-cleared",
+    split: [
+      { label: "Approved", value: 52, color: "#16A34A" },
+      { label: "In review", value: 22, color: "#0D9488" },
+      { label: "Not generated", value: 23, color: "#CBD3DC" }
+    ],
+    alerts: [
+      { tone: "info", text: "150 stations blocked on ESP approval" }
+    ],
+    generated: 74, approved: 52
+  },
+  toc: { headline: "41", headlineLabel: "stations SIP-ready", generated: 18, approved: 11, split: [] },
+  kavach: { headline: "9", headlineLabel: "active designs", generated: 7, approved: 4, split: [] }
+};
+const PIPELINE = [
+  { id: "survey", label: "Survey data received", desc: "Total station / LiDAR upload verified", count: 247, module: "esp", color: "#94A3B8" },
+  { id: "digitised", label: "ESP digitised", desc: "Yard drawn, assets tagged", count: 205, module: "esp", color: "#6366F1" },
+  { id: "validated", label: "ESP validated", desc: "SOD + zone rules passed", count: 142, module: "esp", color: "#3737C8" },
+  { id: "esp_approved", label: "ESP approved", desc: "Frozen baseline, SIP unlocked", count: 97, module: "esp", color: "#2929A0" },
+  { id: "sip_gen", label: "SIP generated", desc: "Interlocking plan drafted", count: 74, module: "sip", color: "#14B8A6" },
+  { id: "sip_approved", label: "SIP approved", desc: "Ready for TOC generation", count: 52, module: "sip", color: "#0D9488" }
+];
+const STAGE_DOCS = [
+  { label: "Not started", esp: 18, sip: 33 },
+  { label: "In progress", esp: 22, sip: 12 },
+  { label: "Under validation", esp: 16, sip: 8 },
+  { label: "Under review", esp: 12, sip: 9 },
+  { label: "Submitted", esp: 8, sip: 5 },
+  { label: "Approved", esp: 74, sip: 41 },
+  { label: "Returned", esp: 6, sip: 3 }
+];
+const APPROVALS = [
+  { doc: "SIP", station: "Vijayawada Junction", code: "BZA", ver: "v1.2", who: "R. Sharma", tone: "danger", label: "Overdue", age: "12d" },
+  { doc: "ESP", station: "Guntur Junction", code: "GNT", ver: "v2.0", who: "K. Naidu", tone: "danger", label: "Overdue", age: "8d" },
+  { doc: "SIP", station: "Tenali Junction", code: "TEL", ver: "v1.0", who: "S. Reddy", tone: "warning", label: "Pending", age: "3d" },
+  { doc: "ESP", station: "Ongole", code: "OGL", ver: "v1.0", who: "V. Kumar", tone: "warning", label: "Pending", age: "1d" },
+  { doc: "ESP", station: "Bhimavaram Town", code: "BVRT", ver: "v1.1", who: "M. Prasad", tone: "info", label: "In review", age: "Today" }
+];
+const OVERDUE = [
+  { station: "Nanded", code: "NED", desc: "ESP not started \xB7 added 45 days ago", doc: "ESP", days: 45 },
+  { station: "Eluru", code: "EE", desc: "Survey data never uploaded", doc: "ESP", days: 30 },
+  { station: "Kurnool City", code: "KRNT", desc: "SIP draft not submitted", doc: "SIP", days: 22 },
+  { station: "Secunderabad Jn", code: "SC", desc: "SIP validation incomplete \xB7 5 violations", doc: "SIP", days: 15 },
+  { station: "Vijayawada Junction", code: "BZA", desc: "ESP validation started \xB7 no activity", doc: "ESP", days: 12 },
+  { station: "Guntur Junction", code: "GNT", desc: "Awaiting approval \xB7 submitted 8d ago", doc: "ESP", days: 8 }
+];
+const DISCREPANCIES = [
+  { count: 12, station: "Vijayawada Junction", code: "BZA", desc: "Track spacing violations \xB7 3 critical", doc: "ESP" },
+  { count: 9, station: "Bisalwas Kalan", code: "BIWK", desc: "SOD rule failures \xB7 signal placement", doc: "SIP" },
+  { count: 6, station: "Tenali Junction", code: "TEL", desc: "Platform offset violations", doc: "ESP" },
+  { count: 5, station: "Guntur Junction", code: "GNT", desc: "Turnout chainage mismatch", doc: "ESP" },
+  { count: 4, station: "Rajahmundry", code: "RJY", desc: "Fouling mark not derivable", doc: "SIP" },
+  { count: 3, station: "Ongole", code: "OGL", desc: "Missing LC gate annotation", doc: "ESP" }
+];
+const DIVISIONS = [
+  { name: "Vijayawada", stations: 89, esp: 72, sip: 34, status: "On track", tone: "success" },
+  { name: "Hyderabad", stations: 71, esp: 88, sip: 52, status: "On track", tone: "success" },
+  { name: "Guntur", stations: 64, esp: 60, sip: 22, status: "At risk", tone: "warning" },
+  { name: "Nanded", stations: 23, esp: 30, sip: 8, status: "Lagging", tone: "danger" }
+];
+const ACTIVITY = [
+  { day: "Today \xB7 Mon, 17 Aug", rows: [
+    { doc: "SIP", action: "Resumed SIP validation", station: "Bisalwas Kalan", code: "BIWK", tone: "info", label: "In progress", time: "2:30 PM" },
+    { doc: "ESP", action: "Approved ESP v2.1", station: "Tenali Junction", code: "TEL", tone: "success", label: "Approved", time: "11:00 AM" },
+    { doc: "ESP", action: "Returned ESP with 3 remarks", station: "Ongole", code: "OGL", tone: "danger", label: "Returned", time: "9:15 AM" }
+  ] },
+  { day: "Yesterday \xB7 Sun, 16 Aug", rows: [
+    { doc: "SIP", action: "Generated SIP draft", station: "Rajahmundry", code: "RJY", tone: "neutral", label: "Done", time: "4:45 PM" },
+    { doc: "LIB", action: "Published SOD rule-set 2026.2", station: "Zone-wide", code: "SCR", tone: "neutral", label: "Done", time: "2:00 PM" },
+    { doc: "ESP", action: "Fixed 3 SOD violations", station: "Guntur Junction", code: "GNT", tone: "neutral", label: "Done", time: "11:30 AM" }
+  ] }
+];
+const DOC_TONE = { ESP: "#3737C8", SIP: "#0D9488", TOC: "#B45309", TAD: "#0EA5E9", LIB: "#64748B" };
+const rapidCSS = `
+/* \u2500\u2500 shell \u2500\u2500 */
+.rh-app { display: grid; grid-template-columns: 252px 1fr; height: 100vh; overflow: hidden; background: var(--canvas); }
+.rh-app .ds-sidebar { width: 252px; height: 100vh; overflow: hidden; }
+.rh-main { display: flex; flex-direction: column; height: 100vh; overflow: hidden; min-width: 0; container: rh-home / inline-size; }
+/* embedded in Digital Library's own shell \u2014 it owns the sidebar and the height */
+.rh-main-embedded { flex: 1; width: 100%; height: 100%; min-width: 0; background: var(--canvas); }
+
+/* \u2500\u2500 topbar \u2500\u2500 */
+.rh-topbar { flex-shrink: 0; background: var(--paper); border-bottom: var(--hairline); padding: 0 24px; }
+.rh-live { display: inline-flex; align-items: center; gap: 5px; color: var(--success-text); font-weight: 600; }
+.rh-live i { width: 6px; height: 6px; border-radius: 50%; background: var(--success); display: block; }
+.rh-topbar-spacer { flex: 1; min-width: 12px; }
+
+/* Digital Library Home header */
+.rh-home-head-main { min-height: 66px; padding: 13px 0 10px; display: flex; align-items: center; gap: 20px; }
+.rh-home-head-copy { min-width: 0; }
+.rh-home-title { margin: 0; color: var(--ink-900); font-size: 20px; font-weight: 800; line-height: 1.15; letter-spacing: -0.025em; }
+.rh-home-title-pipe { margin: 0 7px; color: var(--ink-300); font-weight: 500; }
+.rh-home-meta { margin-top: 4px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: var(--ink-500); font-size: 11.5px; }
+.rh-home-meta > * + *::before { content: "\xB7"; margin-right: 8px; color: var(--ink-300); }
+.rh-home-head-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.rh-home-head-actions .ds-search { width: 270px; }
+.rh-home-head-actions .ds-search-input { height: 32px; padding-right: 12px; font-size: 12px; box-shadow: none; }
+.rh-home-head-actions .ds-search-kbd { display: none; }
+
+/* applied filters row */
+.rh-scopebar { min-height: 45px; padding: 8px 0 10px; border-top: 1px solid var(--ink-100); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.rh-scope-label { margin-right: 1px; color: var(--ink-400); font-size: 9px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; }
+.rh-filter-chip { height: 26px; padding: 0 10px; border: 1px solid #D9DAF4; border-radius: var(--r-full); background: #F7F7FE; color: var(--ink-500); display: inline-flex; align-items: center; gap: 5px; font: inherit; font-size: 11px; cursor: pointer; white-space: nowrap; transition: 120ms; }
+.rh-filter-chip:hover { border-color: #B9BCEB; background: #F1F1FC; }
+.rh-filter-chip b { color: #30309C; font-weight: 750; }
+.rh-scope-summary { color: var(--ink-400); font-size: 10.5px; white-space: nowrap; }
+.rh-updated { font-size: 11px; color: var(--ink-400); font-variant-numeric: tabular-nums; }
+.rh-filter-open { height: 30px; padding: 0 9px 0 10px; border: 1px solid #3737C8; border-radius: var(--r-md); background: #3737C8; color: #fff; display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 10px -6px rgba(55,55,200,.75); }
+.rh-filter-open:hover { background: #2F2FAE; border-color: #2F2FAE; }
+.rh-filter-count { min-width: 17px; height: 17px; padding: 0 5px; border-radius: var(--r-full); background: rgba(255,255,255,.18); display: grid; place-items: center; font-size: 9.5px; }
+
+/* right-side filter drawer */
+.rh-filter-scrim { position: fixed; inset: 0; z-index: 110; padding: 0; border: 0; background: rgba(14,27,44,.30); cursor: default; animation: rhScrimIn 140ms ease-out; }
+.rh-filter-drawer { position: fixed; z-index: 111; top: 0; right: 0; bottom: 0; width: min(336px, calc(100vw - 24px)); background: var(--paper); box-shadow: -18px 0 38px rgba(14,27,44,.14); display: flex; flex-direction: column; outline: none; animation: rhDrawerIn 170ms ease-out; }
+@keyframes rhScrimIn { from { opacity: 0; } }
+@keyframes rhDrawerIn { from { transform: translateX(18px); opacity: .7; } }
+@media (prefers-reduced-motion: reduce) { .rh-filter-scrim, .rh-filter-drawer { animation: none; } }
+.rh-filter-drawer-head { min-height: 60px; padding: 14px 17px; border-bottom: var(--hairline); display: flex; align-items: flex-start; gap: 12px; }
+.rh-filter-drawer-title { color: var(--ink-900); font-size: 14px; font-weight: 800; }
+.rh-filter-drawer-sub { margin-top: 2px; color: var(--ink-500); font-size: 10.5px; }
+.rh-filter-close { margin-left: auto; width: 28px; height: 28px; border: var(--hairline); border-radius: var(--r-md); background: var(--paper); color: var(--ink-500); display: grid; place-items: center; cursor: pointer; }
+.rh-filter-close:hover { background: var(--ink-50); color: var(--ink-900); }
+.rh-filter-drawer-body { flex: 1; min-height: 0; overflow-y: auto; padding: 14px 17px 24px; display: flex; flex-direction: column; gap: 14px; }
+.rh-filter-field { display: grid; gap: 5px; }
+.rh-filter-field label { color: var(--ink-500); font-size: 9.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.rh-filter-select { width: 100%; height: 34px; padding: 0 10px; border: 1px solid #D8E0EA; border-radius: var(--r-md); background: var(--paper); color: var(--ink-900); font: inherit; font-size: 12px; font-weight: 600; outline: none; }
+.rh-filter-select:focus { border-color: #3737C8; box-shadow: 0 0 0 3px rgba(55,55,200,.10); }
+.rh-filter-select:disabled { background: var(--ink-50); color: var(--ink-400); cursor: not-allowed; }
+.rh-filter-hint { color: var(--ink-400); font-size: 10px; }
+.rh-filter-drawer-foot { padding: 12px 17px; border-top: var(--hairline); background: var(--ink-50); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.rh-filter-reset, .rh-filter-apply { height: 34px; padding: 0 13px; border-radius: var(--r-md); font: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer; }
+.rh-filter-reset { border: var(--hairline); background: var(--paper); color: var(--ink-700); }
+.rh-filter-apply { margin-left: auto; border: 1px solid #3737C8; background: #3737C8; color: #fff; }
+.rh-filter-chip:focus-visible, .rh-filter-open:focus-visible, .rh-filter-close:focus-visible, .rh-filter-reset:focus-visible, .rh-filter-apply:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+
+@media (max-width: 920px) {
+  .rh-home-head-main { align-items: flex-start; flex-wrap: wrap; }
+  .rh-home-head-actions { width: 100%; margin-left: 0; }
+  .rh-home-head-actions .ds-search { width: auto; flex: 1; }
+  .rh-scope-summary { display: none; }
+}
+@media (max-width: 640px) {
+  .rh-topbar { padding-left: 15px; padding-right: 15px; }
+  .rh-home-title { font-size: 18px; }
+  .rh-home-head-actions { align-items: stretch; }
+  .rh-home-head-actions .ds-search { min-width: 0; }
+  .rh-updated { display: none; }
+  .rh-filter-drawer { width: 100vw; }
+}
+
+/* \u2500\u2500 content \u2500\u2500 */
+.rh-content { flex: 1; overflow-y: auto; padding: 22px 28px 60px; display: flex; flex-direction: column; gap: 22px; }
+.rh-sec { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.rh-sec-head { display: flex; align-items: baseline; gap: 10px; }
+.rh-sec-head, .rh-empty { grid-column: 1 / -1; }
+.rh-content > .rh-sec > .rh-sec-head { display: none; }
+.rh-sec-title { font-size: 12px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-500); }
+.rh-sec-note { font-size: 12px; color: var(--ink-400); }
+.rh-sec-link { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--accent-text); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
+.rh-sec-link:hover { text-decoration: underline; }
+
+/* \u2500\u2500 module access strip \u2500\u2500 */
+.rh-module-access { min-width: 0; display: grid; gap: 12px; }
+.rh-module-access-title { margin: 0; color: var(--ink-500); font-size: 12px; font-weight: 800; letter-spacing: .07em; line-height: 1; text-transform: uppercase; }
+.rh-module-access-grid { min-width: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+.rh-access-card { position: relative; min-width: 0; min-height: 158px; height: 100%; padding: 14px 15px 13px; border: var(--hairline); border-radius: var(--r-lg); background: var(--paper); display: grid; grid-template-rows: auto 1fr auto; row-gap: 10px; overflow: hidden; transition: border-color 150ms, box-shadow 150ms, transform 150ms; }
+.rh-access-card[data-accent="true"]::before { content: ""; position: absolute; z-index: 1; top: -1px; left: -1px; right: -1px; height: 3px; border-radius: var(--r-lg) var(--r-lg) 0 0; background: #4141D8; }
+.rh-access-card:hover { border-color: #C7D2E1; box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+.rh-access-head { min-width: 0; min-height: 54px; display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: start; gap: 10px; }
+.rh-access-icon { width: 34px; height: 34px; border-radius: 9px; background: #F1F1FF; color: #3737C8; display: grid; place-items: center; }
+.rh-access-copy { min-width: 0; }
+.rh-access-name { margin: 1px 0 0; color: var(--ink-900); font-size: 13.5px; font-weight: 700; letter-spacing: -.012em; line-height: 1.25; }
+.rh-access-summary { margin-top: 5px; color: var(--ink-400); font-size: 11px; line-height: 1.25; }
+.rh-access-metrics { align-self: start; display: grid; gap: 9px; margin: 0; }
+.rh-access-row { min-width: 0; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.rh-access-row dt { min-width: 0; color: var(--ink-500); font-size: 11px; line-height: 1.35; }
+.rh-access-row dd { margin: 0; color: var(--ink-900); font-size: 12px; font-weight: 800; line-height: 1.35; font-variant-numeric: tabular-nums; }
+.rh-access-open { align-self: end; width: max-content; max-width: 100%; padding: 0; border: 0; background: transparent; color: #3030B5; display: inline-flex; align-items: center; gap: 4px; font: inherit; font-size: 11.5px; font-weight: 750; cursor: pointer; }
+.rh-access-open:hover { color: #202090; text-decoration: underline; }
+.rh-access-open:focus-visible { outline: none; border-radius: var(--r-xs); box-shadow: var(--shadow-focus); }
+
+/* \u2500\u2500 module tiles \u2500\u2500 */
+.rh-mod-grid, .rh-mod-grid-sm { display: contents; }
+.rh-mod-grid > .rh-mod { grid-column: span 3; }
+.rh-mod-grid-sm > .rh-mod { grid-column: span 2; }
+.rh-mod { background: var(--paper); border: var(--hairline); border-radius: var(--r-lg); padding: 16px 18px 14px; display: grid; grid-template-columns: minmax(96px, .8fr) minmax(180px, 1.2fr); grid-template-rows: auto minmax(52px, 1fr) auto; column-gap: 16px; row-gap: 12px; min-width: 0; min-height: 212px; height: 100%; position: relative; overflow: hidden; transition: 160ms; }
+.rh-mod[data-open="true"] { cursor: pointer; }
+.rh-mod[data-open="true"]:hover { border-color: color-mix(in srgb, var(--m) 45%, var(--ink-200)); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.rh-mod[data-open="false"] { background: linear-gradient(180deg, var(--ink-50), var(--paper)); border-style: dashed; }
+.rh-mod-top { grid-column: 1 / -1; grid-row: 1; display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: flex-start; column-gap: 11px; min-width: 0; min-height: 54px; }
+.rh-mod-icon { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; background: color-mix(in srgb, var(--m) 12%, var(--paper)); color: var(--m); border: 1px solid color-mix(in srgb, var(--m) 22%, transparent); }
+.rh-mod[data-open="false"] .rh-mod-icon { background: var(--ink-100); color: var(--ink-400); border-color: var(--ink-200); }
+.rh-mod-name { min-width: 0; font-size: 14.5px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.015em; line-height: 1.25; display: flex; align-items: center; flex-wrap: wrap; column-gap: 7px; row-gap: 2px; }
+.rh-mod-code { flex: 0 0 auto; white-space: nowrap; font-family: var(--font-mono); font-size: 9.5px; font-weight: 800; letter-spacing: 0.04em; padding: 1.5px 5px; border-radius: var(--r-xs); background: color-mix(in srgb, var(--m) 12%, var(--paper)); color: var(--m); }
+.rh-mod[data-open="false"] .rh-mod-code { background: var(--ink-100); color: var(--ink-500); }
+.rh-mod-desc { min-height: 2.9em; font-size: 11.5px; color: var(--ink-500); margin-top: 3px; line-height: 1.45; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.rh-mod-stage { margin-left: auto; flex-shrink: 0; }
+.rh-mod-figure { grid-column: 1; grid-row: 2; align-self: center; min-width: 0; display: flex; align-items: baseline; gap: 7px; }
+.rh-mod-counts { grid-column: 2; grid-row: 2; align-self: center; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+.rh-mod-count { min-width: 0; min-height: 50px; padding: 8px 10px; border: var(--hairline); border-radius: var(--r-md); background: var(--ink-50); display: flex; flex-direction: column; justify-content: center; }
+.rh-mod-count b { display: block; font-size: 19px; line-height: 1.15; color: var(--ink-900); font-variant-numeric: tabular-nums; }
+.rh-mod-count span { font-size: 10.5px; color: var(--ink-500); }
+.rh-mod-headline { font-size: 24px; font-weight: 700; letter-spacing: -0.03em; color: var(--ink-900); font-variant-numeric: tabular-nums; line-height: 1; }
+.rh-mod-headline-label { font-size: 11.5px; color: var(--ink-500); }
+.rh-mod-bar { display: flex; height: 7px; border-radius: 99px; overflow: hidden; background: var(--ink-100); }
+.rh-mod-bar span { display: block; height: 100%; }
+.rh-mod-legend { display: flex; gap: 14px; flex-wrap: wrap; }
+.rh-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--ink-500); }
+.rh-legend-item i { width: 7px; height: 7px; border-radius: 2px; display: block; flex-shrink: 0; }
+.rh-legend-item b { color: var(--ink-900); font-weight: 700; font-variant-numeric: tabular-nums; }
+.rh-mod-alerts { display: flex; flex-direction: column; gap: 5px; }
+.rh-mod-alert { display: flex; align-items: center; gap: 7px; font-size: 11.5px; font-weight: 600; padding: 5px 9px; border-radius: var(--r-sm); }
+.rh-mod-alert[data-tone="danger"] { background: var(--danger-soft); color: var(--danger-text); }
+.rh-mod-alert[data-tone="warning"] { background: var(--warning-soft); color: var(--warning-text); }
+.rh-mod-alert[data-tone="info"] { background: var(--info-soft); color: var(--info-text); }
+/* centres in whatever space the tallest sibling tile leaves behind */
+.rh-mod-placeholder { grid-column: 1 / -1; grid-row: 2; align-self: center; margin: 0; font-size: 11.5px; color: var(--ink-400); line-height: 1.5; }
+.rh-mod-foot { grid-column: 1 / -1; grid-row: 3; margin-top: 0; padding-top: 11px; border-top: var(--hairline); display: flex; align-items: center; gap: 10px; }
+.rh-mod-cta { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--m); background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
+.rh-mod-cta:hover { text-decoration: underline; }
+.rh-mod-quiet { font-size: 11.5px; color: var(--ink-400); margin-left: auto; }
+.rh-mod-locked { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--ink-400); font-weight: 600; }
+
+/* The three-up row keeps the same card height with tighter internal geometry. */
+.rh-mod-grid-sm > .rh-mod { grid-template-columns: minmax(76px, .72fr) minmax(140px, 1.28fr); padding: 14px 15px 13px; column-gap: 12px; row-gap: 10px; }
+.rh-mod-grid-sm .rh-mod-top { grid-template-columns: 34px minmax(0, 1fr) auto; column-gap: 10px; min-height: 72px; }
+.rh-mod-grid-sm .rh-mod-icon { width: 34px; height: 34px; border-radius: 9px; }
+.rh-mod-grid-sm .rh-mod-name { font-size: 13.5px; }
+.rh-mod-grid-sm .rh-mod-desc { font-size: 11px; }
+.rh-mod-grid-sm .rh-mod-headline { font-size: 22px; }
+.rh-mod-grid-sm .rh-mod-count { min-height: 48px; padding: 7px 9px; }
+.rh-mod-grid-sm .rh-mod-count b { font-size: 18px; }
+.rh-mod-grid-sm .rh-mod-foot { padding-top: 9px; }
+
+/* \u2500\u2500 cards \u2500\u2500 */
+.rh-card { background: var(--paper); border: var(--hairline); border-radius: var(--r-lg); display: flex; flex-direction: column; overflow: hidden; }
+.rh-content > .rh-card { flex-shrink: 0; }
+.rh-grid-2 > .rh-card-fill { align-self: stretch; }
+.rh-card-fill .rh-table-wrap { flex: 1; }
+.rh-card-fill .rh-table { height: 100%; }
+.rh-card-fill .rh-meter-track { width: auto; flex: 1; min-width: 44px; }
+.rh-card-head { padding: 14px 18px; border-bottom: var(--hairline); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.rh-card-title { font-size: 13.5px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.01em; }
+.rh-card-sub { font-size: 11.5px; color: var(--ink-500); margin-top: 2px; }
+.rh-card-head-right { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.rh-card-body { padding: 14px 18px; }
+.rh-card-foot { margin-top: auto; padding: 9px 16px; border-top: var(--hairline); background: var(--ink-50); display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--ink-400); }
+.rh-card-foot button { font-size: 11.5px; font-weight: 700; color: var(--accent-text); background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; }
+.rh-card-foot button:hover { text-decoration: underline; }
+
+.rh-grid-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: 18px; align-items: start; }
+.rh-grid-2b { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+
+/* \u2500\u2500 pipeline funnel \u2500\u2500 */
+.rh-stage { display: flex; align-items: center; gap: 13px; padding: 9px 10px; border-radius: var(--r-md); cursor: pointer; transition: background 120ms; }
+.rh-stage:hover { background: var(--ink-50); }
+.rh-stage-rail { width: 3px; height: 30px; border-radius: 2px; flex-shrink: 0; background: var(--c); }
+.rh-stage-main { flex: 1; min-width: 0; }
+.rh-stage-name { font-size: 12.5px; font-weight: 700; color: var(--ink-900); }
+.rh-stage-desc { font-size: 11px; color: var(--ink-500); margin-top: 1px; }
+.rh-stage-track { flex: 0 1 200px; min-width: 90px; height: 6px; border-radius: 99px; background: var(--ink-100); overflow: hidden; }
+.rh-stage-fill { height: 100%; border-radius: 99px; background: var(--c); }
+.rh-stage-num { width: 74px; text-align: right; flex-shrink: 0; }
+.rh-stage-count { font-size: 16px; font-weight: 700; color: var(--ink-900); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.rh-stage-pct { font-size: 10.5px; color: var(--ink-400); font-variant-numeric: tabular-nums; }
+.rh-stage-drop { font-size: 10.5px; font-weight: 700; color: var(--danger-text); }
+
+/* \u2500\u2500 list rows \u2500\u2500 */
+.rh-row { display: flex; align-items: center; gap: 11px; padding: 9px 16px; border-bottom: var(--hairline); cursor: pointer; transition: background 120ms; }
+.rh-row:hover { background: var(--ink-50); }
+.rh-row:last-child { border-bottom: none; }
+.rh-doc { font-family: var(--font-mono); font-size: 9px; font-weight: 800; letter-spacing: 0.03em; padding: 3px 5px; border-radius: var(--r-xs); flex-shrink: 0; min-width: 30px; text-align: center; background: color-mix(in srgb, var(--d) 12%, var(--paper)); color: var(--d); }
+.rh-row-main { flex: 1; min-width: 0; }
+.rh-row-title { font-size: 12.5px; font-weight: 600; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rh-row-meta { font-size: 10.5px; color: var(--ink-500); margin-top: 1px; display: flex; align-items: center; gap: 6px; }
+.rh-code { font-family: var(--font-mono); font-size: 9.5px; padding: 0 4px; border-radius: var(--r-xs); background: var(--ink-100); color: var(--ink-500); font-weight: 600; }
+.rh-row-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+.rh-age { font-size: 10.5px; font-weight: 700; color: var(--ink-400); font-variant-numeric: tabular-nums; }
+.rh-age[data-hot="true"] { color: var(--danger-text); }
+.rh-count-badge { min-width: 28px; height: 24px; border-radius: var(--r-sm); display: grid; place-items: center; font-size: 11.5px; font-weight: 800; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.rh-count-badge[data-sev="high"] { background: var(--danger-soft); color: var(--danger-text); }
+.rh-count-badge[data-sev="mid"] { background: var(--warning-soft); color: var(--warning-text); }
+.rh-scroll { max-height: 328px; overflow-y: auto; }
+
+/* \u2500\u2500 activity \u2500\u2500 */
+.rh-day { position: sticky; top: 0; z-index: 1; background: var(--ink-50); padding: 6px 16px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-400); border-bottom: var(--hairline); }
+
+/* \u2500\u2500 table \u2500\u2500 */
+/* the wrapper is the safety net: a narrow card scrolls the table instead of
+   clipping its last column against .rh-card's overflow:hidden */
+.rh-table-wrap { overflow-x: auto; }
+.rh-table { width: 100%; border-collapse: collapse; }
+.rh-table th, .rh-table td { white-space: nowrap; }
+.rh-table thead th { background: var(--ink-50); font-size: 10px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-500); text-align: left; padding: 9px 12px; border-bottom: var(--hairline); }
+.rh-table tbody td { padding: 10px 12px; border-bottom: var(--hairline); vertical-align: middle; }
+.rh-table th:first-child, .rh-table td:first-child { padding-left: 18px; }
+.rh-table th:last-child, .rh-table td:last-child { padding-right: 18px; }
+/* numeric + status columns read as a column only when right-aligned */
+.rh-table th[data-align="right"], .rh-table td[data-align="right"] { text-align: right; }
+.rh-table tbody tr { cursor: pointer; transition: background 120ms; }
+.rh-table tbody tr:hover { background: var(--ink-50); }
+.rh-table tbody tr:last-child td { border-bottom: none; }
+.rh-td-name { font-size: 13px; font-weight: 700; color: var(--ink-900); }
+.rh-td-sub { font-size: 10.5px; color: var(--ink-400); margin-top: 1px; }
+.rh-meter { display: flex; align-items: center; gap: 9px; }
+.rh-meter-track { width: 62px; height: 6px; border-radius: 99px; background: var(--ink-100); overflow: hidden; flex-shrink: 0; }
+.rh-meter-fill { height: 100%; border-radius: 99px; }
+.rh-meter-pct { font-size: 11.5px; font-weight: 700; color: var(--ink-700); font-variant-numeric: tabular-nums; min-width: 32px; text-align: right; }
+.rh-legend { display: flex; align-items: center; gap: 14px; font-size: 11.5px; color: var(--ink-500); }
+.rh-legend-item { display: flex; align-items: center; gap: 6px; }
+.rh-legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.rh-overall { font-size: 13.5px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.rh-num { font-size: 13px; font-weight: 600; color: var(--ink-700); font-variant-numeric: tabular-nums; }
+
+/* \u2500\u2500 empty / no-access \u2500\u2500 */
+.rh-empty { border: 1px dashed var(--ink-300); border-radius: var(--r-lg); padding: 28px; text-align: center; color: var(--ink-500); font-size: 13px; background: var(--paper); }
+
+@media (max-width: 1380px) {
+  .rh-grid-2, .rh-grid-2b { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 1240px) {
+  .rh-mod-grid-sm > .rh-mod { grid-column: span 3; }
+  .rh-mod-grid-sm > .rh-mod:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc((100% - 16px) / 2); justify-self: center; }
+}
+@media (max-width: 1080px) {
+  .rh-mod-grid > .rh-mod, .rh-mod-grid-sm > .rh-mod { grid-column: 1 / -1; min-height: 0; }
+  .rh-mod-grid-sm > .rh-mod:last-child:nth-child(odd) { width: auto; justify-self: stretch; }
+}
+@container rh-home (max-width: 1100px) {
+  .rh-module-access-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .rh-access-card { grid-column: span 2; }
+  .rh-access-card:first-child:nth-last-child(2) { grid-column: 2 / span 2; }
+  .rh-access-card:first-child:nth-last-child(2) + .rh-access-card { grid-column: 4 / span 2; }
+  .rh-access-card:nth-child(4):nth-last-child(2) { grid-column: 2 / span 2; }
+  .rh-access-card:nth-child(4):nth-last-child(2) + .rh-access-card { grid-column: 4 / span 2; }
+}
+@container rh-home (max-width: 760px) {
+  .rh-module-access-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rh-access-card, .rh-access-card:first-child:nth-last-child(2), .rh-access-card:first-child:nth-last-child(2) + .rh-access-card, .rh-access-card:nth-child(4):nth-last-child(2), .rh-access-card:nth-child(4):nth-last-child(2) + .rh-access-card { grid-column: auto; }
+  .rh-access-card:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc((100% - 12px) / 2); justify-self: center; }
+}
+@container rh-home (max-width: 480px) {
+  .rh-module-access-grid { grid-template-columns: minmax(0, 1fr); }
+  .rh-access-card:last-child:nth-child(odd) { grid-column: auto; width: auto; justify-self: stretch; }
+}
+`;
+const MODULE_ACTIONS = {
+  esp: [
+    { id: "espCreate", icon: "plus", label: "Create ESP" },
+    { id: "espUpdate", icon: "edit", label: "Update ESP" }
+  ],
+  sip: [
+    { id: "sipCreate", icon: "plus", label: "Create SIP" },
+    { id: "sipUpdate", icon: "edit", label: "Update SIP" }
+  ]
+};
+const buildSidebarNav = (role, granted) => ({
+  brand: { mark: "R", title: "RAPID", sub: "Indian Railways" },
+  // "Vijayawada Division" → "Vijayawada"; the 252px rail has no room for the noun
+  scope: {
+    label: "Scope",
+    value: `${role.scope.zone.split(" \u2014 ")[0]} \xB7 ${role.scope.division.replace(/ Division$/, "")}`
+  },
+  user: {
+    initials: role.user.initials,
+    name: role.user.name,
+    role: role.user.designation,
+    action: "log_out",
+    actionTitle: "Sign out"
+  },
+  // Three titled sections. No counts, no stage tags — the rail is for
+  // navigation; status lives on the dashboard itself.
+  groups: [
+    {
+      id: "main",
+      label: "Main",
+      header: true,
+      collapsible: true,
+      defaultOpen: true,
+      items: [
+        { id: "home", icon: "home", label: "Home" },
+        role.can.library && { id: "library", icon: "book", label: "Digital Library" }
+      ].filter(Boolean)
+    },
+    {
+      id: "modules",
+      label: "Modules",
+      header: true,
+      collapsible: true,
+      defaultOpen: true,
+      emptyLabel: "No modules granted",
+      items: granted.map((m) => ({
+        id: m.id,
+        icon: m.icon,
+        label: m.name,
+        disabled: m.stage === "soon",
+        title: m.stage === "soon" ? `${m.name} \u2014 not released yet` : m.name,
+        children: m.stage === "soon" ? void 0 : MODULE_ACTIONS[m.id]
+      }))
+    },
+    {
+      id: "system",
+      label: "System",
+      header: true,
+      collapsible: true,
+      defaultOpen: true,
+      items: [
+        role.can.users && { id: "users", icon: "users", label: "User Management" },
+        { id: "help", icon: "info", label: "Help" },
+        { id: "settings", icon: "settings", label: "Settings" }
+      ].filter(Boolean)
+    }
+  ]
+});
+const DASHBOARD_FILTER_DEFAULTS = Object.freeze({
+  viewBy: "Division",
+  zone: "SCR \u2014 South Central Railway",
+  division: "All divisions",
+  section: "All sections",
+  financialYear: "FY 2026\u201327",
+  module: "All modules"
+});
+const DIVISION_SECTIONS = {
+  "Vijayawada Division": ["Vijayawada\u2013Gudivada", "Vijayawada\u2013Tenali"],
+  "Guntur Division": ["Guntur\u2013Tenali", "Guntur\u2013Nallapadu"],
+  "Hyderabad Division": ["Secunderabad\u2013Kazipet", "Kazipet\u2013Dornakal"],
+  "Nanded Division": ["Nanded\u2013Mudkhed", "Mudkhed\u2013Adilabad"]
+};
+const DashboardFilterField = ({ id, label, hint, children }) => /* @__PURE__ */ React.createElement("div", { className: "rh-filter-field" }, /* @__PURE__ */ React.createElement("label", { htmlFor: id }, label), children, hint && /* @__PURE__ */ React.createElement("span", { className: "rh-filter-hint" }, hint));
+const ScopeBar = ({ role }) => {
+  const [filtersOpen, setFiltersOpen] = useStateD(false);
+  const [appliedFilters, setAppliedFilters] = useStateD({ ...DASHBOARD_FILTER_DEFAULTS });
+  const [draftFilters, setDraftFilters] = useStateD({ ...DASHBOARD_FILTER_DEFAULTS });
+  const [updatedLabel, setUpdatedLabel] = useStateD("Updated 4 min ago");
+  const openerRef = useRefD(null);
+  const drawerRef = useRefD(null);
+  const stage = "SIP generated";
+  const { viewBy, zone, division, section, financialYear, module } = appliedFilters;
+  const zoneCode = zone.split(" \u2014 ")[0];
+  const filterCount = 4 + (module === "All modules" ? 0 : 1);
+  const draftFilterCount = 4 + (draftFilters.module === "All modules" ? 0 : 1);
+  const sectionOptions = DIVISION_SECTIONS[draftFilters.division] || [];
+  const chips = [
+    { label: "View by", value: viewBy },
+    { label: "Zone", value: zoneCode },
+    { label: "FY", value: financialYear },
+    { label: "Stage", value: stage },
+    ...module === "All modules" ? [] : [{ label: "Module", value: module }]
+  ];
+  const openFilters = (event) => {
+    openerRef.current = event.currentTarget;
+    setDraftFilters({ ...appliedFilters });
+    setFiltersOpen(true);
+  };
+  const closeFilters = () => {
+    setFiltersOpen(false);
+    window.setTimeout(() => openerRef.current?.focus(), 0);
+  };
+  const updateDraft = (changes) => setDraftFilters((current) => ({ ...current, ...changes }));
+  const applyFilters = () => {
+    setAppliedFilters({ ...draftFilters });
+    closeFilters();
+  };
+  useEffectD(() => {
+    if (!filtersOpen) return void 0;
+    const drawer = drawerRef.current;
+    drawer?.querySelector(".rh-filter-close")?.focus();
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeFilters();
+        return;
+      }
+      if (event.key !== "Tab" || !drawer) return;
+      const focusable = [...drawer.querySelectorAll("button:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex='-1'])")];
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [filtersOpen]);
+  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "rh-home-head-main" }, /* @__PURE__ */ React.createElement("div", { className: "rh-home-head-copy" }, /* @__PURE__ */ React.createElement("h1", { className: "rh-home-title", "aria-label": "Rapid Platform | Dashboard" }, "Rapid Platform", /* @__PURE__ */ React.createElement("span", { className: "rh-home-title-pipe" }, "|"), "Dashboard"), /* @__PURE__ */ React.createElement("div", { className: "rh-home-meta" }, /* @__PURE__ */ React.createElement("span", null, role.label), /* @__PURE__ */ React.createElement("span", null, "Mon, 17 Aug 2026"), /* @__PURE__ */ React.createElement("span", { className: "rh-live" }, /* @__PURE__ */ React.createElement("i", null), Object.keys(role.grants).length, " modules active"))), /* @__PURE__ */ React.createElement("div", { className: "rh-home-head-actions" }, /* @__PURE__ */ React.createElement(HeaderSearch, { placeholder: "Search stations, drawings, approvals\u2026" }), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", size: "sm", leadingIcon: "refresh", onClick: () => setUpdatedLabel("Updated just now") }, "Refresh"))), /* @__PURE__ */ React.createElement("div", { className: "rh-scopebar" }, /* @__PURE__ */ React.createElement("span", { className: "rh-scope-label" }, "Applied"), chips.map((chip) => /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-chip", key: chip.label, onClick: openFilters }, /* @__PURE__ */ React.createElement("span", null, chip.label), /* @__PURE__ */ React.createElement("b", null, chip.value))), /* @__PURE__ */ React.createElement("span", { className: "rh-scope-summary" }, zoneCode, " \xB7 ", division, " \xB7 ", section), /* @__PURE__ */ React.createElement("div", { className: "rh-topbar-spacer" }), /* @__PURE__ */ React.createElement("span", { className: "rh-updated", "aria-live": "polite" }, updatedLabel), /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-open", onClick: openFilters }, /* @__PURE__ */ React.createElement(Icon, { name: "filter", size: 13 }), "Filters", /* @__PURE__ */ React.createElement("span", { className: "rh-filter-count" }, filterCount))), filtersOpen && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-scrim", "aria-label": "Close filters", onClick: closeFilters }), /* @__PURE__ */ React.createElement("aside", { ref: drawerRef, tabIndex: -1, className: "rh-filter-drawer", role: "dialog", "aria-modal": "true", "aria-labelledby": "dashboard-filter-title" }, /* @__PURE__ */ React.createElement("div", { className: "rh-filter-drawer-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "rh-filter-drawer-title", id: "dashboard-filter-title" }, "Filters"), /* @__PURE__ */ React.createElement("div", { className: "rh-filter-drawer-sub" }, "Zone \u2192 Division \u2192 Section cascade")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-close", "aria-label": "Close filters", onClick: closeFilters }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 14 }))), /* @__PURE__ */ React.createElement("div", { className: "rh-filter-drawer-body" }, /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-view-by", label: "View by", hint: "Sets the grouping used by dashboard reporting" }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-view-by", className: "rh-filter-select", value: draftFilters.viewBy, onChange: (e) => updateDraft({ viewBy: e.target.value }) }, /* @__PURE__ */ React.createElement("option", null, "Zone"), /* @__PURE__ */ React.createElement("option", null, "Division"), /* @__PURE__ */ React.createElement("option", null, "Section"))), /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-zone", label: "Zone", hint: "Your admin scope" }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-zone", className: "rh-filter-select", value: draftFilters.zone, onChange: (e) => updateDraft({ zone: e.target.value, division: "All divisions", section: "All sections" }) }, /* @__PURE__ */ React.createElement("option", null, "SCR \u2014 South Central Railway"))), /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-division", label: "Division", hint: "Choosing a division resets the section" }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-division", className: "rh-filter-select", value: draftFilters.division, onChange: (e) => updateDraft({ division: e.target.value, section: "All sections" }) }, /* @__PURE__ */ React.createElement("option", null, "All divisions"), /* @__PURE__ */ React.createElement("option", null, "Vijayawada Division"), /* @__PURE__ */ React.createElement("option", null, "Guntur Division"), /* @__PURE__ */ React.createElement("option", null, "Hyderabad Division"), /* @__PURE__ */ React.createElement("option", null, "Nanded Division"))), /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-section", label: "Section", hint: draftFilters.division === "All divisions" ? "Choose a division to select a section" : `Sections in ${draftFilters.division}` }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-section", className: "rh-filter-select", value: draftFilters.section, disabled: draftFilters.division === "All divisions", onChange: (e) => updateDraft({ section: e.target.value }) }, /* @__PURE__ */ React.createElement("option", null, "All sections"), sectionOptions.map((option) => /* @__PURE__ */ React.createElement("option", { key: option }, option)))), /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-financial-year", label: "Financial year", hint: "Approvals and aging are counted within the year" }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-financial-year", className: "rh-filter-select", value: draftFilters.financialYear, onChange: (e) => updateDraft({ financialYear: e.target.value }) }, /* @__PURE__ */ React.createElement("option", null, "FY 2026\u201327"), /* @__PURE__ */ React.createElement("option", null, "FY 2025\u201326"))), /* @__PURE__ */ React.createElement(DashboardFilterField, { id: "dashboard-module", label: "Module", hint: "Narrows widgets to one module's work" }, /* @__PURE__ */ React.createElement("select", { id: "dashboard-module", className: "rh-filter-select", value: draftFilters.module, onChange: (e) => updateDraft({ module: e.target.value }) }, /* @__PURE__ */ React.createElement("option", null, "All modules"), /* @__PURE__ */ React.createElement("option", null, "RAPID Track Alignment Design"), /* @__PURE__ */ React.createElement("option", null, "RAPID ESP"), /* @__PURE__ */ React.createElement("option", null, "RAPID SIP"), /* @__PURE__ */ React.createElement("option", null, "RAPID TOC"), /* @__PURE__ */ React.createElement("option", null, "RAPID Kavach")))), /* @__PURE__ */ React.createElement("div", { className: "rh-filter-drawer-foot" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-reset", onClick: () => setDraftFilters({ ...DASHBOARD_FILTER_DEFAULTS }) }, "Reset filters"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-filter-apply", onClick: applyFilters }, "Apply ", draftFilterCount, " filters")))));
+};
+const ModuleAccessStrip = ({ modules }) => {
+  if (!modules.length) return null;
+  return /* @__PURE__ */ React.createElement("section", { className: "rh-module-access", "aria-labelledby": "rh-module-access-title" }, /* @__PURE__ */ React.createElement("h2", { className: "rh-module-access-title", id: "rh-module-access-title" }, "Module access"), /* @__PURE__ */ React.createElement("div", { className: "rh-module-access-grid" }, modules.map((mod) => {
+    const access = MODULE_ACCESS_STATS[mod.id];
+    if (!access) return null;
+    return /* @__PURE__ */ React.createElement("article", { className: "rh-access-card", "data-accent": !!access.accent, key: mod.id }, /* @__PURE__ */ React.createElement("div", { className: "rh-access-head" }, /* @__PURE__ */ React.createElement("span", { className: "rh-access-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: mod.icon, size: 17 })), /* @__PURE__ */ React.createElement("div", { className: "rh-access-copy" }, /* @__PURE__ */ React.createElement("h3", { className: "rh-access-name" }, mod.name), /* @__PURE__ */ React.createElement("div", { className: "rh-access-summary" }, access.summary))), /* @__PURE__ */ React.createElement("dl", { className: "rh-access-metrics" }, access.rows.map(([label, value]) => /* @__PURE__ */ React.createElement("div", { className: "rh-access-row", key: label }, /* @__PURE__ */ React.createElement("dt", null, label), /* @__PURE__ */ React.createElement("dd", null, value)))), /* @__PURE__ */ React.createElement("button", { type: "button", className: "rh-access-open", "aria-label": `Open ${mod.name} module` }, "Open module ", /* @__PURE__ */ React.createElement(Icon, { name: "arrow_right", size: 12 })));
+  })));
+};
+const SplitBar = ({ split }) => {
+  const total = split.reduce((s, x) => s + x.value, 0) || 1;
+  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-bar" }, split.map((s) => /* @__PURE__ */ React.createElement("span", { key: s.label, style: { width: `${s.value / total * 100}%`, background: s.color } }))), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-legend" }, split.map((s) => /* @__PURE__ */ React.createElement("span", { className: "rh-legend-item", key: s.label }, /* @__PURE__ */ React.createElement("i", { style: { background: s.color } }), s.label, " ", /* @__PURE__ */ React.createElement("b", null, s.value)))));
+};
+const LegacyModuleTile = ({ mod, grant, compact }) => {
+  const open = mod.stage !== "soon" && !!grant;
+  const stats = MODULE_STATS[mod.id];
+  const stageChip = mod.stage === "live" ? /* @__PURE__ */ React.createElement(Chip, { tone: "success", dot: true }, "Live") : mod.stage === "pilot" ? /* @__PURE__ */ React.createElement(Chip, { tone: "info", dot: true }, "Pilot") : /* @__PURE__ */ React.createElement(Chip, { tone: "neutral" }, "Coming soon");
+  return /* @__PURE__ */ React.createElement("div", { className: "rh-mod", style: { "--m": mod.color }, "data-open": open }, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-top" }, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: mod.icon, size: compact ? 17 : 19 })), /* @__PURE__ */ React.createElement("div", { style: { minWidth: 0, flex: 1 } }, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-name" }, mod.name, /* @__PURE__ */ React.createElement("span", { className: "rh-mod-code" }, mod.code)), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-desc" }, mod.full)), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-stage" }, stageChip)), open && stats && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-figure" }, /* @__PURE__ */ React.createElement("span", { className: "rh-mod-headline" }, stats.headline), /* @__PURE__ */ React.createElement("span", { className: "rh-mod-headline-label" }, stats.headlineLabel)), /* @__PURE__ */ React.createElement(SplitBar, { split: stats.split }), stats.alerts && /* @__PURE__ */ React.createElement("div", { className: "rh-mod-alerts" }, stats.alerts.map((a) => /* @__PURE__ */ React.createElement("div", { className: "rh-mod-alert", key: a.text, "data-tone": a.tone }, /* @__PURE__ */ React.createElement(Icon, { name: a.tone === "info" ? "info" : "alert", size: 13 }), a.text))), stats.note && /* @__PURE__ */ React.createElement("div", { className: "rh-mod-quiet", style: { marginLeft: 0 } }, stats.note)), !open && /* @__PURE__ */ React.createElement("div", { className: "rh-mod-placeholder" }, "Provisioned for your zone \u2014 the module appears here at release."), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-foot" }, open ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { className: "rh-mod-cta" }, "Open ", mod.short, /* @__PURE__ */ React.createElement(Icon, { name: "arrow_right", size: 13 })), /* @__PURE__ */ React.createElement("span", { className: "rh-mod-quiet" }, grant === "view" ? "Read-only access" : grant === "full" ? "Full access" : "Edit access")) : /* @__PURE__ */ React.createElement("span", { className: "rh-mod-locked" }, /* @__PURE__ */ React.createElement(Icon, { name: "lock", size: 13 }), "Releases Q3 FY 2026\u201327")));
+};
+const ModuleTile = ({ mod, grant, compact }) => {
+  const stats = MODULE_STATS[mod.id];
+  return /* @__PURE__ */ React.createElement("div", { className: "rh-mod", style: { "--m": mod.color }, "data-open": true }, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-top" }, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-icon" }, /* @__PURE__ */ React.createElement(Icon, { name: mod.icon, size: compact ? 17 : 19 })), /* @__PURE__ */ React.createElement("div", { style: { minWidth: 0, flex: 1 } }, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-name" }, mod.name, /* @__PURE__ */ React.createElement("span", { className: "rh-mod-code" }, mod.code)), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-desc" }, mod.full))), stats && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-figure" }, /* @__PURE__ */ React.createElement("span", { className: "rh-mod-headline" }, stats.headline), /* @__PURE__ */ React.createElement("span", { className: "rh-mod-headline-label" }, stats.headlineLabel)), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-counts" }, /* @__PURE__ */ React.createElement("div", { className: "rh-mod-count" }, /* @__PURE__ */ React.createElement("b", null, stats.generated), /* @__PURE__ */ React.createElement("span", null, "Generated")), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-count" }, /* @__PURE__ */ React.createElement("b", null, stats.approved), /* @__PURE__ */ React.createElement("span", null, "Approved")))), /* @__PURE__ */ React.createElement("div", { className: "rh-mod-foot" }, /* @__PURE__ */ React.createElement("button", { className: "rh-mod-cta" }, "Open module", /* @__PURE__ */ React.createElement(Icon, { name: "arrow_right", size: 13 })), /* @__PURE__ */ React.createElement("span", { className: "rh-mod-quiet" }, grant === "view" ? "Read-only access" : "Full access")));
+};
+const StageDocsBar = ({ value, max, color }) => /* @__PURE__ */ React.createElement("div", { className: "rh-meter" }, /* @__PURE__ */ React.createElement("div", { className: "rh-meter-track" }, /* @__PURE__ */ React.createElement("div", { className: "rh-meter-fill", style: { width: `${value / max * 100}%`, background: color } })), /* @__PURE__ */ React.createElement("span", { className: "rh-meter-pct" }, value));
+const StageDocsRow = ({ s, max }) => /* @__PURE__ */ React.createElement("tr", { key: s.label }, /* @__PURE__ */ React.createElement("td", null, s.label), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(StageDocsBar, { value: s.esp, max, color: "#3737C8" })), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(StageDocsBar, { value: s.sip, max, color: "#0D9488" })));
+const StageDocsCard = () => {
+  const max = Math.max(...STAGE_DOCS.flatMap((s) => [s.esp, s.sip]));
+  const head = /* @__PURE__ */ React.createElement("div", { className: "rh-card-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "rh-card-title" }, "Documents by workflow stage"), /* @__PURE__ */ React.createElement("div", { className: "rh-card-sub" }, "ESP and SIP comparison")), /* @__PURE__ */ React.createElement("div", { className: "rh-card-head-right" }, /* @__PURE__ */ React.createElement("span", { className: "rh-legend" }, /* @__PURE__ */ React.createElement("span", { className: "rh-legend-item" }, /* @__PURE__ */ React.createElement("span", { className: "rh-legend-dot", style: { background: "#3737C8" } }), "ESP"), /* @__PURE__ */ React.createElement("span", { className: "rh-legend-item" }, /* @__PURE__ */ React.createElement("span", { className: "rh-legend-dot", style: { background: "#0D9488" } }), "SIP"))));
+  const table = /* @__PURE__ */ React.createElement("div", { className: "rh-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "rh-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Stage"), /* @__PURE__ */ React.createElement("th", null, "ESP"), /* @__PURE__ */ React.createElement("th", null, "SIP"))), /* @__PURE__ */ React.createElement("tbody", null, STAGE_DOCS.map((s) => /* @__PURE__ */ React.createElement(StageDocsRow, { key: s.label, s, max })))));
+  return /* @__PURE__ */ React.createElement("div", { className: "rh-card rh-card-fill" }, head, table);
+};
+const PipelineCard = () => {
+  const max = PIPELINE[0].count;
+  return /* @__PURE__ */ React.createElement("div", { className: "rh-card" }, /* @__PURE__ */ React.createElement("div", { className: "rh-card-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "rh-card-title" }, "ESP \u2192 SIP pipeline"), /* @__PURE__ */ React.createElement("div", { className: "rh-card-sub" }, SCOPE_TOTAL, " stations \xB7 where the zone is stuck")), /* @__PURE__ */ React.createElement("div", { className: "rh-card-head-right" }, /* @__PURE__ */ React.createElement(Chip, { tone: "neutral" }, "FY 2026\u201327"))), /* @__PURE__ */ React.createElement("div", { className: "rh-card-body", style: { padding: "10px 12px" } }, PIPELINE.map((s, i) => {
+    const prev = i > 0 ? PIPELINE[i - 1].count : null;
+    const drop = prev ? prev - s.count : 0;
+    return /* @__PURE__ */ React.createElement("div", { className: "rh-stage", key: s.id, style: { "--c": s.color } }, /* @__PURE__ */ React.createElement("span", { className: "rh-stage-rail" }), /* @__PURE__ */ React.createElement("div", { className: "rh-stage-main" }, /* @__PURE__ */ React.createElement("div", { className: "rh-stage-name" }, s.label), /* @__PURE__ */ React.createElement("div", { className: "rh-stage-desc" }, s.desc)), /* @__PURE__ */ React.createElement("div", { className: "rh-stage-track" }, /* @__PURE__ */ React.createElement("div", { className: "rh-stage-fill", style: { width: `${s.count / max * 100}%` } })), /* @__PURE__ */ React.createElement("div", { className: "rh-stage-num" }, /* @__PURE__ */ React.createElement("div", { className: "rh-stage-count" }, s.count), drop > 0 ? /* @__PURE__ */ React.createElement("div", { className: "rh-stage-drop" }, "\u2212", drop) : /* @__PURE__ */ React.createElement("div", { className: "rh-stage-pct" }, Math.round(s.count / max * 100), "%")));
+  })), /* @__PURE__ */ React.createElement("div", { className: "rh-card-foot" }, /* @__PURE__ */ React.createElement("span", null, "Biggest drop-off: ", /* @__PURE__ */ React.createElement("b", { style: { color: "var(--ink-700)" } }, "ESP validated \u2192 approved"), " (45 stations)"), /* @__PURE__ */ React.createElement("button", null, "Open ESP module \u2192")));
+};
+const AttentionCard = ({ canApprove }) => {
+  const tabs = [
+    canApprove && { id: "approvals", label: `Approvals ${APPROVALS.length}` },
+    { id: "overdue", label: `Overdue ${OVERDUE.length}` },
+    { id: "disc", label: "Discrepancies 43" }
+  ].filter(Boolean);
+  const [tabState, setTab] = useStateD(tabs[0].id);
+  const tab = tabs.some((t) => t.id === tabState) ? tabState : tabs[0].id;
+  return /* @__PURE__ */ React.createElement("div", { className: "rh-card" }, /* @__PURE__ */ React.createElement("div", { className: "rh-card-head", style: { paddingBottom: 12 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "rh-card-title" }, "Needs your attention"), /* @__PURE__ */ React.createElement("div", { className: "rh-card-sub" }, "Ranked by age \xB7 click to open the station"))), /* @__PURE__ */ React.createElement("div", { style: { padding: "10px 16px 0" } }, /* @__PURE__ */ React.createElement(PillTabs, { items: tabs, active: tab, onChange: setTab })), /* @__PURE__ */ React.createElement("div", { className: "rh-scroll", style: { marginTop: 10 } }, tab === "approvals" && APPROVALS.map((a) => /* @__PURE__ */ React.createElement("div", { className: "rh-row", key: a.station + a.doc }, /* @__PURE__ */ React.createElement("span", { className: "rh-doc", style: { "--d": DOC_TONE[a.doc] } }, a.doc), /* @__PURE__ */ React.createElement("div", { className: "rh-row-main" }, /* @__PURE__ */ React.createElement("div", { className: "rh-row-title" }, a.station), /* @__PURE__ */ React.createElement("div", { className: "rh-row-meta" }, /* @__PURE__ */ React.createElement("span", { className: "rh-code" }, a.code), a.doc, " ", a.ver, " \xB7 ", a.who)), /* @__PURE__ */ React.createElement("div", { className: "rh-row-right" }, /* @__PURE__ */ React.createElement(Chip, { tone: a.tone, dot: true }, a.label), /* @__PURE__ */ React.createElement("span", { className: "rh-age", "data-hot": a.tone === "danger" }, a.age)))), tab === "overdue" && OVERDUE.map((o) => /* @__PURE__ */ React.createElement("div", { className: "rh-row", key: o.code + o.doc }, /* @__PURE__ */ React.createElement("span", { className: "rh-doc", style: { "--d": DOC_TONE[o.doc] } }, o.doc), /* @__PURE__ */ React.createElement("div", { className: "rh-row-main" }, /* @__PURE__ */ React.createElement("div", { className: "rh-row-title" }, o.station), /* @__PURE__ */ React.createElement("div", { className: "rh-row-meta" }, /* @__PURE__ */ React.createElement("span", { className: "rh-code" }, o.code), o.desc)), /* @__PURE__ */ React.createElement("span", { className: "rh-age", "data-hot": o.days >= 15 }, o.days, "d"))), tab === "disc" && DISCREPANCIES.map((d) => /* @__PURE__ */ React.createElement("div", { className: "rh-row", key: d.code }, /* @__PURE__ */ React.createElement("span", { className: "rh-count-badge", "data-sev": d.count >= 10 ? "high" : "mid" }, d.count), /* @__PURE__ */ React.createElement("div", { className: "rh-row-main" }, /* @__PURE__ */ React.createElement("div", { className: "rh-row-title" }, d.station), /* @__PURE__ */ React.createElement("div", { className: "rh-row-meta" }, /* @__PURE__ */ React.createElement("span", { className: "rh-code" }, d.code), d.desc)), /* @__PURE__ */ React.createElement("span", { className: "rh-doc", style: { "--d": DOC_TONE[d.doc] } }, d.doc)))), /* @__PURE__ */ React.createElement("div", { className: "rh-card-foot" }, /* @__PURE__ */ React.createElement("span", null, tab === "approvals" ? "5 overdue beyond 7 days" : tab === "overdue" ? "6 stations stalled" : "43 open across 6 stations"), /* @__PURE__ */ React.createElement("button", null, "View all \u2192")));
+};
+const DivisionTable = () => /* @__PURE__ */ React.createElement("div", { className: "rh-card" }, /* @__PURE__ */ React.createElement("div", { className: "rh-card-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "rh-card-title" }, "Division-wise progress"), /* @__PURE__ */ React.createElement("div", { className: "rh-card-sub" }, "South Central Railway \xB7 247 stations")), /* @__PURE__ */ React.createElement("div", { className: "rh-card-head-right" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", size: "sm", trailingIcon: "arrow_right" }, "Drill down"))), /* @__PURE__ */ React.createElement("div", { className: "rh-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "rh-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Division"), /* @__PURE__ */ React.createElement("th", { "data-align": "right" }, "Stations"), /* @__PURE__ */ React.createElement("th", null, "ESP"), /* @__PURE__ */ React.createElement("th", null, "SIP"), /* @__PURE__ */ React.createElement("th", { "data-align": "right" }, "Overall"), /* @__PURE__ */ React.createElement("th", { "data-align": "right" }, "Status"))), /* @__PURE__ */ React.createElement("tbody", null, DIVISIONS.map((d) => {
+  const overall = Math.round((d.esp + d.sip) / 2);
+  const overallColor = overall >= 60 ? "var(--success-text)" : overall >= 30 ? "var(--warning-text)" : "var(--danger-text)";
+  return /* @__PURE__ */ React.createElement("tr", { key: d.name }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "rh-td-name" }, d.name), /* @__PURE__ */ React.createElement("div", { className: "rh-td-sub" }, "SCR \xB7 ", d.stations, " stations")), /* @__PURE__ */ React.createElement("td", { "data-align": "right" }, /* @__PURE__ */ React.createElement("span", { className: "rh-num" }, d.stations)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "rh-meter" }, /* @__PURE__ */ React.createElement("div", { className: "rh-meter-track" }, /* @__PURE__ */ React.createElement("div", { className: "rh-meter-fill", style: { width: `${d.esp}%`, background: "#3737C8" } })), /* @__PURE__ */ React.createElement("span", { className: "rh-meter-pct" }, d.esp, "%"))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "rh-meter" }, /* @__PURE__ */ React.createElement("div", { className: "rh-meter-track" }, /* @__PURE__ */ React.createElement("div", { className: "rh-meter-fill", style: { width: `${d.sip}%`, background: "#0D9488" } })), /* @__PURE__ */ React.createElement("span", { className: "rh-meter-pct" }, d.sip, "%"))), /* @__PURE__ */ React.createElement("td", { "data-align": "right" }, /* @__PURE__ */ React.createElement("span", { className: "rh-overall", style: { color: overallColor } }, overall, "%")), /* @__PURE__ */ React.createElement("td", { "data-align": "right" }, /* @__PURE__ */ React.createElement(Chip, { tone: d.tone, dot: true }, d.status)));
+})))));
+const ActivityCard = () => /* @__PURE__ */ React.createElement("div", { className: "rh-card" }, /* @__PURE__ */ React.createElement("div", { className: "rh-card-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "rh-card-title" }, "Recent activity"), /* @__PURE__ */ React.createElement("div", { className: "rh-card-sub" }, "Your actions across all modules")), /* @__PURE__ */ React.createElement("div", { className: "rh-card-head-right" }, /* @__PURE__ */ React.createElement(Chip, { tone: "neutral" }, "Last 7 days"))), /* @__PURE__ */ React.createElement("div", { className: "rh-scroll", style: { maxHeight: 296 } }, ACTIVITY.map((g) => /* @__PURE__ */ React.createElement("div", { key: g.day }, /* @__PURE__ */ React.createElement("div", { className: "rh-day" }, g.day), g.rows.map((r) => /* @__PURE__ */ React.createElement("div", { className: "rh-row", key: r.action + r.code }, /* @__PURE__ */ React.createElement("span", { className: "rh-doc", style: { "--d": DOC_TONE[r.doc] } }, r.doc), /* @__PURE__ */ React.createElement("div", { className: "rh-row-main" }, /* @__PURE__ */ React.createElement("div", { className: "rh-row-title" }, r.action), /* @__PURE__ */ React.createElement("div", { className: "rh-row-meta" }, /* @__PURE__ */ React.createElement("span", { className: "rh-code" }, r.code), r.station)), /* @__PURE__ */ React.createElement("div", { className: "rh-row-right" }, /* @__PURE__ */ React.createElement(Chip, { tone: r.tone, dot: r.tone !== "neutral" }, r.label), /* @__PURE__ */ React.createElement("span", { className: "rh-age" }, r.time))))))), /* @__PURE__ */ React.createElement("div", { className: "rh-card-foot" }, /* @__PURE__ */ React.createElement("span", null, "6 actions this week"), /* @__PURE__ */ React.createElement("button", null, "Full history \u2192")));
+const DashboardPage = ({ embedded = false }) => {
+  const [roleId, setRoleId] = useStateD("zone_admin");
+  const [nav, setNav] = useStateD("home");
+  const role = ROLES[roleId];
+  const granted = useMemoD(
+    () => MODULES.filter((m) => !!role.grants[m.id]),
+    [roleId]
+  );
+  const sidebarNav = useMemoD(() => buildSidebarNav(role, granted), [roleId, granted]);
+  const main = /* @__PURE__ */ React.createElement("div", { className: embedded ? "rh-main rh-main-embedded" : "rh-main" }, /* @__PURE__ */ React.createElement("div", { className: "rh-topbar" }, /* @__PURE__ */ React.createElement(ScopeBar, { role })), /* @__PURE__ */ React.createElement("div", { className: "rh-content" }, /* @__PURE__ */ React.createElement(ModuleAccessStrip, { modules: granted }), granted.length === 0 && /* @__PURE__ */ React.createElement("div", { className: "rh-empty" }, "No modules are assigned to this role yet. Contact your zone administrator."), /* @__PURE__ */ React.createElement("div", { className: "rh-grid-2" }, /* @__PURE__ */ React.createElement(PipelineCard, null), /* @__PURE__ */ React.createElement(StageDocsCard, null)), /* @__PURE__ */ React.createElement("div", { className: "rh-grid-2b" }, /* @__PURE__ */ React.createElement(AttentionCard, { canApprove: role.can.approve }), /* @__PURE__ */ React.createElement(ActivityCard, null)), /* @__PURE__ */ React.createElement(DivisionTable, null)));
+  if (embedded) return main;
+  return /* @__PURE__ */ React.createElement("div", { className: "rh-app" }, /* @__PURE__ */ React.createElement(Sidebar, { active: nav, onSelect: setNav, project: null, ...sidebarNav }), main);
+};
+const rapidStyle = document.createElement("style");
+rapidStyle.textContent = window.NAV_CSS + window.DATA_CSS + window.FORM_CSS + rapidCSS;
+document.head.appendChild(rapidStyle);
+window.DashboardPage = DashboardPage;
+if (!window.__EMBED_DASHBOARD_PAGE) {
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(DashboardPage, null));
+}
+  </script>
+</body>
+</html>

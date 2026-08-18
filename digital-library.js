@@ -441,6 +441,25 @@ const libCSS = `
 }
 .dl-layout .ds-sidebar-item[data-disabled="true"] .icon,
 .dl-layout .ds-sidebar-item[data-disabled="true"]:hover .icon { color: var(--ink-300); }
+
+/* Sub-menu rows — light-theme repaint of the ds-sidebar-child classes from
+   components-nav, which are authored for the dark rail (white text). */
+.dl-layout .ds-sidebar-children { border-left-color: var(--ink-200); }
+.dl-layout .ds-sidebar-child { color: var(--ink-600); }
+.dl-layout .ds-sidebar-child .icon { color: var(--ink-400); }
+.dl-layout .ds-sidebar-child:hover {
+  background: color-mix(in srgb, var(--accent-soft) 52%, #FFFFFF);
+  color: var(--accent-text);
+}
+.dl-layout .ds-sidebar-child:hover .icon { color: var(--accent); }
+.dl-layout .ds-sidebar-child[data-active="true"] {
+  background: linear-gradient(180deg, var(--accent), var(--accent-hover));
+  color: var(--paper);
+  box-shadow: 0 12px 22px -16px rgba(99,91,255,.95);
+}
+.dl-layout .ds-sidebar-child[data-active="true"] .icon,
+.dl-layout .ds-sidebar-child[data-active="true"] svg { color: var(--paper); }
+.dl-layout .ds-sidebar-caret { color: var(--ink-400); }
 .dl-layout .ds-sidebar-foot {
   background: rgba(255,255,255,.72);
   border-top: 1px solid rgba(10,37,64,.08);
@@ -550,6 +569,51 @@ const libCSS = `
 .dl-library-page-header .dl-page-actions { gap: 10px; }
 .dl-library-page-header .dl-page-actions .ds-icon-btn,
 .dl-library-page-header .dl-page-actions .ds-btn { box-shadow: none; }
+
+.dl-record-switch {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 8px;
+  padding: 3px;
+  border: var(--hairline);
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--ink-100) 72%, var(--paper));
+}
+.dl-record-switch button {
+  min-height: 29px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: calc(var(--r-md) - 2px);
+  background: transparent;
+  color: var(--ink-600);
+  font: 700 12px var(--font-sans);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dl-record-switch button:hover { color: var(--ink-900); }
+.dl-record-switch button[data-active="true"] {
+  background: var(--paper);
+  color: var(--accent-text);
+  box-shadow: var(--shadow-xs);
+}
+.dl-record-switch button:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.dl-record-count {
+  min-width: 20px;
+  min-height: 18px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0 5px;
+  border-radius: var(--r-full);
+  background: var(--ink-200);
+  color: var(--ink-700);
+  font: 800 10px var(--font-mono);
+}
+.dl-record-switch button[data-active="true"] .dl-record-count { background: var(--accent-soft); color: var(--accent-text); }
 
 
 /* \u2500\u2500 Scope bar \u2500\u2500 */
@@ -680,6 +744,7 @@ const libCSS = `
   right: 0;
   width: min(620px, calc(100vw - 56px));
   padding: 12px;
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
@@ -687,6 +752,8 @@ const libCSS = `
   border-radius: var(--r-lg);
   background: var(--paper);
   box-shadow: var(--shadow-lg);
+  max-height: min(520px, calc(100vh - 150px));
+  overflow: auto;
   z-index: 20;
 }
 .dl-filter-field {
@@ -728,6 +795,38 @@ const libCSS = `
   gap: 8px;
   padding-top: 2px;
 }
+.dl-sort-control {
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding-left: 9px;
+  border: 1px solid #D8E0EA;
+  border-radius: var(--r-md);
+  background: var(--paper);
+  color: var(--ink-700);
+  box-shadow: var(--shadow-xs);
+  white-space: nowrap;
+}
+.dl-sort-control > span { font-size: 12px; font-weight: 700; }
+.dl-sort-control select {
+  height: 26px;
+  max-width: 190px;
+  padding: 0 25px 0 2px;
+  border: 0;
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  outline: none;
+  appearance: none;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  background-size: 12px;
+  color: var(--ink-800);
+  font: 600 11.5px var(--font-sans);
+  cursor: pointer;
+}
+.dl-sort-control:focus-within { border-color: var(--accent); box-shadow: var(--shadow-focus); }
 .dl-toast {
   position: fixed;
   right: 24px;
@@ -1591,17 +1690,36 @@ const libCSS = `
 /* \u2500\u2500 Table scroll area \u2500\u2500 */
 .dl-table-area {
   flex: 1;
-  overflow: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 18%, var(--canvas)) 0, var(--canvas) 140px);
 }
 .dl-table-container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   margin: 16px 28px 24px;
   border: 1px solid color-mix(in srgb, var(--ink-200) 80%, var(--ink-300));
   border-radius: var(--r-lg);
   background: var(--paper);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
+}
+.dl-table-scroll {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior-inline: contain;
+}
+.dl-table-scroll > .ds-table:not(.dl-route-table) { min-width: 980px; }
+.dl-table-scroll .ds-table tbody tr:nth-last-child(-n+3) .dl-row-menu {
+  top: auto;
+  bottom: calc(100% + 5px);
 }
 /* Sticky headers */
 .dl-table-area .ds-table thead th {
@@ -1619,6 +1737,22 @@ const libCSS = `
 }
 .dl-table-area .ds-table thead th[data-sortable] { cursor: pointer; }
 .dl-table-area .ds-table thead th[data-sortable]:hover { color: var(--ink-900); }
+.dl-sort-th-button {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.dl-sort-th-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
 .dl-table-area .ds-table {
   table-layout: fixed;
   min-width: 980px;
@@ -1760,6 +1894,50 @@ const libCSS = `
 /* \u2500\u2500 Last activity \u2500\u2500 */
 .dl-activity-time { font-size: 12px; color: var(--ink-600); line-height: 1.3; }
 .dl-activity-by   { font-size: 10.5px; color: var(--ink-400); margin-top: 1px; }
+
+/* Route-plan registry cells */
+.dl-route-table { min-width: 1280px !important; }
+.dl-route-od,
+.dl-route-coverage,
+.dl-route-selected {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink-700);
+  font-size: 12px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dl-route-od { color: var(--ink-800); font-family: var(--font-mono); font-weight: 700; }
+.dl-route-selected[data-empty="true"] { color: var(--ink-400); font-style: italic; }
+.dl-route-mobile-status { display: none; }
+.dl-route-number { color: var(--ink-900); font: 800 12px var(--font-mono); }
+.dl-route-doc-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 24px;
+  padding: 0 8px;
+  border: var(--hairline);
+  border-radius: var(--r-full);
+  background: var(--ink-50);
+  color: var(--ink-700);
+  font: 800 11px var(--font-mono);
+}
+.dl-route-summary-body { min-height: 0; padding: 14px; overflow-y: auto; }
+.dl-route-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--ink-200);
+}
+.dl-route-summary-field { min-height: 62px; display: grid; align-content: center; gap: 5px; padding: 11px 12px; background: var(--paper); }
+.dl-route-summary-field[data-span="full"] { grid-column: 1 / -1; }
+.dl-route-summary-label { color: var(--ink-500); font-size: 10px; font-weight: 800; letter-spacing: .055em; text-transform: uppercase; }
+.dl-route-summary-value { color: var(--ink-900); font-size: 12.5px; font-weight: 650; line-height: 1.4; }
 
 /* \u2500\u2500 Completeness bar \u2500\u2500 */
 .dl-complete { display: flex; align-items: center; gap: 7px; }
@@ -2109,6 +2287,7 @@ const libCSS = `
   transition: border-color 120ms, box-shadow 120ms;
 }
 .dl-dot-row:hover { border-color: var(--ink-300); box-shadow: var(--shadow-xs); }
+.dl-dot-row:focus-visible { outline: none; border-color: var(--accent); box-shadow: var(--shadow-focus); }
 .dl-dot-wrap {
   position: relative;
   display: inline-flex;
@@ -2151,6 +2330,11 @@ const libCSS = `
   border-top-color: var(--ink-900);
 }
 .dl-dot-wrap:hover .dl-dot-tip { opacity: 1; }
+.dl-dot[data-doc="esp"] { background: var(--accent); }
+.dl-dot[data-doc="sip"] { background: var(--info); }
+.dl-dot[data-doc="survey"] { background: var(--success); }
+.dl-dot[data-doc="other"] { background: var(--warning); }
+.dl-dot[data-available="false"] { background: var(--ink-200); box-shadow: inset 0 0 0 1px var(--ink-300); }
 .dl-dot[data-tone="success"] { background: var(--success); }
 .dl-dot[data-tone="info"]    { background: var(--info); }
 .dl-dot[data-tone="warning"] { background: var(--warning); }
@@ -2196,6 +2380,8 @@ const libCSS = `
   border-radius: var(--r-md);
   background: var(--paper);
   box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 .dl-doc-popover-head {
@@ -2220,6 +2406,7 @@ const libCSS = `
   cursor: pointer;
 }
 .dl-doc-popover-close:hover { color: var(--ink-900); background: var(--ink-50); }
+.dl-doc-detail-scroll { min-height: 0; overflow: auto; }
 .dl-doc-detail-table { width: 100%; border-collapse: collapse; }
 .dl-doc-detail-table th {
   padding: 9px 14px;
@@ -2268,6 +2455,34 @@ const libCSS = `
   background: var(--ink-50);
   cursor: not-allowed;
 }
+.dl-doc-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-height: 32px;
+  padding: 0 14px;
+  border-bottom: var(--hairline);
+  background: color-mix(in srgb, var(--ink-50) 76%, var(--paper));
+  color: var(--ink-500);
+  font-size: 10.5px;
+}
+.dl-doc-legend-label { margin-right: 2px; font-weight: 700; color: var(--ink-600); }
+.dl-doc-legend-item { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.dl-doc-legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+.dl-doc-legend-dot[data-doc="esp"] { background: var(--accent); }
+.dl-doc-legend-dot[data-doc="sip"] { background: var(--info); }
+.dl-doc-legend-dot[data-doc="survey"] { background: var(--success); }
+.dl-doc-legend-dot[data-doc="other"] { background: var(--warning); }
+.dl-list-empty,
+.dl-cards-placeholder { display: grid; justify-items: center; gap: 10px; }
+.dl-cards-placeholder { flex: 1; min-height: 0; overflow: auto; }
+.dl-table-empty { min-height: 100%; align-content: center; padding: 28px; box-sizing: border-box; }
+.dl-table-empty > .ds-btn { margin: 0 0 20px; }
+.dl-list-empty > .ds-btn,
+.dl-cards-placeholder > .ds-btn { margin-top: -54px; margin-bottom: 22px; position: relative; z-index: 1; }
+.dl-list-empty.dl-table-empty .ds-empty { width: 100%; max-width: 520px; box-sizing: border-box; }
+.dl-list-empty.dl-table-empty > .ds-btn { margin: 0 0 20px; }
 .dl-overall-status { display: inline-flex; align-items: center; min-height: 24px; padding: 0 9px; border-radius: var(--r-full); font-size: 11px; font-weight: 600; white-space: nowrap; }
 .dl-overall-status[data-tone="success"] { background: var(--success-soft); color: var(--success-text); }
 .dl-overall-status[data-tone="info"] { background: var(--info-soft); color: var(--info-text); }
@@ -2288,6 +2503,45 @@ const libCSS = `
 .dl-login-mark,
 .ir-login-mark,
 .ir-board-code { background: linear-gradient(180deg,var(--stripe-blue-800),var(--stripe-blue-900)); color: var(--paper); }
+
+@media (max-width: 1100px) {
+  .dl-library-page-header { flex-wrap: wrap; }
+  .dl-library-page-header .dl-page-heading { flex: 1 1 420px; }
+  .dl-library-page-header .dl-page-actions { flex: 1 1 100%; justify-content: flex-start; margin-left: 0; }
+  .dl-scope-bar { flex-wrap: wrap; }
+  .dl-scope-path { margin-left: 0; }
+  .dl-filter-row { position: relative; flex-wrap: wrap; }
+  .dl-search-wrap { flex: 1 1 100%; }
+  .dl-filter-shell { position: static; }
+  .dl-filter-panel { left: 0; right: auto; width: min(620px, 100%); }
+  .ds-table-foot { flex-wrap: wrap; gap: 10px; }
+  .dl-table-foot-left { flex-wrap: wrap; }
+}
+@media (max-width: 720px) {
+  .dl-library-page-header { padding: 20px 16px 16px; gap: 14px; }
+  .dl-library-page-header .dl-page-title { font-size: 23px; }
+  .dl-library-page-header .dl-page-actions { align-items: stretch; }
+  .dl-library-page-header .dl-page-actions .ds-btn { min-width: 0; flex: 1 1 auto; }
+  .dl-scope-bar { padding: 10px 16px; gap: 8px; }
+  .dl-scope-controls { width: 100%; }
+  .dl-scope-select { flex: 1 1 150px; min-width: 0; }
+  .dl-scope-bar > .dl-vdivider { display: none; }
+  .dl-scope-path { width: 100%; min-width: 0; overflow-x: auto; }
+  .dl-filter-bar { padding: 10px 16px; }
+  .dl-filter-panel { position: fixed; left: 88px; right: 16px; top: auto; bottom: 16px; width: auto; max-height: calc(100vh - 32px); grid-template-columns: 1fr; z-index: 200; }
+  .dl-filter-actions { grid-column: auto; }
+  .dl-sort-control { flex: 1 1 180px; }
+  .dl-sort-control select { flex: 1; max-width: none; }
+  .dl-table-container { margin: 12px 16px 20px; }
+  .dl-doc-legend { justify-content: flex-start; overflow-x: auto; }
+  .dl-bulk-bar { padding: 9px 16px; overflow-x: auto; }
+  .dl-route-summary-grid { grid-template-columns: 1fr; }
+  .dl-route-summary-field[data-span="full"] { grid-column: auto; }
+  .dl-route-mobile-status { display: block; margin-top: 4px; color: var(--ink-500); font-size: 10.5px; font-weight: 650; }
+  .dl-route-table th:last-child,
+  .dl-route-table td:last-child { position: sticky; right: 0; z-index: 3; background: var(--paper); box-shadow: -8px 0 12px -12px rgba(15, 23, 42, .55); }
+  .dl-route-table thead th:last-child { z-index: 5; background: linear-gradient(180deg, #fff, var(--ink-50)); }
+}
 `;
 const ALL_STATIONS = [
   {
@@ -2467,6 +2721,121 @@ const ALL_STATIONS = [
     lastBy: "T. Babu"
   }
 ];
+const ROUTE_PLANS = [
+  {
+    id: "route:RP-001",
+    name: "Hyderabad-Nanded Corridor",
+    routeId: "RP-001",
+    corridor: "Hyderabad-Nanded rail corridor",
+    originCode: "HYB",
+    originName: "Hyderabad",
+    destinationCode: "NED",
+    destinationName: "Nanded",
+    coverage: "2 divisions \xB7 4 sections",
+    alternatives: 3,
+    selectedRoute: "Alternative B",
+    planningStatus: "Under review",
+    planningStatusKey: "under_review",
+    approvalStatus: "In review",
+    approvalStatusKey: "in_review",
+    routeType: "New corridor",
+    routeTypeKey: "new_corridor",
+    surveyData: "Available",
+    surveyDataKey: "available",
+    documents: 8,
+    lastTime: "3 hours ago",
+    lastBy: "Planning cell",
+    lastActivityOrder: 180,
+    zone: "SCoR",
+    divisions: ["Vijayawada", "Guntur"],
+    sections: ["Vijayawada\u2013Gudivada", "Vijayawada\u2013Eluru", "Eluru\u2013Samalkot", "Samalkot\u2013Kakinada"]
+  },
+  {
+    id: "route:RP-002",
+    name: "Vijayawada Bypass",
+    routeId: "RP-002",
+    corridor: "Vijayawada-Kondapalli bypass corridor",
+    originCode: "BZA",
+    originName: "Vijayawada",
+    destinationCode: "KCC",
+    destinationName: "Kondapalli",
+    coverage: "1 division \xB7 2 sections",
+    alternatives: 2,
+    selectedRoute: null,
+    planningStatus: "Feasibility study",
+    planningStatusKey: "feasibility_study",
+    approvalStatus: "Not submitted",
+    approvalStatusKey: "not_submitted",
+    routeType: "Bypass",
+    routeTypeKey: "bypass",
+    surveyData: "Partial",
+    surveyDataKey: "partial",
+    documents: 5,
+    lastTime: "1 day ago",
+    lastBy: "Survey team",
+    lastActivityOrder: 1440,
+    zone: "SCoR",
+    divisions: ["Vijayawada"],
+    sections: ["Vijayawada\u2013Gudivada", "Vijayawada\u2013Eluru"]
+  },
+  {
+    id: "route:RP-003",
+    name: "Coastal Freight Route",
+    routeId: "RP-003",
+    corridor: "Kakinada Port-Visakhapatnam freight corridor",
+    originCode: "COA",
+    originName: "Kakinada Port",
+    destinationCode: "VSKP",
+    destinationName: "Visakhapatnam",
+    coverage: "2 divisions \xB7 5 sections",
+    alternatives: 4,
+    selectedRoute: "Alternative C",
+    planningStatus: "Approved",
+    planningStatusKey: "approved",
+    approvalStatus: "Approved",
+    approvalStatusKey: "approved",
+    routeType: "Freight corridor",
+    routeTypeKey: "freight_corridor",
+    surveyData: "Available",
+    surveyDataKey: "available",
+    documents: 12,
+    lastTime: "4 days ago",
+    lastBy: "Chief planner",
+    lastActivityOrder: 5760,
+    zone: "SCoR",
+    divisions: ["Vijayawada", "Visakhapatnam"],
+    sections: ["Vijayawada\u2013Gudivada", "Vijayawada\u2013Eluru", "Eluru\u2013Samalkot", "Samalkot\u2013Kakinada", "Visakhapatnam\u2013Duvvada"]
+  },
+  {
+    id: "route:RP-004",
+    name: "Guntur-Tenali Capacity Route",
+    routeId: "RP-004",
+    corridor: "Guntur-Tenali capacity corridor",
+    originCode: "GNT",
+    originName: "Guntur",
+    destinationCode: "TEL",
+    destinationName: "Tenali",
+    coverage: "1 division \xB7 1 section",
+    alternatives: 2,
+    selectedRoute: "Alternative A",
+    planningStatus: "Route selected",
+    planningStatusKey: "route_selected",
+    approvalStatus: "Not submitted",
+    approvalStatusKey: "not_submitted",
+    routeType: "Capacity enhancement",
+    routeTypeKey: "capacity_enhancement",
+    surveyData: "Available",
+    surveyDataKey: "available",
+    documents: 6,
+    lastTime: "6 hours ago",
+    lastBy: "Guntur division",
+    lastActivityOrder: 360,
+    zone: "SCoR",
+    divisions: ["Guntur"],
+    libraryDivisions: ["Vijayawada"],
+    sections: ["Guntur\u2013Tenali"]
+  }
+];
 const DOCUMENT_FILTERS = [
   { value: "all", label: "All document types" },
   { value: "esp", label: "ESP available" },
@@ -2512,6 +2881,90 @@ const FILTER_LABELS = {
   survey: Object.fromEntries(SURVEY_FILTERS.map((o) => [o.value, o.label])),
   completeness: Object.fromEntries(COMPLETENESS_FILTERS.map((o) => [o.value, o.label]))
 };
+const ROUTE_PLANNING_STATUS_FILTERS = [
+  { value: "all", label: "Any planning status" },
+  { value: "draft", label: "Draft" },
+  { value: "survey_pending", label: "Survey pending" },
+  { value: "feasibility_study", label: "Feasibility study" },
+  { value: "alternatives_under_study", label: "Alternatives under study" },
+  { value: "under_review", label: "Under review" },
+  { value: "route_selected", label: "Route selected" },
+  { value: "submitted_for_approval", label: "Submitted for approval" },
+  { value: "approved", label: "Approved" },
+  { value: "returned_for_correction", label: "Returned for correction" },
+  { value: "archived", label: "Archived" }
+];
+const ROUTE_APPROVAL_STATUS_FILTERS = [
+  { value: "all", label: "Any approval status" },
+  { value: "not_submitted", label: "Not submitted" },
+  { value: "in_review", label: "In review" },
+  { value: "submitted", label: "Submitted" },
+  { value: "approved", label: "Approved" },
+  { value: "returned", label: "Returned" }
+];
+const ROUTE_TYPE_FILTERS = [
+  { value: "all", label: "Any route type" },
+  { value: "new_corridor", label: "New corridor" },
+  { value: "bypass", label: "Bypass" },
+  { value: "freight_corridor", label: "Freight corridor" },
+  { value: "capacity_enhancement", label: "Capacity enhancement" }
+];
+const ROUTE_SURVEY_FILTERS = [
+  { value: "all", label: "Any survey data" },
+  { value: "available", label: "Survey available" },
+  { value: "partial", label: "Survey partially available" },
+  { value: "pending", label: "Survey pending" },
+  { value: "missing", label: "Survey not available" }
+];
+const ROUTE_SELECTION_FILTERS = [
+  { value: "all", label: "Any selection state" },
+  { value: "selected", label: "Selected route" },
+  { value: "not_selected", label: "Not selected" }
+];
+const DEFAULT_ROUTE_FILTERS = {
+  planningStatus: "all",
+  approvalStatus: "all",
+  routeType: "all",
+  surveyData: "all",
+  selection: "all"
+};
+const ROUTE_FILTER_LABELS = {
+  planningStatus: Object.fromEntries(ROUTE_PLANNING_STATUS_FILTERS.map((o) => [o.value, o.label])),
+  approvalStatus: Object.fromEntries(ROUTE_APPROVAL_STATUS_FILTERS.map((o) => [o.value, o.label])),
+  routeType: Object.fromEntries(ROUTE_TYPE_FILTERS.map((o) => [o.value, o.label])),
+  surveyData: Object.fromEntries(ROUTE_SURVEY_FILTERS.map((o) => [o.value, o.label])),
+  selection: Object.fromEntries(ROUTE_SELECTION_FILTERS.map((o) => [o.value, o.label]))
+};
+const STATION_FILTER_FIELDS = [
+  { key: "document", label: "Document Type", options: DOCUMENT_FILTERS },
+  { key: "status", label: "Document Status", options: STATUS_FILTERS },
+  { key: "survey", label: "Survey Data", options: SURVEY_FILTERS },
+  { key: "completeness", label: "Completeness", options: COMPLETENESS_FILTERS }
+];
+const ROUTE_FILTER_FIELDS = [
+  { key: "planningStatus", label: "Planning status", options: ROUTE_PLANNING_STATUS_FILTERS },
+  { key: "approvalStatus", label: "Approval status", options: ROUTE_APPROVAL_STATUS_FILTERS },
+  { key: "routeType", label: "Route type", options: ROUTE_TYPE_FILTERS },
+  { key: "surveyData", label: "Survey data", options: ROUTE_SURVEY_FILTERS },
+  { key: "selection", label: "Selected route", options: ROUTE_SELECTION_FILTERS }
+];
+const STATION_SORT_OPTIONS = [
+  { value: "name:asc", label: "Station name (A-Z)" },
+  { value: "name:desc", label: "Station name (Z-A)" },
+  { value: "code:asc", label: "Station code (A-Z)" },
+  { value: "lastTime:asc", label: "Last activity" }
+];
+const ROUTE_SORT_OPTIONS = [
+  { value: "routeId:asc", label: "Route ID" },
+  { value: "name:asc", label: "Route plan name (A-Z)" },
+  { value: "name:desc", label: "Route plan name (Z-A)" },
+  { value: "lastActivityOrder:asc", label: "Last activity (recent first)" },
+  { value: "lastActivityOrder:desc", label: "Last activity (oldest first)" },
+  { value: "planningStatus:asc", label: "Planning status (A-Z)" },
+  { value: "planningStatus:desc", label: "Planning status (Z-A)" },
+  { value: "alternatives:asc", label: "Alternatives (low-high)" },
+  { value: "alternatives:desc", label: "Alternatives (high-low)" }
+];
 const SECTION_SCOPE_LABELS = {
   all: "All Sections",
   "VJA-GDV": "Vijayawada\u2013Gudivada",
@@ -2714,7 +3167,7 @@ const formatLatestVersion = (station, docKey) => {
 };
 const getDocumentState = (station, docKey) => docKey === "toc" ? station.toc ? "approved" : null : station[docKey];
 const getLatestApprovedVersion = (station, docKey, status) => {
-  if (status !== "Approved") return "Empty";
+  if (status !== "Approved") return "No approved version";
   return formatLatestVersion(station, docKey);
 };
 const getSurveySummary = (survey = {}) => {
@@ -2730,7 +3183,7 @@ const getStationDocuments = (station) => {
     const state = getDocumentState(station, doc.key);
     const status = normalizeDocumentStatus(state);
     const latestVersion = getLatestApprovedVersion(station, doc.key, status);
-    const available = latestVersion !== "Empty";
+    const available = Boolean(state);
     return {
       ...doc,
       available,
@@ -2796,6 +3249,111 @@ const DocumentDetailsPopover = ({ station, documents, onView }) => {
   };
   return /* @__PURE__ */ React.createElement("div", { className: "dl-doc-summary", onClick: (event) => event.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "dl-dot-row", role: "button", "aria-label": `${availableCount} documents — click for details`, onClick: openModal }, documents.filter((d) => d.key !== "survey").map((doc) => /* @__PURE__ */ React.createElement("div", { className: "dl-dot-wrap", key: doc.key }, /* @__PURE__ */ React.createElement("div", { className: "dl-dot", "data-tone": doc.tone }), /* @__PURE__ */ React.createElement("span", { className: "dl-dot-tip" }, doc.label, " \xB7 ", doc.status)))), modalOpen && /* @__PURE__ */ React.createElement("div", { className: "dl-doc-modal-layer", role: "presentation", onClick: () => setModalOpen(false) }, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover", role: "dialog", "aria-modal": "true", "aria-label": `Document details for ${station.name}`, onClick: (event) => event.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-title" }, "Document Details"), /* @__PURE__ */ React.createElement("div", { className: "dl-doc-popover-sub" }, station.name, " \xB7 ", station.code)), /* @__PURE__ */ React.createElement("button", { className: "dl-doc-popover-close", type: "button", "aria-label": "Close document details", onClick: () => setModalOpen(false) }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 13 }))), /* @__PURE__ */ React.createElement(DocumentDetailsTable, { documents, onView: viewDocument }))));
 };
+const StationDocumentIndicators = ({ station, documents, onView }) => {
+  const [modalOpen, setModalOpen] = useStateLib(false);
+  const triggerRef = React.useRef(null);
+  const dialogRef = React.useRef(null);
+  const closeRef = React.useRef(null);
+  const byKey = Object.fromEntries(documents.map((doc) => [doc.key, doc]));
+  const otherDocuments = [byKey.toc, byKey.lop].filter(Boolean);
+  const isPresent = (doc) => !!doc && doc.status !== "Not Available";
+  const indicators = [
+    { key: "esp", label: "ESP", available: isPresent(byKey.esp), detail: byKey.esp?.status || "Not available" },
+    { key: "sip", label: "SIP", available: isPresent(byKey.sip), detail: byKey.sip?.status || "Not available" },
+    { key: "survey", label: "Survey", available: isPresent(byKey.survey), detail: byKey.survey?.status || "Not available" },
+    {
+      key: "other",
+      label: "Other",
+      available: otherDocuments.some(isPresent),
+      detail: otherDocuments.map((doc) => `${doc.label}: ${doc.status}`).join("; ") || "Not available"
+    }
+  ];
+  const availabilityLabel = indicators.map((item) => `${item.label}: ${item.available ? "available" : "not available"}`).join("; ");
+  const closeModal = () => {
+    setModalOpen(false);
+    window.requestAnimationFrame(() => triggerRef.current?.focus?.());
+  };
+  React.useEffect(() => {
+    if (!modalOpen) return;
+    closeRef.current?.focus();
+    const onKey = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeModal();
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+      const focusable = Array.from(dialogRef.current.querySelectorAll('button, [href], select, input, [tabindex]:not([tabindex="-1"])')).filter((node) => !node.disabled);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [modalOpen]);
+  const viewDocument = (doc) => {
+    if (!doc.available) return;
+    setModalOpen(false);
+    onView?.(doc, station);
+  };
+  return React.createElement(
+    "div",
+    { className: "dl-doc-summary", onClick: (event) => event.stopPropagation() },
+    React.createElement(
+      "button",
+      {
+        ref: triggerRef,
+        type: "button",
+        className: "dl-dot-row",
+        "aria-label": `Document availability for ${station.name}. ${availabilityLabel}. Open document details.`,
+        "aria-haspopup": "dialog",
+        onClick: (event) => {
+          event.stopPropagation();
+          setModalOpen(true);
+        }
+      },
+      indicators.map((item) => React.createElement(
+        "span",
+        { className: "dl-dot-wrap", key: item.key, title: `${item.label} — ${item.detail}` },
+        React.createElement("span", { className: "dl-dot", "data-doc": item.key, "data-available": item.available ? "true" : "false", "aria-hidden": "true" }),
+        React.createElement("span", { className: "dl-dot-tip", "aria-hidden": "true" }, item.label, " · ", item.detail)
+      ))
+    ),
+    modalOpen && React.createElement(
+      "div",
+      { className: "dl-doc-modal-layer", role: "presentation", onClick: closeModal },
+      React.createElement(
+        "div",
+        { ref: dialogRef, className: "dl-doc-popover", role: "dialog", "aria-modal": "true", "aria-label": `Document details for ${station.name}`, onClick: (event) => event.stopPropagation() },
+        React.createElement(
+          "div",
+          { className: "dl-doc-popover-head" },
+          React.createElement("div", null, React.createElement("div", { className: "dl-doc-popover-title" }, "Document Details"), React.createElement("div", { className: "dl-doc-popover-sub" }, station.name, " · ", station.code)),
+          React.createElement("button", { ref: closeRef, className: "dl-doc-popover-close", type: "button", "aria-label": "Close document details", onClick: closeModal }, React.createElement(Icon, { name: "x", size: 13 }))
+        ),
+        React.createElement("div", { className: "dl-doc-detail-scroll" }, React.createElement(DocumentDetailsTable, { documents, onView: viewDocument }))
+      )
+    )
+  );
+};
+const DocumentTypeLegend = () => React.createElement(
+  "div",
+  { className: "dl-doc-legend", "aria-label": "Document indicator legend" },
+  React.createElement("span", { className: "dl-doc-legend-label" }, "Document dots:"),
+  [["esp", "ESP"], ["sip", "SIP"], ["survey", "Survey"], ["other", "Other"]].map(([key, label]) => React.createElement(
+    "span",
+    { className: "dl-doc-legend-item", key },
+    React.createElement("span", { className: "dl-doc-legend-dot", "data-doc": key, "aria-hidden": "true" }),
+    label
+  ))
+);
 const StationRowActions = ({ station, onView, onAction }) => {
   const [open, setOpen] = useStateLib(false);
   React.useEffect(() => {
@@ -3615,13 +4173,238 @@ const SortTh = ({ children, sortKey, sort, onSort, style }) => {
     "th",
     {
       style,
+      scope: "col",
       "data-sortable": "true",
       "data-active": active || void 0,
-      onClick: () => onSort(sortKey)
+      "aria-sort": active ? sort.dir === "asc" ? "ascending" : "descending" : "none"
     },
-    /* @__PURE__ */ React.createElement("span", { className: "ds-th-inner" }, children, active ? /* @__PURE__ */ React.createElement(Icon, { name: sort.dir === "asc" ? "arrow_up" : "arrow_down", size: 11 }) : /* @__PURE__ */ React.createElement(Icon, { name: "sort", size: 11, style: { opacity: 0.35 } }))
+    /* @__PURE__ */ React.createElement("button", { type: "button", className: "dl-sort-th-button", onClick: () => onSort(sortKey), "aria-label": `Sort by ${children}` }, children, active ? /* @__PURE__ */ React.createElement(Icon, { name: sort.dir === "asc" ? "arrow_up" : "arrow_down", size: 11 }) : /* @__PURE__ */ React.createElement(Icon, { name: "sort", size: 11, style: { opacity: 0.35 } }))
   );
 };
+const getRouteStatusTone = (status) => {
+  if (status === "Approved" || status === "Route selected") return "success";
+  if (status === "Under review" || status === "Submitted for approval") return "info";
+  if (status === "Feasibility study" || status === "Survey pending" || status === "Alternatives under study") return "warning";
+  if (status === "Returned for correction") return "danger";
+  return "neutral";
+};
+const RouteStatusBadge = ({ status }) => React.createElement("span", { className: "dl-overall-status", "data-tone": getRouteStatusTone(status) }, status);
+const RoutePlanRowActions = ({ route, onView, onAction }) => {
+  const [open, setOpen] = useStateLib(false);
+  const [menuPosition, setMenuPosition] = useStateLib({ top: 0, left: 0 });
+  const moreButtonRef = React.useRef(null);
+  const menuRef = React.useRef(null);
+  React.useEffect(() => {
+    if (!open) return;
+    const menuItems = () => Array.from(menuRef.current?.querySelectorAll('[role="menuitem"]') || []);
+    const triggerRect = moreButtonRef.current?.getBoundingClientRect();
+    const menuRect = menuRef.current?.getBoundingClientRect();
+    if (triggerRect && menuRect) {
+      const fitsBelow = window.innerHeight - triggerRect.bottom >= menuRect.height + 8;
+      setMenuPosition({
+        top: fitsBelow ? triggerRect.bottom + 6 : Math.max(8, triggerRect.top - menuRect.height - 6),
+        left: Math.max(8, Math.min(window.innerWidth - menuRect.width - 8, triggerRect.right - menuRect.width))
+      });
+    }
+    menuItems()[0]?.focus();
+    const close = () => setOpen(false);
+    const onKey = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        window.requestAnimationFrame(() => moreButtonRef.current?.focus?.());
+        return;
+      }
+      if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key) || !menuRef.current?.contains(event.target)) return;
+      event.preventDefault();
+      const items = menuItems();
+      const currentIndex = Math.max(0, items.indexOf(document.activeElement));
+      const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? items.length - 1 : event.key === "ArrowDown" ? (currentIndex + 1) % items.length : (currentIndex - 1 + items.length) % items.length;
+      items[nextIndex]?.focus();
+    };
+    document.addEventListener("click", close);
+    document.addEventListener("keydown", onKey);
+    window.addEventListener("resize", close);
+    window.addEventListener("scroll", close, true);
+    return () => {
+      document.removeEventListener("click", close);
+      document.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", close);
+      window.removeEventListener("scroll", close, true);
+    };
+  }, [open]);
+  const toastAction = (label, event) => {
+    event.stopPropagation();
+    setOpen(false);
+    onAction?.(`${label} for ${route.routeId}`);
+    window.requestAnimationFrame(() => moreButtonRef.current?.focus?.());
+  };
+  const viewSummary = (event) => {
+    event.stopPropagation();
+    setOpen(false);
+    onView({ currentTarget: moreButtonRef.current });
+  };
+  return React.createElement(
+    "div",
+    { className: "dl-row-actions" },
+    React.createElement("button", { className: "dl-row-view-btn", type: "button", onClick: onView }, React.createElement(Icon, { name: "eye", size: 14 }), " View"),
+    React.createElement(
+      "div",
+      { className: "dl-row-more-wrap", onBlur: (event) => {
+        if (!event.currentTarget.contains(event.relatedTarget) && !menuRef.current?.contains(event.relatedTarget)) setOpen(false);
+      } },
+      React.createElement("button", { ref: moreButtonRef, className: "dl-action-icon", type: "button", title: "More actions", "aria-label": `More actions for ${route.name}`, "aria-haspopup": "menu", "aria-expanded": open ? "true" : "false", onClick: (event) => {
+        event.stopPropagation();
+        if (open) {
+          setOpen(false);
+          return;
+        }
+        const rect = event.currentTarget.getBoundingClientRect();
+        setMenuPosition({ top: rect.bottom + 6, left: Math.max(8, Math.min(window.innerWidth - 190, rect.right - 178)) });
+        setOpen(true);
+      } }, React.createElement(Icon, { name: "more", size: 15 })),
+      open && ReactDOM.createPortal(React.createElement(
+        "div",
+        { ref: menuRef, className: "dl-row-menu", role: "menu", "aria-label": `Actions for ${route.name}`, style: { position: "fixed", top: menuPosition.top, left: menuPosition.left, right: "auto", zIndex: 200 }, onClick: (event) => event.stopPropagation(), onBlur: (event) => {
+          if (!event.currentTarget.contains(event.relatedTarget) && event.relatedTarget !== moreButtonRef.current) setOpen(false);
+        } },
+        React.createElement("button", { type: "button", role: "menuitem", onClick: viewSummary }, React.createElement(Icon, { name: "eye", size: 13 }), " View summary"),
+        React.createElement("button", { type: "button", role: "menuitem", onClick: (event) => toastAction("View documents", event) }, React.createElement(Icon, { name: "file", size: 13 }), " View documents"),
+        React.createElement("button", { type: "button", role: "menuitem", onClick: (event) => toastAction("View version history", event) }, React.createElement(Icon, { name: "clock", size: 13 }), " View version history"),
+        React.createElement("button", { type: "button", role: "menuitem", onClick: (event) => toastAction("Archive preview", event) }, React.createElement(Icon, { name: "inbox", size: 13 }), " Archive")
+      ), document.body)
+    )
+  );
+};
+const RoutePlanSummaryModal = ({ route, onClose }) => {
+  const dialogRef = React.useRef(null);
+  const closeRef = React.useRef(null);
+  React.useEffect(() => {
+    closeRef.current?.focus();
+    const onKey = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+      const focusable = Array.from(dialogRef.current.querySelectorAll('button, [href], select, input, [tabindex]:not([tabindex="-1"])')).filter((node) => !node.disabled);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [route]);
+  if (!route) return null;
+  const fields = [
+    ["Route ID", route.routeId],
+    ["Origin-Destination", `${route.originName} (${route.originCode}) – ${route.destinationName} (${route.destinationCode})`],
+    ["Coverage", route.coverage],
+    ["Alternatives", String(route.alternatives)],
+    ["Selected route", route.selectedRoute || "Not selected"],
+    ["Planning status", route.planningStatus],
+    ["Approval status", route.approvalStatus],
+    ["Route type", route.routeType],
+    ["Survey data", route.surveyData],
+    ["Documents", `${route.documents} files`]
+  ];
+  return ReactDOM.createPortal(
+    React.createElement(
+      "div",
+      { className: "dl-doc-modal-layer", role: "presentation", onMouseDown: (event) => {
+        if (event.target === event.currentTarget) onClose();
+      } },
+      React.createElement(
+        "section",
+        { ref: dialogRef, className: "dl-doc-popover", role: "dialog", "aria-modal": "true", "aria-labelledby": "route-summary-title" },
+        React.createElement(
+          "div",
+          { className: "dl-doc-popover-head" },
+          React.createElement("div", null, React.createElement("div", { id: "route-summary-title", className: "dl-doc-popover-title" }, route.name), React.createElement("div", { className: "dl-doc-popover-sub" }, "Route plan summary · ", route.routeId)),
+          React.createElement("button", { ref: closeRef, className: "dl-doc-popover-close", type: "button", "aria-label": "Close route plan summary", onClick: onClose }, React.createElement(Icon, { name: "x", size: 13 }))
+        ),
+        React.createElement(
+          "div",
+          { className: "dl-route-summary-body" },
+          React.createElement("div", { className: "dl-route-summary-grid" }, fields.map(([label, value], index) => React.createElement(
+            "div",
+            { className: "dl-route-summary-field", "data-span": index === 1 ? "full" : undefined, key: label },
+            React.createElement("span", { className: "dl-route-summary-label" }, label),
+            React.createElement("span", { className: "dl-route-summary-value" }, label === "Planning status" ? React.createElement(RouteStatusBadge, { status: value }) : value)
+          )))
+        )
+      )
+    ),
+    document.body
+  );
+};
+const RoutePlansTable = ({ routes, sort, onSort, allChecked, someChecked, onToggleAll, selected, onToggleRow, onView, onAction, onClear }) => React.createElement(
+  "table",
+  { className: "ds-table dl-route-table", style: { width: "100%" } },
+  React.createElement("colgroup", null, [42, 170, 82, 166, 124, 104, 118, 140, 82, 124, 128].map((width, index) => React.createElement("col", { key: index, style: { width } }))),
+  React.createElement(
+    "thead",
+    null,
+    React.createElement(
+      "tr",
+      null,
+      React.createElement("th", { className: "col-checkbox", scope: "col" }, React.createElement(Checkbox, { checked: allChecked, indeterminate: someChecked, onChange: onToggleAll, ariaLabel: "Select all visible route plans" })),
+      React.createElement(SortTh, { sortKey: "name", sort, onSort }, "Route plan"),
+      React.createElement(SortTh, { sortKey: "routeId", sort, onSort }, "Route ID"),
+      React.createElement("th", { scope: "col" }, "Origin-Destination"),
+      React.createElement("th", { scope: "col" }, "Coverage"),
+      React.createElement(SortTh, { sortKey: "alternatives", sort, onSort }, "Alternatives"),
+      React.createElement("th", { scope: "col" }, "Selected route"),
+      React.createElement(SortTh, { sortKey: "planningStatus", sort, onSort }, "Planning status"),
+      React.createElement("th", { scope: "col" }, "Documents"),
+      React.createElement(SortTh, { sortKey: "lastActivityOrder", sort, onSort }, "Last activity"),
+      React.createElement("th", { scope: "col", style: { textAlign: "right" } }, "Action")
+    )
+  ),
+  React.createElement(
+    "tbody",
+    null,
+    routes.length === 0 ? React.createElement(
+      "tr",
+      null,
+      React.createElement(
+        "td",
+        { colSpan: 11, style: { padding: 0, border: "none" } },
+        React.createElement(
+          "div",
+          { className: "dl-list-empty", style: { padding: "40px 28px" } },
+          React.createElement(EmptyState, { kind: "search", title: "No route plans match this scope", description: "Adjust your search, scope or filter criteria to find route plans." }),
+          React.createElement(Btn, { type: "button", variant: "secondary", onClick: onClear }, "Clear filters")
+        )
+      )
+    ) : routes.map((route) => {
+      const isSelected = !!selected[route.id];
+      return React.createElement(
+        "tr",
+        { key: route.id, "data-selected": isSelected, onClick: (event) => onView(route, event) },
+        React.createElement("td", { className: "col-checkbox", onClick: (event) => onToggleRow(route.id, event) }, React.createElement(Checkbox, { checked: isSelected, onChange: () => onToggleRow(route.id), ariaLabel: `Select ${route.name}` })),
+        React.createElement("td", null, React.createElement("div", { className: "dl-station-cell", title: route.name }, route.name), React.createElement("span", { className: "dl-route-mobile-status" }, route.planningStatus)),
+        React.createElement("td", null, React.createElement("span", { className: "dl-code-pill" }, route.routeId)),
+        React.createElement("td", null, React.createElement("div", { className: "dl-route-od", title: `${route.originName} to ${route.destinationName}`, "aria-label": `${route.originName} to ${route.destinationName}` }, route.originCode, "-", route.destinationCode)),
+        React.createElement("td", null, React.createElement("div", { className: "dl-route-coverage", title: route.coverage }, route.coverage)),
+        React.createElement("td", null, React.createElement("span", { className: "dl-route-number" }, route.alternatives)),
+        React.createElement("td", null, React.createElement("div", { className: "dl-route-selected", "data-empty": route.selectedRoute ? undefined : "true", title: route.selectedRoute || "Not selected" }, route.selectedRoute || "Not selected")),
+        React.createElement("td", null, React.createElement(RouteStatusBadge, { status: route.planningStatus })),
+        React.createElement("td", null, React.createElement("span", { className: "dl-route-doc-count", "aria-label": `${route.documents} route planning documents` }, React.createElement(Icon, { name: "file", size: 12, "aria-hidden": "true" }), route.documents)),
+        React.createElement("td", null, React.createElement("div", { className: "dl-activity-time" }, route.lastTime), React.createElement("div", { className: "dl-activity-by" }, "by ", route.lastBy)),
+        React.createElement("td", { className: "dl-action-table-cell", onClick: (event) => event.stopPropagation() }, React.createElement(RoutePlanRowActions, { route, onView: (event) => onView(route, event), onAction }))
+      );
+    })
+  )
+);
 // "modEsp" is the ESP Design module (landing + guided workflow). The file
 // workspace it replaced stays reachable on its own ids and as tabs on the
 // ESP landing page.
@@ -3630,14 +4413,22 @@ const ESP_PAGES = new Set(["workspace", "wsMyFiles", "wsShared"]);
 // on Home. Items marked `disabled` are listed for visibility but not selectable.
 const RAPID_MODULES = [
   { id: "modTad", icon: "track", label: "RAPID Track Alignment Design" },
-  { id: "modEsp", icon: "layers", label: "RAPID ESP" },
-  { id: "modSip", icon: "branch", label: "RAPID SIP" },
+  { id: "modEsp", icon: "layers", label: "RAPID ESP", children: [
+    { id: "espCreate", icon: "plus", label: "Create ESP" },
+    { id: "espUpdate", icon: "edit", label: "Update ESP" }
+  ] },
+  { id: "modSip", icon: "branch", label: "RAPID SIP", children: [
+    { id: "sipCreate", icon: "plus", label: "Create SIP" },
+    { id: "sipUpdate", icon: "edit", label: "Update SIP" }
+  ] },
   { id: "modToc", icon: "file_check", label: "RAPID TOC", disabled: true },
   { id: "modKavach", icon: "shield", label: "RAPID Kavach", disabled: true }
 ];
 const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate }) => {
   const [openGroups, setOpenGroups] = useStateLib({ main: true, modules: true, system: true });
+  const [openItems, setOpenItems] = useStateLib({});
   const toggleGroup = (id) => setOpenGroups((o) => ({ ...o, [id]: !o[id] }));
+  const toggleItem = (id) => setOpenItems((o) => ({ ...o, [id]: !o[id] }));
   const sections = [
     {
       id: "main", label: "Main", items: [
@@ -3655,7 +4446,7 @@ const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate })
     }
   ];
   const go = (it) => { if (!it.disabled && onNavigate) onNavigate(it.id); };
-  const renderItem = (it) => /* @__PURE__ */ React.createElement(
+  const renderRow = (it) => /* @__PURE__ */ React.createElement(
     "div",
     {
       key: it.id,
@@ -3669,6 +4460,55 @@ const LibrarySidebar = ({ collapsed, onToggle, active = "library", onNavigate })
     /* @__PURE__ */ React.createElement("span", null, it.label),
     it.badge && /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-badge" }, it.badge)
   );
+  // An item with `children` becomes an expandable parent. The collapsed rail has
+  // no room for a sub-list, so there it stays a plain row.
+  const renderItem = (it) => {
+    if (collapsed || !it.children || !it.children.length) return renderRow(it);
+    const childActive = it.children.some((c) => c.id === active);
+    const isOpen = openItems[it.id] === void 0 ? childActive : !!openItems[it.id];
+    return /* @__PURE__ */ React.createElement(
+      React.Fragment,
+      { key: it.id },
+      /* @__PURE__ */ React.createElement(
+        "div",
+        {
+          className: "ds-sidebar-item",
+          "data-active": active === it.id ? "true" : "false",
+          "data-disabled": it.disabled ? "true" : void 0,
+          onClick: () => { go(it); setOpenItems((o) => ({ ...o, [it.id]: true })); }
+        },
+        /* @__PURE__ */ React.createElement(Icon, { name: it.icon }),
+        /* @__PURE__ */ React.createElement("span", null, it.label),
+        /* @__PURE__ */ React.createElement(
+          "span",
+          {
+            className: "ds-sidebar-caret",
+            role: "button",
+            "aria-expanded": isOpen,
+            "aria-label": (isOpen ? "Collapse " : "Expand ") + it.label,
+            style: { display: "flex", marginLeft: "auto", transform: isOpen ? "rotate(90deg)" : "none", transition: "transform 160ms" },
+            onClick: (e) => { e.stopPropagation(); toggleItem(it.id); }
+          },
+          /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 13 })
+        )
+      ),
+      isOpen && /* @__PURE__ */ React.createElement(
+        "div",
+        { className: "ds-sidebar-children" },
+        it.children.map((c) => /* @__PURE__ */ React.createElement(
+          "div",
+          {
+            key: c.id,
+            className: "ds-sidebar-child",
+            "data-active": active === c.id ? "true" : "false",
+            onClick: () => go(c)
+          },
+          c.icon && /* @__PURE__ */ React.createElement(Icon, { name: c.icon, size: 14 }),
+          /* @__PURE__ */ React.createElement("span", { className: "ds-sidebar-child-label" }, c.label)
+        ))
+      )
+    );
+  };
   const renderSection = (sec) => {
     // while the rail is collapsed there is no heading to click, so never let a
     // closed section hide its icons
@@ -3778,8 +4618,8 @@ const DigitalLibraryPage = () => {
   const [stations, setStations] = useStateLib(ALL_STATIONS);
   const [addStationFlow, setAddStationFlow] = useStateLib(null);
   const [hubStation, setHubStation] = useStateLib(null);
-  const [activePage, setActivePage] = useStateLib("library");
-  const [activeNav, setActiveNav] = useStateLib("library");
+  const [activePage, setActivePage] = useStateLib("home");
+  const [activeNav, setActiveNav] = useStateLib("home");
   const [recentlyAdded, setRecentlyAdded] = useStateLib(null);
   const [toast, setToast] = useStateLib("");
   const [zone, setZone] = useStateLib("SCoR");
@@ -3788,20 +4628,49 @@ const DigitalLibraryPage = () => {
   const [search, setSearch] = useStateLib("");
   const [filtersOpen, setFiltersOpen] = useStateLib(false);
   const [filters, setFilters] = useStateLib(DEFAULT_FILTERS);
+  const [routeFilters, setRouteFilters] = useStateLib(DEFAULT_ROUTE_FILTERS);
+  const [recordType, setRecordType] = useStateLib("stations");
+  const [routeSummary, setRouteSummary] = useStateLib(null);
+  const routeSummaryReturnFocus = React.useRef(null);
   const [view, setView] = useStateLib("table");
   const [selected, setSelected] = useStateLib({});
   const [sort, setSort] = useStateLib({ key: "name", dir: "asc" });
   const [pageSize, setPageSize] = useStateLib(10);
   const [currentPage, setCurrentPage] = useStateLib(1);
+  const isRoutes = recordType === "routePlans";
   const rows = useMemoLib(() => {
-    let list = stations;
     const sectionMap = {
       "VJA-GDV": "Vijayawada\u2013Gudivada",
       "GNT-TEL": "Guntur\u2013Tenali",
       "EE-SLO": "Eluru\u2013Samalkot"
     };
+    const selectedSection = sectionMap[sectionScope] || SECTION_SCOPE_LABELS[sectionScope] || sectionScope;
+    const sortList = (list) => [...list].sort((a, b) => {
+      const av = a[sort.key] ?? "", bv = b[sort.key] ?? "";
+      const cmp = typeof av === "number" && typeof bv === "number" ? av - bv : String(av).localeCompare(String(bv), void 0, { numeric: true });
+      return sort.dir === "asc" ? cmp : -cmp;
+    });
+    if (isRoutes) {
+      let list = ROUTE_PLANS.filter((route) => route.zone === zone && [...route.divisions, ...(route.libraryDivisions || [])].includes(division));
+      if (sectionScope !== "all") list = list.filter((route) => route.sections.includes(selectedSection));
+      if (search.trim()) {
+        const q = search.trim().toLowerCase();
+        list = list.filter((route) => [route.name, route.corridor, route.routeId, route.originCode, route.originName, route.destinationCode, route.destinationName].join(" ").toLowerCase().includes(q));
+      }
+      list = list.filter((route) => {
+        if (routeFilters.planningStatus !== "all" && route.planningStatusKey !== routeFilters.planningStatus) return false;
+        if (routeFilters.approvalStatus !== "all" && route.approvalStatusKey !== routeFilters.approvalStatus) return false;
+        if (routeFilters.routeType !== "all" && route.routeTypeKey !== routeFilters.routeType) return false;
+        if (routeFilters.surveyData !== "all" && route.surveyDataKey !== routeFilters.surveyData) return false;
+        if (routeFilters.selection === "selected" && !route.selectedRoute) return false;
+        if (routeFilters.selection === "not_selected" && route.selectedRoute) return false;
+        return true;
+      });
+      return sortList(list);
+    }
+    let list = stations.filter((station) => station.zone === zone && station.division === division);
     if (sectionScope !== "all") {
-      list = list.filter((s) => s.section === (sectionMap[sectionScope] || SECTION_SCOPE_LABELS[sectionScope] || sectionScope));
+      list = list.filter((s) => s.section === selectedSection);
     }
     if (search.trim()) {
       const q = search.toLowerCase();
@@ -3839,19 +4708,23 @@ const DigitalLibraryPage = () => {
       if (filters.completeness === "not_started" && count !== 0) return false;
       return true;
     });
-    return [...list].sort((a, b) => {
-      const av = a[sort.key] ?? "", bv = b[sort.key] ?? "";
-      const cmp = String(av).localeCompare(String(bv));
-      return sort.dir === "asc" ? cmp : -cmp;
-    });
-  }, [stations, search, sort, sectionScope, filters]);
+    return sortList(list);
+  }, [isRoutes, stations, search, sort, zone, division, sectionScope, filters, routeFilters]);
   const existingCodes = useMemoLib(
     () => new Set(stations.map((s) => s.code.toUpperCase())),
     [stations]
   );
   React.useEffect(() => {
     setCurrentPage(1);
-  }, [search, filters, sectionScope, sort, pageSize]);
+  }, [search, filters, routeFilters, recordType, zone, division, sectionScope, sort, pageSize]);
+  React.useEffect(() => {
+    if (!filtersOpen) return;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setFiltersOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [filtersOpen]);
   const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
   const safeCurrentPage = Math.min(currentPage, totalPages);
   const pageStart = rows.length ? (safeCurrentPage - 1) * pageSize : 0;
@@ -3941,14 +4814,26 @@ const DigitalLibraryPage = () => {
     window.setTimeout(() => setToast(""), 3200);
   };
   const onSort = (key) => setSort((s) => ({ key, dir: s.key === key && s.dir === "asc" ? "desc" : "asc" }));
-  const setFilterValue = (key, value) => setFilters((current) => ({ ...current, [key]: value }));
+  const activeFilters = isRoutes ? routeFilters : filters;
+  const filterFields = isRoutes ? ROUTE_FILTER_FIELDS : STATION_FILTER_FIELDS;
+  const filterLabels = isRoutes ? ROUTE_FILTER_LABELS : FILTER_LABELS;
+  const filterHint = isRoutes ? "Filters available: planning status, approval status, route type, survey data, selected route" : "Filters available: document type, document status, survey data, completeness";
+  const sortOptions = isRoutes ? ROUTE_SORT_OPTIONS : STATION_SORT_OPTIONS;
+  const currentSortValue = `${sort.key}:${sort.dir}`;
+  const sortSelectValue = sortOptions.some((option) => option.value === currentSortValue) ? currentSortValue : "custom";
+  const setFilterValue = (key, value) => {
+    const setter = isRoutes ? setRouteFilters : setFilters;
+    setter((current) => ({ ...current, [key]: value }));
+  };
   const clearFilters = () => {
     setSearch("");
-    setFilters(DEFAULT_FILTERS);
+    if (isRoutes) setRouteFilters(DEFAULT_ROUTE_FILTERS);
+    else setFilters(DEFAULT_FILTERS);
+    setCurrentPage(1);
   };
   const activeFilterChips = [
     search.trim() ? { key: "search", label: `Search: ${search.trim()}` } : null,
-    ...Object.entries(filters).filter(([, value]) => value !== "all").map(([key, value]) => ({ key, label: FILTER_LABELS[key][value] }))
+    ...Object.entries(activeFilters).filter(([, value]) => value !== "all").map(([key, value]) => ({ key, label: filterLabels[key]?.[value] || value }))
   ].filter(Boolean);
   const removeFilterChip = (key) => {
     if (key === "search") {
@@ -3956,6 +4841,24 @@ const DigitalLibraryPage = () => {
       return;
     }
     setFilterValue(key, "all");
+  };
+  const handleRecordTypeChange = (nextType) => {
+    if (nextType === recordType) return;
+    setRecordType(nextType);
+    setSearch("");
+    setFilters(DEFAULT_FILTERS);
+    setRouteFilters(DEFAULT_ROUTE_FILTERS);
+    setSelected({});
+    setFiltersOpen(false);
+    setSort(nextType === "routePlans" ? { key: "routeId", dir: "asc" } : { key: "name", dir: "asc" });
+    setCurrentPage(1);
+    setRouteSummary(null);
+  };
+  const handleSortSelect = (event) => {
+    const value = event.target.value;
+    if (value === "custom") return;
+    const splitAt = value.lastIndexOf(":");
+    setSort({ key: value.slice(0, splitAt), dir: value.slice(splitAt + 1) });
   };
   const secLabel = SECTION_SCOPE_LABELS;
   const navLabels = {
@@ -3966,7 +4869,11 @@ const DigitalLibraryPage = () => {
     // these module pages are not built yet — acknowledge the click rather than
     // dropping the user back on the library with no explanation
     modTad: "RAPID Track Alignment Design",
-    modSip: "RAPID SIP"
+    modSip: "RAPID SIP",
+    espCreate: "Create ESP",
+    espUpdate: "Update ESP",
+    sipCreate: "Create SIP",
+    sipUpdate: "Update SIP"
   };
   const navigateSidebar = (page) => {
     setActiveNav(page);
@@ -3987,6 +4894,15 @@ const DigitalLibraryPage = () => {
   const showRowActionToast = (message) => {
     setToast(message);
     window.setTimeout(() => setToast(""), 2600);
+  };
+  const openRouteSummary = (route, event) => {
+    const trigger = event?.currentTarget;
+    routeSummaryReturnFocus.current = trigger && typeof trigger.focus === "function" ? trigger : document.activeElement;
+    setRouteSummary(route);
+  };
+  const closeRouteSummary = () => {
+    setRouteSummary(null);
+    window.requestAnimationFrame(() => routeSummaryReturnFocus.current?.focus?.());
   };
   if (activePage === "home" && window.DashboardPage) {
     const Dashboard = window.DashboardPage;
@@ -4098,16 +5014,49 @@ const DigitalLibraryPage = () => {
     AppTopBar,
     {
       crumbs: [{ label: "Home", onClick: () => navigateSidebar("home") }, "Digital Library"],
-      searchPlaceholder: "Search stations, documents, approvals..."
+      searchPlaceholder: isRoutes ? "Search route plans, documents and approvals..." : "Search stations, documents, approvals..."
     }
-  ), /* @__PURE__ */ React.createElement("div", { className: "dl-page-header dl-library-page-header" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "layers", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "dl-page-heading" }, /* @__PURE__ */ React.createElement("div", { className: "dl-page-title" }, "Digital Library"), /* @__PURE__ */ React.createElement("div", { className: "dl-page-sub" }, "Central repository of all station records, drawings and survey data")), /* @__PURE__ */ React.createElement("div", { className: "dl-page-actions" }, /* @__PURE__ */ React.createElement("button", { className: "ds-icon-btn", title: "Export Register" }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 16 })), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "plus", onClick: () => {
-    setHubStation(null);
-    setActiveNav("library");
-    setActivePage("bulkUpload");
-  } }, "Add Stations in Bulk"), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "plus", onClick: () => setAddStationFlow("choose") }, "Add Station"))), /* @__PURE__ */ React.createElement("div", { className: "dl-scope-bar" }, /* @__PURE__ */ React.createElement("span", { className: "dl-scope-label" }, "Scope:"), /* @__PURE__ */ React.createElement("div", { className: "dl-scope-controls" }, /* @__PURE__ */ React.createElement(
+  ), React.createElement(
+    "div",
+    { className: "dl-page-header dl-library-page-header" },
+    React.createElement("div", { className: "dl-page-icon-badge" }, React.createElement(Icon, { name: "layers", size: 20 })),
+    React.createElement(
+      "div",
+      { className: "dl-page-heading" },
+      React.createElement("div", { className: "dl-page-title" }, "Digital Library"),
+      React.createElement("div", { className: "dl-page-sub" }, "Central repository for route plans, station records, engineering drawings and survey data"),
+      React.createElement(
+        "div",
+        { className: "dl-record-switch", role: "group", "aria-label": "Digital Library record type" },
+        React.createElement("button", { type: "button", "aria-pressed": !isRoutes, "data-active": !isRoutes ? "true" : undefined, onClick: () => handleRecordTypeChange("stations") }, "Stations", React.createElement("span", { className: "dl-record-count" }, stations.length)),
+        React.createElement("button", { type: "button", "aria-pressed": isRoutes, "data-active": isRoutes ? "true" : undefined, onClick: () => handleRecordTypeChange("routePlans") }, "Route Plans", React.createElement("span", { className: "dl-record-count" }, ROUTE_PLANS.length))
+      )
+    ),
+    React.createElement(
+      "div",
+      { className: "dl-page-actions" },
+      React.createElement("button", { type: "button", className: "ds-icon-btn", title: isRoutes ? "Export Route Plan Register" : "Export Station Register", "aria-label": isRoutes ? "Export Route Plan Register" : "Export Station Register", onClick: () => showRowActionToast(isRoutes ? "Route Plan Register export prepared" : "Station Register export prepared") }, React.createElement(Icon, { name: "download", size: 16 })),
+      isRoutes ? React.createElement(
+        React.Fragment,
+        null,
+        React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "upload", onClick: () => showRowActionToast("Import Route Plans workflow opened") }, "Import Route Plans"),
+        React.createElement(Btn, { type: "button", variant: "accent", leadingIcon: "plus", onClick: () => showRowActionToast("Add Route Plan workflow opened") }, "Add Route Plan")
+      ) : React.createElement(
+        React.Fragment,
+        null,
+        React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "plus", onClick: () => {
+          setHubStation(null);
+          setActiveNav("library");
+          setActivePage("bulkUpload");
+        } }, "Add Stations in Bulk"),
+        React.createElement(Btn, { type: "button", variant: "accent", leadingIcon: "plus", onClick: () => setAddStationFlow("choose") }, "Add Station")
+      )
+    )
+  ), React.createElement("div", { className: "dl-scope-bar" }, React.createElement("span", { className: "dl-scope-label" }, "Scope:"), React.createElement("div", { className: "dl-scope-controls" }, React.createElement(
     "select",
     {
       className: "dl-scope-select",
+      "aria-label": "Zone scope",
       value: zone,
       onChange: (e) => {
         const nextZone = e.target.value;
@@ -4124,6 +5073,7 @@ const DigitalLibraryPage = () => {
     "select",
     {
       className: "dl-scope-select",
+      "aria-label": "Division scope",
       value: division,
       onChange: (e) => {
         setDivision(e.target.value);
@@ -4137,6 +5087,7 @@ const DigitalLibraryPage = () => {
     "select",
     {
       className: "dl-scope-select",
+      "aria-label": "Section scope",
       value: sectionScope,
       onChange: (e) => setSectionScope(e.target.value)
     },
@@ -4144,10 +5095,11 @@ const DigitalLibraryPage = () => {
     (SECTION_OPTIONS[division] || []).map(
       (sectionName) => /* @__PURE__ */ React.createElement("option", { key: sectionName, value: sectionName }, sectionName)
     )
-  )), /* @__PURE__ */ React.createElement("div", { className: "dl-vdivider" }), /* @__PURE__ */ React.createElement("span", { className: "dl-scope-count" }, rows.length, " stations in scope"), /* @__PURE__ */ React.createElement("nav", { className: "ds-breadcrumb dl-scope-path", style: { fontSize: "12px" } }, /* @__PURE__ */ React.createElement("a", { style: { fontSize: "12px" } }, zone), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11, className: "ds-breadcrumb-sep" }), /* @__PURE__ */ React.createElement("a", { style: { fontSize: "12px" } }, division), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11, className: "ds-breadcrumb-sep" }), /* @__PURE__ */ React.createElement("span", { className: "ds-breadcrumb-current", style: { fontSize: "12px" } }, secLabel[sectionScope] || sectionScope))), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-bar" }, /* @__PURE__ */ React.createElement("div", { className: "dl-filter-row" }, /* @__PURE__ */ React.createElement("div", { className: "dl-search-wrap" }, /* @__PURE__ */ React.createElement(Icon, { name: "search", size: 14, className: "dl-search-icon" }), /* @__PURE__ */ React.createElement(
+  )), /* @__PURE__ */ React.createElement("div", { className: "dl-vdivider" }), /* @__PURE__ */ React.createElement("span", { className: "dl-scope-count", role: "status", "aria-live": "polite" }, rows.length, isRoutes ? rows.length === 1 ? " route plan in scope" : " route plans in scope" : rows.length === 1 ? " station in scope" : " stations in scope"), /* @__PURE__ */ React.createElement("nav", { className: "ds-breadcrumb dl-scope-path", "aria-label": "Current scope", style: { fontSize: "12px" } }, /* @__PURE__ */ React.createElement("a", { style: { fontSize: "12px" } }, zone), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11, className: "ds-breadcrumb-sep" }), /* @__PURE__ */ React.createElement("a", { style: { fontSize: "12px" } }, division), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11, className: "ds-breadcrumb-sep" }), /* @__PURE__ */ React.createElement("span", { className: "ds-breadcrumb-current", style: { fontSize: "12px" } }, secLabel[sectionScope] || sectionScope))), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-bar" }, /* @__PURE__ */ React.createElement("div", { className: "dl-filter-row" }, /* @__PURE__ */ React.createElement("div", { className: "dl-search-wrap" }, /* @__PURE__ */ React.createElement(Icon, { name: "search", size: 14, className: "dl-search-icon" }), /* @__PURE__ */ React.createElement(
     "input",
     {
-      placeholder: "Search by station name or code\u2026",
+      placeholder: isRoutes ? "Search by route name, corridor, origin, destination or route ID..." : "Search by station name or code...",
+      "aria-label": isRoutes ? "Search Route Plans" : "Search Stations",
       value: search,
       onChange: (e) => setSearch(e.target.value)
     }
@@ -4158,53 +5110,53 @@ const DigitalLibraryPage = () => {
       size: "sm",
       leadingIcon: "filter",
       trailingIcon: filtersOpen ? "chevron_up" : "chevron_down",
+      "aria-expanded": filtersOpen,
+      "aria-controls": "digital-library-filters",
       onClick: () => setFiltersOpen((open) => !open)
     },
     "Filters",
     activeFilterChips.length ? ` (${activeFilterChips.length})` : ""
-  ), filtersOpen && /* @__PURE__ */ React.createElement("div", { className: "dl-filter-panel" }, /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Document Type"), /* @__PURE__ */ React.createElement(
-    "select",
-    {
-      value: filters.document,
-      onChange: (e) => setFilterValue("document", e.target.value)
-    },
-    DOCUMENT_FILTERS.map(
-      (option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label)
+  ), filtersOpen && React.createElement(
+    "div",
+    { className: "dl-filter-panel", id: "digital-library-filters", role: "group", "aria-label": isRoutes ? "Route Plan filters" : "Station filters" },
+    filterFields.map((field) => {
+      const fieldId = `dl-filter-${recordType}-${field.key}`;
+      return React.createElement(
+        "div",
+        { className: "dl-filter-field", key: field.key },
+        React.createElement("label", { htmlFor: fieldId }, field.label),
+        React.createElement(
+          "select",
+          { id: fieldId, value: activeFilters[field.key], onChange: (event) => setFilterValue(field.key, event.target.value) },
+          field.options.map((option) => React.createElement("option", { key: option.value, value: option.value }, option.label))
+        )
+      );
+    }),
+    React.createElement(
+      "div",
+      { className: "dl-filter-actions" },
+      React.createElement(Btn, { type: "button", variant: "ghost", size: "sm", onClick: clearFilters }, "Clear all"),
+      React.createElement(Btn, { type: "button", variant: "primary", size: "sm", onClick: () => setFiltersOpen(false) }, "Apply")
     )
-  )), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Document Status"), /* @__PURE__ */ React.createElement(
-    "select",
-    {
-      value: filters.status,
-      onChange: (e) => setFilterValue("status", e.target.value)
-    },
-    STATUS_FILTERS.map(
-      (option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label)
+  ), React.createElement(
+    "label",
+    { className: "dl-sort-control" },
+    React.createElement(Icon, { name: "sort", size: 13, "aria-hidden": "true" }),
+    React.createElement("span", null, "Sort"),
+    React.createElement(
+      "select",
+      { value: sortSelectValue, onChange: handleSortSelect, "aria-label": isRoutes ? "Sort Route Plans" : "Sort Stations" },
+      React.createElement("option", { value: "custom", disabled: true }, "Sorted by table column"),
+      sortOptions.map((option) => React.createElement("option", { key: option.value, value: option.value }, option.label))
     )
-  )), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Survey Data"), /* @__PURE__ */ React.createElement(
-    "select",
-    {
-      value: filters.survey,
-      onChange: (e) => setFilterValue("survey", e.target.value)
-    },
-    SURVEY_FILTERS.map(
-      (option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label)
-    )
-  )), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-field" }, /* @__PURE__ */ React.createElement("label", null, "Completeness"), /* @__PURE__ */ React.createElement(
-    "select",
-    {
-      value: filters.completeness,
-      onChange: (e) => setFilterValue("completeness", e.target.value)
-    },
-    COMPLETENESS_FILTERS.map(
-      (option) => /* @__PURE__ */ React.createElement("option", { key: option.value, value: option.value }, option.label)
-    )
-  )), /* @__PURE__ */ React.createElement("div", { className: "dl-filter-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", size: "sm", onClick: clearFilters }, "Clear all"), /* @__PURE__ */ React.createElement(Btn, { variant: "primary", size: "sm", onClick: () => setFiltersOpen(false) }, "Apply")))), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", size: "sm", leadingIcon: "sort" }, "Sort"), /* @__PURE__ */ React.createElement("div", { className: "dl-vdivider" }), /* @__PURE__ */ React.createElement(
-    PillTabs,
-    {
-      items: [{ id: "table", label: "Table" }, { id: "cards", label: "Cards" }],
-      active: view,
-      onChange: setView
-    }
+  ), React.createElement("div", { className: "dl-vdivider" }), React.createElement(
+    "div",
+    { className: "ds-pilltabs", role: "group", "aria-label": "Library view" },
+    [{ id: "table", label: "Table" }, { id: "cards", label: "Cards" }].map((item) => React.createElement(
+      "button",
+      { key: item.id, type: "button", className: "ds-pilltab", "data-active": view === item.id ? "true" : undefined, "aria-pressed": view === item.id, onClick: () => setView(item.id) },
+      item.label
+    ))
   )), /* @__PURE__ */ React.createElement("div", { className: "dl-chips" }, activeFilterChips.length ? activeFilterChips.map((chip) => {
     return /* @__PURE__ */ React.createElement(
       "button",
@@ -4217,7 +5169,7 @@ const DigitalLibraryPage = () => {
       /* @__PURE__ */ React.createElement("span", null, chip.label),
       /* @__PURE__ */ React.createElement("span", { className: "ds-fchip-x" }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 10 }))
     );
-  }) : /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, color: "var(--ink-500)" } }, "Filters available: document type, document status, survey data, completeness"), /* @__PURE__ */ React.createElement(
+  }) : /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, color: "var(--ink-500)" } }, filterHint), /* @__PURE__ */ React.createElement(
     "button",
     {
       className: "ds-fchip",
@@ -4226,30 +5178,59 @@ const DigitalLibraryPage = () => {
     },
     /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 12 }),
     "\u2009Add filter"
-  ))), /* @__PURE__ */ React.createElement("div", { className: "dl-table-area", "data-density": t.tableDensity }, view === "cards" ? /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "center", paddingTop: 64 } }, /* @__PURE__ */ React.createElement(
-    EmptyState,
-    {
-      kind: "track",
-      title: "Cards view coming soon",
-      description: "Switch back to Table view to browse the full station registry.",
-      secondary: "Switch to Table"
-    }
-  )) : /* @__PURE__ */ React.createElement("div", { className: "dl-table-container" }, /* @__PURE__ */ React.createElement("table", { className: "ds-table", style: { width: "100%" } }, /* @__PURE__ */ React.createElement("colgroup", null, /* @__PURE__ */ React.createElement("col", { style: { width: 42 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 150 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 76 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 154 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 116 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 72 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 104 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 142 } }), /* @__PURE__ */ React.createElement("col", { style: { width: 126 } })), /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { className: "col-checkbox" }, /* @__PURE__ */ React.createElement(
+  ))), React.createElement(
+    "div",
+    { className: "dl-table-area", "data-density": t.tableDensity },
+    view === "cards" ? React.createElement(
+      "div",
+      { className: "dl-cards-placeholder", style: { paddingTop: 64 } },
+      React.createElement(EmptyState, {
+        kind: "track",
+        title: "Cards view coming soon",
+        description: isRoutes ? "Switch back to Table view to browse the full route plan registry." : "Switch back to Table view to browse the full station registry."
+      }),
+      React.createElement(Btn, { type: "button", variant: "secondary", onClick: () => setView("table") }, "Switch to Table")
+    ) : React.createElement(
+      "div",
+      { className: "dl-table-container" },
+      !isRoutes && React.createElement(DocumentTypeLegend, null),
+      React.createElement("div", { className: "dl-table-scroll" }, rows.length === 0 ? React.createElement(
+        "div",
+        { className: "dl-list-empty dl-table-empty" },
+        React.createElement(EmptyState, {
+          kind: "search",
+          title: isRoutes ? "No route plans match this scope" : "No stations match this scope",
+          description: isRoutes ? "Adjust your search, scope or filter criteria to find route plans." : "Adjust your search or filter criteria to find stations."
+        }),
+        React.createElement(Btn, { type: "button", variant: "secondary", onClick: clearFilters }, "Clear filters")
+      ) : isRoutes ? React.createElement(RoutePlansTable, {
+        routes: pagedRows,
+        sort,
+        onSort,
+        allChecked,
+        someChecked,
+        onToggleAll: toggleAll,
+        selected,
+        onToggleRow: toggleRow,
+        onView: openRouteSummary,
+        onAction: showRowActionToast,
+        onClear: clearFilters
+      }) : React.createElement("table", { className: "ds-table", style: { width: "100%" } }, React.createElement("colgroup", null, React.createElement("col", { style: { width: 42 } }), React.createElement("col", { style: { width: 150 } }), React.createElement("col", { style: { width: 76 } }), React.createElement("col", { style: { width: 154 } }), React.createElement("col", { style: { width: 116 } }), React.createElement("col", { style: { width: 72 } }), React.createElement("col", { style: { width: 104 } }), React.createElement("col", { style: { width: 142 } }), React.createElement("col", { style: { width: 126 } })), React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", { className: "col-checkbox", scope: "col" }, React.createElement(
     Checkbox,
     {
       checked: allChecked,
       indeterminate: someChecked,
-      onChange: toggleAll
+      onChange: toggleAll,
+      ariaLabel: "Select all visible stations"
     }
-  )), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "name", sort, onSort }, "Station"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "code", sort, onSort }, "Code"), /* @__PURE__ */ React.createElement("th", null, "Section"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "division", sort, onSort }, "Division"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "zone", sort, onSort }, "Zone"), /* @__PURE__ */ React.createElement("th", null, "Documents"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "lastTime", sort, onSort }, "Last Activity"), /* @__PURE__ */ React.createElement("th", { style: { textAlign: "right" } }, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, rows.length === 0 ? /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { colSpan: 9, style: { padding: 0, border: "none" } }, /* @__PURE__ */ React.createElement("div", { style: { padding: "40px 28px" } }, /* @__PURE__ */ React.createElement(
+  )), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "name", sort, onSort }, "Station"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "code", sort, onSort }, "Code"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Section"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "division", sort, onSort }, "Division"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "zone", sort, onSort }, "Zone"), /* @__PURE__ */ React.createElement("th", { scope: "col" }, "Documents"), /* @__PURE__ */ React.createElement(SortTh, { sortKey: "lastTime", sort, onSort }, "Last Activity"), /* @__PURE__ */ React.createElement("th", { scope: "col", style: { textAlign: "right" } }, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, rows.length === 0 ? /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { colSpan: 9, style: { padding: 0, border: "none" } }, /* @__PURE__ */ React.createElement("div", { className: "dl-list-empty", style: { padding: "40px 28px" } }, /* @__PURE__ */ React.createElement(
     EmptyState,
     {
       kind: "search",
       title: "No stations match this scope",
-      description: "Adjust your search or filter criteria to find stations.",
-      secondary: "Clear filters"
+      description: "Adjust your search or filter criteria to find stations."
     }
-  )))) : pagedRows.map((s) => {
+  ), /* @__PURE__ */ React.createElement(Btn, { type: "button", variant: "secondary", onClick: clearFilters }, "Clear filters")))) : pagedRows.map((s) => {
     const isSelected = !!selected[s.id];
     const stationDocuments = getStationDocuments(s);
     return /* @__PURE__ */ React.createElement(
@@ -4273,7 +5254,8 @@ const DigitalLibraryPage = () => {
           Checkbox,
           {
             checked: isSelected,
-            onChange: () => toggleRow(s.id)
+            onChange: () => toggleRow(s.id),
+            ariaLabel: `Select ${s.name}`
           }
         )
       ),
@@ -4283,7 +5265,7 @@ const DigitalLibraryPage = () => {
       /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "dl-division-cell", title: s.division }, s.division)),
       /* @__PURE__ */ React.createElement("td", { style: { fontSize: 12, color: "var(--ink-700)", fontWeight: 700 } }, s.zone),
       /* @__PURE__ */ React.createElement("td", { className: "dl-doc-table-cell" }, /* @__PURE__ */ React.createElement(
-        DocumentDetailsPopover,
+        StationDocumentIndicators,
         {
           station: s,
           documents: stationDocuments,
@@ -4306,7 +5288,7 @@ const DigitalLibraryPage = () => {
         }
       ))
     );
-  }))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-foot" }, /* @__PURE__ */ React.createElement("div", { className: "dl-table-foot-left" }, /* @__PURE__ */ React.createElement("span", null, "Showing ", rows.length ? pageStart + 1 : 0, "-", pageEnd, " of ", rows.length, " visible stations", activeFilterChips.length > 0 && /* @__PURE__ */ React.createElement("span", { style: { color: "var(--ink-500)" } }, " \u2014 ", activeFilterChips.length, " filter", activeFilterChips.length !== 1 ? "s" : "", " active")), /* @__PURE__ */ React.createElement("label", { className: "dl-page-size" }, /* @__PURE__ */ React.createElement("span", null, "Rows per page"), /* @__PURE__ */ React.createElement(
+  })))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-foot" }, /* @__PURE__ */ React.createElement("div", { className: "dl-table-foot-left" }, /* @__PURE__ */ React.createElement("span", { role: "status", "aria-live": "polite" }, "Showing ", rows.length ? pageStart + 1 : 0, "–", pageEnd, " of ", rows.length, isRoutes ? rows.length === 1 ? " visible route plan" : " visible route plans" : rows.length === 1 ? " visible station" : " visible stations", activeFilterChips.length > 0 && /* @__PURE__ */ React.createElement("span", { style: { color: "var(--ink-500)" } }, " \u2014 ", activeFilterChips.length, " filter", activeFilterChips.length !== 1 ? "s" : "", " active")), /* @__PURE__ */ React.createElement("label", { className: "dl-page-size" }, /* @__PURE__ */ React.createElement("span", null, "Rows per page"), /* @__PURE__ */ React.createElement(
     "select",
     {
       value: pageSize,
@@ -4318,7 +5300,9 @@ const DigitalLibraryPage = () => {
   ))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-pager" }, /* @__PURE__ */ React.createElement(
     "button",
     {
+      type: "button",
       className: "ds-page-btn",
+      "aria-label": "Previous page",
       disabled: safeCurrentPage === 1,
       onClick: () => setCurrentPage((p) => Math.max(1, p - 1))
     },
@@ -4326,15 +5310,20 @@ const DigitalLibraryPage = () => {
   ), pageNumbers.map((page, i) => /* @__PURE__ */ React.createElement(React.Fragment, { key: page }, i > 0 && page - pageNumbers[i - 1] > 1 && /* @__PURE__ */ React.createElement("span", { className: "dl-page-ellipsis" }, "\u2026"), /* @__PURE__ */ React.createElement(
     "button",
     {
+      type: "button",
       className: "ds-page-btn",
       "data-current": page === safeCurrentPage ? "true" : void 0,
+      "aria-current": page === safeCurrentPage ? "page" : void 0,
+      "aria-label": `Page ${page}`,
       onClick: () => setCurrentPage(page)
     },
     page
   ))), /* @__PURE__ */ React.createElement(
     "button",
     {
+      type: "button",
       className: "ds-page-btn",
+      "aria-label": "Next page",
       disabled: safeCurrentPage === totalPages,
       onClick: () => setCurrentPage((p) => Math.min(totalPages, p + 1))
     },
@@ -4346,7 +5335,7 @@ const DigitalLibraryPage = () => {
       size: 15,
       style: { color: "rgba(255,255,255,0.45)", flexShrink: 0 }
     }
-  ), /* @__PURE__ */ React.createElement("span", { className: "dl-bulk-label" }, selectedCount, " station", selectedCount !== 1 ? "s" : "", " selected"), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-sep" }), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 13 }), "Export selected"), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 13 }), "Download documents"), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "pin", size: 13 }), "Add to\u2026"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-clear", onClick: clearSelection }, "Clear selection"))), addStationFlow === "choose" && /* @__PURE__ */ React.createElement(AddStationChoiceModal, { onChoose: setAddStationFlow, onClose: () => setAddStationFlow(null) }), addStationFlow === "existing" && /* @__PURE__ */ React.createElement(ExistingStationModal, { existingCodes, onAdd: addStation, onAddNew: () => setAddStationFlow("newFromExisting"), onBack: () => setAddStationFlow("choose"), onClose: () => setAddStationFlow(null) }), (addStationFlow === "new" || addStationFlow === "newFromExisting") && /* @__PURE__ */ React.createElement(
+  ), /* @__PURE__ */ React.createElement("span", { className: "dl-bulk-label" }, selectedCount, isRoutes ? " route plan" : " station", selectedCount !== 1 ? "s" : "", " selected"), /* @__PURE__ */ React.createElement("div", { className: "dl-bulk-sep" }), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 13 }), "Export selected"), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "file", size: 13 }), "Download documents"), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-action" }, /* @__PURE__ */ React.createElement(Icon, { name: "pin", size: 13 }), "Add to\u2026"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }), /* @__PURE__ */ React.createElement("button", { className: "dl-bulk-clear", onClick: clearSelection }, "Clear selection"))), routeSummary && React.createElement(RoutePlanSummaryModal, { route: routeSummary, onClose: closeRouteSummary }), addStationFlow === "choose" && /* @__PURE__ */ React.createElement(AddStationChoiceModal, { onChoose: setAddStationFlow, onClose: () => setAddStationFlow(null) }), addStationFlow === "existing" && /* @__PURE__ */ React.createElement(ExistingStationModal, { existingCodes, onAdd: addStation, onAddNew: () => setAddStationFlow("newFromExisting"), onBack: () => setAddStationFlow("choose"), onClose: () => setAddStationFlow(null) }), (addStationFlow === "new" || addStationFlow === "newFromExisting") && /* @__PURE__ */ React.createElement(
     AddStationModal,
     {
       initialZone: zone,
@@ -4372,7 +5361,7 @@ const DigitalLibraryPage = () => {
       options: ["compact", "regular"],
       onChange: (v) => setTweak("tableDensity", v)
     }
-  )));
+  ))));
 };
 const dlStyleEl = document.createElement("style");
 dlStyleEl.textContent = window.NAV_CSS + window.DATA_CSS + window.FORM_CSS + libCSS;

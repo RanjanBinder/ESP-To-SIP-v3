@@ -143,7 +143,7 @@ const Checkbox = ({ checked, indeterminate, onChange, ariaLabel }) => /* @__PURE
   "span",
   {
     role: "checkbox",
-    "aria-checked": checked,
+    "aria-checked": indeterminate && !checked ? "mixed" : checked,
     "aria-label": ariaLabel,
     tabIndex: 0,
     className: "ds-checkbox",
