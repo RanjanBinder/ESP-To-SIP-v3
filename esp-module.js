@@ -415,24 +415,6 @@ const espCSS = `
 .esp-code { font-family: var(--font-mono); font-size: 9.5px; padding: 1px 4px; border-radius: var(--r-xs); background: var(--ink-100); color: var(--ink-500); font-weight: 600; margin-left: 6px; }
 .esp-ver { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--ink-800); }
 
-/* stepper bar */
-.esp-stepbar { flex-shrink: 0; background: var(--paper); border-bottom: var(--hairline); padding: 12px 28px 14px; }
-.esp-steps { display: flex; align-items: flex-start; gap: 0; }
-.esp-step { flex: 1; display: flex; align-items: flex-start; gap: 9px; min-width: 0; position: relative; padding-right: 10px; cursor: pointer; }
-.esp-step:last-child { flex: 0 0 auto; padding-right: 0; }
-.esp-step-dot { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 800; flex-shrink: 0; border: 1.5px solid var(--ink-200); background: var(--paper); color: var(--ink-500); transition: 150ms; }
-.esp-step[data-state="done"] .esp-step-dot { background: var(--accent); border-color: var(--accent); color: #fff; }
-.esp-step[data-state="active"] .esp-step-dot { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: var(--shadow-focus); }
-.esp-step-txt { min-width: 0; }
-.esp-step-label { font-size: 12.5px; font-weight: 700; color: var(--ink-500); white-space: nowrap; }
-.esp-step[data-state="done"] .esp-step-label, .esp-step[data-state="active"] .esp-step-label { color: var(--ink-900); }
-.esp-step-sub { font-size: 10.5px; color: var(--ink-400); white-space: nowrap; }
-.esp-step-line { position: absolute; left: 24px; right: 6px; top: 11.5px; height: 2px; background: var(--ink-200); border-radius: 2px; z-index: 0; }
-.esp-step[data-state="done"] .esp-step-line { background: var(--accent); }
-.esp-step > * { position: relative; z-index: 1; }
-.esp-step:last-child .esp-step-line { display: none; }
-.esp-step[data-locked="true"] { cursor: default; opacity: .75; }
-
 /* wizard footer */
 .esp-footer { flex-shrink: 0; background: var(--paper); border-top: var(--hairline); padding: 12px 28px; display: flex; align-items: center; gap: 12px; }
 .esp-footer-note { font-size: 12px; color: var(--ink-500); }
@@ -586,12 +568,37 @@ const espCSS = `
 
 /* single-page Update ESP workflow */
 .esp-update-page { width: 100%; }
-.esp-update-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+/* station picker — one required searchable field; the hierarchy is derived */
+.esp-picker { position: relative; }
+.esp-combo { position: relative; max-width: 560px; }
+.esp-combo-menu { position: absolute; z-index: 40; top: calc(100% + 6px); left: 0; right: 0; max-height: 300px; overflow-y: auto; padding: 4px; background: var(--paper); border: var(--hairline); border-radius: var(--r-md); box-shadow: var(--shadow-lg); }
+.esp-combo-opt { display: flex; align-items: center; gap: 12px; padding: 9px 10px; border-radius: var(--r-sm); cursor: pointer; }
+.esp-combo-opt[data-active="true"] { background: var(--accent-soft); }
+.esp-combo-opt-main { flex: 1; min-width: 0; }
+.esp-combo-opt mark { background: transparent; color: var(--accent); font-weight: 800; }
+.esp-combo-empty { padding: 22px 14px; text-align: center; font-size: 12.5px; color: var(--ink-500); }
+.esp-combo-empty .icon { color: var(--ink-400); }
+.esp-picked { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 1px solid var(--accent); border-radius: var(--r-md); background: var(--accent-soft); }
+.esp-picked-badge { flex-shrink: 0; display: grid; place-items: center; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%; background: var(--accent); color: #fff; }
+.esp-picked-main { flex: 1; min-width: 0; }
+.esp-picked-name { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 14.5px; font-weight: 700; color: var(--ink-900); }
+.esp-picked-name .esp-code { margin-left: 0; }
+.esp-picked-chain { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 7px; font-size: 11.5px; font-weight: 650; color: var(--ink-700); }
+.esp-picked-chain .icon { color: var(--ink-400); }
+.esp-picked-note { margin-top: 5px; font-size: 11.5px; color: var(--ink-500); }
+.esp-adv { margin-top: 14px; padding-top: 12px; border-top: var(--hairline); }
+.esp-adv-toggle { display: inline-flex; align-items: center; gap: 7px; margin-left: -9px; padding: 5px 9px; border: 0; border-radius: var(--r-sm); background: transparent; font: inherit; font-size: 12.5px; font-weight: 650; color: var(--ink-600); cursor: pointer; }
+.esp-adv-toggle:hover { background: var(--ink-50); color: var(--ink-900); }
+.esp-adv-caret { transition: transform 140ms; }
+.esp-adv-toggle[data-open="true"] .esp-adv-caret { transform: rotate(180deg); }
+.esp-adv-count { display: grid; place-items: center; min-width: 16px; height: 16px; padding: 0 5px; border-radius: var(--r-full); background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 700; }
+.esp-adv-panel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; padding: 14px; border: var(--hairline); border-radius: var(--r-md); background: var(--ink-50); }
+.esp-adv-foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 11.5px; color: var(--ink-500); }
 .esp-update-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-top: 18px; margin-top: 18px; border-top: var(--hairline); }
 .esp-update-file { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px dashed var(--ink-300); border-radius: var(--r-md); background: var(--ink-50); }
 .esp-update-file input { max-width: 260px; }
 .esp-update-uploadbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; padding: 12px 16px; border: var(--hairline); border-radius: var(--r-md); background: var(--paper); }
-@media (max-width: 760px) { .esp-update-grid { grid-template-columns: 1fr; } .esp-update-actions { align-items: stretch; flex-direction: column; } }
+@media (max-width: 760px) { .esp-adv-panel { grid-template-columns: 1fr; } .esp-update-actions { align-items: stretch; flex-direction: column; } }
 
 @media (max-width: 1240px) {
   .esp-2col { grid-template-columns: minmax(0,1fr); }
@@ -603,6 +610,23 @@ const espCSS = `
 @media (max-width: 900px) {
   .esp-actions, .esp-grid-2, .esp-grid-3 { grid-template-columns: minmax(0,1fr); }
 }
+
+/* update ESP — key plan editor, generated options and final selection */
+.esp-ed-head { flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: var(--hairline); background: var(--paper); flex-wrap: wrap; }
+.esp-ed-head-actions { margin-left: auto; display: flex; align-items: center; gap: 7px; }
+.esp-kp-canvas { display: block; }
+.esp-kp-canvas[data-draw="true"] { cursor: crosshair; }
+.esp-kp-strip { flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: var(--hairline); background: var(--danger-soft); color: var(--danger-text); font-size: 12px; font-weight: 650; }
+.esp-kp-strip b { font-weight: 800; }
+.esp-kp-swatch { width: 22px; height: 0; border-top: 2px dashed #DC2626; flex-shrink: 0; }
+.esp-kp-body { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.esp-kp-steps { margin: 0; padding-left: 18px; font-size: 11.5px; color: var(--ink-600); line-height: 1.7; }
+.esp-final { display: flex; align-items: center; gap: 16px; padding: 16px 18px; margin-bottom: 22px; border: 1px solid var(--success); border-radius: var(--r-lg); background: var(--success-soft); }
+.esp-final-icon { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--success); color: #fff; flex-shrink: 0; }
+.esp-final-title { font-size: 14.5px; font-weight: 750; color: var(--ink-900); }
+.esp-final-sub { font-size: 12px; color: var(--ink-600); margin-top: 2px; }
+.esp-final-actions { margin-left: auto; display: flex; gap: 8px; }
+@media (max-width: 760px) { .esp-final { flex-direction: column; align-items: flex-start; } .esp-final-actions { margin-left: 0; } }
 `;
 const StatusChip = ({ status }) => {
   const meta = ESP_STATUS[status] || { tone: "neutral" };
@@ -777,34 +801,555 @@ const StepFinalize = ({ finalized, onSubmit, onFinalize }) => {
   const outstanding = FINAL_CHECKLIST.filter((c) => !c.done).length;
   return /* @__PURE__ */ React.createElement("div", { className: "esp-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "esp-2col" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "esp-sec" }, /* @__PURE__ */ React.createElement(SecTitle, { n: outstanding ? `${outstanding} outstanding` : "complete" }, "Final review checklist"), /* @__PURE__ */ React.createElement(Card, { bodyStyle: { padding: 0 } }, FINAL_CHECKLIST.map((c) => /* @__PURE__ */ React.createElement("div", { className: "esp-check", key: c.id, "data-done": c.done }, /* @__PURE__ */ React.createElement("div", { className: "esp-check-box" }, c.done && /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 12 })), /* @__PURE__ */ React.createElement("span", { className: "esp-check-label" }, c.label), !c.done && /* @__PURE__ */ React.createElement(Btn, { size: "sm", variant: "ghost" }, "Resolve"))))), finalized && /* @__PURE__ */ React.createElement("div", { className: "esp-sec" }, /* @__PURE__ */ React.createElement(SecTitle, null, "Final output \u2014 saved to the Digital Library"), /* @__PURE__ */ React.createElement(Card, { bodyStyle: { padding: 0 } }, FINAL_OUTPUTS.map((o) => /* @__PURE__ */ React.createElement("div", { className: "esp-inputrow", key: o.label }, /* @__PURE__ */ React.createElement(Icon, { name: o.icon, size: 15, style: { color: "var(--success)" } }), /* @__PURE__ */ React.createElement("div", { className: "esp-inputrow-main" }, /* @__PURE__ */ React.createElement("div", { className: "esp-inputrow-label" }, o.label)), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11.5, color: "var(--ink-500)", fontFamily: "var(--font-mono)" } }, o.meta)))))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(Card, { title: "Submission" }, outstanding > 0 ? /* @__PURE__ */ React.createElement(Note, { tone: "warning", icon: "alert_tri" }, outstanding, " checklist item", outstanding > 1 ? "s" : "", " outstanding, including S-O-D validation. An ESP cannot be finalized until validation is complete.") : /* @__PURE__ */ React.createElement(Note, { tone: "success", icon: "check_circle" }, "All checks complete. Ready to submit."), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8, marginTop: 14 } }, /* @__PURE__ */ React.createElement(Btn, { variant: "primary", trailingIcon: "arrow_right", onClick: onSubmit, style: { justifyContent: "center" } }, "Submit for Review"), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "check_circle", disabled: !finalized && outstanding > 0, onClick: onFinalize, style: { justifyContent: "center" } }, "Finalize ESP")), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--ink-400)", marginTop: 10, lineHeight: 1.5 } }, "Finalizing assigns the version number, generates PDF and DWG/DXF, stores the editable ESP with its asset data, validation results and traceability, and unlocks SIP generation.")))));
 };
-const UpdateEspPage = ({ station, setStation, selectedEsp, setSelectedEsp, onGoLibrary, onOpenEditor, onExit }) => {
+/* ═══════════════════════════════════════════════════════════════
+   STATION PICKER  (Update ESP)
+   ═══════════════════════════════════════════════════════════════ */
+
+// Zone codes spelled out for the derived context chain.
+const ZONE_NAMES = { SCR: "South Central Railway" };
+
+// Emphasise the matched fragment so the reason a row is listed is obvious.
+const espHighlight = (text, q) => {
   const h = React.createElement;
+  const i = q ? text.toLowerCase().indexOf(q) : -1;
+  if (i < 0) return text;
+  return [text.slice(0, i), h("mark", { key: "hit" }, text.slice(i, i + q.length)), text.slice(i + q.length)];
+};
+
+// Station is the only thing worth asking for: picking one resolves its zone,
+// division and section, so those are demoted to optional scope filters behind
+// a collapsed disclosure.
+const StationPicker = ({ station, onPick }) => {
+  const h = React.createElement;
+  const [query, setQuery] = useStateEsp("");
+  const [open, setOpen] = useStateEsp(false);
+  const [active, setActive] = useStateEsp(0);
+  const [showFilters, setShowFilters] = useStateEsp(false);
   const [division, setDivision] = useStateEsp("");
   const [section, setSection] = useStateEsp("");
-  const [stationSearch, setStationSearch] = useStateEsp("");
-  const [keyPlan, setKeyPlan] = useStateEsp("");
+  const boxRef = useRefEsp(null);
+  const inputRef = useRefEsp(null);
+
   const divisions = [...new Set(STATIONS.map((s) => s.division))];
   const sections = [...new Set(STATIONS.filter((s) => !division || s.division === division).map((s) => s.section))];
-  const stations = STATIONS.filter((s) => (!division || s.division === division) && (!section || s.section === section) && (!stationSearch.trim() || s.name.toLowerCase().includes(stationSearch.trim().toLowerCase()) || s.code.toLowerCase().includes(stationSearch.trim().toLowerCase())));
-  const rows = station ? station.espVersions.map((v, i) => ({ drawing: `${station.code}-ESP-${String(i + 1).padStart(3, "0")}`, file: `${station.code}_ESP_${v.split(" ")[0]}.${i === 0 ? "dwg" : "pdf"}`, version: v.split(" ")[0], status: v.includes("Approved") ? "Approved" : "Superseded", updated: i ? "04 Jan 2025" : "12 Jul 2026" })) : [];
-  const chooseStation = (code) => { setStation(STATIONS.find((s) => s.code === code) || null); setSelectedEsp(""); };
-  const option = (value, label) => h("option", { key: value, value }, label);
+  const q = query.trim().toLowerCase();
+  const matches = STATIONS.filter((s) => (!division || s.division === division) && (!section || s.section === section) &&
+    (!q || s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q)));
+  const filterCount = (division ? 1 : 0) + (section ? 1 : 0);
+
+  // A click outside the combobox dismisses the list.
+  useEffectEsp(() => {
+    if (!open) return;
+    const onDown = (e) => { if (boxRef.current && !boxRef.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [open]);
+
+  const pick = (s) => { onPick(s); setQuery(""); setOpen(false); setActive(0); };
+  const change = () => { onPick(null); setQuery(""); setOpen(true); setTimeout(() => inputRef.current && inputRef.current.focus(), 0); };
+  const resetFilters = () => { setDivision(""); setSection(""); setActive(0); };
+
+  const onKeyDown = (e) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!open) { setOpen(true); return; }
+      if (!matches.length) return;
+      const step = e.key === "ArrowDown" ? 1 : -1;
+      setActive((i) => (i + step + matches.length) % matches.length);
+    } else if (e.key === "Enter" && open && matches[active]) {
+      e.preventDefault();
+      pick(matches[active]);
+    } else if (e.key === "Escape") {
+      setOpen(false);
+    }
+  };
+
+  // Chosen state — the station stands in for the whole hierarchy.
+  if (station) {
+    return h("div", { className: "esp-picked" },
+      h("div", { className: "esp-picked-badge" }, h(Icon, { name: "check", size: 13 })),
+      h("div", { className: "esp-picked-main" },
+        h("div", { className: "esp-picked-name" },
+          station.name,
+          h("span", { className: "esp-code" }, station.code),
+          h(Chip, { tone: station.status === "Operational" ? "success" : "info", dot: true }, station.status)),
+        h("div", { className: "esp-picked-chain" },
+          h("span", null, ZONE_NAMES[station.zone] || station.zone),
+          h(Icon, { name: "chevron_right", size: 11 }),
+          h("span", null, `${station.division} Division`),
+          h(Icon, { name: "chevron_right", size: 11 }),
+          h("span", null, station.section)),
+        h("div", { className: "esp-picked-note" }, "Zone, division and section resolved from the station — nothing further to select.")
+      ),
+      h(Btn, { size: "sm", variant: "ghost", leadingIcon: "refresh", onClick: change }, "Change")
+    );
+  }
+
+  return h("div", { className: "esp-picker", ref: boxRef },
+    h(Field, { label: "Station", required: true, help: "Zone, division and section follow from the station you pick." },
+      h("div", { className: "esp-combo" },
+        h("div", { className: "ds-input-group", "data-has-left": "true" },
+          h(Icon, { name: "search", className: "icon-left", size: 15 }),
+          h("input", {
+            className: "ds-input", ref: inputRef, value: query, autoComplete: "off",
+            role: "combobox", "aria-expanded": open, "aria-autocomplete": "list",
+            placeholder: "Search by station name or code — e.g. Tarur or TRR",
+            onChange: (e) => { setQuery(e.target.value); setOpen(true); setActive(0); },
+            onFocus: () => setOpen(true), onKeyDown
+          })
+        ),
+        open && h("div", { className: "esp-combo-menu", role: "listbox" },
+          matches.length ? matches.map((s, i) => h("div", {
+            key: s.code, className: "esp-combo-opt", role: "option", "aria-selected": i === active,
+            "data-active": i === active, onMouseEnter: () => setActive(i),
+            onMouseDown: (e) => { e.preventDefault(); pick(s); }
+          },
+            h("div", { className: "esp-combo-opt-main" },
+              h("div", null,
+                h("span", { className: "esp-td-station" }, espHighlight(s.name, q)),
+                h("span", { className: "esp-code" }, espHighlight(s.code, q))),
+              h("div", { className: "esp-stationrow-meta" }, `${s.zone} · ${s.division} division · ${s.section} · ${s.category}`)),
+            h(Chip, { tone: s.status === "Operational" ? "success" : "info", dot: true }, s.status)
+          )) : h("div", { className: "esp-combo-empty" },
+            h(Icon, { name: "search", size: 18 }),
+            h("div", { style: { marginTop: 8, fontWeight: 650, color: "var(--ink-700)" } },
+              query ? `No station matches “${query}”` : "No station in the current scope"),
+            h("div", { style: { marginTop: 3 } },
+              filterCount ? "Try clearing the advanced filters." : "Check the spelling, or search by station code.")
+          )
+        )
+      )
+    ),
+    h("div", { className: "esp-adv" },
+      h("button", { type: "button", className: "esp-adv-toggle", "data-open": showFilters, "aria-expanded": showFilters, onClick: () => setShowFilters(!showFilters) },
+        h(Icon, { name: "filter", size: 13 }),
+        "Advanced filters",
+        filterCount > 0 && h("span", { className: "esp-adv-count" }, filterCount),
+        h(Icon, { name: "chevron_down", size: 13, className: "esp-adv-caret" })
+      ),
+      showFilters && h("div", { className: "esp-adv-panel" },
+        h(Field, { label: "Zone" }, h(Select, { value: "SCR", disabled: true }, h("option", { value: "SCR" }, "SCR — South Central Railway"))),
+        h(Field, { label: "Division" }, h(Select, { value: division, onChange: (e) => { setDivision(e.target.value); setSection(""); setActive(0); } },
+          h("option", { value: "" }, "All divisions"), divisions.map((v) => h("option", { key: v, value: v }, v)))),
+        h(Field, { label: "Section" }, h(Select, { value: section, onChange: (e) => { setSection(e.target.value); setActive(0); } },
+          h("option", { value: "" }, "All sections"), sections.map((v) => h("option", { key: v, value: v }, v)))),
+        h("div", { className: "esp-adv-foot" },
+          h("span", null, `${matches.length} of ${STATIONS.length} stations in scope`),
+          h(Btn, { size: "sm", variant: "ghost", disabled: !filterCount, onClick: resetFilters }, "Reset filters"))
+      )
+    )
+  );
+};
+
+const UpdateEspPage = ({ station, setStation, selectedEsp, setSelectedEsp, keyPlan, setKeyPlan, onGoLibrary, onOpenEditor, onExit }) => {
+  const h = React.createElement;
+  const espRows = station ? station.espVersions.map((version, index) => ({
+    drawing: `${station.code}-ESP-${String(index + 1).padStart(3, "0")}`,
+    file: `${station.code}_ESP_${version.split(" ")[0]}.${index === 0 ? "dwg" : "pdf"}`,
+    version: version.split(" ")[0],
+    status: version.includes("Approved") ? "Approved" : version.includes("Superseded") ? "Superseded" : "Available",
+    updated: index === 0 ? "12 Jul 2026" : "04 Jan 2025"
+  })) : [];
+  const chooseStation = (s) => { setStation(s || null); setSelectedEsp(""); };
   return h("div", { className: "esp-page" },
-    h("div", { className: "esp-topbar" }, h("div", { className: "esp-titlerow" }, h("div", null, h("div", { className: "esp-title" }, "Update ESP"), h("div", { className: "esp-sub" }, "Select a station and choose the ESP drawing to update.")), h("div", { className: "esp-titlerow-actions" }, h(Btn, { variant: "ghost", leadingIcon: "x", onClick: onExit }, "Exit")))),
+    h("div", { className: "esp-topbar" },
+      h("div", { className: "esp-titlerow" },
+        h("div", null, h("div", { className: "esp-title" }, "Update ESP"), h("div", { className: "esp-sub" }, "Select a station and choose the ESP drawing to update.")),
+        h("div", { className: "esp-titlerow-actions" }, h(Btn, { variant: "ghost", leadingIcon: "x", onClick: onExit }, "Exit"))
+      )
+    ),
     h("div", { className: "esp-body" }, h("div", { className: "esp-update-page" },
-      h("div", { className: "esp-sec" }, h(SecTitle, null, "Select Station"), h(Card, null, h("div", { className: "esp-update-grid" },
-        h(Field, { label: "Zone" }, h(Select, { value: "SCR", disabled: true }, option("SCR", "SCR — South Central Railway"))),
-        h(Field, { label: "Division" }, h(Select, { value: division, onChange: (e) => { setDivision(e.target.value); setSection(""); chooseStation(""); } }, option("", "All divisions"), divisions.map((v) => option(v, v)))),
-        h(Field, { label: "Section" }, h(Select, { value: section, onChange: (e) => { setSection(e.target.value); chooseStation(""); } }, option("", "All sections"), sections.map((v) => option(v, v)))),
-        h(Field, { label: "Search Station" }, h(TextInput, { value: stationSearch, onChange: (e) => setStationSearch(e.target.value), placeholder: "Station name or code", leadingIcon: "search" })),
-        h(Field, { label: "Station", required: true }, h(Select, { value: station ? station.code : "", onChange: (e) => chooseStation(e.target.value) }, option("", "Select station"), stations.map((s) => option(s.code, `${s.name} (${s.code})`))))
-      ))),
-      station && h("div", { className: "esp-sec" }, h(SecTitle, { n: `${rows.length} drawing${rows.length === 1 ? "" : "s"}` }, "Select ESP"), rows.length ? h(Card, { bodyStyle: { padding: 0 } }, h("div", { className: "esp-tablewrap" }, h("table", { className: "esp-table" }, h("thead", null, h("tr", null, h("th", null, "Select"), h("th", null, "ESP"), h("th", null, "Drawing Number"), h("th", null, "Version"), h("th", null, "Status"), h("th", null, "Last Updated"))), h("tbody", null, rows.map((r) => h("tr", { key: r.drawing, onClick: () => setSelectedEsp(r.drawing), style: { cursor: "pointer", background: selectedEsp === r.drawing ? "var(--accent-soft)" : void 0 } }, h("td", null, h(Radio, { checked: selectedEsp === r.drawing })), h("td", null, r.file), h("td", null, h("span", { className: "esp-td-station" }, r.drawing)), h("td", null, h("span", { className: "esp-ver" }, r.version)), h("td", null, h(Chip, { tone: r.status === "Approved" ? "success" : "neutral", dot: true }, r.status)), h("td", null, r.updated))))))) : h("div", { className: "esp-empty" }, h(Icon, { name: "file", size: 24 }), h("div", { style: { marginTop: 10, fontWeight: 700, color: "var(--ink-900)" } }, "No ESP is available for this station"), h("div", { style: { marginTop: 5 } }, "Upload an ESP in the station’s Digital Library before starting an update."), h("div", { style: { marginTop: 14 } }, h(Btn, { variant: "primary", leadingIcon: "upload", onClick: onGoLibrary }, "Upload ESP in Digital Library")))),
-      station && rows.length > 0 && h("div", { className: "esp-update-uploadbar" }, h("div", null, h("div", { style: { fontSize: 13, fontWeight: 700, color: "var(--ink-900)" } }, "Need to use a different ESP?"), h("div", { className: "esp-card-sub" }, "Upload another drawing to this station’s Digital Library.")), h(Btn, { variant: "secondary", leadingIcon: "upload", onClick: onGoLibrary }, "Upload New ESP")),
-      station && rows.length > 0 && h("div", { className: "esp-sec", style: { marginTop: 22 } }, h(SecTitle, null, "Upload Key Plan"), h(Card, null, h("div", { className: "esp-update-file" }, h(Icon, { name: "upload", size: 18, style: { color: "var(--accent)" } }), h("div", { style: { flex: 1 } }, h("div", { style: { fontWeight: 700, fontSize: 13 } }, "Upload Key Plan (optional)"), h("div", { className: "esp-card-sub" }, keyPlan || "PDF, DWG or DXF; you can continue without it.")), h("input", { type: "file", accept: ".pdf,.dwg,.dxf", onChange: (e) => setKeyPlan(e.target.files && e.target.files[0] ? e.target.files[0].name : "") })))),
-      station && rows.length > 0 && h("div", { className: "esp-update-actions" }, h(Btn, { variant: "primary", trailingIcon: "arrow_right", disabled: !selectedEsp, onClick: onOpenEditor }, "Open in Editor"))
+      h("div", { className: "esp-sec" }, h(SecTitle, null, "Select Station"),
+        h(Card, null, h(StationPicker, { station, onPick: chooseStation }))),
+      station && h("div", { className: "esp-sec" }, h(SecTitle, { n: `${espRows.length} drawing${espRows.length === 1 ? "" : "s"}` }, "Select ESP"),
+        espRows.length ? h(Card, { bodyStyle: { padding: 0 } }, h("div", { className: "esp-tablewrap" }, h("table", { className: "esp-table" },
+          h("thead", null, h("tr", null, h("th", null, "Select"), h("th", null, "ESP"), h("th", null, "Drawing Number"), h("th", null, "Version"), h("th", null, "Status"), h("th", null, "Last Updated"))),
+          h("tbody", null, espRows.map((row) => h("tr", { key: row.drawing, onClick: () => setSelectedEsp(row.version), style: { cursor: "pointer", background: selectedEsp === row.version ? "var(--accent-soft)" : undefined } },
+            h("td", null, h(Radio, { checked: selectedEsp === row.version })), h("td", null, row.file), h("td", null, h("span", { className: "esp-td-station" }, row.drawing)), h("td", null, h("span", { className: "esp-ver" }, row.version)), h("td", null, h(Chip, { tone: row.status === "Approved" ? "success" : "neutral", dot: true }, row.status)), h("td", null, row.updated)
+          )))
+        ))) : h("div", { className: "esp-empty" }, h(Icon, { name: "file", size: 24 }), h("div", { style: { marginTop: 10, fontWeight: 700, color: "var(--ink-900)" } }, "No ESP is available for this station"), h("div", { style: { marginTop: 5 } }, "Upload an ESP in the station’s Digital Library before starting an update."), h("div", { style: { marginTop: 14 } }, h(Btn, { variant: "primary", leadingIcon: "upload", onClick: onGoLibrary }, "Upload ESP in Digital Library")))
+      ),
+      station && espRows.length > 0 && h("div", { className: "esp-update-uploadbar" }, h("div", null, h("div", { style: { fontSize: 13, fontWeight: 700, color: "var(--ink-900)" } }, "Need to use a different ESP?"), h("div", { className: "esp-card-sub" }, "Upload another drawing to this station’s Digital Library.")), h(Btn, { variant: "secondary", leadingIcon: "upload", onClick: onGoLibrary }, "Upload New ESP")),
+      station && espRows.length > 0 && h("div", { className: "esp-sec", style: { marginTop: 22 } }, h(SecTitle, null, "Upload Key Plan"), h(Card, null,
+        h("div", { className: "esp-update-file" }, h(Icon, { name: "upload", size: 18, style: { color: "var(--accent)" } }), h("div", { style: { flex: 1 } }, h("div", { style: { fontWeight: 700, fontSize: 13 } }, "Upload Key Plan (optional)"), h("div", { className: "esp-card-sub" }, keyPlan || "PDF, DWG or DXF; you can continue without it.")), h("input", { type: "file", accept: ".pdf,.dwg,.dxf", onChange: (e) => setKeyPlan(e.target.files && e.target.files[0] ? e.target.files[0].name : "") })),
+        h("div", { style: { marginTop: 12 } }, h(Note, { tone: "info", icon: "info" },
+          keyPlan ? "The editor will show this key plan in red over the approved ESP."
+            : "Without a key plan the editor lets you draw one in red over the approved ESP, and generates the updated ESP from what you draw."))
+      )),
+      station && espRows.length > 0 && h("div", { className: "esp-update-actions" }, h(Btn, { variant: "primary", trailingIcon: "arrow_right", disabled: !selectedEsp, onClick: onOpenEditor }, "Open Editor"))
     ))
   );
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   UPDATE ESP — KEY PLAN EDITOR, GENERATED OPTIONS, FINAL SELECTION
+   ═══════════════════════════════════════════════════════════════ */
+
+// The approved ESP is read in black and everything that comes from the key plan
+// is read in red, so the key plan is the only red layer while it is being placed.
+const KEYPLAN_LAYERS = [
+  { id: "prev", label: "Approved ESP (base)", count: 412, colour: "#0E1B2C", on: true },
+  { id: "keyplan", label: "Key plan", count: 24, colour: "#DC2626", on: true },
+  { id: "constraints", label: "Constraints", count: 7, colour: "#B45309", on: true },
+  { id: "assets", label: "Extracted assets", count: 412, colour: "#3737C8", on: false },
+  { id: "gis", label: "GIS / survey reference", count: 2, colour: "#0D9488", on: false },
+];
+
+const OPTION_LAYERS = [
+  { id: "prev", label: "Approved ESP (base)", count: 412, colour: "#0E1B2C", on: true },
+  { id: "proposed", label: "Generated changes", count: 38, colour: "#DC2626", on: true },
+  { id: "keyplan", label: "Key plan", count: 24, colour: "#DC2626", on: false },
+  { id: "sod", label: "S-O-D violations", count: 3, colour: "#BE123C", on: true },
+  { id: "constraints", label: "Constraints", count: 7, colour: "#B45309", on: true },
+];
+
+const KEYPLAN_TOOLS = [
+  { id: "select", icon: "cursor", label: "Select" },
+  { id: "draw", icon: "edit", label: "Draw key plan" },
+  { id: "measure", icon: "ruler", label: "Measure" },
+];
+
+// An uploaded key plan, drawn as red linework over the approved ESP.
+const KeyPlanArt = ({ width }) => {
+  const h = React.createElement;
+  const red = { fontSize: 9.5, fontWeight: 800, fill: "#DC2626", stroke: "none" };
+  return h("g", { fill: "none", stroke: "#DC2626", strokeWidth: 1.6 },
+    h("rect", { x: 150, y: 72, width: width - 300, height: 228, strokeDasharray: "9 5" }),
+    h("text", { x: 156, y: 66, ...red, fontSize: 10 }, "KEY PLAN — STATION LIMITS"),
+    h("line", { x1: 40, y1: 150, x2: 150, y2: 150, strokeWidth: 2.2 }),
+    h("text", { x: 44, y: 142, ...red, fontWeight: 700 }, "← GUDIVADA (GDV) 11.4 km"),
+    h("line", { x1: width - 150, y1: 150, x2: width - 40, y2: 150, strokeWidth: 2.2 }),
+    h("text", { x: width - 152, y: 142, ...red, fontWeight: 700 }, "PEDANA (PDN) 9.8 km →"),
+    h("line", { x1: 300, y1: 292, x2: 1400, y2: 292, strokeWidth: 2, strokeDasharray: "10 5" }),
+    h("text", { x: 306, y: 286, ...red }, "KEY PLAN — PROPOSED LOOP LINE 3"),
+    h("path", { d: "M1320,248 L1410,292", strokeWidth: 1.8, strokeDasharray: "8 4" }),
+    h("rect", { x: 950, y: 256, width: 148, height: 26, strokeDasharray: "6 4" }),
+    h("text", { x: 958, y: 273, ...red }, "PF-2 EXTENSION"),
+    h("circle", { cx: width - 92, cy: 92, r: 15, strokeWidth: 1.4 }),
+    h("path", { d: `M${width - 92},80 L${width - 92},104 M${width - 98},86 L${width - 92},80 L${width - 86},86`, strokeWidth: 1.4 }),
+    h("text", { x: width - 96, y: 120, ...red }, "N")
+  );
+};
+
+/* The editor canvas: approved ESP underneath, key plan on top. With `drawing`
+   on, pointer strokes are captured into the same red key plan layer — that is
+   how a station with no uploaded key plan gets one. */
+const KeyPlanCanvas = ({ layers, showKeyPlan, strokes, setStrokes, drawing, width = 1680, height = 330 }) => {
+  const h = React.createElement;
+  const ref = useRefEsp(null);
+  const [live, setLive] = useStateEsp(null);
+  const at = (e) => {
+    const box = ref.current.getBoundingClientRect();
+    return [Math.round(e.clientX - box.left), Math.round(e.clientY - box.top)];
+  };
+  const start = (e) => { if (!drawing) return; e.preventDefault(); setLive([at(e)]); };
+  const move = (e) => { if (!drawing || !live) return; setLive(live.concat([at(e)])); };
+  const end = () => {
+    if (!live) return;
+    if (live.length > 1) setStrokes(strokes.concat([live]));
+    setLive(null);
+  };
+  const d = (pts) => pts.map((p, i) => `${i ? "L" : "M"}${p[0]},${p[1]}`).join(" ");
+  return h("svg", {
+      ref, width, height, className: "esp-kp-canvas", "data-draw": drawing ? "true" : "false",
+      onMouseDown: start, onMouseMove: move, onMouseUp: end, onMouseLeave: end },
+    h(YardDrawing, { layers, width }),
+    showKeyPlan && h(KeyPlanArt, { width }),
+    h("g", { fill: "none", stroke: "#DC2626", strokeWidth: 2.2, strokeLinecap: "round", strokeLinejoin: "round" },
+      strokes.map((s, i) => h("path", { key: `stroke-${i}`, d: d(s) })),
+      live && live.length > 1 && h("path", { d: d(live), strokeDasharray: "7 4" })
+    )
+  );
+};
+
+const EdPanelTitle = ({ children }) =>
+  React.createElement("div", { className: "esp-ed-ptitle", style: { borderTop: "var(--hairline)" } }, children);
+
+/* One editor doing two jobs: placing the key plan on the approved ESP
+   (`keyplan`), and reviewing one generated option before it is made final
+   (`option`). */
+const UpdateEditorPage = ({ station, baseEsp, mode, keyPlan, strokes, setStrokes, layers, setLayers,
+                            tool, setTool, option, onGenerate, onSelectFinal, onBack, onExit }) => {
+  const h = React.createElement;
+  const isOption = mode === "option";
+  const hasPlan = !!keyPlan || strokes.length > 0;
+  const keyPlanLayer = layers.find((l) => l.id === "keyplan");
+  // Nothing is drawn on, or into, a hidden key plan layer.
+  const keyPlanOn = !!(keyPlanLayer && keyPlanLayer.on);
+  const drawing = !isOption && !keyPlan && keyPlanOn && tool === "draw";
+  const showKeyPlan = !!keyPlan && keyPlanOn;
+  const toggleLayer = (id) => setLayers(layers.map((l) => (l.id === id ? { ...l, on: !l.on } : l)));
+  const code = station ? station.code : "—";
+  const name = station ? station.name : "—";
+
+  const optionProps = isOption ? [
+    ["Option", option.name], ["Profile", option.tag], ["Compliance score", String(option.score)],
+    ["S-O-D violations", String(option.violations)], ["Warnings", String(option.warnings)],
+    ["Land utilization", option.land], ["New turnouts", String(option.turnouts)],
+    ["Proposed track length", option.trackLength], ["Connectivity", option.connectivity],
+    ["Estimated cost", option.cost], ["Major constraints", option.constraints],
+  ] : [];
+
+  return h("div", { className: "esp-page" },
+    h("div", { className: "esp-topbar" },
+      h("div", { className: "esp-titlerow" },
+        h("div", null,
+          h("div", { className: "esp-title" }, isOption ? `ESP Editor — ${option.name}` : "ESP Editor"),
+          h("div", { className: "esp-sub" }, `${name} (${code}) · base ${baseEsp} · `,
+            isOption ? "reviewing a generated option"
+              : keyPlan ? "key plan overlaid on the approved ESP"
+              : "draw the key plan on the approved ESP")),
+        h("div", { className: "esp-titlerow-actions" },
+          h(Btn, { variant: "ghost", leadingIcon: "chevron_left", onClick: onBack }, isOption ? "Back to options" : "Back"),
+          h(Btn, { variant: "ghost", leadingIcon: "x", onClick: onExit }, "Exit"))
+      )
+    ),
+    h("div", { className: "esp-body", style: { display: "flex", flexDirection: "column", paddingBottom: 22, overflow: "hidden" } },
+      h("div", { className: "esp-editor" },
+
+        h("div", { className: "esp-ed-panel" },
+          h("div", { className: "esp-ed-ptitle" }, "Layers"),
+          h("div", { className: "esp-ed-scroll" },
+            layers.map((l) => h("div", { className: "esp-layer", key: l.id, "data-off": !l.on, onClick: () => toggleLayer(l.id) },
+              h(Icon, { name: l.on ? "eye" : "eye_off", size: 13 }),
+              h("i", { style: { background: l.colour } }),
+              h("span", { className: "esp-layer-name" }, l.label),
+              h("span", { className: "esp-layer-count" }, l.count))),
+            h(EdPanelTitle, null, "Key plan"),
+            h("div", { className: "esp-layer" },
+              h(Icon, { name: keyPlan ? "file" : "edit", size: 13 }),
+              h("span", { className: "esp-layer-name" }, keyPlan || "Drawn in editor")),
+            h("div", { className: "esp-layer" },
+              h("i", { style: { background: "#DC2626" } }),
+              h("span", { className: "esp-layer-name" }, keyPlan ? "Imported linework" : "Drawn linework"),
+              h("span", { className: "esp-layer-count" }, keyPlan ? 24 : strokes.length)),
+            h(EdPanelTitle, null, "Source documents"),
+            [`${code}-ESP-${baseEsp}.dwg`, `${code}-TS-2026.csv`, `${code}-GIS.shp`].map((doc) =>
+              h("div", { className: "esp-layer", key: doc },
+                h(Icon, { name: "file", size: 13 }), h("span", { className: "esp-layer-name" }, doc)))
+          )
+        ),
+
+        h("div", { className: "esp-ed-centre" },
+          h("div", { className: "esp-ed-head" },
+            h("span", { style: { fontSize: 13, fontWeight: 750, color: "var(--ink-900)" } }, `${name} (${code})`),
+            h(Chip, { tone: "neutral" }, "Update ESP"),
+            h(Chip, { tone: "neutral" }, `Base ${baseEsp}`),
+            isOption ? h(Chip, { tone: "info", dot: true }, option.name) : h(Chip, { tone: "accent", dot: true }, "Key plan"),
+            h("div", { className: "esp-ed-head-actions" },
+              h(Btn, { size: "sm", variant: "secondary", leadingIcon: "save" }, "Save"),
+              isOption
+                ? h(Btn, { size: "sm", variant: "primary", leadingIcon: "check_circle", onClick: () => onSelectFinal(option.id) }, "Select as Final ESP")
+                : h(Btn, { size: "sm", variant: "primary", trailingIcon: "arrow_right", disabled: !hasPlan, onClick: onGenerate }, "Generate Updated ESP"))
+          ),
+          h("div", { className: "esp-kp-strip" },
+            h("span", { className: "esp-kp-swatch" }),
+            isOption
+              ? h("span", null, "Generated changes are shown in ", h("b", null, "red"), " over the approved ESP.")
+              : keyPlan
+                ? h("span", null, "Key plan ", h("b", null, keyPlan), " is overlaid in ", h("b", null, "red"), " over the approved ESP.")
+                : h("span", null, strokes.length
+                    ? `${strokes.length} key plan element${strokes.length === 1 ? "" : "s"} drawn in red — generate the updated ESP when the plan is complete.`
+                    : "No key plan on record. Pick the draw tool and trace the key plan in red over the approved ESP.")
+          ),
+          h("div", { className: "esp-canvas" },
+            h(KeyPlanCanvas, { layers, showKeyPlan, strokes: keyPlanOn ? strokes : [], setStrokes, drawing })),
+          h("div", { className: "esp-toolbar" },
+            (isOption ? EDITOR_TOOLS.slice(0, 3) : KEYPLAN_TOOLS).map((t) =>
+              h("button", { key: t.id, className: "esp-tool", "data-active": tool === t.id, title: t.label, onClick: () => setTool(t.id) },
+                h(Icon, { name: t.icon, size: 15 }))),
+            !isOption && h(React.Fragment, null,
+              h("span", { className: "esp-tool-sep" }),
+              h("button", { className: "esp-tool", title: "Undo last key plan element", disabled: !strokes.length, onClick: () => setStrokes(strokes.slice(0, -1)) },
+                h(Icon, { name: "undo", size: 15 })),
+              h("button", { className: "esp-tool", title: "Clear drawn key plan", disabled: !strokes.length, onClick: () => setStrokes([]) },
+                h(Icon, { name: "trash", size: 15 }))),
+            h("span", { className: "esp-tool-sep" }),
+            h("button", { className: "esp-tool", title: "Zoom in" }, h(Icon, { name: "zoom_in", size: 15 })),
+            h("button", { className: "esp-tool", title: "Zoom out" }, h(Icon, { name: "zoom_out", size: 15 })),
+            h("button", { className: "esp-tool", title: "Fit" }, h(Icon, { name: "fit_screen", size: 15 })),
+            h("span", { style: { marginLeft: "auto", fontSize: 11, color: "var(--ink-400)", paddingRight: 6 } },
+              "Snapping on · grid 1 m · CH 411/0 – 414/2")
+          )
+        ),
+
+        h("div", { className: "esp-ed-panel" },
+          h("div", { className: "esp-ed-ptitle" }, isOption ? "Option summary" : "Key plan"),
+          h("div", { className: "esp-ed-scroll" },
+            isOption
+              ? h(React.Fragment, null,
+                  optionProps.map((p) => h("div", { className: "esp-prop", key: p[0] }, h("span", null, p[0]), h("b", null, p[1]))),
+                  h("div", { style: { padding: 14 } },
+                    h(Note, { tone: option.violations ? "warning" : "success", icon: option.violations ? "alert" : "check_circle" }, option.rationale)))
+              : keyPlan
+                ? h(React.Fragment, null,
+                    [["File", keyPlan], ["Source", "Uploaded with this update"], ["Placement", "Aligned to base ESP grid"],
+                     ["Scale", "1:2000"], ["Layer", "Key plan"], ["Colour", "Red"], ["Status", "Overlaid on approved ESP"]]
+                      .map((p) => h("div", { className: "esp-prop", key: p[0] }, h("span", null, p[0]), h("b", null, p[1]))),
+                    h("div", { style: { padding: 14 } },
+                      h(Note, { tone: "info", icon: "info" }, "The key plan is reference linework. Generate the updated ESP to turn it into design options.")))
+                : h("div", { className: "esp-kp-body" },
+                    h(Note, { tone: strokes.length ? "success" : "warning", icon: strokes.length ? "check_circle" : "alert" },
+                      strokes.length
+                        ? `${strokes.length} element${strokes.length === 1 ? "" : "s"} drawn. Generate the updated ESP when the key plan is complete.`
+                        : "No key plan was uploaded for this station, so it has to be drawn here before an updated ESP can be generated."),
+                    h("div", { style: { fontSize: 11, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--ink-500)" } }, "How to draw it"),
+                    h("ol", { className: "esp-kp-steps" },
+                      h("li", null, "Pick the draw tool in the toolbar."),
+                      h("li", null, "Trace the proposed station limits, lines and platforms over the approved ESP."),
+                      h("li", null, "Everything you draw is captured in the red key plan layer."),
+                      h("li", null, "Choose Generate Updated ESP to turn the key plan into design options.")),
+                    h(Btn, { variant: drawing ? "primary" : "secondary", leadingIcon: "edit", onClick: () => setTool(drawing ? "select" : "draw") },
+                      drawing ? "Drawing key plan" : "Draw key plan"))
+          )
+        )
+      )
+    )
+  );
+};
+
+/* The three ESPs generated from the key plan. */
+const UpdateOptionsPage = ({ station, baseEsp, keyPlan, selected, setSelected, onOpen, onSelectFinal, onRegenerate, onExit }) => {
+  const h = React.createElement;
+  const source = keyPlan ? `key plan ${keyPlan}` : "the key plan drawn in the editor";
+  return h("div", { className: "esp-page" },
+    h("div", { className: "esp-topbar" },
+      h("div", { className: "esp-titlerow" },
+        h("div", null,
+          h("div", { className: "esp-title" }, "Generated ESP Options"),
+          h("div", { className: "esp-sub" },
+            `${station ? station.name : "—"} (${station ? station.code : "—"}) · base ${baseEsp} · generated from ${source}`)),
+        h("div", { className: "esp-titlerow-actions" },
+          h(Btn, { variant: "secondary", leadingIcon: "refresh", onClick: onRegenerate }, "Regenerate"),
+          h(Btn, { variant: "ghost", leadingIcon: "x", onClick: onExit }, "Exit"))
+      )
+    ),
+    h("div", { className: "esp-body" }, h("div", { className: "esp-wrap" },
+      h("div", { className: "esp-sec" },
+        h(Note, { tone: "info", icon: "info" }, "Open any option to review it in the editor, then select one as the final ESP."),
+        h("div", { className: "esp-grid-3", style: { marginTop: 14 } },
+          OPTIONS.map((o) => h("div", { key: o.id, className: "esp-opt", "data-sel": selected === o.id, onClick: () => onOpen(o.id) },
+            h("div", { className: "esp-opt-thumb" },
+              h(OptionThumb, { id: o.id }),
+              o.recommended && h("div", { className: "esp-opt-badge" }, h(Chip, { tone: "accent", dot: true }, "Recommended"))),
+            h("div", { className: "esp-opt-body" },
+              h("div", { className: "esp-opt-name" }, o.name, h(Chip, { tone: "neutral" }, o.tag)),
+              h("div", { className: "esp-opt-score" },
+                h("span", { className: "esp-opt-scoreval" }, o.score),
+                h("span", { style: { fontSize: 11.5, color: "var(--ink-500)" } }, "compliance score")),
+              h("div", { className: "esp-opt-metrics" },
+                h("div", { className: "esp-metric" }, h("span", null, "S-O-D violations"),
+                  h("b", { style: { color: o.violations ? "var(--danger-text)" : "var(--success-text)" } }, o.violations)),
+                h("div", { className: "esp-metric" }, h("span", null, "Warnings"), h("b", null, o.warnings)),
+                h("div", { className: "esp-metric" }, h("span", null, "Land use"), h("b", null, o.land)),
+                h("div", { className: "esp-metric" }, h("span", null, "New turnouts"), h("b", null, o.turnouts)),
+                h("div", { className: "esp-metric" }, h("span", null, "Track length"), h("b", null, o.trackLength)),
+                h("div", { className: "esp-metric" }, h("span", null, "Est. cost"), h("b", null, o.cost))),
+              h("div", { className: "esp-opt-rationale" }, h("b", { style: { color: "var(--ink-800)" } }, "Why: "), o.rationale)),
+            h("div", { className: "esp-opt-foot" },
+              h(Btn, { size: "sm", variant: "primary", leadingIcon: "edit", onClick: (e) => { e.stopPropagation(); onOpen(o.id); } }, "View in editor"),
+              h(Btn, { size: "sm", variant: "ghost", leadingIcon: "check_circle", onClick: (e) => { e.stopPropagation(); onSelectFinal(o.id); } }, "Select as final"))
+          ))
+        )
+      )
+    ))
+  );
+};
+
+const UpdateGeneratingPage = ({ station, keyPlan, progress }) => {
+  const h = React.createElement;
+  const pct = Math.round(((progress + 1) / GEN_STAGES.length) * 100);
+  return h("div", { className: "esp-page" },
+    h("div", { className: "esp-body" }, h("div", { className: "esp-genwrap" },
+      h("div", { style: { fontSize: 16, fontWeight: 750, color: "var(--ink-900)" } }, "Generating updated ESP"),
+      h("div", { style: { fontSize: 12.5, color: "var(--ink-500)", marginTop: 4, marginBottom: 16 } },
+        `${station ? station.name : "—"} (${station ? station.code : "—"}) · from ${keyPlan ? `key plan ${keyPlan}` : "the key plan you drew"}`),
+      GEN_STAGES.map((s, i) => {
+        const state = i < progress ? "done" : i === progress ? "active" : "pending";
+        return h("div", { className: "esp-genstage", key: s, "data-state": state },
+          h("div", { className: "esp-genstage-dot" },
+            state === "done" ? h(Icon, { name: "check", size: 12 })
+              : state === "active" ? h("span", { className: "esp-spin" }) : null),
+          h("div", { className: "esp-genstage-label" }, s));
+      }),
+      h("div", { className: "esp-progressbar" }, h("div", { style: { width: `${pct}%` } }))
+    ))
+  );
+};
+
+/* The chosen ESP, surfaced back in the module once an option has been made final. */
+const FinalEspCard = ({ final, onOpen }) => {
+  const h = React.createElement;
+  return h("div", { className: "esp-final" },
+    h("div", { className: "esp-final-icon" }, h(Icon, { name: "check", size: 18 })),
+    h("div", null,
+      h("div", { className: "esp-final-title" }, `Final ESP — ${final.station} (${final.code}) · ${final.version}`),
+      h("div", { className: "esp-final-sub" },
+        `${final.option} · ${final.tag} · compliance ${final.score} · base ${final.base} · generated from ${final.keyPlan}`)),
+    h("div", { className: "esp-final-actions" },
+      h(Btn, { variant: "secondary", leadingIcon: "edit", onClick: onOpen }, "Open in editor"),
+      h(Btn, { variant: "primary", trailingIcon: "arrow_right" }, "Submit for Review"))
+  );
+};
+
+/* Update ESP end to end: choose the ESP, place or draw the key plan in the
+   editor, generate options from it, review one, make it the final ESP. */
+const UpdateEspFlow = ({ station, setStation, selectedEsp, setSelectedEsp, onGoLibrary, onExit, onFinalize, resume }) => {
+  const h = React.createElement;
+  const [stage, setStage] = useStateEsp(resume ? "option" : "setup");   // setup | editor | generating | options | option
+  const [keyPlan, setKeyPlan] = useStateEsp(resume ? resume.keyPlanFile : "");
+  const [strokes, setStrokes] = useStateEsp([]);
+  const [progress, setProgress] = useStateEsp(0);
+  const [layers, setLayers] = useStateEsp(KEYPLAN_LAYERS);
+  const [optLayers, setOptLayers] = useStateEsp(OPTION_LAYERS);
+  const [tool, setTool] = useStateEsp("select");
+  const [selected, setSelected] = useStateEsp(resume ? resume.optionId : 1);
+  const baseEsp = selectedEsp || "V2";
+
+  // drive the generation progress stages
+  useEffectEsp(() => {
+    if (stage !== "generating") return;
+    if (progress >= GEN_STAGES.length) {
+      const t = setTimeout(() => setStage("options"), 420);
+      return () => clearTimeout(t);
+    }
+    const t = setTimeout(() => setProgress((p) => p + 1), 560);
+    return () => clearTimeout(t);
+  }, [stage, progress]);
+
+  // An uploaded key plan only has to be looked at; a missing one has to be drawn.
+  const openEditor = () => { setTool(keyPlan ? "select" : "draw"); setStage("editor"); };
+  const generate = () => { setProgress(0); setStage("generating"); };
+  const openOption = (id) => { setSelected(id); setTool("select"); setStage("option"); };
+  const finalize = (id) => {
+    const opt = OPTIONS.find((o) => o.id === id) || OPTIONS[0];
+    setSelected(opt.id);
+    onFinalize({
+      station: station ? station.name : "—", code: station ? station.code : "—",
+      version: "V3", base: baseEsp, option: opt.name, tag: opt.tag, score: opt.score,
+      optionId: opt.id, keyPlanFile: keyPlan, keyPlan: keyPlan || "key plan drawn in the editor",
+    });
+  };
+
+  if (stage === "generating") return h(UpdateGeneratingPage, { station, keyPlan, progress });
+
+  if (stage === "options") return h(UpdateOptionsPage, {
+    station, baseEsp, keyPlan, selected, setSelected, onOpen: openOption,
+    onSelectFinal: finalize, onRegenerate: generate, onExit });
+
+  if (stage === "option") return h(UpdateEditorPage, {
+    station, baseEsp, mode: "option", keyPlan, strokes, setStrokes,
+    layers: optLayers, setLayers: setOptLayers, tool, setTool,
+    option: OPTIONS.find((o) => o.id === selected) || OPTIONS[0],
+    onSelectFinal: finalize, onBack: () => setStage("options"), onExit });
+
+  if (stage === "editor") return h(UpdateEditorPage, {
+    station, baseEsp, mode: "keyplan", keyPlan, strokes, setStrokes, layers, setLayers, tool, setTool,
+    onGenerate: generate, onBack: () => setStage("setup"), onExit });
+
+  return h(UpdateEspPage, {
+    station, setStation, selectedEsp, setSelectedEsp, keyPlan, setKeyPlan,
+    onGoLibrary, onOpenEditor: openEditor, onExit });
 };
 
 const EspModulePage = ({ onNavigate }) => {
@@ -833,6 +1378,9 @@ const EspModulePage = ({ onNavigate }) => {
   const [tool, setTool] = useStateEsp("select");
   const [editorTab, setEditorTab] = useStateEsp("editor");
   const [finalized, setFinalized] = useStateEsp(false);
+  const [updateEsp, setUpdateEsp] = useStateEsp("");
+  const [finalEsp, setFinalEsp] = useStateEsp(null);
+  const [resume, setResume] = useStateEsp(null);
   const [maxReached, setMaxReached] = useStateEsp(0);
   const goStep = (i) => {
     setStep(i);
@@ -856,8 +1404,14 @@ const EspModulePage = ({ onNavigate }) => {
     setFlow(f);
     setStep(0);
     setMaxReached(0);
+    setResume(null);
     setView("workflow");
     setStation(null);
+  };
+  const reopenFinal = () => {
+    setResume(finalEsp);
+    setFlow("update");
+    setView("workflow");
   };
   const stepValid = () => {
     if (step === 0) return !!station;
@@ -941,30 +1495,18 @@ const EspModulePage = ({ onNavigate }) => {
         return null;
     }
   };
-  if (view === "workflow" && flow === "update" && step < 5) {
-    return /* @__PURE__ */ React.createElement(UpdateEspPage, { station, setStation, selectedEsp: prevEsp, setSelectedEsp: setPrevEsp, onGoLibrary: () => onNavigate && onNavigate("library"), onOpenEditor: () => goStep(5), onExit: () => setView("landing") });
+  if (view === "workflow" && flow === "update") {
+    return /* @__PURE__ */ React.createElement(UpdateEspFlow, { station, setStation, selectedEsp: updateEsp, setSelectedEsp: setUpdateEsp, resume, onGoLibrary: () => onNavigate && onNavigate("library"), onExit: () => setView("landing"), onFinalize: (final) => {
+      setFinalEsp(final);
+      setResume(null);
+      setView("landing");
+    } });
   }
   if (view === "landing") {
-    return /* @__PURE__ */ React.createElement("div", { className: "esp-page" }, /* @__PURE__ */ React.createElement("div", { className: "esp-topbar" }, /* @__PURE__ */ React.createElement("div", { className: "esp-titlerow" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "esp-title" }, "RAPID ESP"), /* @__PURE__ */ React.createElement("div", { className: "esp-sub" }, "Create, update, validate and manage Engineering Scale Plans")))), /* @__PURE__ */ React.createElement("div", { className: "esp-body" }, /* @__PURE__ */ React.createElement(EspLanding, { onStart: startFlow, onOpenFiles: () => onNavigate && onNavigate("wsMyFiles") })));
+    return /* @__PURE__ */ React.createElement("div", { className: "esp-page" }, /* @__PURE__ */ React.createElement("div", { className: "esp-topbar" }, /* @__PURE__ */ React.createElement("div", { className: "esp-titlerow" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "esp-title" }, "RAPID ESP"), /* @__PURE__ */ React.createElement("div", { className: "esp-sub" }, "Create, update, validate and manage Engineering Scale Plans")))), /* @__PURE__ */ React.createElement("div", { className: "esp-body" }, finalEsp && /* @__PURE__ */ React.createElement(FinalEspCard, { final: finalEsp, onOpen: reopenFinal }), /* @__PURE__ */ React.createElement(EspLanding, { onStart: startFlow, onOpenFiles: () => onNavigate && onNavigate("wsMyFiles") })));
   }
   const isEditorStep = step === 5;
-  return /* @__PURE__ */ React.createElement("div", { className: "esp-page" }, /* @__PURE__ */ React.createElement("div", { className: "esp-topbar", style: { paddingBottom: 12 } }, /* @__PURE__ */ React.createElement("div", { className: "esp-crumb" }, /* @__PURE__ */ React.createElement("button", { onClick: () => onNavigate && onNavigate("home") }, "Design Modules"), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11 }), /* @__PURE__ */ React.createElement("button", { onClick: () => setView("landing") }, "ESP Design"), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11 }), /* @__PURE__ */ React.createElement("span", { className: "cur" }, flow === "create" ? "Create ESP" : "Update ESP", station ? ` \u2014 ${station.name}` : "")), /* @__PURE__ */ React.createElement("div", { className: "esp-titlerow" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "esp-title" }, flow === "create" ? "Create New ESP" : "Update Existing ESP"), /* @__PURE__ */ React.createElement("div", { className: "esp-sub" }, station ? `${station.name} (${station.code}) \xB7 ${station.division} division` : "No station selected", flow === "update" && (station == null ? void 0 : station.espVersions.length) ? ` \xB7 base ${prevEsp}` : "")), /* @__PURE__ */ React.createElement("div", { className: "esp-titlerow-actions" }, /* @__PURE__ */ React.createElement(Chip, { tone: "accent", dot: true }, step >= 5 ? "Editing" : step >= 4 ? "Options Generated" : step >= 3 ? "Ready for Generation" : "Setup Incomplete"), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "save" }, "Save draft"), /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", leadingIcon: "x", onClick: () => setView("landing") }, "Exit")))), /* @__PURE__ */ React.createElement("div", { className: "esp-stepbar" }, /* @__PURE__ */ React.createElement("div", { className: "esp-steps" }, WORKFLOW_STEPS.map((s, i) => {
-    const state = i < step ? "done" : i === step ? "active" : "pending";
-    const locked = i > maxReached;
-    return /* @__PURE__ */ React.createElement(
-      "div",
-      {
-        key: s.id,
-        className: "esp-step",
-        "data-state": state,
-        "data-locked": locked,
-        onClick: () => !locked && goStep(i)
-      },
-      /* @__PURE__ */ React.createElement("div", { className: "esp-step-line" }),
-      /* @__PURE__ */ React.createElement("div", { className: "esp-step-dot" }, state === "done" ? /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 12 }) : i + 1),
-      /* @__PURE__ */ React.createElement("div", { className: "esp-step-txt" }, /* @__PURE__ */ React.createElement("div", { className: "esp-step-label" }, s.label), /* @__PURE__ */ React.createElement("div", { className: "esp-step-sub" }, flow === "update" && i === 1 ? "Previous ESP" : flow === "update" && i === 2 ? "Proposed changes" : s.sub))
-    );
-  }))), isEditorStep && /* @__PURE__ */ React.createElement("div", { style: { flexShrink: 0, padding: "10px 28px 0", background: "var(--canvas)" } }, /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ React.createElement("div", { className: "esp-page" }, /* @__PURE__ */ React.createElement("div", { className: "esp-topbar", style: { paddingBottom: 12 } }, /* @__PURE__ */ React.createElement("div", { className: "esp-crumb" }, /* @__PURE__ */ React.createElement("button", { onClick: () => onNavigate && onNavigate("home") }, "Design Modules"), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11 }), /* @__PURE__ */ React.createElement("button", { onClick: () => setView("landing") }, "ESP Design"), /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 11 }), /* @__PURE__ */ React.createElement("span", { className: "cur" }, flow === "create" ? "Create ESP" : "Update ESP", station ? ` \u2014 ${station.name}` : "")), /* @__PURE__ */ React.createElement("div", { className: "esp-titlerow" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "esp-title" }, flow === "create" ? "Create New ESP" : "Update Existing ESP"), /* @__PURE__ */ React.createElement("div", { className: "esp-sub" }, station ? `${station.name} (${station.code}) \xB7 ${station.division} division` : "No station selected", flow === "update" && (station == null ? void 0 : station.espVersions.length) ? ` \xB7 base ${prevEsp}` : "")), /* @__PURE__ */ React.createElement("div", { className: "esp-titlerow-actions" }, /* @__PURE__ */ React.createElement(Chip, { tone: "accent", dot: true }, step >= 5 ? "Editing" : step >= 4 ? "Options Generated" : step >= 3 ? "Ready for Generation" : "Setup Incomplete"), /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "save" }, "Save draft"), /* @__PURE__ */ React.createElement(Btn, { variant: "ghost", leadingIcon: "x", onClick: () => setView("landing") }, "Exit")))), isEditorStep && /* @__PURE__ */ React.createElement("div", { style: { flexShrink: 0, padding: "10px 28px 0", background: "var(--canvas)" } }, /* @__PURE__ */ React.createElement(
     PillTabs,
     {
       items: [{ id: "editor", label: "Editor" }, { id: "validation", label: `Validation (${VALIDATION.violations + VALIDATION.warnings})` }],

@@ -117,7 +117,7 @@
       docType: payload.docType,
       fileType: payload.fileType,
       file: payload.fileName,
-      version: payload.version,
+      version: payload.drawingNumber || "",
       name: (doc == null ? void 0 : doc.title) || payload.docType,
       addedBy: CURRENT_USER.name
     };
@@ -1502,10 +1502,6 @@
 .sh-upload-select-zone:hover { border-color:var(--accent); background:var(--accent-soft); }
 .sh-upload-group { display:flex; flex-direction:column; gap:10px; padding:12px 14px; border:var(--hairline); border-radius:var(--r-md); background:var(--ink-50); }
 .sh-upload-group-label { font-size:10px; font-weight:700; color:var(--ink-500); text-transform:uppercase; letter-spacing:.07em; }
-.sh-upload-version-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
-.sh-upload-version-preview { display:flex; align-items:center; gap:8px; padding-top:4px; border-top:var(--hairline); }
-.sh-upload-version-preview-label { font-size:11px; color:var(--ink-400); }
-.sh-upload-version-id { font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--ink-900); letter-spacing:.04em; }
 .sh-upload-select-input { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; }
 .sh-upload-select-icon { width:40px; height:40px; border-radius:var(--r-md); background:var(--paper); color:var(--accent-text); display:grid; place-items:center; flex-shrink:0; border:var(--hairline); }
 .sh-upload-select-copy { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
@@ -1522,13 +1518,6 @@
 .sh-upload-steps-item[data-state="active"] .sh-upload-steps-num { background:var(--accent); color:var(--paper); }
 .sh-upload-steps-item[data-state="done"] .sh-upload-steps-num { background:var(--success); color:var(--paper); }
 .sh-upload-steps-sep { flex:1; min-width:8px; height:1px; background:var(--ink-200); }
-.sh-upload-yard-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; }
-.sh-upload-yard-card { min-height:84px; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:10px; padding:14px; border:var(--hairline); border-radius:var(--r-md); background:var(--paper); color:var(--ink-700); font-family:var(--font-sans); text-align:left; cursor:pointer; }
-.sh-upload-yard-card:hover { background:var(--ink-50); border-color:var(--ink-300); }
-.sh-upload-yard-card[data-active="true"] { background:var(--accent-soft); border-color:var(--accent); color:var(--accent-text); }
-.sh-upload-yard-card-icon { width:32px; height:32px; border-radius:var(--r-md); background:var(--ink-100); color:var(--ink-700); display:grid; place-items:center; flex-shrink:0; }
-.sh-upload-yard-card[data-active="true"] .sh-upload-yard-card-icon { background:var(--paper); color:var(--accent-text); }
-.sh-upload-yard-card strong { font-size:13.5px; color:inherit; }
 .sh-upload-doc-block { display:flex; flex-direction:column; gap:10px; padding:14px; border:var(--hairline); border-radius:var(--r-md); background:var(--paper); }
 .sh-upload-doc-block[data-invalid="true"] { border-color:oklch(0.86 0.09 25); }
 .sh-upload-doc-head { display:flex; align-items:center; gap:8px; }
@@ -1542,8 +1531,42 @@
 .sh-upload-notice[data-tone="danger"] { background:var(--danger-soft); border-color:oklch(0.86 0.09 25); color:var(--danger-text); }
 .sh-upload-confirm-shell { width:min(420px, calc(100% - 32px)); }
 .sh-upload-confirm-copy { color:var(--ink-600); font-size:12.5px; line-height:1.45; }
+.sh-upload-shell[data-wide="true"] { width:min(760px, calc(100% - 32px)); }
+.sh-dc-optional { color:var(--ink-400); font-weight:700; text-transform:none; letter-spacing:0; }
+.sh-dc-list { display:flex; flex-direction:column; gap:10px; }
+.sh-dc-row { display:flex; flex-direction:column; gap:10px; padding:12px 14px; border:var(--hairline); border-radius:var(--r-md); background:var(--paper); }
+.sh-dc-row[data-invalid="true"] { border-color:oklch(0.86 0.09 25); background:var(--danger-soft); }
+.sh-dc-row-head { display:flex; align-items:center; gap:10px; }
+.sh-dc-row-index { width:22px; height:22px; border-radius:var(--r-full); background:var(--ink-100); color:var(--ink-700); display:grid; place-items:center; font-size:10.5px; font-weight:800; flex-shrink:0; }
+.sh-dc-row-title { flex:1; min-width:0; display:flex; align-items:center; gap:10px; }
+.sh-dc-row-title strong { font-size:12.5px; font-weight:700; color:var(--ink-900); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sh-dc-preview { flex:1; min-width:56px; max-width:150px; height:12px; }
+.sh-dc-row-remove { width:26px; height:26px; border-radius:var(--r-sm); border:var(--hairline); background:var(--paper); color:var(--ink-500); cursor:pointer; display:grid; place-items:center; flex-shrink:0; }
+.sh-dc-row-remove:hover { background:var(--danger-soft); color:var(--danger-text); border-color:oklch(0.86 0.09 25); }
+.sh-dc-row-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; }
+.sh-dc-colour-row { display:flex; align-items:center; gap:8px; }
+.sh-dc-colour-row .sh-upload-grid-input { flex:1; min-width:0; }
+.sh-dc-swatch { width:22px; height:22px; border-radius:var(--r-sm); border:var(--hairline); flex-shrink:0; }
+.sh-dc-swatch[data-empty="true"] { background:repeating-linear-gradient(45deg, var(--ink-100), var(--ink-100) 4px, var(--paper) 4px, var(--paper) 8px); }
+.sh-dc-custom { display:flex; align-items:center; gap:8px; }
+.sh-dc-custom input[type="color"] { width:36px; height:34px; padding:2px; border:var(--hairline); border-radius:var(--r-sm); background:var(--paper); cursor:pointer; flex-shrink:0; }
+.sh-dc-custom .sh-upload-grid-input { flex:1; min-width:0; font-family:var(--font-mono); text-transform:uppercase; }
+.sh-dc-hint { font-size:10.5px; color:var(--ink-400); line-height:1.35; }
+.sh-dc-warning { display:flex; align-items:flex-start; gap:5px; color:var(--warning-text); font-size:11.5px; font-weight:600; line-height:1.35; }
+.sh-dc-warning svg { flex-shrink:0; margin-top:1px; }
+.sh-dc-add { display:inline-flex; align-items:center; justify-content:center; gap:7px; padding:10px 12px; border:1.5px dashed var(--ink-300); border-radius:var(--r-md); background:var(--ink-50); color:var(--ink-700); font-family:var(--font-sans); font-size:12.5px; font-weight:700; cursor:pointer; }
+.sh-dc-add:hover { border-color:var(--accent); color:var(--accent-text); background:var(--accent-soft); }
+.sh-dc-empty { padding:16px; border:1.5px dashed oklch(0.86 0.09 25); border-radius:var(--r-md); background:var(--danger-soft); color:var(--danger-text); font-size:12.5px; text-align:center; }
+.sh-dc-legend { display:flex; flex-direction:column; gap:8px; }
+.sh-dc-legend-row { display:grid; grid-template-columns:minmax(150px,1.3fr) minmax(110px,0.9fr) minmax(110px,0.9fr) minmax(70px,1fr) minmax(90px,0.7fr); gap:12px; align-items:center; padding:9px 12px; border:var(--hairline); border-radius:var(--r-md); background:var(--paper); font-size:12px; color:var(--ink-600); }
+.sh-dc-legend-row strong { color:var(--ink-900); font-size:12.5px; }
+.sh-dc-legend-colour { display:flex; align-items:center; gap:7px; }
+.sh-doc-drawing-cell { display:flex; flex-direction:column; gap:2px; }
+.sh-doc-drawing-no { font-family:var(--font-mono); font-size:12.5px; font-weight:700; color:var(--ink-900); }
+.sh-doc-drawing-year { font-size:11px; color:var(--ink-500); }
 @media (max-width: 620px) {
-  .sh-upload-yard-grid, .sh-upload-grid, .sh-upload-version-grid { grid-template-columns:1fr; }
+  .sh-upload-grid, .sh-dc-row-grid { grid-template-columns:1fr; }
+  .sh-dc-legend-row { grid-template-columns:1fr 1fr; }
   .sh-upload-steps-label { display:none; }
 }
 @keyframes dsFadeIn { from { opacity:0; } to { opacity:1; } }
@@ -1925,12 +1948,12 @@
     const activeDocStatus = STATION_DOCUMENT_STATUS.find((item) => item.id === active) || { title: activeMeta.label, fullName: "" };
     const activeTitle = active === "survey" ? "Survey Data" : `${activeDocStatus.title} Documents`;
     const activeIcon = { survey: "layers", esp: "file_check", sip: "branch", lop: "book" }[active] || "file_check";
-    return /* @__PURE__ */ React.createElement("section", { className: "sh-workspace-panel" }, /* @__PURE__ */ React.createElement(StationDocumentStatus, { active, onChange: switchTab, rowsByType }), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-toolbar" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-controls" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: "2px" } }, /* @__PURE__ */ React.createElement("h3", { className: "sh-doc-files-title", style: { display: "flex", alignItems: "center", gap: "8px", margin: 0 } }, /* @__PURE__ */ React.createElement(Icon, { name: activeIcon, size: 16, style: { color: "var(--accent)" } }), activeTitle), activeDocStatus.fullName && /* @__PURE__ */ React.createElement("span", { className: "sh-doc-files-sub", style: { margin: 0 } }, activeDocStatus.fullName))), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "upload", onClick: () => onUpload() }, "Upload Document")), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-card" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-scroll" }, /* @__PURE__ */ React.createElement("table", { className: "sh-doc-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, active === "esp" ? "ESP" : active === "sip" ? "SIP" : "File Name")), (active === "esp" || active === "sip") && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Version")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "File Type")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digitize Status")), active === "sip" && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Generated from")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Uploaded By")), (active === "esp" || active === "sip") && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Approval Status")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, pagedRows.map((row, index) => {
+    return /* @__PURE__ */ React.createElement("section", { className: "sh-workspace-panel" }, /* @__PURE__ */ React.createElement(StationDocumentStatus, { active, onChange: switchTab, rowsByType }), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-toolbar" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-controls" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: "2px" } }, /* @__PURE__ */ React.createElement("h3", { className: "sh-doc-files-title", style: { display: "flex", alignItems: "center", gap: "8px", margin: 0 } }, /* @__PURE__ */ React.createElement(Icon, { name: activeIcon, size: 16, style: { color: "var(--accent)" } }), activeTitle), activeDocStatus.fullName && /* @__PURE__ */ React.createElement("span", { className: "sh-doc-files-sub", style: { margin: 0 } }, activeDocStatus.fullName))), /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "upload", onClick: () => onUpload() }, "Upload Document")), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-card" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-table-scroll" }, /* @__PURE__ */ React.createElement("table", { className: "sh-doc-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, active === "esp" ? "ESP" : active === "sip" ? "SIP" : "File Name")), active === "sip" && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Version")), active === "esp" && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Drawing No.")), active === "esp" && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Drawing Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "File Type")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digitize Status")), active === "sip" && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Generated from")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Uploaded By")), (active === "esp" || active === "sip") && /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Approval Status")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, pagedRows.map((row, index) => {
       const menuKey = `${active}-${pageStart + index}-${row.fileName}`;
       const fileType = row.fileType || ((row.fileName.split(".").pop() || "").toUpperCase()) || activeDocType;
       const rawExt = row.fileName.includes(".") ? row.fileName.split(".").pop().toUpperCase() : "";
       const badgeLabel = rawExt && rawExt.length <= 5 ? rawExt : (row.fileType && row.fileType.length <= 5 ? row.fileType.toUpperCase() : "");
-      return /* @__PURE__ */ React.createElement("tr", { key: menuKey, onClick: () => onOpenRow(active, row), style: { cursor: (active === "esp" || active === "sip") ? "pointer" : "default" } }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-name-cell" }, badgeLabel && /* @__PURE__ */ React.createElement("span", { className: "sh-doc-ft-badge", "data-ft": badgeLabel }, badgeLabel), /* @__PURE__ */ React.createElement("span", { className: "sh-doc-file-name" }, row.fileName))), (active === "esp" || active === "sip") && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-version" }, row.version || "—")), /* @__PURE__ */ React.createElement("td", null, fileType), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-status", "data-tone": row.tone }, row.tone === "success" && /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 13 }), row.status)), active === "sip" && /* @__PURE__ */ React.createElement("td", null, row.generatedFrom ? /* @__PURE__ */ React.createElement("span", { className: "sh-doc-version" }, row.generatedFrom) : /* @__PURE__ */ React.createElement("span", { style: { color: "var(--ink-400)" } }, "—")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-cell" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-avatar", style: { background: avatarColor(row.initials) } }, row.initials), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-name" }, row.user), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-role" }, row.uploaded)))), (active === "esp" || active === "sip") && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-status", "data-tone": row.approvalStatus === "Approved" ? "success" : "warning" }, row.approvalStatus || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-actions" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-btn", type: "button", onClick: (event) => {
+      return /* @__PURE__ */ React.createElement("tr", { key: menuKey, onClick: () => onOpenRow(active, row), style: { cursor: (active === "esp" || active === "sip") ? "pointer" : "default" } }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-name-cell" }, badgeLabel && /* @__PURE__ */ React.createElement("span", { className: "sh-doc-ft-badge", "data-ft": badgeLabel }, badgeLabel), /* @__PURE__ */ React.createElement("span", { className: "sh-doc-file-name" }, row.fileName))), active === "sip" && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-version" }, row.version || "—")), active === "esp" && /* @__PURE__ */ React.createElement("td", null, row.drawingNumber ? /* @__PURE__ */ React.createElement("div", { className: "sh-doc-drawing-cell" }, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-drawing-no" }, row.drawingNumber), row.drawingYear && /* @__PURE__ */ React.createElement("span", { className: "sh-doc-drawing-year" }, row.drawingYear)) : /* @__PURE__ */ React.createElement("span", { style: { color: "var(--ink-400)" } }, "—")), active === "esp" && /* @__PURE__ */ React.createElement("td", null, row.drawingStatus ? /* @__PURE__ */ React.createElement("span", { className: "sh-doc-status", "data-tone": row.drawingStatus === "Approved" ? "success" : "warning" }, row.drawingStatus) : /* @__PURE__ */ React.createElement("span", { style: { color: "var(--ink-400)" } }, "—")), /* @__PURE__ */ React.createElement("td", null, fileType), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-status", "data-tone": row.tone }, row.tone === "success" && /* @__PURE__ */ React.createElement(Icon, { name: "check", size: 13 }), row.status)), active === "sip" && /* @__PURE__ */ React.createElement("td", null, row.generatedFrom ? /* @__PURE__ */ React.createElement("span", { className: "sh-doc-version" }, row.generatedFrom) : /* @__PURE__ */ React.createElement("span", { style: { color: "var(--ink-400)" } }, "—")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-cell" }, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-avatar", style: { background: avatarColor(row.initials) } }, row.initials), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-name" }, row.user), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-role" }, row.uploaded)))), (active === "esp" || active === "sip") && /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sh-doc-status", "data-tone": row.approvalStatus === "Approved" ? "success" : "warning" }, row.approvalStatus || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-actions" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-btn", type: "button", onClick: (event) => {
         event.stopPropagation();
         onOpenRow(active, row);
       } }, /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 13 }), "View"), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-menu-wrap" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-icon", type: "button", "aria-label": `More actions for ${row.fileName}`, onClick: (event) => {
@@ -1941,7 +1964,7 @@
       } }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 14 })), openMenu === menuKey && menuAnchor && /* @__PURE__ */ React.createElement("div", { className: "sh-doc-row-menu", style: { position: "fixed", top: menuAnchor.top, right: menuAnchor.right, zIndex: 9999 }, onClick: (event) => event.stopPropagation() }, ["Download", "Clone", "View History", "Replace File"].map((action) => /* @__PURE__ */ React.createElement("button", { type: "button", key: action, onClick: () => {
         if (action === "Clone") { cloneDocRow(row); } else { openStub(`${action} ${row.fileName}`); setOpenMenu(""); setMenuAnchor(null); }
       } }, /* @__PURE__ */ React.createElement(Icon, { name: action === "Download" ? "download" : action === "Clone" ? "copy" : action === "Replace File" ? "upload" : "clock", size: 13 }), action)))))));
-    }), !rows.length && /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { colSpan: active === "esp" ? 7 : active === "sip" ? 8 : 5 }, /* @__PURE__ */ React.createElement("div", { className: "sh-single-empty" }, "No documents available for ", activeMeta.label, ".")))))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-foot sh-doc-pagination" }, /* @__PURE__ */ React.createElement("div", { className: "sh-archive-foot-left" }, /* @__PURE__ */ React.createElement("span", null, "Showing ", rows.length ? pageStart + 1 : 0, "-", pageEnd, " of ", rows.length, " documents")), /* @__PURE__ */ React.createElement("div", { className: "ds-table-pager" }, /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === 1, onClick: () => setCurrentPage((page) => Math.max(1, page - 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_left", size: 14 })), pageNumbers.map((page, index) => /* @__PURE__ */ React.createElement(React.Fragment, { key: page }, index > 0 && page - pageNumbers[index - 1] > 1 && /* @__PURE__ */ React.createElement("span", { className: "sh-page-ellipsis" }, "..."), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", "data-current": page === safeCurrentPage ? "true" : void 0, onClick: () => setCurrentPage(page) }, page))), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === totalPages, onClick: () => setCurrentPage((page) => Math.min(totalPages, page + 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 14 }))))));
+    }), !rows.length && /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { colSpan: active === "esp" ? 8 : active === "sip" ? 8 : 5 }, /* @__PURE__ */ React.createElement("div", { className: "sh-single-empty" }, "No documents available for ", activeMeta.label, ".")))))), /* @__PURE__ */ React.createElement("div", { className: "ds-table-foot sh-doc-pagination" }, /* @__PURE__ */ React.createElement("div", { className: "sh-archive-foot-left" }, /* @__PURE__ */ React.createElement("span", null, "Showing ", rows.length ? pageStart + 1 : 0, "-", pageEnd, " of ", rows.length, " documents")), /* @__PURE__ */ React.createElement("div", { className: "ds-table-pager" }, /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === 1, onClick: () => setCurrentPage((page) => Math.max(1, page - 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_left", size: 14 })), pageNumbers.map((page, index) => /* @__PURE__ */ React.createElement(React.Fragment, { key: page }, index > 0 && page - pageNumbers[index - 1] > 1 && /* @__PURE__ */ React.createElement("span", { className: "sh-page-ellipsis" }, "..."), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", "data-current": page === safeCurrentPage ? "true" : void 0, onClick: () => setCurrentPage(page) }, page))), /* @__PURE__ */ React.createElement("button", { className: "ds-page-btn", disabled: safeCurrentPage === totalPages, onClick: () => setCurrentPage((page) => Math.min(totalPages, page + 1)) }, /* @__PURE__ */ React.createElement(Icon, { name: "chevron_right", size: 14 }))))));
   };
   const ESPWorkflowPage = ({ station, upload, digitalVersions, onBack, onReviewAssets, onOpenVersion, onClone }) => {
     const [cloneSourceRow, setCloneSourceRow] = useStateHub(null);
@@ -1974,7 +1997,7 @@
         crumbs: ["Digital Library", { label: station.name, onClick: onBack }, "ESP"],
         searchPlaceholder: "Search ESP metadata, extracted assets, versions..."
       }
-    ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, currentUpload.fileName, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, "ESP")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, station.name, " \xB7 Engineering Scale Plan file and digital ESP versions")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "download", onClick: () => openStub("Download all ESP files") }, "Download All"), !digitalVersions.length && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: onReviewAssets }, pimButtonLabel))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "ESP Metadata"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Uploaded ESP file and extraction readiness for Aurangabad station."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-chips-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "sh-detail-chips" }, /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Station"), `${station.name} (${station.code})`), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Zone"), station.zone || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Division"), station.division || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Section"), station.section || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Source File"), currentUpload.fileName, /* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "Download", onClick: () => openStub(`Download ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 12 })), /* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "View", onClick: () => openStub(`View ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 12 }))), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Uploaded By"), currentUpload.user || CURRENT_USER.name)))), /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "Digital ESP Versions"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Generated digital ESP versions created from reviewed PIM assets."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "sh-hub-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digital Version")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Created From")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digitize Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "SOD Validation")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Approval Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Last Activity")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, pagedVersions.map((row) => /* @__PURE__ */ React.createElement("tr", { key: row.id }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, row.version)), /* @__PURE__ */ React.createElement("td", null, row.createdFrom || "—"), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.digitizeStatus || "Generated")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.sodValidation || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.approvalStatus || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-name" }, row.lastActivityBy || row.updatedBy), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-role" }, row.lastActivityAt || row.updated)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-actions" }, /* @__PURE__ */ React.createElement(ESPRowAction, { icon: "eye", primary: true, onClick: () => onOpenVersion(row) }, "Open"), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-menu-wrap" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-icon", type: "button", "aria-label": `More actions for ${row.version}`, onClick: (event) => { const rect = event.currentTarget.getBoundingClientRect(); setMenuAnchor({ top: rect.bottom + 4, right: window.innerWidth - rect.right }); setOpenMenu((current) => current === row.id ? "" : row.id); } }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 14 })), openMenu === row.id && menuAnchor && /* @__PURE__ */ React.createElement("div", { className: "sh-doc-row-menu", style: { position: "fixed", top: menuAnchor.top, right: menuAnchor.right, zIndex: 9999 } }, /* @__PURE__ */ React.createElement("button", { type: "button", onClick: () => {
+    ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "file_check", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, currentUpload.fileName, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, "ESP")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, station.name, " \xB7 Engineering Scale Plan file and digital ESP versions")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "download", onClick: () => openStub("Download all ESP files") }, "Download All"), !digitalVersions.length && /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "check", onClick: onReviewAssets }, pimButtonLabel))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "ESP Metadata"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Uploaded ESP file and extraction readiness for Aurangabad station."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-chips-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "sh-detail-chips" }, /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Station"), `${station.name} (${station.code})`), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Zone"), station.zone || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Division"), station.division || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Section"), station.section || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Source File"), currentUpload.fileName, /* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "Download", onClick: () => openStub(`Download ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "download", size: 12 })), /* @__PURE__ */ React.createElement("button", { className: "sh-meta-icon-btn", type: "button", title: "View", onClick: () => openStub(`View ${currentUpload.fileName}`) }, /* @__PURE__ */ React.createElement(Icon, { name: "eye", size: 12 }))), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Drawing No."), currentUpload.drawingNumber || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Drawing Year"), currentUpload.drawingYear || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Status"), currentUpload.drawingStatus || "—"), /* @__PURE__ */ React.createElement("span", { className: "sh-detail-chip" }, /* @__PURE__ */ React.createElement("strong", null, "Uploaded By"), currentUpload.user || CURRENT_USER.name)))), /* @__PURE__ */ React.createElement(ESPConventionLegend, { conventions: currentUpload.conventions }), /* @__PURE__ */ React.createElement("section", { className: "sh-hub-section" }, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-title" }, "Digital ESP Versions"), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-section-sub" }, "Generated digital ESP versions created from reviewed PIM assets."))), /* @__PURE__ */ React.createElement("div", { className: "sh-hub-table-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "sh-hub-table" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digital Version")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Created From")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Digitize Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "SOD Validation")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Approval Status")), /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement(SortableHeader, null, "Last Activity")), /* @__PURE__ */ React.createElement("th", null, "Action"))), /* @__PURE__ */ React.createElement("tbody", null, pagedVersions.map((row) => /* @__PURE__ */ React.createElement("tr", { key: row.id }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("strong", null, row.version)), /* @__PURE__ */ React.createElement("td", null, row.createdFrom || "—"), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.digitizeStatus || "Generated")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.sodValidation || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(V3Badge, null, row.approvalStatus || "Pending")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-name" }, row.lastActivityBy || row.updatedBy), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-user-role" }, row.lastActivityAt || row.updated)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "sh-doc-actions" }, /* @__PURE__ */ React.createElement(ESPRowAction, { icon: "eye", primary: true, onClick: () => onOpenVersion(row) }, "Open"), /* @__PURE__ */ React.createElement("div", { className: "sh-doc-menu-wrap" }, /* @__PURE__ */ React.createElement("button", { className: "sh-doc-action-icon", type: "button", "aria-label": `More actions for ${row.version}`, onClick: (event) => { const rect = event.currentTarget.getBoundingClientRect(); setMenuAnchor({ top: rect.bottom + 4, right: window.innerWidth - rect.right }); setOpenMenu((current) => current === row.id ? "" : row.id); } }, /* @__PURE__ */ React.createElement(Icon, { name: "more", size: 14 })), openMenu === row.id && menuAnchor && /* @__PURE__ */ React.createElement("div", { className: "sh-doc-row-menu", style: { position: "fixed", top: menuAnchor.top, right: menuAnchor.right, zIndex: 9999 } }, /* @__PURE__ */ React.createElement("button", { type: "button", onClick: () => {
       setCloneSourceRow(row); setCloneVerNum("V0"); setCloneRevNum("R0"); setCloneAltNum("A0");
       setOpenMenu("");
       setMenuAnchor(null);
@@ -2264,22 +2287,100 @@
       searchPlaceholder: "Search archived versions, approvals, comparisons..."
     }
   ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, "Archive and Version History", /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, station.code)), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, "Document-wise locked, approved and archived versions for ", station.name, " station.")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "accent", leadingIcon: "copy", onClick: () => openStub("Compare archive versions") }, "Compare"))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement(ArchiveSection, null)));
-  const YARD_TYPE_OPTIONS = [
-    { id: "existing", label: "Existing Yard", icon: "train" },
-    { id: "new", label: "New Yard", icon: "spark" }
-  ];
-  const UPLOAD_STEP_LABELS = ["Select Yard Type", "Upload Document Details"];
+  const UPLOAD_STEP_LABELS = ["ESP Drawing Details", "Drawing Conventions"];
   const UPLOAD_ACCEPT_EXTS = ["DWG", "DXF", "PDF"];
   const UPLOAD_ACCEPT_ATTR = ".dwg,.dxf,.pdf";
   const UPLOAD_MAX_MB = 25;
   const UPLOAD_MAX_BYTES = UPLOAD_MAX_MB * 1024 * 1024;
   const UPLOAD_DOC_SLOTS = [
-    { id: "ESP", label: "ESP", icon: "file_check", help: "Approved Engineering Scale Plan drawing" },
-    { id: "SIP", label: "SIP", icon: "branch", help: "Approved Signal Interlocking Plan for the same yard" }
+    { id: "ESP", label: "ESP", icon: "file_check", help: "Approved Engineering Scale Plan drawing" }
   ];
-  const emptyUploadDoc = () => ({ fileName: "", fileType: "", fileSize: 0, version: "V0", revision: "R0", alteration: "A0" });
-  const uploadVersionId = (doc) => `${doc.version}-${doc.revision}-${doc.alteration}`;
-  const uploadVersionOptions = (prefix, count) => Array.from({ length: count }, (_, index) => prefix + index);
+  const ESP_UPLOAD_SLOT = UPLOAD_DOC_SLOTS[0];
+  const DRAWING_STATUS_OPTIONS = ["Approved", "Under Approval", "Draft", "Superseded"];
+  const DRAWING_YEAR_OPTIONS = Array.from({ length: 41 }, (_, index) => String(new Date().getFullYear() - index));
+  const CONVENTION_WORK_TYPES = [
+    { id: "existing", label: "Existing", phase: false },
+    { id: "dismantled", label: "To be Dismantled", phase: false },
+    { id: "proposed", label: "Proposed / New Work", phase: true },
+    { id: "future", label: "Future Work", phase: true },
+    { id: "temporary", label: "Temporary Work", phase: true }
+  ];
+  const CONVENTION_COLOURS = [
+    { id: "black", label: "Black", hex: "#000000" },
+    { id: "red", label: "Red", hex: "#FF0000" },
+    { id: "green", label: "Green", hex: "#00A651" },
+    { id: "blue", label: "Blue", hex: "#0000FF" },
+    { id: "magenta", label: "Magenta", hex: "#FF00FF" },
+    { id: "yellow", label: "Yellow", hex: "#FFD400" },
+    { id: "custom", label: "Custom", hex: "" }
+  ];
+  const CONVENTION_LINE_STYLES = [
+    { id: "continuous", label: "Continuous", dash: "" },
+    { id: "dashed", label: "Dashed", dash: "11 6" },
+    { id: "dotted", label: "Dotted", dash: "1.5 5" },
+    { id: "dash_dot", label: "Dash-Dot", dash: "13 5 1.5 5" },
+    { id: "dash_dot_dot", label: "Dash-Dot-Dot", dash: "13 5 1.5 5 1.5 5" },
+    { id: "long_dash", label: "Long Dash", dash: "22 7" }
+  ];
+  const CONVENTION_HEX_RE = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+  let conventionSeq = 0;
+  const emptyConvention = () => ({ key: `dc-${++conventionSeq}`, workType: "", colour: "", customHex: "#1F4E79", lineStyle: "", phase: "" });
+  const conventionWorkType = (row) => CONVENTION_WORK_TYPES.find((item) => item.id === row.workType) || null;
+  const conventionColour = (row) => CONVENTION_COLOURS.find((item) => item.id === row.colour) || null;
+  const conventionLineStyle = (row) => CONVENTION_LINE_STYLES.find((item) => item.id === row.lineStyle) || null;
+  const conventionHex = (row) => row.colour === "custom" ? (row.customHex || "").trim() : ((conventionColour(row) || {}).hex || "");
+  const conventionPhaseAllowed = (row) => Boolean((conventionWorkType(row) || {}).phase);
+  const conventionPhase = (row) => conventionPhaseAllowed(row) ? (row.phase || "").trim() : "";
+  const describeConvention = (row) => {
+    const phase = conventionPhase(row);
+    return [(conventionWorkType(row) || {}).label || "Work type", phase ? `Phase ${phase}` : ""].filter(Boolean).join(" · ");
+  };
+  const validateConventions = (rows) => {
+    const rowErrors = rows.map(() => ({}));
+    const rowWarnings = rows.map(() => "");
+    const seenMapping = new Map();
+    const seenScope = new Map();
+    const seenStyle = new Map();
+    rows.forEach((row, index) => {
+      const errors = rowErrors[index];
+      if (!row.workType) errors.workType = "Select a status or work type.";
+      if (!row.colour) errors.colour = "Select a colour.";
+      else if (row.colour === "custom" && !CONVENTION_HEX_RE.test(conventionHex(row))) errors.colour = "Enter a valid custom colour, for example #1F4E79.";
+      if (!row.lineStyle) errors.lineStyle = "Select a line style.";
+      if (Object.keys(errors).length) return;
+      const hex = conventionHex(row).toLowerCase();
+      const phase = conventionPhase(row).toLowerCase();
+      const mappingKey = [row.workType, phase, hex, row.lineStyle].join("|");
+      if (seenMapping.has(mappingKey)) {
+        errors.duplicate = `Identical mapping is already defined in convention ${seenMapping.get(mappingKey) + 1}.`;
+        return;
+      }
+      seenMapping.set(mappingKey, index);
+      const scopeKey = [row.workType, phase].join("|");
+      if (seenScope.has(scopeKey)) {
+        errors.duplicate = `${describeConvention(row)} is already mapped in convention ${seenScope.get(scopeKey) + 1}. Remove it or use a different phase.`;
+        return;
+      }
+      seenScope.set(scopeKey, index);
+      const styleKey = [hex, row.lineStyle].join("|");
+      if (seenStyle.has(styleKey)) rowWarnings[index] = `Same colour and line style as convention ${seenStyle.get(styleKey) + 1}. Both will look identical on the drawing.`;
+      else seenStyle.set(styleKey, index);
+    });
+    return { rowErrors, rowWarnings, valid: rows.length > 0 && rowErrors.every((errors) => !Object.keys(errors).length) };
+  };
+  const conventionPayload = (row) => ({
+    workType: row.workType,
+    workTypeLabel: (conventionWorkType(row) || {}).label || "",
+    colour: row.colour,
+    colourLabel: row.colour === "custom" ? "Custom" : ((conventionColour(row) || {}).label || ""),
+    colourHex: conventionHex(row),
+    lineStyle: row.lineStyle,
+    lineStyleLabel: (conventionLineStyle(row) || {}).label || "",
+    lineDash: (conventionLineStyle(row) || {}).dash || "",
+    phase: conventionPhase(row)
+  });
+  const emptyUploadDoc = () => ({ fileName: "", fileType: "", fileSize: 0, drawingNumber: "", drawingYear: "", drawingStatus: "" });
+  const drawingKey = (doc) => `${(doc.drawingNumber || "").trim().toLowerCase()}|${doc.drawingYear || ""}`;
   const describeFileSize = (bytes) => !bytes ? "" : bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   const validateUploadFile = (file) => {
     const ext = (file.name.split(".").pop() || "").toUpperCase();
@@ -2317,14 +2418,82 @@
       )
     ))
   );
-  const YardTypeCard = ({ option, active, onSelect }) => React.createElement("button", {
-    type: "button",
-    className: "sh-upload-yard-card",
-    "data-active": active ? "true" : "false",
-    onClick: () => onSelect(option.id)
-  },
-    React.createElement("span", { className: "sh-upload-yard-card-icon" }, React.createElement(Icon, { name: option.icon, size: 17 })),
-    React.createElement("strong", null, option.label)
+  const ConventionLinePreview = ({ hex, dash }) => React.createElement("svg", { className: "sh-dc-preview", viewBox: "0 0 120 12", preserveAspectRatio: "none", "aria-hidden": "true" },
+    React.createElement("line", { x1: 1, y1: 6, x2: 119, y2: 6, stroke: hex || "var(--ink-300)", strokeWidth: 2.4, strokeDasharray: dash || void 0 })
+  );
+  const ConventionFieldError = ({ message }) => message ? React.createElement("span", { className: "sh-upload-error" }, React.createElement(Icon, { name: "alert", size: 12 }), message) : null;
+  const ConventionRowCard = ({ row, index, errors, warning, onChange, onRemove }) => {
+    const type = conventionWorkType(row);
+    const phaseAllowed = conventionPhaseAllowed(row);
+    const hex = conventionHex(row);
+    const invalid = Object.keys(errors).length > 0;
+    return React.createElement("div", { className: "sh-dc-row", "data-invalid": invalid ? "true" : "false" },
+      React.createElement("div", { className: "sh-dc-row-head" },
+        React.createElement("span", { className: "sh-dc-row-index" }, index + 1),
+        React.createElement("div", { className: "sh-dc-row-title" },
+          React.createElement("strong", null, type ? type.label : "New drawing convention"),
+          React.createElement(ConventionLinePreview, { hex, dash: (conventionLineStyle(row) || {}).dash })
+        ),
+        React.createElement("button", { type: "button", className: "sh-dc-row-remove", "aria-label": `Remove drawing convention ${index + 1}`, onClick: onRemove }, React.createElement(Icon, { name: "trash", size: 13 }))
+      ),
+      React.createElement("div", { className: "sh-dc-row-grid" },
+        React.createElement("div", { className: "sh-upload-grid-field" },
+          React.createElement("label", { className: "sh-upload-grid-label" }, "Status / Work Type ", React.createElement("span", { className: "sh-upload-req" }, "*")),
+          React.createElement("select", { className: "sh-upload-grid-input", value: row.workType, onChange: (event) => onChange("workType", event.target.value) },
+            React.createElement("option", { value: "" }, "Select status or work type"),
+            CONVENTION_WORK_TYPES.map((item) => React.createElement("option", { key: item.id, value: item.id }, item.label))
+          ),
+          React.createElement(ConventionFieldError, { message: errors.workType })
+        ),
+        React.createElement("div", { className: "sh-upload-grid-field" },
+          React.createElement("label", { className: "sh-upload-grid-label" }, "Colour ", React.createElement("span", { className: "sh-upload-req" }, "*")),
+          React.createElement("div", { className: "sh-dc-colour-row" },
+            React.createElement("span", { className: "sh-dc-swatch", "data-empty": hex ? "false" : "true", style: hex ? { background: hex } : void 0 }),
+            React.createElement("select", { className: "sh-upload-grid-input", value: row.colour, onChange: (event) => onChange("colour", event.target.value) },
+              React.createElement("option", { value: "" }, "Select colour"),
+              CONVENTION_COLOURS.map((item) => React.createElement("option", { key: item.id, value: item.id }, item.label))
+            )
+          ),
+          row.colour === "custom" && React.createElement("div", { className: "sh-dc-custom" },
+            React.createElement("input", { type: "color", "aria-label": "Pick custom colour", value: CONVENTION_HEX_RE.test((row.customHex || "").trim()) ? row.customHex.trim() : "#1F4E79", onChange: (event) => onChange("customHex", event.target.value.toUpperCase()) }),
+            React.createElement("input", { className: "sh-upload-grid-input", "aria-label": "Custom colour hex code", value: row.customHex || "", placeholder: "#1F4E79", onChange: (event) => onChange("customHex", event.target.value) })
+          ),
+          React.createElement(ConventionFieldError, { message: errors.colour })
+        ),
+        React.createElement("div", { className: "sh-upload-grid-field" },
+          React.createElement("label", { className: "sh-upload-grid-label" }, "Line Style ", React.createElement("span", { className: "sh-upload-req" }, "*")),
+          React.createElement("select", { className: "sh-upload-grid-input", value: row.lineStyle, onChange: (event) => onChange("lineStyle", event.target.value) },
+            React.createElement("option", { value: "" }, "Select line style"),
+            CONVENTION_LINE_STYLES.map((item) => React.createElement("option", { key: item.id, value: item.id }, item.label))
+          ),
+          React.createElement(ConventionFieldError, { message: errors.lineStyle })
+        ),
+        React.createElement("div", { className: "sh-upload-grid-field" },
+          React.createElement("label", { className: "sh-upload-grid-label" }, "Phase ", React.createElement("span", { className: "sh-dc-optional" }, "Optional")),
+          React.createElement("input", { className: "sh-upload-grid-input", value: phaseAllowed ? row.phase : "", placeholder: phaseAllowed ? "e.g. Phase 1" : "Not applicable", disabled: !phaseAllowed, onChange: (event) => onChange("phase", event.target.value) }),
+          React.createElement("span", { className: "sh-dc-hint" }, phaseAllowed ? "Use it when the same work type is drawn in more than one phase." : "Phase applies to proposed, future and temporary work only.")
+        )
+      ),
+      errors.duplicate && React.createElement("span", { className: "sh-upload-error" }, React.createElement(Icon, { name: "alert", size: 12 }), errors.duplicate),
+      warning && React.createElement("span", { className: "sh-dc-warning" }, React.createElement(Icon, { name: "info", size: 12 }), warning)
+    );
+  };
+  const ESPConventionLegend = ({ conventions }) => React.createElement("section", { className: "sh-hub-section" },
+    React.createElement("div", { className: "sh-hub-section-head" },
+      React.createElement("div", null,
+        React.createElement("div", { className: "sh-hub-section-title" }, "Drawing Conventions"),
+        React.createElement("div", { className: "sh-hub-section-sub" }, "Status and work type mapping captured when this ESP was uploaded.")
+      )
+    ),
+    (conventions || []).length ? React.createElement("div", { className: "sh-dc-legend" },
+      conventions.map((item, index) => React.createElement("div", { className: "sh-dc-legend-row", key: `${item.workType}-${item.phase}-${index}` },
+        React.createElement("strong", null, item.workTypeLabel || item.workType),
+        React.createElement("span", { className: "sh-dc-legend-colour" }, React.createElement("span", { className: "sh-dc-swatch", style: { background: item.colourHex } }), item.colourLabel || item.colourHex),
+        React.createElement("span", null, item.lineStyleLabel),
+        React.createElement(ConventionLinePreview, { hex: item.colourHex, dash: item.lineDash }),
+        React.createElement("span", null, item.phase ? `Phase ${item.phase}` : "—")
+      ))
+    ) : React.createElement("div", { className: "sh-hub-section-sub" }, "No drawing convention was captured for this ESP.")
   );
   const UploadFileZone = ({ slot, doc, error, onSelect, onRemove }) => doc.fileName ? React.createElement("div", { className: "sh-upload-file-card" },
     React.createElement("div", { className: "sh-upload-file-icon" }, React.createElement(Icon, { name: "file_check", size: 18 })),
@@ -2354,58 +2523,40 @@
     ),
     error && React.createElement("span", { className: "sh-upload-error" }, React.createElement(Icon, { name: "alert", size: 12 }), error)
   );
-  const UploadVersionFields = ({ doc, errors, onChange }) => React.createElement("div", { className: "sh-upload-group" },
-      React.createElement("div", { className: "sh-upload-group-label" }, "Document version"),
-      React.createElement("div", { className: "sh-upload-version-grid" },
-        [["version", "Version", "V"], ["revision", "Revision", "R"], ["alteration", "Alteration", "A"]].map(([key, label, prefix]) => React.createElement("div", { className: "sh-upload-grid-field", key },
-          React.createElement("label", { className: "sh-upload-grid-label" }, label, " ", React.createElement("span", { className: "sh-upload-req" }, "*")),
-          React.createElement("select", { className: "sh-upload-grid-input", value: doc[key], onChange: (event) => onChange(key, event.target.value) },
-            uploadVersionOptions(prefix, 10).map((value) => React.createElement("option", { key: value, value }, value))
-          )
-        ))
-      ),
-      React.createElement("div", { className: "sh-upload-version-preview" },
-        React.createElement("span", { className: "sh-upload-version-preview-label" }, "Document version"),
-        React.createElement("span", { className: "sh-upload-version-id" }, uploadVersionId(doc))
-      ),
-      errors.version && React.createElement("span", { className: "sh-upload-error" }, React.createElement(Icon, { name: "alert", size: 12 }), errors.version)
-  );
-  const UploadDocumentModal = ({ station, onClose, onUpload, existingVersions = {} }) => {
+  const UploadDocumentModal = ({ station, onClose, onUpload, existingDrawings = [] }) => {
     const [step, setStep] = useStateHub(1);
-    const [yardType, setYardType] = useStateHub("");
-    const [docs, setDocs] = useStateHub(() => ({ ESP: emptyUploadDoc(), SIP: emptyUploadDoc() }));
-    const [fileErrors, setFileErrors] = useStateHub({});
-    const [showErrors, setShowErrors] = useStateHub(false);
+    const [doc, setDoc] = useStateHub(() => emptyUploadDoc());
+    const [conventions, setConventions] = useStateHub(() => [emptyConvention()]);
+    const [fileError, setFileError] = useStateHub("");
+    const [showDetailErrors, setShowDetailErrors] = useStateHub(false);
+    const [showConventionErrors, setShowConventionErrors] = useStateHub(false);
     const [discardOpen, setDiscardOpen] = useStateHub(false);
-    const isExistingYard = yardType === "existing";
-    const docHasData = (doc) => Boolean(doc.fileName || uploadVersionId(doc) !== "V0-R0-A0");
-    const hasEnteredData = UPLOAD_DOC_SLOTS.some((slot) => docHasData(docs[slot.id]));
-    const updateDoc = (slotId, key, value) => setDocs((prev) => ({ ...prev, [slotId]: { ...prev[slotId], [key]: value } }));
-    const selectFile = (slotId, file) => {
+    const hasEnteredData = Boolean(doc.fileName || doc.drawingNumber || doc.drawingYear || doc.drawingStatus) || conventions.some((row) => row.workType || row.colour || row.lineStyle || row.phase);
+    const updateDoc = (key, value) => setDoc((prev) => ({ ...prev, [key]: value }));
+    const selectFile = (file) => {
       const message = validateUploadFile(file);
-      setFileErrors((prev) => ({ ...prev, [slotId]: message }));
+      setFileError(message);
       if (message) return;
-      setDocs((prev) => ({ ...prev, [slotId]: { ...prev[slotId], fileName: file.name, fileType: (file.name.split(".").pop() || "").toUpperCase(), fileSize: file.size } }));
+      setDoc((prev) => ({ ...prev, fileName: file.name, fileType: (file.name.split(".").pop() || "").toUpperCase(), fileSize: file.size }));
     };
-    const removeFile = (slotId) => {
-      setFileErrors((prev) => ({ ...prev, [slotId]: "" }));
-      setDocs((prev) => ({ ...prev, [slotId]: { ...prev[slotId], fileName: "", fileType: "", fileSize: 0 } }));
+    const removeFile = () => {
+      setFileError("");
+      setDoc((prev) => ({ ...prev, fileName: "", fileType: "", fileSize: 0 }));
     };
-    const errorsForSlot = (slotId) => {
-      const doc = docs[slotId];
-      const found = {};
-      if (fileErrors[slotId]) found.file = fileErrors[slotId];
-      else if (!doc.fileName) found.file = `${slotId} file is required.`;
-      if ((existingVersions[slotId] || []).includes(uploadVersionId(doc))) {
-        found.version = `${slotId} ${uploadVersionId(doc)} already exists for ${station.code}. Choose a different version, revision or alteration.`;
-      }
-      return found;
-    };
-    const slotErrors = { ESP: errorsForSlot("ESP"), SIP: errorsForSlot("SIP") };
-    const detailsValid = isExistingYard
-      && !Object.keys(slotErrors.ESP).length
-      && !Object.keys(slotErrors.SIP).length;
-    const visibleErrorsFor = (slotId) => showErrors ? slotErrors[slotId] : (fileErrors[slotId] ? { file: fileErrors[slotId] } : {});
+    const updateConvention = (key, field, value) => setConventions((rows) => rows.map((row) => row.key === key ? { ...row, [field]: value } : row));
+    const addConvention = () => setConventions((rows) => [...rows, emptyConvention()]);
+    const removeConvention = (key) => setConventions((rows) => rows.filter((row) => row.key !== key));
+    const detailErrors = {};
+    if (fileError) detailErrors.file = fileError;
+    else if (!doc.fileName) detailErrors.file = "ESP file is required.";
+    if (!doc.drawingNumber.trim()) detailErrors.drawingNumber = "Drawing number is required.";
+    if (!doc.drawingYear) detailErrors.drawingYear = "Drawing year is required.";
+    if (!doc.drawingStatus) detailErrors.drawingStatus = "Status is required.";
+    if (doc.drawingNumber.trim() && doc.drawingYear && existingDrawings.some((row) => drawingKey(row) === drawingKey(doc))) detailErrors.drawingNumber = `Drawing ${doc.drawingNumber.trim()} (${doc.drawingYear}) is already uploaded for ${station.code}. Use a different drawing number or year.`;
+    const detailsValid = !Object.keys(detailErrors).length;
+    const conventionState = validateConventions(conventions);
+    const visibleDetailErrors = showDetailErrors ? detailErrors : (fileError ? { file: fileError } : {});
+    const detailFieldError = (key) => React.createElement(ConventionFieldError, { message: visibleDetailErrors[key] });
     const requestClose = () => {
       if (hasEnteredData) {
         setDiscardOpen(true);
@@ -2413,71 +2564,110 @@
       }
       onClose();
     };
-    const goToDetails = () => {
-      if (!isExistingYard) return;
+    const goToConventions = () => {
+      if (!detailsValid) {
+        setShowDetailErrors(true);
+        return;
+      }
+      setShowDetailErrors(false);
       setStep(2);
     };
     const submit = (event) => {
       event.preventDefault();
-      if (!detailsValid) {
-        setShowErrors(true);
+      if (step === 1) {
+        goToConventions();
         return;
       }
-      const withVersion = (slotId) => ({ ...docs[slotId], docType: slotId, versionId: uploadVersionId(docs[slotId]) });
+      if (!detailsValid) {
+        setShowDetailErrors(true);
+        setStep(1);
+        return;
+      }
+      if (!conventionState.valid) {
+        setShowConventionErrors(true);
+        return;
+      }
       onUpload({
-        yardType,
-        yardTypeLabel: (YARD_TYPE_OPTIONS.find((option) => option.id === yardType) || {}).label,
-        esp: withVersion("ESP"),
-        sip: withVersion("SIP")
+        esp: { ...doc, docType: "ESP", drawingNumber: doc.drawingNumber.trim() },
+        conventions: conventions.map(conventionPayload)
       });
     };
-    const headSub = `Station ${station.code} \xB7 Step ${step} of ${UPLOAD_STEP_LABELS.length} \xB7 ${UPLOAD_STEP_LABELS[step - 1]}`;
-    const stepBody = step === 1 ? React.createElement(React.Fragment, null,
-      React.createElement("div", { className: "sh-upload-yard-grid" },
-        YARD_TYPE_OPTIONS.map((option) => React.createElement(YardTypeCard, { key: option.id, option, active: yardType === option.id, onSelect: setYardType }))
-      ),
-      yardType === "new" && React.createElement("div", { className: "sh-upload-notice", "data-tone": "danger" }, React.createElement(Icon, { name: "alert", size: 14 }), "New Yard uploads are not available yet. Select Existing Yard to continue.")
-    ) : React.createElement(React.Fragment, null,
-      React.createElement("div", { className: "sh-upload-summary-bar" },
-        React.createElement("span", null, React.createElement("strong", null, "Existing Yard"), " upload for ", station.name),
-        React.createElement("button", { className: "sh-upload-summary-change", type: "button", onClick: () => setStep(1) }, "Change yard type")
-      ),
-      showErrors && !detailsValid && React.createElement("div", { className: "sh-upload-notice", "data-tone": "danger" }, React.createElement(Icon, { name: "alert", size: 14 }), "Some mandatory details are missing. Fix the highlighted fields to continue."),
-      UPLOAD_DOC_SLOTS.map((slot) => {
-        const errors = visibleErrorsFor(slot.id);
-        const doc = docs[slot.id];
-        return React.createElement("div", { className: "sh-upload-doc-block", key: slot.id, "data-invalid": Object.keys(errors).length ? "true" : "false" },
-          React.createElement("div", { className: "sh-upload-doc-head" },
-            React.createElement("span", { className: "sh-upload-doc-head-icon" }, React.createElement(Icon, { name: slot.icon, size: 14 })),
-            React.createElement("strong", null, slot.label, " ", React.createElement("span", { className: "sh-upload-req" }, "*"))
-          ),
-          React.createElement(UploadFileZone, {
-            slot,
-            doc,
-            error: errors.file,
-            onSelect: (file) => selectFile(slot.id, file),
-            onRemove: () => removeFile(slot.id)
-          }),
-          React.createElement(UploadVersionFields, {
-            doc,
-            errors,
-            onChange: (key, value) => updateDoc(slot.id, key, value)
-          })
-        );
-      })
+    const detailsBody = React.createElement(React.Fragment, null,
+      showDetailErrors && !detailsValid && React.createElement("div", { className: "sh-upload-notice", "data-tone": "danger" }, React.createElement(Icon, { name: "alert", size: 14 }), "Some mandatory details are missing. Fix the highlighted fields to continue."),
+      React.createElement("div", { className: "sh-upload-doc-block", "data-invalid": showDetailErrors && !detailsValid ? "true" : "false" },
+        React.createElement("div", { className: "sh-upload-doc-head" },
+          React.createElement("span", { className: "sh-upload-doc-head-icon" }, React.createElement(Icon, { name: ESP_UPLOAD_SLOT.icon, size: 14 })),
+          React.createElement("strong", null, ESP_UPLOAD_SLOT.label, " ", React.createElement("span", { className: "sh-upload-req" }, "*"))
+        ),
+        React.createElement(UploadFileZone, {
+          slot: ESP_UPLOAD_SLOT,
+          doc,
+          error: visibleDetailErrors.file,
+          onSelect: selectFile,
+          onRemove: removeFile
+        }),
+        React.createElement("div", { className: "sh-upload-group" },
+          React.createElement("div", { className: "sh-upload-group-label" }, "Drawing details"),
+          React.createElement("div", { className: "sh-upload-grid" },
+            React.createElement("div", { className: "sh-upload-grid-field", "data-span": "full" },
+              React.createElement("label", { className: "sh-upload-grid-label" }, "Drawing Number ", React.createElement("span", { className: "sh-upload-req" }, "*")),
+              React.createElement("input", { className: "sh-upload-grid-input", value: doc.drawingNumber, placeholder: "e.g. SE/ESP/AWB/012", onChange: (event) => updateDoc("drawingNumber", event.target.value) }),
+              detailFieldError("drawingNumber")
+            ),
+            React.createElement("div", { className: "sh-upload-grid-field" },
+              React.createElement("label", { className: "sh-upload-grid-label" }, "Drawing Year ", React.createElement("span", { className: "sh-upload-req" }, "*")),
+              React.createElement("select", { className: "sh-upload-grid-input", value: doc.drawingYear, onChange: (event) => updateDoc("drawingYear", event.target.value) },
+                React.createElement("option", { value: "" }, "Select year"),
+                DRAWING_YEAR_OPTIONS.map((year) => React.createElement("option", { key: year, value: year }, year))
+              ),
+              detailFieldError("drawingYear")
+            ),
+            React.createElement("div", { className: "sh-upload-grid-field" },
+              React.createElement("label", { className: "sh-upload-grid-label" }, "Status ", React.createElement("span", { className: "sh-upload-req" }, "*")),
+              React.createElement("select", { className: "sh-upload-grid-input", value: doc.drawingStatus, onChange: (event) => updateDoc("drawingStatus", event.target.value) },
+                React.createElement("option", { value: "" }, "Select status"),
+                DRAWING_STATUS_OPTIONS.map((status) => React.createElement("option", { key: status, value: status }, status))
+              ),
+              detailFieldError("drawingStatus")
+            )
+          )
+        )
+      )
     );
+    const conventionsBody = React.createElement(React.Fragment, null,
+      React.createElement("div", { className: "sh-upload-summary-bar" },
+        React.createElement("span", null, React.createElement("strong", null, doc.drawingNumber || "ESP"), " · ", doc.drawingYear || "—", " · ", doc.drawingStatus || "—"),
+        React.createElement("button", { className: "sh-upload-summary-change", type: "button", onClick: () => setStep(1) }, "Edit drawing details")
+      ),
+      React.createElement("div", { className: "sh-upload-notice" }, React.createElement(Icon, { name: "info", size: 14 }), "Map every status or work type used in this ESP to the colour and line style it is drawn with. Phase is optional and applies to proposed, future and temporary work only."),
+      showConventionErrors && !conventionState.valid && React.createElement("div", { className: "sh-upload-notice", "data-tone": "danger" }, React.createElement(Icon, { name: "alert", size: 14 }), conventions.length ? "Fix the highlighted drawing conventions to continue." : "Define at least one drawing convention to continue."),
+      conventions.length ? React.createElement("div", { className: "sh-dc-list" },
+        conventions.map((row, index) => React.createElement(ConventionRowCard, {
+          key: row.key,
+          row,
+          index,
+          errors: showConventionErrors ? conventionState.rowErrors[index] : {},
+          warning: conventionState.rowWarnings[index],
+          onChange: (field, value) => updateConvention(row.key, field, value),
+          onRemove: () => removeConvention(row.key)
+        }))
+      ) : React.createElement("div", { className: "sh-dc-empty" }, "At least one drawing convention must be defined before this ESP can be uploaded."),
+      React.createElement("button", { type: "button", className: "sh-dc-add", onClick: addConvention }, React.createElement(Icon, { name: "plus", size: 13 }), "Add drawing convention")
+    );
+    const stepBody = step === 1 ? detailsBody : conventionsBody;
+    const headSub = `Station ${station.code} · Step ${step} of ${UPLOAD_STEP_LABELS.length} · ${UPLOAD_STEP_LABELS[step - 1]}`;
     const foot = React.createElement("div", { className: "sh-upload-shell-foot" },
-      step > 1 && React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "chevron_left", onClick: () => setStep(step - 1) }, "Back"),
+      step > 1 && React.createElement(Btn, { type: "button", variant: "secondary", leadingIcon: "chevron_left", onClick: () => setStep(1) }, "Back"),
       React.createElement(Btn, { type: "button", variant: "secondary", onClick: requestClose }, "Cancel"),
-      step === 1 ? React.createElement(Btn, { key: "to-details", type: "button", variant: "accent", disabled: !isExistingYard, onClick: goToDetails }, "Continue")
+      step === 1 ? React.createElement(Btn, { key: "to-conventions", type: "button", variant: "accent", onClick: goToConventions }, "Continue")
         : React.createElement(Btn, { key: "submit", type: "submit", variant: "accent", leadingIcon: "upload" }, "Upload and Start Processing")
     );
     const shell = React.createElement("div", { className: "sh-upload-portal", onClick: requestClose },
-      React.createElement("form", { className: "sh-upload-shell", onClick: (event) => event.stopPropagation(), onSubmit: submit },
+      React.createElement("form", { className: "sh-upload-shell", "data-wide": step === 2 ? "true" : "false", onClick: (event) => event.stopPropagation(), onSubmit: submit },
         React.createElement("div", { className: "sh-upload-shell-head" },
           React.createElement("div", { className: "sh-upload-shell-icon" }, React.createElement(Icon, { name: "upload", size: 18 })),
           React.createElement("div", { className: "sh-upload-shell-text" },
-            React.createElement("div", { className: "sh-upload-shell-title" }, "Upload Document"),
+            React.createElement("div", { className: "sh-upload-shell-title" }, "Upload ESP"),
             React.createElement("div", { className: "sh-upload-shell-sub" }, headSub)
           ),
           React.createElement("button", { type: "button", className: "sh-upload-shell-close", onClick: requestClose, "aria-label": "Close" }, React.createElement(Icon, { name: "x", size: 15 }))
@@ -2492,11 +2682,11 @@
         React.createElement("div", { className: "sh-upload-shell-head" },
           React.createElement("div", { className: "sh-upload-shell-icon" }, React.createElement(Icon, { name: "alert_tri", size: 18 })),
           React.createElement("div", { className: "sh-upload-shell-text" },
-            React.createElement("div", { className: "sh-upload-shell-title" }, "Discard uploaded document details?")
+            React.createElement("div", { className: "sh-upload-shell-title" }, "Discard this ESP upload?")
           )
         ),
         React.createElement("div", { className: "sh-upload-shell-body" },
-          React.createElement("p", { className: "sh-upload-confirm-copy" }, "The files and version details you entered will not be saved and nothing will be uploaded.")
+          React.createElement("p", { className: "sh-upload-confirm-copy" }, "The ESP file, drawing details and drawing conventions you entered will not be saved and nothing will be uploaded.")
         ),
         React.createElement("div", { className: "sh-upload-shell-foot" },
           React.createElement(Btn, { type: "button", variant: "secondary", onClick: () => setDiscardOpen(false) }, "Keep Editing"),
@@ -3250,18 +3440,15 @@
       setUploadOpen(null);
       const stamp = Date.now();
       const espId = `esp-upload-${stamp}`;
-      const sipId = `sip-upload-${stamp}`;
       const uploader = { user: CURRENT_USER.name, initials: "AV", role: CURRENT_USER.role, uploaded: "Just now", approvalStatus: "Approved" };
       setDocumentTab("esp");
-      setActiveEspUpload({ ...payload.esp, id: espId, status: "Processing", user: CURRENT_USER.name, uploaded: "Just now", modifiedBy: CURRENT_USER.name });
-      setEspRows((rows) => [{ ...uploader, id: espId, fileName: payload.esp.fileName, version: payload.esp.versionId, fileType: payload.esp.fileType, status: "Processing", tone: "info" }, ...rows]);
-      setSipRows((rows) => [{ ...uploader, id: sipId, fileName: payload.sip.fileName, version: payload.sip.versionId, fileType: payload.sip.fileType, status: "Processing", tone: "info", generatedFrom: payload.esp.versionId }, ...rows]);
-      setUploadedDocuments((rows) => [payload.sip, payload.esp].map(uploadedDocumentFromPayload).map((row, index) => ({ ...row, id: `upload-${stamp}-${index}` })).concat(rows).slice(0, 2));
-      setToast("Documents uploaded successfully. Processing has started.");
+      setActiveEspUpload({ ...payload.esp, id: espId, status: "Processing", user: CURRENT_USER.name, uploaded: "Just now", modifiedBy: CURRENT_USER.name, conventions: payload.conventions });
+      setEspRows((rows) => [{ ...uploader, id: espId, fileName: payload.esp.fileName, fileType: payload.esp.fileType, drawingNumber: payload.esp.drawingNumber, drawingYear: payload.esp.drawingYear, drawingStatus: payload.esp.drawingStatus, conventions: payload.conventions, status: "Processing", tone: "info" }, ...rows]);
+      setUploadedDocuments((rows) => [payload.esp].map(uploadedDocumentFromPayload).map((row, index) => ({ ...row, id: `upload-${stamp}-${index}` })).concat(rows).slice(0, 2));
+      setToast("ESP uploaded successfully. Processing has started.");
       window.setTimeout(() => setToast(""), 3200);
       window.setTimeout(() => {
         setEspRows((rows) => rows.map((row) => row.id === espId ? { ...row, status: "Need Review", tone: "warning" } : row));
-        setSipRows((rows) => rows.map((row) => row.id === sipId ? { ...row, status: "Need Review", tone: "warning" } : row));
         setActiveEspUpload((current) => current && current.id === espId ? { ...current, status: "Need Review" } : current);
       }, 2600);
     };
@@ -3284,6 +3471,10 @@
             fileName: row.fileName,
             fileType: row.fileType || ((_a = row.fileName.split(".").pop()) == null ? void 0 : _a.toUpperCase()) || "DWG",
             version: row.version || "",
+            drawingNumber: row.drawingNumber || "",
+            drawingYear: row.drawingYear || "",
+            drawingStatus: row.drawingStatus || "",
+            conventions: row.conventions || (current == null ? void 0 : current.conventions) || [],
             status: row.status,
             user: row.user,
             uploaded: row.uploaded
@@ -3371,7 +3562,7 @@
           fileName: `${station.code}-SIP`,
           version: "V1-R0-A0",
           fileType: "DWG",
-          generatedFrom: activeEspUpload ? `ESP ${activeEspUpload.version || "V7-R0-A0"}` : espRows[0] ? `ESP ${espRows[0].version || "V7-R0-A0"}` : "ESP V7-R0-A0",
+          generatedFrom: `ESP ${(activeEspUpload && (activeEspUpload.drawingNumber || activeEspUpload.fileName)) || (espRows[0] && (espRows[0].drawingNumber || espRows[0].fileName)) || "source"}`,
           status: "Generated",
           tone: "success",
           approvalStatus: "Pending",
@@ -3578,7 +3769,7 @@
     ), /* @__PURE__ */ React.createElement("div", { className: "sh-record-head" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-icon-badge" }, /* @__PURE__ */ React.createElement(Icon, { name: "train", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "sh-record-heading" }, /* @__PURE__ */ React.createElement("div", { className: "sh-record-title" }, station.name, /* @__PURE__ */ React.createElement("span", { className: "dl-code-pill" }, station.code)), /* @__PURE__ */ React.createElement("div", { className: "sh-record-sub" }, "Station document hub for engineering diagrams and survey data")), /* @__PURE__ */ React.createElement("div", { className: "sh-record-actions" }, /* @__PURE__ */ React.createElement(Btn, { variant: "secondary", leadingIcon: "download", onClick: handleDownloadAll }, "Download All"))), /* @__PURE__ */ React.createElement("div", { className: "sh-scroll" }, /* @__PURE__ */ React.createElement(StationContext, { station, onEdit: () => setEditingDetails(true) }), /* @__PURE__ */ React.createElement(DocumentTabsSection, { active: documentTab, onChange: setDocumentTab, rowsByType, onUpload: handleDocumentUploadClick, onOpenRow: handleOpenDocumentRow })), editingDetails && /* @__PURE__ */ React.createElement(EditStationMetadataV3Modal, { station, onClose: () => setEditingDetails(false), onSave: (nextStation) => {
       setStation(nextStation);
       setEditingDetails(false);
-    } }), uploadOpen && /* @__PURE__ */ React.createElement(UploadDocumentModal, { station, existingVersions: { ESP: espRows.map((row) => row.version), SIP: sipRows.map((row) => row.version) }, onClose: () => setUploadOpen(null), onUpload: handleUploadDocument }), toast && /* @__PURE__ */ React.createElement("div", { className: "sh-toast", role: "status", "aria-live": "polite" }, /* @__PURE__ */ React.createElement(Icon, { name: "check_circle", size: 16 }), toast));
+    } }), uploadOpen && /* @__PURE__ */ React.createElement(UploadDocumentModal, { station, existingDrawings: espRows, onClose: () => setUploadOpen(null), onUpload: handleUploadDocument }), toast && /* @__PURE__ */ React.createElement("div", { className: "sh-toast", role: "status", "aria-live": "polite" }, /* @__PURE__ */ React.createElement(Icon, { name: "check_circle", size: 16 }), toast));
   };
   window.StationHubPage = StationHubPage;
 })();
